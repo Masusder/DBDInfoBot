@@ -2,6 +2,7 @@ import { Client, Events, GatewayIntentBits, TextChannel } from 'discord.js';
 import { Scraper, Tweet } from '@the-convocation/twitter-scraper';
 import dotenv from 'dotenv';
 import express from 'express';
+import cron from 'node-cron';
 
 dotenv.config();
 
@@ -76,12 +77,7 @@ async function ensureLoggedIn() {
     const isLoggedIn = await scraper.isLoggedIn();
 
     if (!isLoggedIn) {
-        try {
-            await loginToTwitter();
-        } catch (error) {
-            console.error('Error logging into Twitter:', error);
-            throw new Error('Login failed');
-        }
+        await loginToTwitter();
     }
 }
 
@@ -123,8 +119,14 @@ async function getLatestTweetLink() {
 
                     if (!urlAlreadyPosted) {
                         await channel.send(tweetUrl);
+                    } else {
+                        console.log('This Tweet has already been posted.')
                     }
+                } else {
+                    console.log('Not found specified text channel.');
                 }
+            } else {
+                console.log('All good. Tweet URL remains the same.');
             }
         } else {
             console.log('No new tweets found.');
@@ -146,7 +148,9 @@ client.once(Events.ClientReady, readyClient => {
 
     loginToTwitter().then(() => {
         // Set interval to check for new tweets every 60 seconds
-        setInterval(getLatestTweetLink, 60000);
+        cron.schedule('* * * * *', async () => {
+            await getLatestTweetLink();
+        });
     });
 });
 
