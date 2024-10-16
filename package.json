@@ -7,8 +7,7 @@
     "start": "node dist/index.js",
     "build": "tsc",
     "dev": "ts-node src/index.ts",
-    "deploy": "npm run build && npm run start",
-    "prepare": "npm install && npm run build"
+    "deploy": "npm run build && npm run start"
   },
   "keywords": [],
   "author": "",
