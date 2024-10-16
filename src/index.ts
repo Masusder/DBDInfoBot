@@ -98,6 +98,8 @@ async function ensureLoggedIn() {
  * // This will check for new tweets every 60 seconds.
  */
 async function getLatestTweetLink() {
+    console.log(`Checking for new Tweets - ${new Date()}`);
+
     if (isFetchingTweets) {
         console.log('Skipping execution: Tweet fetching is already in progress.');
         return;
