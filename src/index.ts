@@ -1,7 +1,6 @@
 import { Client, Events, GatewayIntentBits, TextChannel } from 'discord.js';
 import { Scraper, Tweet } from '@the-convocation/twitter-scraper';
 import dotenv from 'dotenv';
-import express from 'express';
 import cron from 'node-cron';
 
 dotenv.config();
@@ -10,9 +9,7 @@ dotenv.config();
 const client: Client<boolean> = new Client({ intents: [GatewayIntentBits.Guilds] });
 const DISCORD_TOKEN: string | undefined = process.env.DISCORD_TOKEN;
 const DBD_NEWS_CHANNEL_ID: string = '1294751528963411989';
-const PORT = process.env.PORT || 4000;
 
-const app = express();
 const scraper = new Scraper();
 
 let latestTweetLink: string = '';
@@ -137,8 +134,6 @@ async function getLatestTweetLink() {
         isFetchingTweets = false;
     }
 }
-
-app.listen(PORT, () => { });
 
 // When the client is ready, run this code (only once).
 // The distinction between `client: Client<boolean>` and `readyClient: Client<true>` is important for TypeScript developers.
