@@ -7,7 +7,7 @@ dotenv.config();
 // Create a new client instance
 const client: Client<boolean> = new Client({ intents: [GatewayIntentBits.Guilds] });
 const DISCORD_TOKEN: string | undefined = process.env.DISCORD_TOKEN;
-const DBD_NEWS_CHANNEL_ID: string = '722738642350506049';
+const DBD_NEWS_CHANNEL_ID: string = '1294751528963411989';
 
 const scraper = new Scraper();
 
