@@ -137,7 +137,7 @@ async function getLatestTweetLink() {
                     const urlAlreadyPosted: boolean = await hasUrlBeenPosted(channel, fxTweetUrl);
 
                     if (!urlAlreadyPosted) {
-                        await channel.send(`${fxTweetUrl}`);
+                        await channel.send(fxTweetUrl);
                     } else {
                         console.log('This Tweet has already been posted.')
                     }
