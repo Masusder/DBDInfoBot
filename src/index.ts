@@ -129,15 +129,15 @@ async function getLatestTweetLink() {
                 throw new Error("Tweet URL was undefined.");
             }
 
-            const fxTweetUrl = convertToFxTwitter(tweetUrl);
+            const fxTweetUrl: string = convertToFxTwitter(tweetUrl);
             if (fxTweetUrl !== latestTweetLink) {
                 latestTweetLink = fxTweetUrl;
                 const channel = client.channels.cache.get(DBD_NEWS_CHANNEL_ID) as TextChannel;
                 if (channel) {
-                    const urlAlreadyPosted = await hasUrlBeenPosted(channel, fxTweetUrl);
+                    const urlAlreadyPosted: boolean = await hasUrlBeenPosted(channel, fxTweetUrl);
 
                     if (!urlAlreadyPosted) {
-                        await channel.send(fxTweetUrl);
+                        await channel.send(`${fxTweetUrl}`);
                     } else {
                         console.log('This Tweet has already been posted.')
                     }
