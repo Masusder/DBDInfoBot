@@ -79,6 +79,22 @@ async function ensureLoggedIn() {
 }
 
 /**
+ * Converts a Twitter URL to an FXTwitter URL by replacing `twitter.com` with `fxtwitter.com`.
+ * This is done to get better SEO on external platforms.
+ * 
+ * @param {string} url - The original Twitter URL.
+ * @returns {string} The converted FXTwitter URL.
+ * 
+ * @example
+ * convertToFxTwitter("https://twitter.com/user/status/12345");
+ * // Returns: "https://fxtwitter.com/user/status/12345"
+ */
+function convertToFxTwitter(url: string): string {
+    return url.replace('twitter.com', 'fxtwitter.com');
+}
+
+
+/**
  * Fetches the latest tweet link from a Dead by Daylight Twitter account and posts it to a Discord channel
  * if it hasn't been posted already.
  *
@@ -108,25 +124,31 @@ async function getLatestTweetLink() {
 
         if (!done && latestTweet) {
             const tweetUrl = latestTweet.permanentUrl;
-            if (tweetUrl && tweetUrl !== latestTweetLink) {
-                latestTweetLink = tweetUrl;
+
+            if (!tweetUrl) {
+                throw new Error("Tweet URL was undefined.");
+            }
+
+            const fxTweetUrl = convertToFxTwitter(tweetUrl);
+            if (fxTweetUrl !== latestTweetLink) {
+                latestTweetLink = fxTweetUrl;
                 const channel = client.channels.cache.get(DBD_NEWS_CHANNEL_ID) as TextChannel;
                 if (channel) {
-                    const urlAlreadyPosted = await hasUrlBeenPosted(channel, tweetUrl);
+                    const urlAlreadyPosted = await hasUrlBeenPosted(channel, fxTweetUrl);
 
                     if (!urlAlreadyPosted) {
-                        await channel.send(tweetUrl);
+                        await channel.send(fxTweetUrl);
                     } else {
                         console.log('This Tweet has already been posted.')
                     }
                 } else {
-                    console.log('Not found specified text channel.');
+                    throw new Error('Not found specified text channel.');
                 }
             } else {
                 console.log('All good. Tweet URL remains the same.');
             }
         } else {
-            console.log('No new tweets found.');
+            console.error('No new tweets found.');
         }
     } catch (error) {
         console.error('Error fetching tweets:', error);
