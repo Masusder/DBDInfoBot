@@ -9,11 +9,19 @@ import {
     EmbedBuilder,
     SlashCommandBuilder
 } from 'discord.js';
-import { getCosmeticChoices, getCosmeticData, getCosmeticDataById } from '../services/cosmeticService';
-import fetchAndResizeImage from "../utils/resizeImage";
-import Constants from "../constants";
-import axios from "axios";
+import {
+    getCosmeticChoices,
+    getCosmeticDataByName,
+    getCosmeticDataById
+} from '../services/cosmeticService';
+import { getCachedCharacters } from "../services/characterService";
 import { createCanvas, loadImage } from "canvas";
+import { CosmeticTypes, Rarities } from "../data";
+import { Cosmetic } from "../types/cosmetic";
+import fetchAndResizeImage from '../utils/resizeImage';
+import Constants from '../Constants';
+import axios from "axios";
+
 
 export const data = new SlashCommandBuilder()
     .setName('cosmetic')
@@ -33,9 +41,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     await interaction.deferReply();
 
-    const cosmeticData = getCosmeticData(cosmeticName);
+    const cosmeticData = getCosmeticDataByName(cosmeticName);
     if (cosmeticData) {
-        const embedColor: ColorResolvable = Constants.RARITY_COLORS[cosmeticData.Rarity] || Constants.RARITY_COLORS['N/A'];
+        const cosmeticRarity = cosmeticData.Rarity;
+        const embedColor: ColorResolvable = Rarities[cosmeticRarity].color as ColorResolvable || Rarities['N/A'].color as ColorResolvable;
         const imageUrl = `${Constants.DBDINFO_BASE_URL}${cosmeticData.IconFilePathList}`;
         const resizedImageBuffer = await fetchAndResizeImage(imageUrl, 256, null);
 
@@ -53,31 +62,68 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             day: 'numeric'
         }) : 'N/A';
 
-        // const cosmeticType = cosmeticData.Type;
+        const prettyCosmeticType = CosmeticTypes[cosmeticData.Type] || "Unknown";
 
         const outfitPieces: string[] = cosmeticData.OutfitItems || [];
 
+        const priceFields: { name: string; value: string, inline: boolean }[] = [];
+        if (cosmeticData.Prices) {
+            const cellsPrice = cosmeticData.Prices.find(price => price.Cells);
+            const shardsPrice = cosmeticData.Prices.find(price => price.Shards);
+
+            if (cellsPrice) {
+                const originalCellsPrice = cellsPrice.Cells ?? 0;
+                const discountPercentage = getDiscountPercentage("Cells", cosmeticData);
+                const discountedCellsPrice = calculateDiscountedPrice(originalCellsPrice, discountPercentage);
+
+                if (discountPercentage > 0) {
+                    priceFields.push({ name: 'Auric Cells', value: `~~${originalCellsPrice}~~ ${discountedCellsPrice}`, inline: true });
+                } else if (originalCellsPrice !== 0){
+                    priceFields.push({ name: 'Auric Cells', value: `${originalCellsPrice}`, inline: true });
+                }
+            }
+
+            if (shardsPrice) {
+                const originalShardsPrice = shardsPrice.Shards ?? 0;
+                const discountPercentage = getDiscountPercentage("Shards", cosmeticData);
+                const discountedShardsPrice = calculateDiscountedPrice(originalShardsPrice, discountPercentage);
+
+                if (discountPercentage > 0) {
+                    priceFields.push({ name: 'Shards', value: `~~${originalShardsPrice}~~ ${discountedShardsPrice}`, inline: true });
+                } else if (originalShardsPrice !== 0) {
+                    priceFields.push({ name: 'Shards', value: `${originalShardsPrice}`, inline: true });
+                }
+            }
+        }
+
+        const embedTitle = formatEmbedTitle(cosmeticData.CosmeticName, cosmeticData.Unbreakable);
+
+        const characterData = getCachedCharacters();
+        const characterIndex = cosmeticData.Character;
+
+        const fields = [
+            characterIndex !== -1 ? { name: 'Character', value: characterData[characterIndex].Name, inline: true } : null,
+            cosmeticData.CollectionName ? { name: 'Collection', value: cosmeticData.CollectionName, inline: true } : null,
+            { name: 'Rarity', value: Rarities[cosmeticData.Rarity]?.name || 'N/A', inline: true },
+            { name: 'Inclusion Version', value: inclusionVersionPretty || 'N/A', inline: true },
+            { name: 'Type', value: prettyCosmeticType, inline: true },
+            { name: 'Release Date', value: isPurchasable ? formattedReleaseDate : 'N/A', inline: true },
+            ...priceFields
+        ];
+
+        const filteredFields = fields.filter(field => field !== null);
+
         const embed = new EmbedBuilder()
             .setColor(embedColor)
-            .setTitle(cosmeticData.CosmeticName)
+            .setTitle(embedTitle)
             .setDescription(cosmeticData.Description)
-            .addFields(
-                { name: 'Rarity', value: cosmeticData.Rarity || 'N/A', inline: true },
-                { name: 'Inclusion Version', value: inclusionVersionPretty || 'N/A', inline: true },
-                { name: 'Type', value: cosmeticData.Type || 'N/A', inline: true },
-                { name: 'Release Date', value: isPurchasable && formattedReleaseDate || 'N/A', inline: true },
-                {
-                    name: 'More Info',
-                    value: `[Click here](${Constants.DBDINFO_BASE_URL}/store/cosmetics?cosmeticId=${cosmeticData.CosmeticId})`,
-                    inline: false
-                }
-            )
+            .addFields(filteredFields)
             .setImage('attachment://resized-image.png')
             .setTimestamp()
             .setFooter({ text: 'Cosmetic Information' });
 
         const viewImagesButton = new ButtonBuilder()
-            .setCustomId('view_outfit_pieces')
+            .setCustomId(`view_outfit_pieces::${cosmeticData.CosmeticId}`)
             .setLabel('View Outfit Pieces')
             .setStyle(ButtonStyle.Secondary)
             .setDisabled(outfitPieces.length === 0);
@@ -95,7 +141,37 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 }
 
 // region Cosmetic Utils
-export function getCosmeticPiecesImage(cosmeticPieces: string[]) {
+function formatEmbedTitle(cosmeticName: string, isUnbreakable: boolean): string {
+    if (isUnbreakable) {
+        return `${cosmeticName.trim()} (Linked Cosmetic)`;
+    }
+
+    return cosmeticName;
+}
+
+// Function to calculate the discounted price
+function calculateDiscountedPrice(baseCurrency: number, discountPercentage: number): number {
+    return Math.round(baseCurrency - (baseCurrency * discountPercentage));
+}
+
+function getDiscountPercentage(currencyId: string, cosmeticData: Cosmetic): number {
+    const currentDate = new Date();
+    const activeTemporaryDiscounts = cosmeticData.TemporaryDiscounts?.filter(discount => {
+        const startDate = new Date(discount.startDate);
+        const endDate = new Date(discount.endDate);
+        return currentDate >= startDate && currentDate <= endDate; // Active if within the date range
+    }) || [];
+
+    const tempDiscount = activeTemporaryDiscounts.find(discount => discount.currencyId === currencyId);
+
+    if (currencyId === "Shards") {
+        return tempDiscount ? tempDiscount.discountPercentage : 0; // No base discount for Shards
+    }
+
+    return tempDiscount ? tempDiscount.discountPercentage : cosmeticData.DiscountPercentage;
+}
+
+export function getCosmeticPiecesCombinedImage(cosmeticPieces: string[]) {
     const urls: string[] = [];
     for (const cosmeticPieceId of cosmeticPieces) {
         const cosmeticPieceData = getCosmeticDataById(cosmeticPieceId);
@@ -111,7 +187,7 @@ export function getCosmeticPiecesImage(cosmeticPieces: string[]) {
 
 export async function combineImages(imageUrls: string[]): Promise<Buffer> {
     const imageBuffers: Buffer[] = await Promise.all(
-        imageUrls.map(async (url) => {
+        imageUrls.map(async(url) => {
             try {
                 const response = await axios.get(url, { responseType: 'arraybuffer' });
                 return Buffer.from(response.data);

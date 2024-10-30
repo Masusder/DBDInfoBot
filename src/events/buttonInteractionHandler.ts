@@ -1,24 +1,49 @@
-import { ButtonInteraction } from 'discord.js';
-import { getCosmeticData } from '../services/cosmeticService';
-import { combineImages, getCosmeticPiecesImage } from "../commands/cosmeticCommand";
+import { ButtonInteraction, EmbedBuilder } from 'discord.js';
+import { getCosmeticDataByName, getCosmeticDataById } from '../services/cosmeticService';
+import { combineImages, getCosmeticPiecesCombinedImage } from "../commands/cosmeticCommand";
+import { extractCosmeticId } from "../utils/stringUtils";
 
 export async function handleButtonInteraction(interaction: ButtonInteraction) {
     if (!interaction.deferred) await interaction.deferUpdate();
 
-    if (interaction.customId === 'view_outfit_pieces') {
-        const cosmeticData = getCosmeticData(<string>interaction.message.embeds[0].title);
+    if (interaction.customId.startsWith('view_outfit_pieces::')) {
+        const cosmeticId = extractCosmeticId(interaction.customId);
 
+        if (!cosmeticId) {
+            await interaction.followUp({ content: 'Invalid cosmetic ID.', ephemeral: true });
+            return;
+        }
+
+        const cosmeticData = getCosmeticDataById(cosmeticId);
         if (cosmeticData) {
-            const outfitPieces = getCosmeticPiecesImage(cosmeticData.OutfitItems);
+            const outfitPieces = getCosmeticPiecesCombinedImage(cosmeticData.OutfitItems);
             const combinedImageBuffer = await combineImages(outfitPieces);
 
+            const embed = new EmbedBuilder()
+                .setTitle(`Outfit Pieces for ${cosmeticData.CosmeticName}`)
+                .setDescription(cosmeticData.Description)
+                .setColor(interaction.message.embeds[0].color)
+                .setImage('attachment://combined-outfit-pieces.png');
+
+            for (const pieceId of cosmeticData.OutfitItems) {
+                const pieceData = getCosmeticDataById(pieceId);
+
+                if (pieceData) {
+                    embed.addFields({
+                        name: pieceData.CosmeticName,
+                        value: pieceData.Description,
+                        inline: true
+                    });
+                }
+            }
+
             await interaction.followUp({
-                content: 'Here are the outfit pieces:',
-                files: [{ attachment: combinedImageBuffer, name: 'combined-image.png' }],
+                embeds: [embed],
+                files: [{ attachment: combinedImageBuffer, name: 'combined-outfit-pieces.png' }],
                 ephemeral: true,
             });
         } else {
-            await interaction.reply({ content: 'Error retrieving cosmetic data.', ephemeral: true });
+            await interaction.followUp({ content: 'Error retrieving cosmetic data.', ephemeral: true });
         }
     }
-}
+    }

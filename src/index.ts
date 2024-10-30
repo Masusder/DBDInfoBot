@@ -1,13 +1,14 @@
 import { Client, Events, GatewayIntentBits } from 'discord.js';
 import {
-    execute as executeCosmetic,
-    autocomplete as autocompleteCosmetic
-} from './commands/cosmeticCommand';
-import { initializeCosmeticCache } from './services/cosmeticService';
-import { getLatestTweetLink, loginToTwitter } from "./twitter-scraper";
-import { handleButtonInteraction } from "./events/buttonInteractionHandler";
+    initializeCosmeticCache,
+    initializeCharactersCache
+} from './services';
+import {
+    startTweetJob,
+    startCacheManagerJob
+} from "./jobs/";
+import interactionCreate from "./events/interactionCreate";
 import dotenv from 'dotenv';
-import cron from 'node-cron';
 
 dotenv.config();
 
@@ -19,28 +20,20 @@ client.once(Events.ClientReady, async readyClient => {
     console.log(`Logged in as ${readyClient.user.tag}`);
 
     await initializeCosmeticCache();
+    await initializeCharactersCache();
+
+    // Set cron-job to refresh cached data every hour
+    await startCacheManagerJob();
 
     // Set cron-job to check for new tweets every 60 seconds
     // Don't run during development
     if (process.env.BRANCH !== 'dev') {
-        loginToTwitter().then(() => {
-            cron.schedule('* * * * *', async () => {
-                await getLatestTweetLink(client);
-            });
-        });
+        await startTweetJob(client);
     }
 });
 
-client.on('interactionCreate', async interaction => {
-    if (interaction.isChatInputCommand() && interaction.commandName === 'cosmetic') {
-        await executeCosmetic(interaction);
-    } else if (interaction.isAutocomplete() && interaction.commandName === 'cosmetic') {
-        await autocompleteCosmetic(interaction);
-    }
-
-    if (interaction.isButton()) {
-        await handleButtonInteraction(interaction);
-    }
+client.on(Events.InteractionCreate, async interaction => {
+    await interactionCreate(client, interaction);
 });
 
 // Log in to Discord with your client's token
