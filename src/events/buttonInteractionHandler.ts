@@ -21,7 +21,6 @@ export async function handleButtonInteraction(interaction: ButtonInteraction) {
 
             const embed = new EmbedBuilder()
                 .setTitle(`Outfit Pieces for ${cosmeticData.CosmeticName}`)
-                .setDescription(cosmeticData.Description)
                 .setColor(interaction.message.embeds[0].color)
                 .setImage('attachment://combined-outfit-pieces.png');
 

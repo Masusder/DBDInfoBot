@@ -4,15 +4,30 @@ import {
     execute as executeCosmetic,
     autocomplete as autocompleteCosmetic
 } from '../commands/cosmeticCommand';
+import {
+    execute as executeCosmeticList
+} from "../commands/cosmeticListCommand";
 
 export default async (client: Client, interaction: Interaction) => {
-    if (interaction.isChatInputCommand() && interaction.commandName === 'cosmetic') {
-        await executeCosmetic(interaction);
-    } else if (interaction.isAutocomplete() && interaction.commandName === 'cosmetic') {
-        await autocompleteCosmetic(interaction);
-    }
+    switch (true) {
+        case interaction.isChatInputCommand() && interaction.commandName === 'cosmetic':
+            await executeCosmetic(interaction);
+            break;
 
-    if (interaction.isButton()) {
-        await handleButtonInteraction(interaction);
+        case interaction.isAutocomplete() && interaction.commandName === 'cosmetic':
+            autocompleteCosmetic(interaction);
+            break;
+
+        // case interaction.isChatInputCommand() && interaction.commandName === 'cosmetic_list':
+        //     await executeCosmeticList(interaction);
+        //     break;
+
+        case interaction.isButton():
+            await handleButtonInteraction(interaction);
+            break;
+
+        default:
+            console.warn('Unhandled interaction type or command:', interaction);
+            break;
     }
 };

@@ -19,9 +19,24 @@ export async function initializeCharactersCache(): Promise<void> {
 
 // region Helpers
 // Retrieve a single character by index
-export function getCosmeticDataByIndex(index: string | number): Character | undefined {
+export function getCharacterDataByIndex(index: string | number): Character | undefined {
     const cachedCharacters = getCachedCharacters();
     return cachedCharacters[index];
+}
+
+export function getCharacterIndexByName(name: string | null): number | undefined {
+    const cachedCharacters = getCachedCharacters();
+
+    if (!name) return undefined;
+
+    const lowerCaseName = name.toLowerCase();
+    for (const [key, character] of Object.entries(cachedCharacters)) {
+        if (character.Name.toLowerCase().includes(lowerCaseName)) {
+            return parseInt(key);
+        }
+    }
+
+    return undefined;
 }
 
 export function getCachedCharacters(): { [key: string]: Character } {

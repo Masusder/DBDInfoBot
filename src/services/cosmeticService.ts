@@ -36,6 +36,14 @@ export function getCosmeticDataByName(name: string): Cosmetic | undefined {
     return Object.values(cachedCosmetics).find(cosmetic => cosmetic.CosmeticName.toLowerCase() === name.toLowerCase());
 }
 
+export function getCosmeticListByCharacterIndex(index: number) {
+    const cosmeticData = getCachedCosmetics();
+
+    return Object.values(cosmeticData).filter(cosmetic => {
+        return cosmetic.Character === index;
+    });
+}
+
 // Retrieve a single cosmetic by ID
 export function getCosmeticDataById(id: string): Cosmetic | undefined {
     const cachedCosmetics = getCachedCosmetics();

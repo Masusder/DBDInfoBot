@@ -1,6 +1,6 @@
 import { Client, TextChannel } from "discord.js";
 import { Scraper, Tweet } from '@the-convocation/twitter-scraper';
-import Constants from "./Constants";
+import Constants from "./constants";
 
 const scraper = new Scraper();
 

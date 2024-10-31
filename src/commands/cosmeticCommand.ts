@@ -19,7 +19,7 @@ import { createCanvas, loadImage } from "canvas";
 import { CosmeticTypes, Rarities } from "../data";
 import { Cosmetic } from "../types/cosmetic";
 import fetchAndResizeImage from '../utils/resizeImage';
-import Constants from '../Constants';
+import Constants from '../constants';
 import axios from "axios";
 
 
@@ -39,104 +39,125 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     if (!cosmeticName) return;
 
-    await interaction.deferReply();
+    try {
+        await interaction.deferReply();
 
-    const cosmeticData = getCosmeticDataByName(cosmeticName);
-    if (cosmeticData) {
-        const cosmeticRarity = cosmeticData.Rarity;
-        const embedColor: ColorResolvable = Rarities[cosmeticRarity].color as ColorResolvable || Rarities['N/A'].color as ColorResolvable;
-        const imageUrl = `${Constants.DBDINFO_BASE_URL}${cosmeticData.IconFilePathList}`;
-        const resizedImageBuffer = await fetchAndResizeImage(imageUrl, 256, null);
+        const cosmeticData = getCosmeticDataByName(cosmeticName);
+        if (cosmeticData) {
+            const cosmeticRarity = cosmeticData.Rarity;
+            const embedColor: ColorResolvable = Rarities[cosmeticRarity].color as ColorResolvable || Rarities['N/A'].color as ColorResolvable;
+            const imageUrl = `${Constants.DBDINFO_BASE_URL}${cosmeticData.IconFilePathList}`;
+            const resizedImageBuffer = await fetchAndResizeImage(imageUrl, 256, null);
 
-        const attachment = new AttachmentBuilder(resizedImageBuffer, { name: 'resized-image.png' });
+            const attachment = new AttachmentBuilder(resizedImageBuffer, { name: 'resized-image.png' });
 
-        const inclusionVersion: string = cosmeticData.InclusionVersion;
-        const inclusionVersionPretty = inclusionVersion === "Legacy" ? "Before 5.5.0" : inclusionVersion;
+            const inclusionVersion: string = cosmeticData.InclusionVersion;
+            const inclusionVersionPretty = inclusionVersion === "Legacy" ? "Before 5.5.0" : inclusionVersion;
 
-        const isPurchasable = cosmeticData.Purchasable;
+            const isPurchasable = cosmeticData.Purchasable;
 
-        const releaseDate = cosmeticData.ReleaseDate ? new Date(cosmeticData.ReleaseDate) : null;
-        const formattedReleaseDate = releaseDate ? releaseDate.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        }) : 'N/A';
+            const releaseDate = cosmeticData.ReleaseDate ? new Date(cosmeticData.ReleaseDate) : null;
+            const formattedReleaseDate = releaseDate ? releaseDate.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            }) : 'N/A';
 
-        const prettyCosmeticType = CosmeticTypes[cosmeticData.Type] || "Unknown";
+            const prettyCosmeticType = CosmeticTypes[cosmeticData.Type] || "Unknown";
 
-        const outfitPieces: string[] = cosmeticData.OutfitItems || [];
+            const outfitPieces: string[] = cosmeticData.OutfitItems || [];
 
-        const priceFields: { name: string; value: string, inline: boolean }[] = [];
-        if (cosmeticData.Prices) {
-            const cellsPrice = cosmeticData.Prices.find(price => price.Cells);
-            const shardsPrice = cosmeticData.Prices.find(price => price.Shards);
+            const priceFields: { name: string; value: string, inline: boolean }[] = [];
+            if (cosmeticData.Prices) {
+                const cellsPrice = cosmeticData.Prices.find(price => price.Cells);
+                const shardsPrice = cosmeticData.Prices.find(price => price.Shards);
 
-            if (cellsPrice) {
-                const originalCellsPrice = cellsPrice.Cells ?? 0;
-                const discountPercentage = getDiscountPercentage("Cells", cosmeticData);
-                const discountedCellsPrice = calculateDiscountedPrice(originalCellsPrice, discountPercentage);
+                if (cellsPrice) {
+                    const originalCellsPrice = cellsPrice.Cells ?? 0;
+                    const discountPercentage = getDiscountPercentage("Cells", cosmeticData);
+                    const discountedCellsPrice = calculateDiscountedPrice(originalCellsPrice, discountPercentage);
 
-                if (discountPercentage > 0) {
-                    priceFields.push({ name: 'Auric Cells', value: `~~${originalCellsPrice}~~ ${discountedCellsPrice}`, inline: true });
-                } else if (originalCellsPrice !== 0){
-                    priceFields.push({ name: 'Auric Cells', value: `${originalCellsPrice}`, inline: true });
+                    if (discountPercentage > 0) {
+                        priceFields.push({
+                            name: 'Auric Cells',
+                            value: `~~${originalCellsPrice}~~ ${discountedCellsPrice}`,
+                            inline: true
+                        });
+                    } else if (originalCellsPrice !== 0) {
+                        priceFields.push({ name: 'Auric Cells', value: `${originalCellsPrice}`, inline: true });
+                    }
+                }
+
+                if (shardsPrice) {
+                    const originalShardsPrice = shardsPrice.Shards ?? 0;
+                    const discountPercentage = getDiscountPercentage("Shards", cosmeticData);
+                    const discountedShardsPrice = calculateDiscountedPrice(originalShardsPrice, discountPercentage);
+
+                    if (discountPercentage > 0) {
+                        priceFields.push({
+                            name: 'Shards',
+                            value: `~~${originalShardsPrice}~~ ${discountedShardsPrice}`,
+                            inline: true
+                        });
+                    } else if (originalShardsPrice !== 0) {
+                        priceFields.push({ name: 'Shards', value: `${originalShardsPrice}`, inline: true });
+                    }
                 }
             }
 
-            if (shardsPrice) {
-                const originalShardsPrice = shardsPrice.Shards ?? 0;
-                const discountPercentage = getDiscountPercentage("Shards", cosmeticData);
-                const discountedShardsPrice = calculateDiscountedPrice(originalShardsPrice, discountPercentage);
+            const embedTitle = formatEmbedTitle(cosmeticData.CosmeticName, cosmeticData.Unbreakable);
 
-                if (discountPercentage > 0) {
-                    priceFields.push({ name: 'Shards', value: `~~${originalShardsPrice}~~ ${discountedShardsPrice}`, inline: true });
-                } else if (originalShardsPrice !== 0) {
-                    priceFields.push({ name: 'Shards', value: `${originalShardsPrice}`, inline: true });
-                }
-            }
+            const characterData = getCachedCharacters();
+            const characterIndex = cosmeticData.Character;
+
+            const fields = [
+                characterIndex !== -1 ? {
+                    name: 'Character',
+                    value: characterData[characterIndex].Name,
+                    inline: true
+                } : null,
+                cosmeticData.CollectionName ? {
+                    name: 'Collection',
+                    value: cosmeticData.CollectionName,
+                    inline: true
+                } : null,
+                { name: 'Rarity', value: Rarities[cosmeticData.Rarity]?.name || 'N/A', inline: true },
+                { name: 'Inclusion Version', value: inclusionVersionPretty || 'N/A', inline: true },
+                { name: 'Type', value: prettyCosmeticType, inline: true },
+                { name: 'Release Date', value: isPurchasable ? formattedReleaseDate : 'N/A', inline: true },
+                ...priceFields
+            ];
+
+            const filteredFields = fields.filter(field => field !== null);
+
+            const embed = new EmbedBuilder()
+                .setColor(embedColor)
+                .setTitle(embedTitle)
+                .setDescription(cosmeticData.Description)
+                .addFields(filteredFields)
+                .setImage('attachment://resized-image.png')
+                .setTimestamp()
+                .setFooter({ text: 'Cosmetic Information' });
+
+            const viewImagesButton = new ButtonBuilder()
+                .setCustomId(`view_outfit_pieces::${cosmeticData.CosmeticId}`)
+                .setLabel('View Outfit Pieces')
+                .setStyle(ButtonStyle.Secondary)
+                .setDisabled(outfitPieces.length === 0);
+
+            const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(viewImagesButton);
+
+            await interaction.editReply({
+                embeds: [embed],
+                files: [attachment],
+                components: outfitPieces.length > 0 ? [actionRow] : [],
+            });
+        } else {
+            await interaction.followUp(`No cosmetic found for "${cosmeticName}".`);
         }
-
-        const embedTitle = formatEmbedTitle(cosmeticData.CosmeticName, cosmeticData.Unbreakable);
-
-        const characterData = getCachedCharacters();
-        const characterIndex = cosmeticData.Character;
-
-        const fields = [
-            characterIndex !== -1 ? { name: 'Character', value: characterData[characterIndex].Name, inline: true } : null,
-            cosmeticData.CollectionName ? { name: 'Collection', value: cosmeticData.CollectionName, inline: true } : null,
-            { name: 'Rarity', value: Rarities[cosmeticData.Rarity]?.name || 'N/A', inline: true },
-            { name: 'Inclusion Version', value: inclusionVersionPretty || 'N/A', inline: true },
-            { name: 'Type', value: prettyCosmeticType, inline: true },
-            { name: 'Release Date', value: isPurchasable ? formattedReleaseDate : 'N/A', inline: true },
-            ...priceFields
-        ];
-
-        const filteredFields = fields.filter(field => field !== null);
-
-        const embed = new EmbedBuilder()
-            .setColor(embedColor)
-            .setTitle(embedTitle)
-            .setDescription(cosmeticData.Description)
-            .addFields(filteredFields)
-            .setImage('attachment://resized-image.png')
-            .setTimestamp()
-            .setFooter({ text: 'Cosmetic Information' });
-
-        const viewImagesButton = new ButtonBuilder()
-            .setCustomId(`view_outfit_pieces::${cosmeticData.CosmeticId}`)
-            .setLabel('View Outfit Pieces')
-            .setStyle(ButtonStyle.Secondary)
-            .setDisabled(outfitPieces.length === 0);
-
-        const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(viewImagesButton);
-
-        await interaction.editReply({
-            embeds: [embed],
-            files: [attachment],
-            components: outfitPieces.length > 0 ? [actionRow] : [],
-        });
-    } else {
-        await interaction.followUp(`No cosmetic found for "${cosmeticName}".`);
+    } catch (error) {
+        console.error("Error executing cosmetic command:", error);
+        await interaction.followUp("An error occurred while fetching the cosmetic information. Please try again later.");
     }
 }
 
@@ -217,13 +238,28 @@ export async function combineImages(imageUrls: string[]): Promise<Buffer> {
 
 // endregion
 
-export async function autocomplete(interaction: AutocompleteInteraction) {
-    const focusedValue = interaction.options.getFocused();
-    const choices = getCosmeticChoices(focusedValue);
-    const options = choices.slice(0, 25).map(cosmetic => ({
-        name: cosmetic.CosmeticName,
-        value: cosmetic.CosmeticName
-    }));
-
-    await interaction.respond(options);
+// region Autocomplete
+function debounce<T extends (...args: any[]) => any>(func: T, wait: number): (...args: Parameters<T>) => void {
+    let timeout: NodeJS.Timeout | undefined;
+    return (...args: Parameters<T>) => {
+        if (timeout) clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), wait);
+    };
 }
+
+export const autocomplete = debounce(async function autocomplete(interaction: AutocompleteInteraction) {
+    try {
+        const focusedValue = interaction.options.getFocused();
+        const choices = getCosmeticChoices(focusedValue);
+        const options = choices.slice(0, 25).map(cosmetic => ({
+            name: cosmetic.CosmeticName,
+            value: cosmetic.CosmeticName
+        }));
+
+        await interaction.respond(options);
+    } catch (error) {
+        console.error("Error handling autocomplete interaction:", error);
+        await interaction.respond([]);
+    }
+}, 300);
+// endregion
