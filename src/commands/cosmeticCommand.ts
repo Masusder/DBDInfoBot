@@ -259,7 +259,6 @@ export const autocomplete = debounce(async function autocomplete(interaction: Au
         await interaction.respond(options);
     } catch (error) {
         console.error("Error handling autocomplete interaction:", error);
-        await interaction.respond([]);
     }
 }, 300);
 // endregion
