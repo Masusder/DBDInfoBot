@@ -5,7 +5,8 @@ import {
     autocomplete as autocompleteCosmetic
 } from '../commands/cosmeticCommand';
 import {
-    execute as executeCosmeticList
+    execute as executeCosmeticList,
+    autocomplete as autocompleteCosmeticList
 } from "../commands/cosmeticListCommand";
 
 export default async (client: Client, interaction: Interaction) => {
@@ -18,12 +19,18 @@ export default async (client: Client, interaction: Interaction) => {
             autocompleteCosmetic(interaction);
             break;
 
-        // case interaction.isChatInputCommand() && interaction.commandName === 'cosmetic_list':
-        //     await executeCosmeticList(interaction);
-        //     break;
+        case interaction.isAutocomplete() && interaction.commandName === 'cosmetic_list':
+            await autocompleteCosmeticList(interaction);
+            break;
+
+        case interaction.isChatInputCommand() && interaction.commandName === 'cosmetic_list':
+            await executeCosmeticList(interaction);
+            break;
 
         case interaction.isButton():
-            await handleButtonInteraction(interaction);
+            if (!interaction.customId.startsWith('pagination::')) {
+                await handleButtonInteraction(interaction);
+            }
             break;
 
         default:

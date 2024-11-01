@@ -7,7 +7,7 @@ import {
     startTweetJob,
     startCacheManagerJob
 } from "./jobs/";
-import interactionCreate from "./events/interactionCreate";
+import interactionCreate from "./interactions/interactionCreate";
 import dotenv from 'dotenv';
 
 dotenv.config();

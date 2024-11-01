@@ -1,18 +1,18 @@
 import { REST, Routes } from 'discord.js';
 import * as dotenv from 'dotenv';
 import { data as cosmeticCommand } from './commands/cosmeticCommand';
-// import { data as cosmeticListCommand } from './commands/cosmeticListCommand';
+import { data as cosmeticListCommand } from './commands/cosmeticListCommand';
 
 dotenv.config();
 
 const commands = [
     cosmeticCommand.toJSON(),
-    // cosmeticListCommand.toJSON()
+    cosmeticListCommand.toJSON()
 ];
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN!);
 
-(async () => {
+(async() => {
     try {
         console.log('Started refreshing application (/) commands.');
 
