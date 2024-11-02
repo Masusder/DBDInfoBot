@@ -1,9 +1,5 @@
 import { Client, Events, GatewayIntentBits } from 'discord.js';
 import {
-    initializeCosmeticCache,
-    initializeCharactersCache, initializePerksCache
-} from './services';
-import {
     startTweetJob,
     startCacheManagerJob
 } from "./jobs/";
