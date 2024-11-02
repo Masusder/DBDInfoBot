@@ -1,5 +1,5 @@
 import axios from '../utils/apiClient';
-import { IBuild, IBuildFilters } from "../types/build";
+import { IBuildFilters } from "../types/build";
 
 export async function retrieveBuilds(filters: IBuildFilters): Promise<any | undefined> {
     try {
