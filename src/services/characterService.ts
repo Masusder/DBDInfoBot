@@ -13,7 +13,7 @@ export async function initializeCharactersCache(): Promise<void> {
             console.error("Failed to fetch characters: API responded with success = false");
         }
     } catch (error) {
-        console.error('Error fetching cosmetics:', error);
+        console.error('Error fetching characters:', error);
     }
 }
 

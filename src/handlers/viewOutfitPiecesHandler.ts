@@ -6,7 +6,7 @@ import {
 } from '../commands/cosmeticCommand';
 import { extractInteractionId } from '../utils/stringUtils';
 
-export async function handleViewOutfitPieces(interaction: ButtonInteraction) {
+export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
     const cosmeticId = extractInteractionId(interaction.customId);
 
     if (!cosmeticId) {

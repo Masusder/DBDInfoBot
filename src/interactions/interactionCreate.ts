@@ -1,4 +1,4 @@
-import { Client, Interaction } from 'discord.js';
+import { Interaction } from 'discord.js';
 import { handleButtonInteraction } from './buttonInteractionHandler';
 import {
     execute as executeCosmetic,
@@ -8,8 +8,11 @@ import {
     execute as executeCosmeticList,
     autocomplete as autocompleteCosmeticList
 } from "../commands/cosmeticListCommand";
+import {
+    execute as executeBuildList
+} from "../commands/buildListCommand";
 
-export default async (client: Client, interaction: Interaction) => {
+export default async (interaction: Interaction) => {
     switch (true) {
         case interaction.isChatInputCommand() && interaction.commandName === 'cosmetic':
             await executeCosmetic(interaction);
@@ -25,6 +28,10 @@ export default async (client: Client, interaction: Interaction) => {
 
         case interaction.isChatInputCommand() && interaction.commandName === 'cosmetic_list':
             await executeCosmeticList(interaction);
+            break;
+
+        case interaction.isChatInputCommand() && interaction.commandName === 'build_list':
+            await executeBuildList(interaction);
             break;
 
         case interaction.isButton():

@@ -1,3 +1,6 @@
+/**
+ * See https://github.com/Masusder/UEParser/blob/master/UEParser/Models/APIComposerModels/Cosmetic.cs
+ */
 export interface Price {
     Cells?: number;
     Shards?: number;
