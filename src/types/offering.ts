@@ -1,3 +1,6 @@
+/**
+ * See https://github.com/Masusder/UEParser/blob/master/UEParser/Models/APIComposerModels/Offering.cs
+ */
 export interface Offering {
     Type: string;
     StatusEffects: string[];

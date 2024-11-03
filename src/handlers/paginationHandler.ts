@@ -6,6 +6,7 @@ import {
     EmbedBuilder,
     Message
 } from "discord.js";
+import { sendUnauthorizedMessage } from "./unauthorizedHandler";
 
 export interface IPaginationOptions {
     items: any[];
@@ -78,7 +79,7 @@ export async function paginationHandler(options: IPaginationOptions) {
     });
 
     const collector = interactionReply.createMessageComponentCollector({
-        filter: (i): i is ButtonInteraction => i.isButton() && i.user.id === interactionUserId,
+        filter: (i): i is ButtonInteraction => i.isButton(),
         time: 60_000
     });
 
@@ -86,6 +87,11 @@ export async function paginationHandler(options: IPaginationOptions) {
         const [action, paginationType] = interaction.customId.split('::');
 
         if (action === 'pagination') {
+            if (interaction.user.id !== interactionUserId) {
+                await sendUnauthorizedMessage(interaction);
+                return;
+            }
+
             currentPage = determineNewPage(currentPage, paginationType as TPaginationType, totalPages);
 
             await interaction.update({

@@ -2,11 +2,18 @@ import {
     AutocompleteInteraction,
     ChatInputCommandInteraction,
     EmbedBuilder,
-    SlashCommandBuilder,
+    SlashCommandBuilder
 } from "discord.js";
-import { getCharacterChoices, getCharacterDataByIndex, getCharacterIndexByName } from "../services/characterService";
+import {
+    getCharacterChoices,
+    getCharacterDataByIndex,
+    getCharacterIndexByName
+} from "../services/characterService";
 import { getCosmeticListByCharacterIndex } from "../services/cosmeticService";
-import { combineBaseUrlWithPath, formatInclusionVersion } from "../utils/stringUtils";
+import {
+    combineBaseUrlWithPath,
+    formatInclusionVersion
+} from "../utils/stringUtils";
 import { CosmeticTypes } from "../data";
 import { paginationHandler } from "../handlers/paginationHandler";
 
@@ -50,7 +57,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
         const generateEmbed = (pageItems: any[]) => {
             const embed = new EmbedBuilder()
-                .setTitle(`Cosmetics for ${characterName}`)
+                .setTitle(`Cosmetics for ${characterName} (${cosmetics.length} Total)`)
                 .setColor("#1e90ff")
                 .setFooter({ text: `List of cosmetics` })
                 .setTimestamp()
@@ -63,7 +70,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 embed.addFields({
                     name: cosmetic.CosmeticName,
                     value: description,
-                    inline: true,
+                    inline: true
                 });
             });
 
@@ -82,7 +89,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
 }
 
-// Autocomplete function
+// region Autocomplete
 export async function autocomplete(interaction: AutocompleteInteraction) {
     try {
         const focusedValue = interaction.options.getFocused();
@@ -97,3 +104,5 @@ export async function autocomplete(interaction: AutocompleteInteraction) {
         console.error("Error handling autocomplete interaction:", error);
     }
 }
+
+// endregion

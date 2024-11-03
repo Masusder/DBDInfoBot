@@ -65,7 +65,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             const outfitPieces: string[] = cosmeticData.OutfitItems || [];
 
             const priceFields: { name: string; value: string, inline: boolean }[] = [];
-            if (cosmeticData.Prices) {
+            if (cosmeticData.Prices && isPurchasable) {
                 const cellsPrice = cosmeticData.Prices.find(price => price.Cells);
                 const shardsPrice = cosmeticData.Prices.find(price => price.Shards);
 
@@ -237,7 +237,6 @@ export async function combineImages(imageUrls: string[]): Promise<Buffer> {
 
     return canvas.toBuffer('image/png');
 }
-
 // endregion
 
 // region Autocomplete

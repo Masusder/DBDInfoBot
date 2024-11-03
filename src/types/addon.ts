@@ -1,3 +1,6 @@
+/**
+ * See https://github.com/Masusder/UEParser/blob/master/UEParser/Models/APIComposerModels/Addon.cs
+ */
 export interface Addon {
     Type: string;
     ItemType: string;

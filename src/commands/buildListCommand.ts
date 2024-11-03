@@ -14,7 +14,6 @@ import {
     retrieveBuilds
 } from "../services/buildService";
 import {
-    getCachedCharacters,
     getCharacterChoices
 } from "../services/characterService";
 import {
@@ -31,6 +30,7 @@ import {
     Addon,
     Offering
 } from "../types";
+import { sendUnauthorizedMessage } from "../handlers/unauthorizedHandler";
 
 export const data = new SlashCommandBuilder()
     .setName('build_list')
@@ -199,12 +199,17 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         });
 
         const collector = replyMessage.createMessageComponentCollector({
-            filter: (i): i is ButtonInteraction => i.isButton() && i.user.id === interaction.user.id,
+            filter: (i): i is ButtonInteraction => i.isButton(),
             time: 60_000
         });
 
-        collector.on('collect', async i => {
+        collector.on('collect', async (i: ButtonInteraction) => {
             try {
+                if (i.user.id !== interaction.user.id) {
+                    await sendUnauthorizedMessage(i);
+                    return;
+                }
+
                 const [_, paginationType] = i.customId.split('::');
 
                 currentPage = determineNewPage(currentPage, paginationType as TPaginationType, totalPages + 1);
@@ -261,7 +266,7 @@ export async function autocompleteInclusionVersion(interaction: AutocompleteInte
     try {
         const focusedValue = interaction.options.getFocused();
         const inclusionVersions = await getCachedInclusionVersions();
-        const filteredVersions = inclusionVersions.filter(version =>
+        const filteredVersions = inclusionVersions.sort().reverse().filter(version =>
             version.toLowerCase().includes(focusedValue.toLowerCase())
         );
         const options = filteredVersions.slice(0, 25).map(inclusionVersion => ({
