@@ -5,16 +5,32 @@ import {
     ButtonInteraction,
     AutocompleteInteraction
 } from "discord.js";
-import { IBuild, IBuildFilters } from "../types/build";
-import { getCachedInclusionVersions, retrieveBuilds } from "../services/buildService";
-import { getCachedCharacters, getCharacterChoices } from "../services/characterService";
-import { generatePaginationButtons } from "../handlers/paginationHandler";
+import {
+    IBuild,
+    IBuildFilters
+} from "../types/build";
+import {
+    getCachedInclusionVersions,
+    retrieveBuilds
+} from "../services/buildService";
+import {
+    getCachedCharacters,
+    getCharacterChoices
+} from "../services/characterService";
+import {
+    determineNewPage,
+    generatePaginationButtons,
+    TPaginationType
+} from "../handlers/paginationHandler";
 import { BuildCategories } from "../data/BuildCategories";
-import { Character, Perk, Addon, Offering } from "../types";
-import { getCachedPerks } from "../services/perkService";
 import { combineBaseUrlWithPath } from "../utils/stringUtils";
-import { getCachedAddons } from "../services/addonService";
-import { getCachedOfferings } from "../services/offeringService";
+import { getGameData } from "../utils/dataUtils";
+import {
+    Character,
+    Perk,
+    Addon,
+    Offering
+} from "../types";
 
 export const data = new SlashCommandBuilder()
     .setName('build_list')
@@ -91,7 +107,7 @@ async function createEmbed(
     offeringData: { [key: string]: Offering },
     username: string) {
     const embed = new EmbedBuilder()
-        .setTitle(`Build List - Page ${currentPage} of ${totalPages}`)
+        .setTitle(`Build List - Page ${currentPage} of ${totalPages + 1}`)
         .setColor(role === 'Survivor' ? "#1e90ff" : "Red")
         .setDescription(`Here are the builds matching your filters: \n[You can create your own build here](${combineBaseUrlWithPath('/builds/create')})`)
         .setTimestamp()
@@ -150,7 +166,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     let currentPage = interaction.options.getNumber('page') || 1;
 
     const filters: IBuildFilters = {
-        page: currentPage,
+        page: currentPage - 1,
         searchInput: interaction.options.getString('title') || null,
         category: interaction.options.getString('category') as IBuildFilters['category'],
         role: interaction.options.getString('role') as IBuildFilters['role'],
@@ -168,15 +184,18 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             return await interaction.editReply({ content: "No builds found with the specified filters." });
         }
 
-        const characterData = await getCachedCharacters();
-        const perkData = await getCachedPerks();
-        const addonData = await getCachedAddons();
-        const offeringData = await getCachedOfferings();
+        const { characterData, perkData, addonData, offeringData } = await getGameData({
+            characterData: true,
+            perkData: true,
+            addonData: true,
+            offeringData: true
+        });
+
         const embed = await createEmbed(filters.role, builds, currentPage, totalPages, characterData, perkData, addonData, offeringData, interaction.user.username);
 
         const replyMessage = await interaction.editReply({
             embeds: [embed],
-            components: [generatePaginationButtons(currentPage, totalPages)]
+            components: [generatePaginationButtons(currentPage, totalPages + 1)]
         });
 
         const collector = replyMessage.createMessageComponentCollector({
@@ -185,26 +204,27 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         });
 
         collector.on('collect', async i => {
-            const [_, paginationType] = i.customId.split('::');
+            try {
+                const [_, paginationType] = i.customId.split('::');
 
-            if (paginationType === 'first') currentPage = 1;
-            else if (paginationType === 'previous') currentPage = Math.max(1, currentPage - 1);
-            else if (paginationType === 'next') currentPage = Math.min(totalPages, currentPage + 1);
-            else if (paginationType === 'last') currentPage = totalPages;
+                currentPage = determineNewPage(currentPage, paginationType as TPaginationType, totalPages + 1);
 
-            const newFilters: IBuildFilters = { ...filters, page: currentPage };
-            const { builds: newBuilds, totalPages: newTotalPages } = await retrieveBuilds(newFilters);
+                const newFilters: IBuildFilters = { ...filters, page: currentPage - 1 };
+                const { builds: newBuilds, totalPages: newTotalPages } = await retrieveBuilds(newFilters);
 
-            if (!newBuilds || newBuilds.length === 0) {
-                return await i.update({ content: "No builds found with the specified filters.", components: [] });
+                if (!newBuilds || newBuilds.length === 0) {
+                    return await i.update({ content: "No builds found with the specified filters.", components: [] });
+                }
+
+                const newEmbed = await createEmbed(filters.role, newBuilds, currentPage, newTotalPages, characterData, perkData, addonData, offeringData, interaction.user.username);
+
+                await i.update({
+                    embeds: [newEmbed],
+                    components: [generatePaginationButtons(currentPage, totalPages + 1)]
+                });
+            } catch (error) {
+                console.error("Error handling pagination:", error);
             }
-
-            const newEmbed = await createEmbed(filters.role, newBuilds, currentPage, newTotalPages, characterData, perkData, addonData, offeringData, interaction.user.username);
-
-            await i.update({
-                embeds: [newEmbed],
-                components: [generatePaginationButtons(currentPage, totalPages)]
-            });
         });
 
         collector.on('end', () => {

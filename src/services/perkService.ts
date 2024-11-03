@@ -1,5 +1,5 @@
 import axios from "../utils/apiClient";
-import { Perk } from "../types/perk";
+import { Perk } from "../types";
 import { getCache, setCache } from "../cache";
 
 export async function initializePerksCache(): Promise<void> {

@@ -1,5 +1,5 @@
 import axios from '../utils/apiClient';
-import { Cosmetic } from '../types/cosmetic';
+import { Cosmetic } from '../types';
 import { setCache, getCache } from '../cache';
 
 export async function initializeCosmeticCache(): Promise<void> {
@@ -50,7 +50,7 @@ export async function getCosmeticDataById(id: string): Promise<Cosmetic | undefi
     return cachedCosmetics[id];
 }
 
-async function getCachedCosmetics(): Promise<{ [key: string]: Cosmetic }> {
+export async function getCachedCosmetics(): Promise<{ [key: string]: Cosmetic }> {
     let cachedCosmetics = getCache<{ [key: string]: Cosmetic }>('cosmeticData');
 
     if (!cachedCosmetics || Object.keys(cachedCosmetics).length === 0) {

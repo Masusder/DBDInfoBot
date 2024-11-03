@@ -45,6 +45,22 @@ export const generatePaginationButtons = (page: number, totalPages: number) => {
     );
 };
 
+export type TPaginationType = 'first' | 'previous' | 'next' | 'last';
+export function determineNewPage(currentPage: number, paginationType: TPaginationType, totalPages: number): number {
+    switch (paginationType) {
+        case 'first':
+            return 1;
+        case 'previous':
+            return Math.max(1, currentPage - 1);
+        case 'next':
+            return Math.min(totalPages, currentPage + 1);
+        case 'last':
+            return totalPages;
+        default:
+            return currentPage; // Fallback, shouldn't happen
+    }
+}
+
 export async function paginationHandler(options: IPaginationOptions) {
     const { items, itemsPerPage, generateEmbed, interactionUserId, interactionReply } = options;
 
@@ -58,31 +74,28 @@ export async function paginationHandler(options: IPaginationOptions) {
 
     await interactionReply.edit({
         embeds: [generateEmbed(getItemsForPage(currentPage), currentPage, totalPages)],
-        components: [generatePaginationButtons(currentPage, totalPages)],
+        components: [generatePaginationButtons(currentPage, totalPages)]
     });
 
     const collector = interactionReply.createMessageComponentCollector({
         filter: (i): i is ButtonInteraction => i.isButton() && i.user.id === interactionUserId,
-        time: 60000,
+        time: 60_000
     });
 
-    collector.on('collect', async (interaction: ButtonInteraction) => {
+    collector.on('collect', async(interaction: ButtonInteraction) => {
         const [action, paginationType] = interaction.customId.split('::');
 
         if (action === 'pagination') {
-            if (paginationType === 'first') currentPage = 1;
-            else if (paginationType === 'previous') currentPage = Math.max(1, currentPage - 1);
-            else if (paginationType === 'next') currentPage = Math.min(totalPages, currentPage + 1);
-            else if (paginationType === 'last') currentPage = totalPages;
+            currentPage = determineNewPage(currentPage, paginationType as TPaginationType, totalPages);
 
             await interaction.update({
                 embeds: [generateEmbed(getItemsForPage(currentPage), currentPage, totalPages)],
-                components: [generatePaginationButtons(currentPage, totalPages)],
+                components: [generatePaginationButtons(currentPage, totalPages)]
             });
         }
     });
 
-    collector.on('end', async () => {
+    collector.on('end', async() => {
         await interactionReply.edit({ components: [] });
     });
 }

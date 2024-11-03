@@ -4,7 +4,7 @@ import { getCache, setCache } from "../cache";
 
 export async function retrieveBuilds(filters: IBuildFilters): Promise<any | undefined> {
     try {
-        const response = await axios.get(`/api/builds/${filters.page}?role=${filters.role}&character=${filters.character}&category=${filters.category}&rating=${filters.rating}&searchInput=${filters.searchInput}`);
+        const response = await axios.get(`/api/builds/${filters.page}?role=${filters.role}&character=${filters.character}&category=${filters.category}&rating=${filters.rating}&version=${filters.version}&searchInput=${filters.searchInput}`);
         if (response.data.success) {
             return response.data.data;
         } else {

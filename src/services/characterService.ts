@@ -1,5 +1,5 @@
 import axios from '../utils/apiClient';
-import { Character } from "../types/character";
+import { Character } from "../types";
 import { setCache, getCache } from '../cache';
 
 export async function initializeCharactersCache(): Promise<void> {

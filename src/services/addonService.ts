@@ -1,5 +1,5 @@
 import axios from "../utils/apiClient";
-import { Addon } from "../types/addon";
+import { Addon } from "../types";
 import { getCache, setCache } from "../cache";
 
 export async function initializeAddonsCache(): Promise<void> {
