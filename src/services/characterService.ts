@@ -28,9 +28,11 @@ export async function getCharacterChoices(query: string): Promise<Character[]> {
     const cachedCharacters = await getCachedCharacters();
 
     const lowerCaseQuery = query.toLowerCase();
-    return Object.values(cachedCharacters).filter(character => {
-        return character.Name.toLowerCase().includes(lowerCaseQuery);
-    });
+    return Object.entries(cachedCharacters)
+        .filter(([_, character]) => character.Name.toLowerCase().includes(lowerCaseQuery))
+        .map(([key, character]) => {
+            return { ...character, CharacterIndex: key };
+        });
 }
 
 export async function getCharacterIndexByName(name: string | null): Promise<number | undefined> {

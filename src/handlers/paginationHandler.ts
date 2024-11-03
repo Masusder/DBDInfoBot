@@ -15,7 +15,7 @@ export interface IPaginationOptions {
     interactionReply: Message;
 }
 
-export const generateButtons = (page: number, totalPages: number) => {
+export const generatePaginationButtons = (page: number, totalPages: number) => {
     return new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
             .setCustomId('pagination::first')
@@ -58,7 +58,7 @@ export async function paginationHandler(options: IPaginationOptions) {
 
     await interactionReply.edit({
         embeds: [generateEmbed(getItemsForPage(currentPage), currentPage, totalPages)],
-        components: [generateButtons(currentPage, totalPages)],
+        components: [generatePaginationButtons(currentPage, totalPages)],
     });
 
     const collector = interactionReply.createMessageComponentCollector({
@@ -77,7 +77,7 @@ export async function paginationHandler(options: IPaginationOptions) {
 
             await interaction.update({
                 embeds: [generateEmbed(getItemsForPage(currentPage), currentPage, totalPages)],
-                components: [generateButtons(currentPage, totalPages)],
+                components: [generatePaginationButtons(currentPage, totalPages)],
             });
         }
     });

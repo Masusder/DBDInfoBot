@@ -9,10 +9,12 @@ import {
     autocomplete as autocompleteCosmeticList
 } from "../commands/cosmeticListCommand";
 import {
-    execute as executeBuildList
+    execute as executeBuildList,
+    autocompleteCharacter as autocompleteCharacterBuildList,
+    autocompleteInclusionVersion as autocompleteInclusionVersionBuildList
 } from "../commands/buildListCommand";
 
-export default async (interaction: Interaction) => {
+export default async(interaction: Interaction) => {
     switch (true) {
         case interaction.isChatInputCommand() && interaction.commandName === 'cosmetic':
             await executeCosmetic(interaction);
@@ -34,8 +36,18 @@ export default async (interaction: Interaction) => {
             await executeBuildList(interaction);
             break;
 
+        case interaction.isAutocomplete() && interaction.commandName === 'build_list':
+            const focusedOption = interaction.options.getFocused(true);
+
+            if (focusedOption.name === 'character') {
+                await autocompleteCharacterBuildList(interaction);
+            } else if (focusedOption.name === 'version') {
+                await autocompleteInclusionVersionBuildList(interaction);
+            }
+            break;
+
         case interaction.isButton():
-            if (!interaction.customId.startsWith('pagination::')) {
+            if (!interaction.customId.startsWith('pagination')) {
                 await handleButtonInteraction(interaction);
             }
             break;

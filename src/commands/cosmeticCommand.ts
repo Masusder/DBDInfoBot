@@ -18,7 +18,7 @@ import { getCachedCharacters } from "../services/characterService";
 import { combineBaseUrlWithPath, formatInclusionVersion } from "../utils/stringUtils";
 import { createCanvas, loadImage } from "canvas";
 import { CosmeticTypes, Rarities } from "../data";
-import { Cosmetic } from "../types/cosmetic";
+import { Cosmetic } from "../types";
 import fetchAndResizeImage from '../utils/resizeImage';
 import axios from "axios";
 
@@ -107,6 +107,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             const characterData = await getCachedCharacters();
             const characterIndex = cosmeticData.Character;
 
+            const cosmeticDetails = '[Click Here](' + combineBaseUrlWithPath(`/store/cosmetics?cosmeticId=${cosmeticData.CosmeticId}`) + ')';
+
             const fields = [
                 characterIndex !== -1 ? {
                     name: 'Character',
@@ -126,7 +128,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 },
                 { name: 'Type', value: prettyCosmeticType, inline: true },
                 { name: 'Release Date', value: isPurchasable ? formattedReleaseDate : 'N/A', inline: true },
-                ...priceFields
+                ...priceFields,
+                { name: 'More Info', value: cosmeticDetails }
             ];
 
             const filteredFields = fields.filter(field => field !== null);

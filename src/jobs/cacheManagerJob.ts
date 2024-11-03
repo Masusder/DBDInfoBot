@@ -2,9 +2,10 @@ import cron from 'node-cron';
 import {
     initializeCharactersCache,
     initializeCosmeticCache,
-    initializePerksCache
+    initializePerksCache,
+    initializeAddonsCache,
+    initializeOfferingCache
 } from "../services";
-import { initializeAddonsCache } from "../services/addonService";
 
 export async function startCacheManagerJob() {
     cron.schedule('0 * * * *', async() => {
@@ -18,4 +19,5 @@ export async function bulkProcessInitialization() {
     await initializeCharactersCache();
     await initializePerksCache();
     await initializeAddonsCache();
+    await initializeOfferingCache();
 }

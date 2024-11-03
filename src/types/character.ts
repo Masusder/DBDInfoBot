@@ -13,4 +13,5 @@ export interface Character {
     IconFilePath: string;
     BackgroundImagePath: string;
     Id: string;
+    CharacterIndex?: string;
 }

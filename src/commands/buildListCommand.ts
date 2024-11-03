@@ -2,19 +2,19 @@ import {
     ChatInputCommandInteraction,
     EmbedBuilder,
     SlashCommandBuilder,
-    ButtonInteraction
+    ButtonInteraction,
+    AutocompleteInteraction
 } from "discord.js";
 import { IBuild, IBuildFilters } from "../types/build";
-import { retrieveBuilds } from "../services/buildService";
-import { getCachedCharacters } from "../services/characterService";
-import { generateButtons } from "../handlers/paginationHandler";
+import { getCachedInclusionVersions, retrieveBuilds } from "../services/buildService";
+import { getCachedCharacters, getCharacterChoices } from "../services/characterService";
+import { generatePaginationButtons } from "../handlers/paginationHandler";
 import { BuildCategories } from "../data/BuildCategories";
-import { Character } from "../types/character";
+import { Character, Perk, Addon, Offering } from "../types";
 import { getCachedPerks } from "../services/perkService";
-import { Perk } from "../types/perk";
 import { combineBaseUrlWithPath } from "../utils/stringUtils";
 import { getCachedAddons } from "../services/addonService";
-import { Addon } from "../types/addon";
+import { getCachedOfferings } from "../services/offeringService";
 
 export const data = new SlashCommandBuilder()
     .setName('build_list')
@@ -32,9 +32,10 @@ export const data = new SlashCommandBuilder()
     .addNumberOption(option =>
         option
             .setName('page')
-            .setDescription('Page number to retrieve (default is 1)')
-            .setRequired(false) // Made optional for initial command
+            .setDescription('Page number (default is 1)')
+            .setRequired(false)
             .setMinValue(1)
+            .setMaxValue(9999)
     )
     .addStringOption(option =>
         option
@@ -56,12 +57,14 @@ export const data = new SlashCommandBuilder()
             .setName('character')
             .setDescription('Character for the build')
             .setRequired(false)
+            .setAutocomplete(true)
     )
     .addStringOption(option =>
         option
             .setName('version')
             .setDescription('Game version for the build')
             .setRequired(false)
+            .setAutocomplete(true)
     )
     .addNumberOption(option =>
         option
@@ -84,14 +87,16 @@ async function createEmbed(
     totalPages: number,
     characterData: { [key: string]: Character },
     perkData: { [key: string]: Perk },
-    addonData: {[key:string]: Addon},
+    addonData: { [key: string]: Addon },
+    offeringData: { [key: string]: Offering },
     username: string) {
     const embed = new EmbedBuilder()
         .setTitle(`Build List - Page ${currentPage} of ${totalPages}`)
         .setColor(role === 'Survivor' ? "#1e90ff" : "Red")
         .setDescription(`Here are the builds matching your filters: \n[You can create your own build here](${combineBaseUrlWithPath('/builds/create')})`)
         .setTimestamp()
-        .setFooter({ text: `Requested by ${username}`, iconURL: undefined });
+        .setFooter({ text: `Builds List | Requested by ${username}`, iconURL: undefined })
+        .setThumbnail(combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_loadout.png'));
 
     builds.forEach((build: IBuild) => {
         const buildTitle = `${build.title} | Created by: ${build.username}`;
@@ -112,11 +117,16 @@ async function createEmbed(
             .join(' \n ') || '  - None';
 
         const averageRating = Math.round(build.averageRating);
-        const offering = build.offering ? `  - ${build.offering}` : '  - None';
+        const offering = build.offering && build.offering !== "None"
+            ? `  - ${offeringData[build.offering]?.Name ?? 'Unknown Offering'}`
+            : '  - None';
+
         const stars = '⭐'.repeat(averageRating) + '☆'.repeat(5 - averageRating);
         const truncatedDescription = build.description
             ? (build.description.length > 75 ? build.description.slice(0, 75) + '..' : build.description)
             : 'No description available.';
+
+        const detailsUrl = combineBaseUrlWithPath(`/builds/${build.buildId}`);
 
         embed.addFields({
             name: buildTitle,
@@ -127,7 +137,8 @@ async function createEmbed(
                 `- **Addons**: \n ${addonsList} \n` +
                 `- **Offering**: \n ${offering} \n` +
                 `- **Rating**: ${averageRating} ${stars} Voted by: ${build.ratingCount} user(s) \n` +
-                `- **Description:** ${truncatedDescription} \n\u200B\n`,
+                `- **Description:** ${truncatedDescription} \n` +
+                `[Click for more build details..](${detailsUrl})\n\u200B\n`,
             inline: false
         });
     });
@@ -150,51 +161,98 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     await interaction.deferReply();
 
-    const { builds, totalPages } = await retrieveBuilds(filters);
+    try {
+        const { builds, totalPages } = await retrieveBuilds(filters);
 
-    if (!builds || builds.length === 0) {
-        return await interaction.editReply({ content: "No builds found with the specified filters." });
-    }
-
-    const characterData = await getCachedCharacters();
-    const perkData = await getCachedPerks();
-    const addonData = await getCachedAddons();
-    const embed = await createEmbed(filters.role, builds, currentPage, totalPages, characterData, perkData, addonData, interaction.user.username);
-
-    const replyMessage = await interaction.editReply({
-        embeds: [embed],
-        components: [generateButtons(currentPage, totalPages)]
-    });
-
-    const collector = replyMessage.createMessageComponentCollector({
-        filter: (i): i is ButtonInteraction => i.isButton() && i.user.id === interaction.user.id,
-        time: 60_000
-    });
-
-    collector.on('collect', async i => {
-        const [_, paginationType] = i.customId.split('::');
-
-        if (paginationType === 'first') currentPage = 1;
-        else if (paginationType === 'previous') currentPage = Math.max(1, currentPage - 1);
-        else if (paginationType === 'next') currentPage = Math.min(totalPages, currentPage + 1);
-        else if (paginationType === 'last') currentPage = totalPages;
-
-        const newFilters: IBuildFilters = { ...filters, page: currentPage };
-        const { builds: newBuilds, totalPages: newTotalPages } = await retrieveBuilds(newFilters);
-
-        if (!newBuilds || newBuilds.length === 0) {
-            return await i.update({ content: "No builds found with the specified filters.", components: [] });
+        if (!builds || builds.length === 0) {
+            return await interaction.editReply({ content: "No builds found with the specified filters." });
         }
 
-        const newEmbed = await createEmbed(filters.role, newBuilds, currentPage, newTotalPages, characterData, perkData, addonData, interaction.user.username);
+        const characterData = await getCachedCharacters();
+        const perkData = await getCachedPerks();
+        const addonData = await getCachedAddons();
+        const offeringData = await getCachedOfferings();
+        const embed = await createEmbed(filters.role, builds, currentPage, totalPages, characterData, perkData, addonData, offeringData, interaction.user.username);
 
-        await i.update({
-            embeds: [newEmbed],
-            components: [generateButtons(currentPage, totalPages)]
+        const replyMessage = await interaction.editReply({
+            embeds: [embed],
+            components: [generatePaginationButtons(currentPage, totalPages)]
         });
-    });
 
-    collector.on('end', () => {
-        replyMessage.edit({ components: [] });
-    });
+        const collector = replyMessage.createMessageComponentCollector({
+            filter: (i): i is ButtonInteraction => i.isButton() && i.user.id === interaction.user.id,
+            time: 60_000
+        });
+
+        collector.on('collect', async i => {
+            const [_, paginationType] = i.customId.split('::');
+
+            if (paginationType === 'first') currentPage = 1;
+            else if (paginationType === 'previous') currentPage = Math.max(1, currentPage - 1);
+            else if (paginationType === 'next') currentPage = Math.min(totalPages, currentPage + 1);
+            else if (paginationType === 'last') currentPage = totalPages;
+
+            const newFilters: IBuildFilters = { ...filters, page: currentPage };
+            const { builds: newBuilds, totalPages: newTotalPages } = await retrieveBuilds(newFilters);
+
+            if (!newBuilds || newBuilds.length === 0) {
+                return await i.update({ content: "No builds found with the specified filters.", components: [] });
+            }
+
+            const newEmbed = await createEmbed(filters.role, newBuilds, currentPage, newTotalPages, characterData, perkData, addonData, offeringData, interaction.user.username);
+
+            await i.update({
+                embeds: [newEmbed],
+                components: [generatePaginationButtons(currentPage, totalPages)]
+            });
+        });
+
+        collector.on('end', () => {
+            replyMessage.edit({ components: [] });
+        });
+    } catch (error) {
+        console.error("Error executing build_list command:", error);
+    }
 }
+
+// region Autocomplete
+export async function autocompleteCharacter(interaction: AutocompleteInteraction) {
+    try {
+        const focusedValue = interaction.options.getFocused();
+        const role = interaction.options.getString('role');
+        const choices = await getCharacterChoices(focusedValue);
+
+        const filteredChoices = choices.filter(character => {
+            return !role || character.Role === role;
+        });
+
+        const options = filteredChoices.slice(0, 25).map(character => ({
+            name: character.Name,
+            value: character.CharacterIndex!
+        }));
+
+        await interaction.respond(options);
+    } catch (error) {
+        console.error("Error handling autocomplete interaction:", error);
+    }
+}
+
+export async function autocompleteInclusionVersion(interaction: AutocompleteInteraction) {
+    try {
+        const focusedValue = interaction.options.getFocused();
+        const inclusionVersions = await getCachedInclusionVersions();
+        const filteredVersions = inclusionVersions.filter(version =>
+            version.toLowerCase().includes(focusedValue.toLowerCase())
+        );
+        const options = filteredVersions.slice(0, 25).map(inclusionVersion => ({
+            name: inclusionVersion,
+            value: inclusionVersion
+        }));
+
+        await interaction.respond(options);
+    } catch (error) {
+        console.error("Error handling autocomplete interaction:", error);
+    }
+}
+
+// endregion
