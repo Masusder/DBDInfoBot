@@ -203,7 +203,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             time: 60_000
         });
 
-        collector.on('collect', async (i: ButtonInteraction) => {
+        collector.on('collect', async(i: ButtonInteraction) => {
             try {
                 if (i.user.id !== interaction.user.id) {
                     await sendUnauthorizedMessage(i);

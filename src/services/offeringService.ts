@@ -1,6 +1,9 @@
 import axios from "../utils/apiClient";
-import { Offering} from "../types";
-import { getCache, setCache } from "../cache";
+import { Offering } from "../types";
+import {
+    getCache,
+    setCache
+} from "../cache";
 
 export async function initializeOfferingCache(): Promise<void> {
     try {
@@ -29,4 +32,5 @@ export async function getCachedOfferings(): Promise<{ [key: string]: Offering }>
 
     return cachedOfferings;
 }
+
 // endregion

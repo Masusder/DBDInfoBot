@@ -1,4 +1,7 @@
-import { REST, Routes } from 'discord.js';
+import {
+    REST,
+    Routes
+} from 'discord.js';
 import * as dotenv from 'dotenv';
 import { data as cosmeticCommand } from './commands/cosmeticCommand';
 import { data as cosmeticListCommand } from './commands/cosmeticListCommand';

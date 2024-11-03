@@ -1,7 +1,7 @@
 import axios from 'axios';
 import sharp from 'sharp';
 
-const fetchAndResizeImage = async (imageUrl: string, width: number | null, height: number | null) => {
+const fetchAndResizeImage = async(imageUrl: string, width: number | null, height: number | null) => {
     const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
 
     if (response.status !== 200) {

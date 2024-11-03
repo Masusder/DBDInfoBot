@@ -1,5 +1,5 @@
 import { Interaction } from 'discord.js';
-import { handleButtonInteraction } from './buttonInteractionHandler';
+import buttonInteractionCreate from './buttonInteractionCreate';
 import {
     execute as executeCosmetic,
     autocomplete as autocompleteCosmetic
@@ -48,7 +48,7 @@ export default async(interaction: Interaction) => {
 
         case interaction.isButton():
             if (!interaction.customId.startsWith('pagination')) {
-                await handleButtonInteraction(interaction);
+                await buttonInteractionCreate(interaction);
             }
             break;
 

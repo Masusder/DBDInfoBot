@@ -26,7 +26,7 @@ export async function getGameData(options: GetGameDataOptions = {}): Promise<Gam
         characterData: getCachedCharacters,
         perkData: getCachedPerks,
         addonData: getCachedAddons,
-        offeringData: getCachedOfferings,
+        offeringData: getCachedOfferings
     };
 
     const tasks = Object.entries(dataFetchers)

@@ -1,6 +1,9 @@
 import axios from '../utils/apiClient';
 import { Cosmetic } from '../types';
-import { setCache, getCache } from '../cache';
+import {
+    setCache,
+    getCache
+} from '../cache';
 
 export async function initializeCosmeticCache(): Promise<void> {
     try {
@@ -60,4 +63,5 @@ export async function getCachedCosmetics(): Promise<{ [key: string]: Cosmetic }>
     }
     return cachedCosmetics;
 }
+
 // endregion

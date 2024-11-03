@@ -15,9 +15,18 @@ import {
     getCosmeticDataById
 } from '../services/cosmeticService';
 import { getCachedCharacters } from "../services/characterService";
-import { combineBaseUrlWithPath, formatInclusionVersion } from "../utils/stringUtils";
-import { createCanvas, loadImage } from "canvas";
-import { CosmeticTypes, Rarities } from "../data";
+import {
+    combineBaseUrlWithPath,
+    formatInclusionVersion
+} from "../utils/stringUtils";
+import {
+    createCanvas,
+    loadImage
+} from "canvas";
+import {
+    CosmeticTypes,
+    Rarities
+} from "../data";
 import { Cosmetic } from "../types";
 import fetchAndResizeImage from '../utils/resizeImage';
 import axios from "axios";
@@ -32,7 +41,7 @@ export const data = new SlashCommandBuilder()
             .setDescription('Name of the cosmetic')
             .setAutocomplete(true)
             .setRequired(true)
-    )
+    );
 
 export async function execute(interaction: ChatInputCommandInteraction) {
     const cosmeticName = interaction.options.getString('name');
@@ -154,7 +163,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             await interaction.editReply({
                 embeds: [embed],
                 files: [attachment],
-                components: outfitPieces.length > 0 ? [actionRow] : [],
+                components: outfitPieces.length > 0 ? [actionRow] : []
             });
         } else {
             await interaction.followUp(`No cosmetic found for "${cosmeticName}".`);
@@ -237,6 +246,7 @@ export async function combineImages(imageUrls: string[]): Promise<Buffer> {
 
     return canvas.toBuffer('image/png');
 }
+
 // endregion
 
 // region Autocomplete

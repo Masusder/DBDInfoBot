@@ -43,5 +43,5 @@ export const Rarities: Record<string, IRarities> = {
     "N/A": {
         name: "N/A",
         color: "#7F8C8D"
-}
+    }
 };

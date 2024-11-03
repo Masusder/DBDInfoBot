@@ -1,7 +1,7 @@
 import { ButtonInteraction } from 'discord.js';
 import { viewOutfitPiecesHandler } from '../handlers/viewOutfitPiecesHandler';
 
-export async function handleButtonInteraction(interaction: ButtonInteraction) {
+export default async(interaction: ButtonInteraction) => {
     if (!interaction.deferred) await interaction.deferUpdate();
 
     const [action] = interaction.customId.split('::');

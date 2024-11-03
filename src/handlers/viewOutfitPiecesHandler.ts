@@ -1,4 +1,7 @@
-import { ButtonInteraction, EmbedBuilder } from 'discord.js';
+import {
+    ButtonInteraction,
+    EmbedBuilder
+} from 'discord.js';
 import { getCosmeticDataById } from '../services/cosmeticService';
 import {
     combineImages,
@@ -42,6 +45,6 @@ export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
     await interaction.followUp({
         embeds: [embed],
         files: [{ attachment: combinedImageBuffer, name: 'combined-outfit-pieces.png' }],
-        ephemeral: true,
+        ephemeral: true
     });
 }

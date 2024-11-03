@@ -1,5 +1,11 @@
-import { Client, TextChannel } from "discord.js";
-import { Scraper, Tweet } from '@the-convocation/twitter-scraper';
+import {
+    Client,
+    TextChannel
+} from "discord.js";
+import {
+    Scraper,
+    Tweet
+} from '@the-convocation/twitter-scraper';
 import Constants from "./constants";
 
 const scraper = new Scraper();
@@ -131,7 +137,7 @@ export async function getLatestTweetLink(client: Client) {
                     if (!urlAlreadyPosted) {
                         await channel.send(fxTweetUrl);
                     } else {
-                        console.log('This Tweet has already been posted.')
+                        console.log('This Tweet has already been posted.');
                     }
                 } else {
                     console.error('Not found specified text channel. Unable to send tweet.');

@@ -1,6 +1,9 @@
 import axios from "../utils/apiClient";
 import { Addon } from "../types";
-import { getCache, setCache } from "../cache";
+import {
+    getCache,
+    setCache
+} from "../cache";
 
 export async function initializeAddonsCache(): Promise<void> {
     try {
@@ -29,4 +32,5 @@ export async function getCachedAddons(): Promise<{ [key: string]: Addon }> {
 
     return cachedAddons;
 }
+
 // endregion

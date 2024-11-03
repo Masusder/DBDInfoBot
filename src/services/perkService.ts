@@ -1,6 +1,9 @@
 import axios from "../utils/apiClient";
 import { Perk } from "../types";
-import { getCache, setCache } from "../cache";
+import {
+    getCache,
+    setCache
+} from "../cache";
 
 export async function initializePerksCache(): Promise<void> {
     try {
@@ -29,4 +32,5 @@ export async function getCachedPerks(): Promise<{ [key: string]: Perk }> {
 
     return cachedPerks;
 }
+
 // endregion

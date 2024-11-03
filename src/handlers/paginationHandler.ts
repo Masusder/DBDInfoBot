@@ -47,6 +47,7 @@ export const generatePaginationButtons = (page: number, totalPages: number) => {
 };
 
 export type TPaginationType = 'first' | 'previous' | 'next' | 'last';
+
 export function determineNewPage(currentPage: number, paginationType: TPaginationType, totalPages: number): number {
     switch (paginationType) {
         case 'first':

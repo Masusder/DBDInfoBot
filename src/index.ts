@@ -1,4 +1,8 @@
-import { Client, Events, GatewayIntentBits } from 'discord.js';
+import {
+    Client,
+    Events,
+    GatewayIntentBits
+} from 'discord.js';
 import {
     startTweetJob,
     startCacheManagerJob

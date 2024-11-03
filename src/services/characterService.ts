@@ -1,6 +1,9 @@
 import axios from '../utils/apiClient';
 import { Character } from "../types";
-import { setCache, getCache } from '../cache';
+import {
+    setCache,
+    getCache
+} from '../cache';
 
 export async function initializeCharactersCache(): Promise<void> {
     try {
@@ -61,4 +64,5 @@ export async function getCachedCharacters(): Promise<{ [key: string]: Character 
 
     return cachedCharacters;
 }
+
 // endregion
