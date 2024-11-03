@@ -1,6 +1,9 @@
 import axios from '../utils/apiClient';
-import { Character } from "../types/character";
-import { setCache, getCache } from '../cache';
+import { Character } from "../types";
+import {
+    setCache,
+    getCache
+} from '../cache';
 
 export async function initializeCharactersCache(): Promise<void> {
     try {
@@ -13,19 +16,30 @@ export async function initializeCharactersCache(): Promise<void> {
             console.error("Failed to fetch characters: API responded with success = false");
         }
     } catch (error) {
-        console.error('Error fetching cosmetics:', error);
+        console.error('Error fetching characters:', error);
     }
 }
 
 // region Helpers
 // Retrieve a single character by index
-export function getCharacterDataByIndex(index: string | number): Character | undefined {
-    const cachedCharacters = getCachedCharacters();
+export async function getCharacterDataByIndex(index: string | number): Promise<Character | undefined> {
+    const cachedCharacters = await getCachedCharacters();
     return cachedCharacters[index];
 }
 
-export function getCharacterIndexByName(name: string | null): number | undefined {
-    const cachedCharacters = getCachedCharacters();
+export async function getCharacterChoices(query: string): Promise<Character[]> {
+    const cachedCharacters = await getCachedCharacters();
+
+    const lowerCaseQuery = query.toLowerCase();
+    return Object.entries(cachedCharacters)
+        .filter(([_, character]) => character.Name.toLowerCase().includes(lowerCaseQuery))
+        .map(([key, character]) => {
+            return { ...character, CharacterIndex: key };
+        });
+}
+
+export async function getCharacterIndexByName(name: string | null): Promise<number | undefined> {
+    const cachedCharacters = await getCachedCharacters();
 
     if (!name) return undefined;
 
@@ -39,12 +53,16 @@ export function getCharacterIndexByName(name: string | null): number | undefined
     return undefined;
 }
 
-export function getCachedCharacters(): { [key: string]: Character } {
-    const cachedCharacters = getCache<{ [key: string]: Character }>('characterData');
+export async function getCachedCharacters(): Promise<{ [key: string]: Character }> {
+    let cachedCharacters = getCache<{ [key: string]: Character }>('characterData');
+
     if (!cachedCharacters || Object.keys(cachedCharacters).length === 0) {
-        console.warn("No characters found in cache.");
-        return {};
+        console.warn("Character cache expired or empty. Fetching new data...");
+        await initializeCharactersCache();
+        cachedCharacters = getCache<{ [key: string]: Character }>('characterData') || {};
     }
+
     return cachedCharacters;
 }
+
 // endregion

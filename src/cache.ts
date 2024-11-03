@@ -15,12 +15,12 @@ export function getCache<T>(key: string): T | undefined {
     return cachedData;
 }
 
-export function clearCache(key: string): void {
-    globalCache.del(key);
-    console.log(`Cache cleared for key: ${key}`);
-}
-
-export function clearAllCache(): void {
-    globalCache.flushAll();
-    console.log('All cache has been cleared.');
-}
+// export function clearCache(key: string): void {
+//     globalCache.del(key);
+//     console.log(`Cache cleared for key: ${key}`);
+// }
+//
+// export function clearAllCache(): void {
+//     globalCache.flushAll();
+//     console.log('All cache has been cleared.');
+// }

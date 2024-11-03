@@ -1,14 +1,15 @@
-import { Client, Events, GatewayIntentBits } from 'discord.js';
 import {
-    initializeCosmeticCache,
-    initializeCharactersCache
-} from './services';
+    Client,
+    Events,
+    GatewayIntentBits
+} from 'discord.js';
 import {
     startTweetJob,
     startCacheManagerJob
 } from "./jobs/";
-import interactionCreate from "./events/interactionCreate";
+import interactionCreate from "./interactions/interactionCreate";
 import dotenv from 'dotenv';
+import { bulkProcessInitialization } from "./jobs/cacheManagerJob";
 
 dotenv.config();
 
@@ -19,8 +20,7 @@ const DISCORD_TOKEN: string | undefined = process.env.DISCORD_TOKEN;
 client.once(Events.ClientReady, async readyClient => {
     console.log(`Logged in as ${readyClient.user.tag}`);
 
-    await initializeCosmeticCache();
-    await initializeCharactersCache();
+    await bulkProcessInitialization();
 
     // Set cron-job to refresh cached data every hour
     await startCacheManagerJob();
@@ -33,7 +33,7 @@ client.once(Events.ClientReady, async readyClient => {
 });
 
 client.on(Events.InteractionCreate, async interaction => {
-    await interactionCreate(client, interaction);
+    await interactionCreate(interaction);
 });
 
 // Log in to Discord with your client's token

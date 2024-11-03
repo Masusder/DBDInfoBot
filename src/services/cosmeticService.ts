@@ -1,6 +1,9 @@
 import axios from '../utils/apiClient';
-import { Cosmetic } from '../types/cosmetic';
-import { setCache, getCache } from '../cache';
+import { Cosmetic } from '../types';
+import {
+    setCache,
+    getCache
+} from '../cache';
 
 export async function initializeCosmeticCache(): Promise<void> {
     try {
@@ -18,8 +21,8 @@ export async function initializeCosmeticCache(): Promise<void> {
 }
 
 // Filter cached cosmetics by name
-export function getCosmeticChoices(query: string): Cosmetic[] {
-    const cachedCosmetics = getCachedCosmetics();
+export async function getCosmeticChoices(query: string): Promise<Cosmetic[]> {
+    const cachedCosmetics = await getCachedCosmetics();
 
     const lowerCaseQuery = query.toLowerCase();
     return Object.values(cachedCosmetics).filter(cosmetic => {
@@ -30,32 +33,35 @@ export function getCosmeticChoices(query: string): Cosmetic[] {
 // region Helpers
 
 // Retrieve a single cosmetic by exact name
-export function getCosmeticDataByName(name: string): Cosmetic | undefined {
-    const cachedCosmetics = getCachedCosmetics();
+export async function getCosmeticDataByName(name: string): Promise<Cosmetic | undefined> {
+    const cachedCosmetics = await getCachedCosmetics();
 
     return Object.values(cachedCosmetics).find(cosmetic => cosmetic.CosmeticName.toLowerCase() === name.toLowerCase());
 }
 
-export function getCosmeticListByCharacterIndex(index: number) {
-    const cosmeticData = getCachedCosmetics();
+export async function getCosmeticListByCharacterIndex(index: number): Promise<Cosmetic[]> {
+    const cosmeticData = await getCachedCosmetics();
 
-    return Object.values(cosmeticData).filter(cosmetic => {
+    return Object.values(cosmeticData).filter((cosmetic: Cosmetic) => {
         return cosmetic.Character === index;
     });
 }
 
 // Retrieve a single cosmetic by ID
-export function getCosmeticDataById(id: string): Cosmetic | undefined {
-    const cachedCosmetics = getCachedCosmetics();
+export async function getCosmeticDataById(id: string): Promise<Cosmetic | undefined> {
+    const cachedCosmetics = await getCachedCosmetics();
     return cachedCosmetics[id];
 }
 
-function getCachedCosmetics(): { [key: string]: Cosmetic } {
-    const cachedCosmetics = getCache<{ [key: string]: Cosmetic }>('cosmeticData');
+export async function getCachedCosmetics(): Promise<{ [key: string]: Cosmetic }> {
+    let cachedCosmetics = getCache<{ [key: string]: Cosmetic }>('cosmeticData');
+
     if (!cachedCosmetics || Object.keys(cachedCosmetics).length === 0) {
-        console.warn("No cosmetics found in cache.");
-        return {};
+        console.warn("Cosmetic cache expired or empty. Fetching new data...");
+        await initializeCosmeticCache();
+        cachedCosmetics = getCache<{ [key: string]: Cosmetic }>('cosmeticData') || {};
     }
     return cachedCosmetics;
 }
+
 // endregion

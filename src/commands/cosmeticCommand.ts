@@ -15,11 +15,20 @@ import {
     getCosmeticDataById
 } from '../services/cosmeticService';
 import { getCachedCharacters } from "../services/characterService";
-import { createCanvas, loadImage } from "canvas";
-import { CosmeticTypes, Rarities } from "../data";
-import { Cosmetic } from "../types/cosmetic";
+import {
+    combineBaseUrlWithPath,
+    formatInclusionVersion
+} from "../utils/stringUtils";
+import {
+    createCanvas,
+    loadImage
+} from "canvas";
+import {
+    CosmeticTypes,
+    Rarities
+} from "../data";
+import { Cosmetic } from "../types";
 import fetchAndResizeImage from '../utils/resizeImage';
-import Constants from '../constants';
 import axios from "axios";
 
 
@@ -32,7 +41,7 @@ export const data = new SlashCommandBuilder()
             .setDescription('Name of the cosmetic')
             .setAutocomplete(true)
             .setRequired(true)
-    )
+    );
 
 export async function execute(interaction: ChatInputCommandInteraction) {
     const cosmeticName = interaction.options.getString('name');
@@ -42,17 +51,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     try {
         await interaction.deferReply();
 
-        const cosmeticData = getCosmeticDataByName(cosmeticName);
+        const cosmeticData = await getCosmeticDataByName(cosmeticName);
         if (cosmeticData) {
             const cosmeticRarity = cosmeticData.Rarity;
             const embedColor: ColorResolvable = Rarities[cosmeticRarity].color as ColorResolvable || Rarities['N/A'].color as ColorResolvable;
-            const imageUrl = `${Constants.DBDINFO_BASE_URL}${cosmeticData.IconFilePathList}`;
+            const imageUrl = combineBaseUrlWithPath(cosmeticData.IconFilePathList);
             const resizedImageBuffer = await fetchAndResizeImage(imageUrl, 256, null);
 
             const attachment = new AttachmentBuilder(resizedImageBuffer, { name: 'resized-image.png' });
-
-            const inclusionVersion: string = cosmeticData.InclusionVersion;
-            const inclusionVersionPretty = inclusionVersion === "Legacy" ? "Before 5.5.0" : inclusionVersion;
 
             const isPurchasable = cosmeticData.Purchasable;
 
@@ -68,7 +74,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             const outfitPieces: string[] = cosmeticData.OutfitItems || [];
 
             const priceFields: { name: string; value: string, inline: boolean }[] = [];
-            if (cosmeticData.Prices) {
+            if (cosmeticData.Prices && isPurchasable) {
                 const cellsPrice = cosmeticData.Prices.find(price => price.Cells);
                 const shardsPrice = cosmeticData.Prices.find(price => price.Shards);
 
@@ -107,8 +113,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
             const embedTitle = formatEmbedTitle(cosmeticData.CosmeticName, cosmeticData.Unbreakable);
 
-            const characterData = getCachedCharacters();
+            const characterData = await getCachedCharacters();
             const characterIndex = cosmeticData.Character;
+
+            const cosmeticDetails = '[Click Here](' + combineBaseUrlWithPath(`/store/cosmetics?cosmeticId=${cosmeticData.CosmeticId}`) + ')';
 
             const fields = [
                 characterIndex !== -1 ? {
@@ -122,10 +130,15 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     inline: true
                 } : null,
                 { name: 'Rarity', value: Rarities[cosmeticData.Rarity]?.name || 'N/A', inline: true },
-                { name: 'Inclusion Version', value: inclusionVersionPretty || 'N/A', inline: true },
+                {
+                    name: 'Inclusion Version',
+                    value: formatInclusionVersion(cosmeticData.InclusionVersion) || 'N/A',
+                    inline: true
+                },
                 { name: 'Type', value: prettyCosmeticType, inline: true },
                 { name: 'Release Date', value: isPurchasable ? formattedReleaseDate : 'N/A', inline: true },
-                ...priceFields
+                ...priceFields,
+                { name: 'More Info', value: cosmeticDetails }
             ];
 
             const filteredFields = fields.filter(field => field !== null);
@@ -150,14 +163,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             await interaction.editReply({
                 embeds: [embed],
                 files: [attachment],
-                components: outfitPieces.length > 0 ? [actionRow] : [],
+                components: outfitPieces.length > 0 ? [actionRow] : []
             });
         } else {
             await interaction.followUp(`No cosmetic found for "${cosmeticName}".`);
         }
     } catch (error) {
         console.error("Error executing cosmetic command:", error);
-        await interaction.followUp("An error occurred while fetching the cosmetic information. Please try again later.");
     }
 }
 
@@ -170,7 +182,7 @@ function formatEmbedTitle(cosmeticName: string, isUnbreakable: boolean): string 
     return cosmeticName;
 }
 
-// Function to calculate the discounted price
+// Calculate the discounted price
 function calculateDiscountedPrice(baseCurrency: number, discountPercentage: number): number {
     return Math.round(baseCurrency - (baseCurrency * discountPercentage));
 }
@@ -192,14 +204,13 @@ function getDiscountPercentage(currencyId: string, cosmeticData: Cosmetic): numb
     return tempDiscount ? tempDiscount.discountPercentage : cosmeticData.DiscountPercentage;
 }
 
-export function getCosmeticPiecesCombinedImage(cosmeticPieces: string[]) {
+export async function getCosmeticPiecesCombinedImage(cosmeticPieces: string[]) {
     const urls: string[] = [];
     for (const cosmeticPieceId of cosmeticPieces) {
-        const cosmeticPieceData = getCosmeticDataById(cosmeticPieceId);
+        const cosmeticPieceData = await getCosmeticDataById(cosmeticPieceId);
 
         if (cosmeticPieceData) {
-            const imageUrl = `${Constants.DBDINFO_BASE_URL}${cosmeticPieceData.IconFilePathList}`;
-            urls.push(imageUrl);
+            urls.push(combineBaseUrlWithPath(cosmeticPieceData.IconFilePathList));
         }
     }
 
@@ -250,7 +261,7 @@ function debounce<T extends (...args: any[]) => any>(func: T, wait: number): (..
 export const autocomplete = debounce(async function autocomplete(interaction: AutocompleteInteraction) {
     try {
         const focusedValue = interaction.options.getFocused();
-        const choices = getCosmeticChoices(focusedValue);
+        const choices = await getCosmeticChoices(focusedValue);
         const options = choices.slice(0, 25).map(cosmetic => ({
             name: cosmetic.CosmeticName,
             value: cosmetic.CosmeticName
