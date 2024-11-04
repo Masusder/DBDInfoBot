@@ -10,9 +10,9 @@ import {
     SlashCommandBuilder
 } from 'discord.js';
 import {
-    getCosmeticChoices,
     getCosmeticDataByName,
-    getCosmeticDataById
+    getCosmeticDataById,
+    getCosmeticChoicesFromIndex
 } from '../services/cosmeticService';
 import { getCachedCharacters } from "../services/characterService";
 import {
@@ -250,18 +250,11 @@ export async function combineImages(imageUrls: string[]): Promise<Buffer> {
 // endregion
 
 // region Autocomplete
-function debounce<T extends (...args: any[]) => any>(func: T, wait: number): (...args: Parameters<T>) => void {
-    let timeout: NodeJS.Timeout | undefined;
-    return (...args: Parameters<T>) => {
-        if (timeout) clearTimeout(timeout);
-        timeout = setTimeout(() => func(...args), wait);
-    };
-}
-
-export const autocomplete = debounce(async function autocomplete(interaction: AutocompleteInteraction) {
+export async function autocomplete(interaction: AutocompleteInteraction) {
     try {
-        const focusedValue = interaction.options.getFocused();
-        const choices = await getCosmeticChoices(focusedValue);
+        const focusedValue = interaction.options.getFocused().toLowerCase();
+        const choices = getCosmeticChoicesFromIndex(focusedValue);
+
         const options = choices.slice(0, 25).map(cosmetic => ({
             name: cosmetic.CosmeticName,
             value: cosmetic.CosmeticName
@@ -271,5 +264,6 @@ export const autocomplete = debounce(async function autocomplete(interaction: Au
     } catch (error) {
         console.error("Error handling autocomplete interaction:", error);
     }
-}, 300);
+}
+
 // endregion

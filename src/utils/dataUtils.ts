@@ -3,6 +3,13 @@ import { getCachedPerks } from "../services/perkService";
 import { getCachedAddons } from "../services/addonService";
 import { getCachedOfferings } from "../services/offeringService";
 import { getCachedCosmetics } from "../services/cosmeticService";
+import {
+    Addon,
+    Character,
+    Cosmetic,
+    Offering,
+    Perk
+} from "../types";
 
 interface GetGameDataOptions {
     cosmeticData?: boolean;
@@ -13,11 +20,11 @@ interface GetGameDataOptions {
 }
 
 interface GameData {
-    cosmeticData: any | null;
-    characterData: any | null;
-    perkData: any | null;
-    addonData: any | null;
-    offeringData: any | null;
+    cosmeticData: { [key: string]: Cosmetic };
+    characterData: { [key: string]: Character };
+    perkData: { [key: string]: Perk };
+    addonData: { [key: string]: Addon };
+    offeringData: { [key: string]: Offering };
 }
 
 export async function getGameData(options: GetGameDataOptions = {}): Promise<GameData> {

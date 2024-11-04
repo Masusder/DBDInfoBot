@@ -5,11 +5,13 @@ import {
     getCache
 } from '../cache';
 
+export let indexedCosmetics: Map<string, Cosmetic[]> = new Map();
 export async function initializeCosmeticCache(): Promise<void> {
     try {
         const response = await axios.get('/api/cosmetics');
         if (response.data.success) {
             const cosmeticsData: { [key: string]: Cosmetic } = response.data.data;
+            indexCosmetics(cosmeticsData);
             setCache('cosmeticData', cosmeticsData);
             console.log(`Fetched and cached ${Object.keys(cosmeticsData).length} cosmetics.`);
         } else {
@@ -19,6 +21,31 @@ export async function initializeCosmeticCache(): Promise<void> {
         console.error('Error fetching cosmetics:', error);
     }
 }
+
+// Build an indexed cosmetics map for fast querying
+function indexCosmetics(cosmetics:  {[key: string]: Cosmetic}) {
+    console.log(`Indexing cosmetics.`);
+
+    indexedCosmetics.clear();
+
+    Object.values(cosmetics).forEach(cosmetic => {
+        const name = cosmetic.CosmeticName.toLowerCase();
+
+        // Index substrings of the cosmetic name
+        for (let i = 0; i < name.length; i++) {
+            for (let j = i + 1; j <= name.length; j++) {
+                const substring = name.slice(i, j);
+
+                if (!indexedCosmetics.has(substring)) {
+                    indexedCosmetics.set(substring, []);
+                }
+                indexedCosmetics.get(substring)!.push(cosmetic);
+            }
+        }
+    });
+}
+
+// region Helpers
 
 // Filter cached cosmetics by name
 export async function getCosmeticChoices(query: string): Promise<Cosmetic[]> {
@@ -30,7 +57,9 @@ export async function getCosmeticChoices(query: string): Promise<Cosmetic[]> {
     });
 }
 
-// region Helpers
+export function getCosmeticChoicesFromIndex(query: string): Cosmetic[] {
+    return indexedCosmetics?.get(query) || [];
+}
 
 // Retrieve a single cosmetic by exact name
 export async function getCosmeticDataByName(name: string): Promise<Cosmetic | undefined> {
