@@ -21,7 +21,7 @@ export default async(interaction: Interaction) => {
             break;
 
         case interaction.isAutocomplete() && interaction.commandName === 'cosmetic':
-            autocompleteCosmetic(interaction);
+            await autocompleteCosmetic(interaction);
             break;
 
         case interaction.isAutocomplete() && interaction.commandName === 'cosmetic_list':
