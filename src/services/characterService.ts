@@ -1,23 +1,12 @@
-import axios from '../utils/apiClient';
-import { Character } from "../types";
 import {
-    setCache,
-    getCache
+    getCachedGameData,
+    initializeGameDataCache
 } from '../cache';
+import { Character } from "../types";
+import { EGameData } from "../utils/dataUtils";
 
 export async function initializeCharactersCache(): Promise<void> {
-    try {
-        const response = await axios.get('/api/characters');
-        if (response.data.success) {
-            const charactersData: { [key: string]: Character } = response.data.data;
-            setCache('characterData', charactersData);
-            console.log(`Fetched and cached ${Object.keys(charactersData).length} characters.`);
-        } else {
-            console.error("Failed to fetch characters: API responded with success = false");
-        }
-    } catch (error) {
-        console.error('Error fetching characters:', error);
-    }
+    await initializeGameDataCache<Character>('/api/characters', EGameData.CharacterData);
 }
 
 // region Helpers
@@ -54,15 +43,7 @@ export async function getCharacterIndexByName(name: string | null): Promise<numb
 }
 
 export async function getCachedCharacters(): Promise<{ [key: string]: Character }> {
-    let cachedCharacters = getCache<{ [key: string]: Character }>('characterData');
-
-    if (!cachedCharacters || Object.keys(cachedCharacters).length === 0) {
-        console.warn("Character cache expired or empty. Fetching new data...");
-        await initializeCharactersCache();
-        cachedCharacters = getCache<{ [key: string]: Character }>('characterData') || {};
-    }
-
-    return cachedCharacters;
+    return getCachedGameData<Character>('characterData', initializeCharactersCache);
 }
 
 // endregion

@@ -11,7 +11,15 @@ import {
     Perk
 } from "../types";
 
-interface GetGameDataOptions {
+export enum EGameData {
+    CosmeticData = 'cosmeticData',
+    CharacterData = 'characterData',
+    PerkData = 'perkData',
+    AddonData = 'addonData',
+    OfferingData = 'offeringData'
+}
+
+interface GameDataOptions {
     cosmeticData?: boolean;
     characterData?: boolean;
     perkData?: boolean;
@@ -27,8 +35,8 @@ interface GameData {
     offeringData: { [key: string]: Offering };
 }
 
-export async function getGameData(options: GetGameDataOptions = {}): Promise<GameData> {
-    const dataFetchers: { [key in keyof GetGameDataOptions]: () => Promise<any> } = {
+export async function getGameData(options: GameDataOptions = {}): Promise<GameData> {
+    const dataFetchers: { [key in keyof GameDataOptions]: () => Promise<any> } = {
         cosmeticData: getCachedCosmetics,
         characterData: getCachedCharacters,
         perkData: getCachedPerks,
@@ -37,12 +45,12 @@ export async function getGameData(options: GetGameDataOptions = {}): Promise<Gam
     };
 
     const tasks = Object.entries(dataFetchers)
-        .filter(([key]) => options[key as keyof GetGameDataOptions])
+        .filter(([key]) => options[key as keyof GameDataOptions])
         .map(([_, fetcher]) => fetcher());
 
     const results = await Promise.all(tasks);
     return Object.keys(dataFetchers).reduce((acc, key) => {
-        acc[key as keyof GameData] = options[key as keyof GetGameDataOptions] ? results.shift() : null;
+        acc[key as keyof GameData] = options[key as keyof GameDataOptions] ? results.shift() : null;
         return acc;
     }, {} as GameData);
 }

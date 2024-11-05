@@ -33,7 +33,7 @@ import {
 import { sendUnauthorizedMessage } from "../handlers/unauthorizedHandler";
 
 export const data = new SlashCommandBuilder()
-    .setName('build_list')
+    .setName('builds')
     .setDescription('Search for builds')
     .addStringOption(option =>
         option

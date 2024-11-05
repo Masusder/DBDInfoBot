@@ -24,19 +24,19 @@ export default async(interaction: Interaction) => {
             await autocompleteCosmetic(interaction);
             break;
 
-        case interaction.isAutocomplete() && interaction.commandName === 'cosmetic_list':
+        case interaction.isAutocomplete() && interaction.commandName === 'cosmetics':
             await autocompleteCosmeticList(interaction);
             break;
 
-        case interaction.isChatInputCommand() && interaction.commandName === 'cosmetic_list':
+        case interaction.isChatInputCommand() && interaction.commandName === 'cosmetics':
             await executeCosmeticList(interaction);
             break;
 
-        case interaction.isChatInputCommand() && interaction.commandName === 'build_list':
+        case interaction.isChatInputCommand() && interaction.commandName === 'builds':
             await executeBuildList(interaction);
             break;
 
-        case interaction.isAutocomplete() && interaction.commandName === 'build_list':
+        case interaction.isAutocomplete() && interaction.commandName === 'builds':
             const focusedOption = interaction.options.getFocused(true);
 
             if (focusedOption.name === 'character') {

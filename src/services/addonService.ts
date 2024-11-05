@@ -1,36 +1,17 @@
-import axios from "../utils/apiClient";
-import { Addon } from "../types";
 import {
-    getCache,
-    setCache
+    getCachedGameData,
+    initializeGameDataCache
 } from "../cache";
+import { Addon } from "../types";
+import { EGameData } from "../utils/dataUtils";
 
 export async function initializeAddonsCache(): Promise<void> {
-    try {
-        const response = await axios.get('/api/addons');
-        if (response.data.success) {
-            const addonData: { [key: string]: Addon } = response.data.data;
-            setCache('addonData', addonData);
-            console.log(`Fetched and cached ${Object.keys(addonData).length} addons.`);
-        } else {
-            console.error("Failed to fetch addons: API responded with success = false");
-        }
-    } catch (error) {
-        console.error('Error fetching addons:', error);
-    }
+    await initializeGameDataCache<Addon>('/api/addons', EGameData.AddonData);
 }
 
 // region Helpers
 export async function getCachedAddons(): Promise<{ [key: string]: Addon }> {
-    let cachedAddons = getCache<{ [key: string]: Addon }>('addonData');
-
-    if (!cachedAddons || Object.keys(cachedAddons).length === 0) {
-        console.warn("Addon cache expired or empty. Fetching new data...");
-        await initializeAddonsCache();
-        cachedAddons = getCache<{ [key: string]: Addon }>('addonData') || {};
-    }
-
-    return cachedAddons;
+    return getCachedGameData<Addon>('addonData', initializeAddonsCache);
 }
 
 // endregion

@@ -20,7 +20,7 @@ import { paginationHandler } from "../handlers/paginationHandler";
 const COSMETICS_PER_PAGE = 6;
 
 export const data = new SlashCommandBuilder()
-    .setName('cosmetic_list')
+    .setName('cosmetics')
     .setDescription('Check list of cosmetics for specific character')
     .addStringOption(option =>
         option

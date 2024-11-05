@@ -1,25 +1,17 @@
-import axios from '../utils/apiClient';
-import { Cosmetic } from '../types';
 import {
-    setCache,
-    getCache
+    getCachedGameData,
+    initializeGameDataCache
 } from '../cache';
+import { Cosmetic } from '../types';
+import { EGameData } from "../utils/dataUtils";
 
 let indexedCosmetics: Map<string, Cosmetic[]> = new Map();
 
 export async function initializeCosmeticCache(): Promise<void> {
-    try {
-        const response = await axios.get('/api/cosmetics');
-        if (response.data.success) {
-            const cosmeticsData: { [key: string]: Cosmetic } = response.data.data;
-            indexCosmetics(cosmeticsData);
-            setCache('cosmeticData', cosmeticsData);
-            console.log(`Fetched and cached ${Object.keys(cosmeticsData).length} cosmetics.`);
-        } else {
-            console.error("Failed to fetch cosmetics: API responded with success = false");
-        }
-    } catch (error) {
-        console.error('Error fetching cosmetics:', error);
+    await initializeGameDataCache<Cosmetic>('/api/cosmetics', EGameData.CosmeticData);
+    const cosmeticData = await getCachedCosmetics();
+    if (Object.keys(cosmeticData).length > 0) {
+        indexCosmetics(cosmeticData);
     }
 }
 
@@ -28,6 +20,8 @@ function indexCosmetics(cosmetics: { [key: string]: Cosmetic }) {
     console.log(`Indexing cosmetics.`);
 
     indexedCosmetics.clear();
+
+    indexedCosmetics.set("", Object.values(cosmetics));
 
     Object.values(cosmetics).forEach(cosmetic => {
         const name = cosmetic.CosmeticName.toLowerCase();
@@ -60,6 +54,7 @@ export async function getCosmeticDataByName(name: string): Promise<Cosmetic | un
     return Object.values(cachedCosmetics).find(cosmetic => cosmetic.CosmeticName.toLowerCase() === name.toLowerCase());
 }
 
+// Retrieve list of cosmetics using character's index
 export async function getCosmeticListByCharacterIndex(index: number): Promise<Cosmetic[]> {
     const cosmeticData = await getCachedCosmetics();
 
@@ -75,14 +70,7 @@ export async function getCosmeticDataById(id: string): Promise<Cosmetic | undefi
 }
 
 export async function getCachedCosmetics(): Promise<{ [key: string]: Cosmetic }> {
-    let cachedCosmetics = getCache<{ [key: string]: Cosmetic }>('cosmeticData');
-
-    if (!cachedCosmetics || Object.keys(cachedCosmetics).length === 0) {
-        console.warn("Cosmetic cache expired or empty. Fetching new data...");
-        await initializeCosmeticCache();
-        cachedCosmetics = getCache<{ [key: string]: Cosmetic }>('cosmeticData') || {};
-    }
-    return cachedCosmetics;
+    return getCachedGameData<Cosmetic>('cosmeticData', initializeCosmeticCache);
 }
 
 // endregion
