@@ -5,7 +5,8 @@ import {
     getCache
 } from '../cache';
 
-export let indexedCosmetics: Map<string, Cosmetic[]> = new Map();
+let indexedCosmetics: Map<string, Cosmetic[]> = new Map();
+
 export async function initializeCosmeticCache(): Promise<void> {
     try {
         const response = await axios.get('/api/cosmetics');
@@ -23,7 +24,7 @@ export async function initializeCosmeticCache(): Promise<void> {
 }
 
 // Build an indexed cosmetics map for fast querying
-function indexCosmetics(cosmetics:  {[key: string]: Cosmetic}) {
+function indexCosmetics(cosmetics: { [key: string]: Cosmetic }) {
     console.log(`Indexing cosmetics.`);
 
     indexedCosmetics.clear();
@@ -47,16 +48,7 @@ function indexCosmetics(cosmetics:  {[key: string]: Cosmetic}) {
 
 // region Helpers
 
-// Filter cached cosmetics by name
-export async function getCosmeticChoices(query: string): Promise<Cosmetic[]> {
-    const cachedCosmetics = await getCachedCosmetics();
-
-    const lowerCaseQuery = query.toLowerCase();
-    return Object.values(cachedCosmetics).filter(cosmetic => {
-        return cosmetic.CosmeticName.toLowerCase().includes(lowerCaseQuery);
-    });
-}
-
+// Filter cosmetics by name using index table
 export function getCosmeticChoicesFromIndex(query: string): Cosmetic[] {
     return indexedCosmetics?.get(query) || [];
 }
