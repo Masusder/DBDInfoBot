@@ -7,7 +7,7 @@ import {
     combineImages,
     getCosmeticPiecesCombinedImage
 } from '../commands/cosmeticCommand';
-import { extractInteractionId } from '../utils/stringUtils';
+import { extractInteractionId } from '@utils/stringUtils';
 
 export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
     const cosmeticId = extractInteractionId(interaction.customId);

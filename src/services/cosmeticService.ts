@@ -3,10 +3,10 @@ import {
     getCachedGameData,
     initializeGameDataCache
 } from '../cache';
-import { Cosmetic } from '../types';
-import { EGameData } from "../utils/dataUtils";
 import { Locale } from 'discord.js';
-import { localizeCacheKey } from "../utils/stringUtils";
+import { Cosmetic } from '../types';
+import { EGameData } from "@utils/dataUtils";
+import { localizeCacheKey } from "@utils/stringUtils";
 
 let indexedCosmetics: Map<string, Map<string, Cosmetic[]>> = new Map();
 

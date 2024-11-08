@@ -1,6 +1,6 @@
 import Constants from "../constants";
 import { Locale } from "discord.js";
-import { DiscordLocaleToDbdLangCode } from "../data/Languages";
+import { DiscordLocaleToDbdLangCode } from "@data/Languages";
 
 export function extractInteractionId(customId: string): string | null {
     const parts = customId.split('::');

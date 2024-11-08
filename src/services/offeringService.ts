@@ -3,7 +3,7 @@ import {
     initializeGameDataCache
 } from "../cache";
 import { Offering } from "../types";
-import { EGameData } from "../utils/dataUtils";
+import { EGameData } from "@utils/dataUtils";
 import { Locale } from "discord.js";
 
 export async function initializeOfferingCache(locale: Locale): Promise<void> {

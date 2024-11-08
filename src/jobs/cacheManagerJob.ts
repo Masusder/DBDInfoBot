@@ -7,7 +7,7 @@ import {
     initializeOfferingCache
 } from "../services";
 import { Locale } from "discord.js";
-import { EGameData } from "../utils/dataUtils";
+import { EGameData } from "@utils/dataUtils";
 
 export async function startCacheManagerJob() {
     cron.schedule('0 * * * *', async() => {

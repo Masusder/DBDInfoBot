@@ -21,9 +21,9 @@ import {
     generatePaginationButtons,
     TPaginationType
 } from "../handlers/paginationHandler";
-import { BuildCategories } from "../data/BuildCategories";
-import { combineBaseUrlWithPath } from "../utils/stringUtils";
-import { getGameData } from "../utils/dataUtils";
+import { BuildCategories } from "@data/BuildCategories";
+import { combineBaseUrlWithPath } from "@utils/stringUtils";
+import { getGameData } from "@utils/dataUtils";
 import {
     Character,
     Perk,

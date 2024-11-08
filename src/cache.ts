@@ -1,11 +1,11 @@
 import NodeCache from 'node-cache';
 import axios from "./utils/apiClient";
-import { EGameData } from "./utils/dataUtils";
+import { EGameData } from "@utils/dataUtils";
 import { Locale } from "discord.js";
 import {
     localizeCacheKey,
     mapDiscordLocaleToDbdLang
-} from "./utils/stringUtils";
+} from "@utils/stringUtils";
 
 const globalCache = new NodeCache({ stdTTL: 3600 });
 const processedKeys = new Set<string>();

@@ -8,7 +8,8 @@ import {
     ColorResolvable,
     EmbedBuilder,
     Locale,
-    SlashCommandBuilder
+    SlashCommandBuilder,
+    APIEmbedField
 } from 'discord.js';
 import {
     getCosmeticDataByName,
@@ -19,7 +20,7 @@ import { getCachedCharacters } from "../services/characterService";
 import {
     combineBaseUrlWithPath,
     formatInclusionVersion
-} from "../utils/stringUtils";
+} from "@utils/stringUtils";
 import {
     createCanvas,
     loadImage
@@ -152,7 +153,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 { name: 'More Info', value: cosmeticDetails }
             ];
 
-            const filteredFields = fields.filter(field => field !== null);
+            const filteredFields = fields.filter((field): field is APIEmbedField => field !== null);
 
             const embed = new EmbedBuilder()
                 .setColor(embedColor)
