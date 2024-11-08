@@ -10,6 +10,7 @@ import {
     Offering,
     Perk
 } from "../types";
+import { Locale } from "discord.js";
 
 export enum EGameData {
     CosmeticData = 'cosmeticData',
@@ -35,8 +36,8 @@ interface GameData {
     offeringData: { [key: string]: Offering };
 }
 
-export async function getGameData(options: GameDataOptions = {}): Promise<GameData> {
-    const dataFetchers: { [key in keyof GameDataOptions]: () => Promise<any> } = {
+export async function getGameData(options: GameDataOptions = {}, locale: Locale): Promise<GameData> {
+    const dataFetchers: { [key in keyof GameDataOptions]: (locale: Locale) => Promise<any> } = {
         cosmeticData: getCachedCosmetics,
         characterData: getCachedCharacters,
         perkData: getCachedPerks,
@@ -46,7 +47,7 @@ export async function getGameData(options: GameDataOptions = {}): Promise<GameDa
 
     const tasks = Object.entries(dataFetchers)
         .filter(([key]) => options[key as keyof GameDataOptions])
-        .map(([_, fetcher]) => fetcher());
+        .map(([_, fetcher]) => fetcher(locale));
 
     const results = await Promise.all(tasks);
     return Object.keys(dataFetchers).reduce((acc, key) => {

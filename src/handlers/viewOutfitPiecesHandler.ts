@@ -11,13 +11,14 @@ import { extractInteractionId } from '../utils/stringUtils';
 
 export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
     const cosmeticId = extractInteractionId(interaction.customId);
+    const locale = interaction.locale;
 
     if (!cosmeticId) {
         await interaction.followUp({ content: 'Invalid cosmetic ID.', ephemeral: true });
         return;
     }
 
-    const cosmeticData = await getCosmeticDataById(cosmeticId);
+    const cosmeticData = await getCosmeticDataById(cosmeticId, locale);
     if (!cosmeticData) {
         await interaction.followUp({ content: 'Error retrieving cosmetic data.', ephemeral: true });
         return;
@@ -32,7 +33,7 @@ export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
         .setImage('attachment://combined-outfit-pieces.png');
 
     for (const pieceId of cosmeticData.OutfitItems) {
-        const pieceData = await getCosmeticDataById(pieceId);
+        const pieceData = await getCosmeticDataById(pieceId, locale);
         if (pieceData) {
             embed.addFields({
                 name: pieceData.CosmeticName,

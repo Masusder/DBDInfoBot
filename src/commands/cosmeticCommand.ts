@@ -7,6 +7,7 @@ import {
     ChatInputCommandInteraction,
     ColorResolvable,
     EmbedBuilder,
+    Locale,
     SlashCommandBuilder
 } from 'discord.js';
 import {
@@ -29,12 +30,21 @@ import {
 } from "../data";
 import { Cosmetic } from "../types";
 import fetchAndResizeImage from '../utils/resizeImage';
+import debounceAsync from "../utils/debounce";
 import axios from "axios";
 
 
 export const data = new SlashCommandBuilder()
     .setName('cosmetic')
-    .setDescription('Search for a cosmetic by name')
+    .setDescription('Search for a cosmetic by name.')
+    .setNameLocalization('en-US', 'cosmetic')
+    .setDescriptionLocalization('en-US', 'Search for a cosmetic by name.')
+    .setNameLocalization('pl', 'kosmetyk')
+    .setDescriptionLocalization('pl', 'Wyszukaj kosmetyku po jego nazwie.')
+    .setNameLocalization('fr', 'cosmétique')
+    .setDescriptionLocalization('fr', 'Rechercher un cosmétique par nom.')
+    .setNameLocalization('es-ES', 'cosmético')
+    .setDescriptionLocalization('es-ES', 'Buscar un cosmético por nombre.')
     .addStringOption(option =>
         option
             .setName('name')
@@ -45,13 +55,14 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: ChatInputCommandInteraction) {
     const cosmeticName = interaction.options.getString('name');
+    const locale = interaction.locale;
 
     if (!cosmeticName) return;
 
     try {
         await interaction.deferReply();
 
-        const cosmeticData = await getCosmeticDataByName(cosmeticName);
+        const cosmeticData = await getCosmeticDataByName(cosmeticName, locale);
         if (cosmeticData) {
             const cosmeticRarity = cosmeticData.Rarity;
             const embedColor: ColorResolvable = Rarities[cosmeticRarity].color as ColorResolvable || Rarities['N/A'].color as ColorResolvable;
@@ -113,7 +124,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
             const embedTitle = formatEmbedTitle(cosmeticData.CosmeticName, cosmeticData.Unbreakable);
 
-            const characterData = await getCachedCharacters();
+            const characterData = await getCachedCharacters(locale);
             const characterIndex = cosmeticData.Character;
 
             const cosmeticDetails = '[Click Here](' + combineBaseUrlWithPath(`/store/cosmetics?cosmeticId=${cosmeticData.CosmeticId}`) + ')';
@@ -207,7 +218,7 @@ function getDiscountPercentage(currencyId: string, cosmeticData: Cosmetic): numb
 export async function getCosmeticPiecesCombinedImage(cosmeticPieces: string[]) {
     const urls: string[] = [];
     for (const cosmeticPieceId of cosmeticPieces) {
-        const cosmeticPieceData = await getCosmeticDataById(cosmeticPieceId);
+        const cosmeticPieceData = await getCosmeticDataById(cosmeticPieceId, Locale.EnglishUS);
 
         if (cosmeticPieceData) {
             urls.push(combineBaseUrlWithPath(cosmeticPieceData.IconFilePathList));
@@ -250,10 +261,11 @@ export async function combineImages(imageUrls: string[]): Promise<Buffer> {
 // endregion
 
 // region Autocomplete
-export async function autocomplete(interaction: AutocompleteInteraction) {
+async function autocomplete(interaction: AutocompleteInteraction) {
     try {
+        const locale = interaction.locale;
         const focusedValue = interaction.options.getFocused().toLowerCase();
-        const choices = getCosmeticChoicesFromIndex(focusedValue);
+        const choices = await getCosmeticChoicesFromIndex(focusedValue, locale);
 
         const options = choices.slice(0, 25).map(cosmetic => ({
             name: cosmetic.CosmeticName,
@@ -264,6 +276,11 @@ export async function autocomplete(interaction: AutocompleteInteraction) {
     } catch (error) {
         console.error("Error handling autocomplete interaction:", error);
     }
+}
+
+export async function debouncedAutocomplete(interaction: AutocompleteInteraction) {
+    const debounced = debounceAsync(autocomplete, 300);
+    return debounced(interaction);
 }
 
 // endregion

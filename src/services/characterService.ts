@@ -4,20 +4,21 @@ import {
 } from '../cache';
 import { Character } from "../types";
 import { EGameData } from "../utils/dataUtils";
+import { Locale } from "discord.js";
 
-export async function initializeCharactersCache(): Promise<void> {
-    await initializeGameDataCache<Character>('/api/characters', EGameData.CharacterData);
+export async function initializeCharactersCache(locale: Locale): Promise<void> {
+    await initializeGameDataCache<Character>('/api/characters', EGameData.CharacterData, locale);
 }
 
 // region Helpers
 // Retrieve a single character by index
-export async function getCharacterDataByIndex(index: string | number): Promise<Character | undefined> {
-    const cachedCharacters = await getCachedCharacters();
+export async function getCharacterDataByIndex(index: string | number, locale: Locale): Promise<Character | undefined> {
+    const cachedCharacters = await getCachedCharacters(locale);
     return cachedCharacters[index];
 }
 
-export async function getCharacterChoices(query: string): Promise<Character[]> {
-    const cachedCharacters = await getCachedCharacters();
+export async function getCharacterChoices(query: string, locale: Locale): Promise<Character[]> {
+    const cachedCharacters = await getCachedCharacters(locale);
 
     const lowerCaseQuery = query.toLowerCase();
     return Object.entries(cachedCharacters)
@@ -27,8 +28,8 @@ export async function getCharacterChoices(query: string): Promise<Character[]> {
         });
 }
 
-export async function getCharacterIndexByName(name: string | null): Promise<number | undefined> {
-    const cachedCharacters = await getCachedCharacters();
+export async function getCharacterIndexByName(name: string | null, locale: Locale): Promise<number | undefined> {
+    const cachedCharacters = await getCachedCharacters(locale);
 
     if (!name) return undefined;
 
@@ -42,8 +43,8 @@ export async function getCharacterIndexByName(name: string | null): Promise<numb
     return undefined;
 }
 
-export async function getCachedCharacters(): Promise<{ [key: string]: Character }> {
-    return getCachedGameData<Character>('characterData', initializeCharactersCache);
+export async function getCachedCharacters(locale: Locale): Promise<{ [key: string]: Character }> {
+    return getCachedGameData<Character>('characterData', locale, () => initializeCharactersCache(locale));
 }
 
 // endregion
