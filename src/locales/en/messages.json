@@ -4,6 +4,12 @@
       "perk_information": "Perk Information",
       "generic_perk": "Generic Perk",
       "description": "Description"
+    },
+    "addon_subcommand": {
+      "addon_information": "Add-on Information",
+      "description": "Description",
+      "rarity": "Rarity",
+      "role": "Role"
     }
   }
 }

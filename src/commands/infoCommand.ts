@@ -8,6 +8,10 @@ import {
     handlePerkCommandInteraction
 } from "./infoCommandComponents/perk";
 import i18next from "i18next";
+import {
+    handleAddonCommandAutocompleteInteraction,
+    handleAddonCommandInteraction
+} from "@commands/infoCommandComponents/addon";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -186,6 +190,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         case 'perk':
             await handlePerkCommandInteraction(interaction);
             break;
+        case 'addon':
+            await handleAddonCommandInteraction(interaction);
+            break;
         default:
             await interaction.reply('Unknown command type.');
     }
@@ -198,6 +205,9 @@ export async function autocomplete(interaction: AutocompleteInteraction) {
     switch (type) {
         case 'perk':
             await handlePerkCommandAutocompleteInteraction(interaction);
+            break;
+        case 'addon':
+            await handleAddonCommandAutocompleteInteraction(interaction);
             break;
         default:
             break;

@@ -1,0 +1,18 @@
+{
+  "rarities": {
+    "common": "Zwykłe",
+    "uncommon": "Niezwykłe",
+    "rare": "Rzadkie",
+    "very_rare": "Bardzo Rzadkie",
+    "ultra_rare": "Ultra Rzadkie",
+    "legendary": "Legendarny",
+    "special_event": "Specjalne Wydarzenie",
+    "artifact": "Artefakt",
+    "limited": "Ograniczone",
+    "unknown": "N/A"
+  },
+  "roles": {
+    "killer": "Zabójca",
+    "survivor": "Ocalały"
+  }
+}

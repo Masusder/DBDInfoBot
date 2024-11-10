@@ -5,7 +5,7 @@ import { Locale } from "discord.js";
 import {
     localizeCacheKey,
     mapDiscordLocaleToDbdLang
-} from "@utils/stringUtils";
+} from "@utils/localizationUtils";
 
 const globalCache = new NodeCache({ stdTTL: 3600 });
 const processedKeys = new Set<string>();
@@ -67,6 +67,7 @@ export async function getCachedGameData<T>(cacheKey: string, locale: Locale, ini
     return cachedData;
 }
 
+// noinspection JSUnusedGlobalSymbols
 export function debugCache(): void {
     if (process.env.BRANCH !== 'dev') {
         throw Error("You're only allowed to use debug cache method on development branch.")

@@ -6,7 +6,7 @@ import {
 import { Locale } from 'discord.js';
 import { Cosmetic } from '../types';
 import { EGameData } from "@utils/dataUtils";
-import { localizeCacheKey } from "@utils/stringUtils";
+import { localizeCacheKey } from "@utils/localizationUtils";
 
 let indexedCosmetics: Map<string, Map<string, Cosmetic[]>> = new Map();
 

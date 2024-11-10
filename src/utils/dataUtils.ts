@@ -1,8 +1,8 @@
-import { getCachedCharacters } from "../services/characterService";
-import { getCachedPerks } from "../services/perkService";
-import { getCachedAddons } from "../services/addonService";
-import { getCachedOfferings } from "../services/offeringService";
-import { getCachedCosmetics } from "../services/cosmeticService";
+import { getCachedCharacters } from "@services/characterService";
+import { getCachedPerks } from "@services/perkService";
+import { getCachedAddons } from "@services/addonService";
+import { getCachedOfferings } from "@services/offeringService";
+import { getCachedCosmetics } from "@services/cosmeticService";
 import {
     Addon,
     Character,

@@ -16,7 +16,7 @@ async function initI18next() {
                     'en', 'de', 'es', 'es-MX', 'fr', 'it', 'ja',
                     'ko', 'pl', 'pt-BR', 'ru', 'th', 'tr', 'zh-Hans', 'zh-Hant'
                 ],
-                ns: ['commands', 'messages'],
+                ns: ['commands', 'messages', 'general'],
                 defaultNS: 'commands',
                 backend: {
                     loadPath: 'src/locales/{{lng}}/{{ns}}.json'

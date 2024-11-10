@@ -1,0 +1,18 @@
+{
+  "rarities": {
+    "common": "Common",
+    "uncommon": "Uncommon",
+    "rare": "Rare",
+    "very_rare": "Very Rare",
+    "ultra_rare": "Ultra Rare",
+    "legendary": "Legendary",
+    "special_event": "Special Event",
+    "artifact": "Artifact",
+    "limited": "Limited",
+    "unknown": "N/A"
+  },
+  "roles": {
+    "killer": "Killer",
+    "survivor": "Survivor"
+  }
+}

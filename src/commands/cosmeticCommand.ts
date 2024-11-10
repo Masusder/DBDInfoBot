@@ -15,8 +15,8 @@ import {
     getCosmeticDataByName,
     getCosmeticDataById,
     getCosmeticChoicesFromIndex
-} from '../services/cosmeticService';
-import { getCachedCharacters } from "../services/characterService";
+} from '@services/cosmeticService';
+import { getCachedCharacters } from "@services/characterService";
 import {
     combineBaseUrlWithPath,
     formatInclusionVersion
@@ -33,6 +33,7 @@ import { Cosmetic } from "../types";
 import fetchAndResizeImage from '../utils/resizeImage';
 import debounceAsync from "../utils/debounce";
 import axios from "axios";
+import { getTranslation } from "@utils/localizationUtils";
 
 
 export const data = new SlashCommandBuilder()
@@ -141,7 +142,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     value: cosmeticData.CollectionName,
                     inline: true
                 } : null,
-                { name: 'Rarity', value: Rarities[cosmeticData.Rarity]?.name || 'N/A', inline: true },
+                { name: 'Rarity', value: getTranslation(Rarities[cosmeticData.Rarity]?.localizedName, locale, 'general') || 'N/A', inline: true },
                 {
                     name: 'Inclusion Version',
                     value: formatInclusionVersion(cosmeticData.InclusionVersion) || 'N/A',

@@ -1,7 +1,4 @@
 import Constants from "../constants";
-import { Locale } from "discord.js";
-import { DiscordLocaleToDbdLangCode } from "@data/Languages";
-import i18next from "i18next";
 
 export function extractInteractionId(customId: string): string | null {
     const parts = customId.split('::');
@@ -18,19 +15,6 @@ export function combineBaseUrlWithPath(relativePath: string): string {
 
 export function formatInclusionVersion(inclusionVersion: string): string {
     return inclusionVersion === "Legacy" ? "Before 5.5.0" : inclusionVersion;
-}
-
-export function localizeCacheKey(cacheKey: string, locale: Locale): string {
-    const dbdLocale = mapDiscordLocaleToDbdLang(locale);
-    return `${cacheKey}_${dbdLocale}`;
-}
-
-export function mapDiscordLocaleToDbdLang(discordLocale: Locale) {
-    return DiscordLocaleToDbdLangCode[discordLocale] || 'en';
-}
-
-export function getTranslation(key: string, locale: Locale, ns: string = 'commands'): string {
-    return i18next.t(key, { lng: mapDiscordLocaleToDbdLang(locale), ns });
 }
 
 export function formatHtmlToDiscordMarkdown(html: string): string {

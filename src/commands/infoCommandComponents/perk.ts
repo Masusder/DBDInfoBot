@@ -13,14 +13,9 @@ import { getCharacterDataByIndex } from "@services/characterService";
 import {
     combineBaseUrlWithPath,
     formatHtmlToDiscordMarkdown,
-    getTranslation,
-    mapDiscordLocaleToDbdLang
 } from "@utils/stringUtils";
-import {
-    createCanvas,
-    loadImage
-} from "canvas";
-import i18next from "i18next";
+import { getTranslation } from "@utils/localizationUtils";
+import { layerIcons } from "@commands/infoCommandComponents/infoUtils";
 
 export async function handlePerkCommandInteraction(interaction: ChatInputCommandInteraction) {
     const perkName = interaction.options.getString('name');
@@ -40,19 +35,19 @@ export async function handlePerkCommandInteraction(interaction: ChatInputCommand
 
         const perkBackgroundUrl = roleData.perkBackground;
         const perkIconUrl = combineBaseUrlWithPath(perkData.IconFilePathList);
-        const imageBuffer = await layerPerkIcons(perkBackgroundUrl, perkIconUrl);
+        const imageBuffer = await layerIcons(perkBackgroundUrl, perkIconUrl);
 
         const characterData = await getCharacterDataByIndex(perkData.Character, locale);
 
         let characterName: string | null = null;
-        if (characterData) characterName = characterData.Name
+        if (characterData) characterName = characterData.Name;
 
         const title = characterName ? `${perkName} (${characterName})` : `${perkName} (${getTranslation('info_command.perk_subcommand.generic_perk', locale, 'messages')})`;
 
         const field: APIEmbedField = {
             name: getTranslation('info_command.perk_subcommand.description', locale, 'messages'),
             value: formatHtmlToDiscordMarkdown(perkData.Description)
-        }
+        };
 
         const embed = new EmbedBuilder()
             .setColor(roleData.hexColor)
@@ -75,23 +70,6 @@ export async function handlePerkCommandInteraction(interaction: ChatInputCommand
     } catch (error) {
         console.error("Error executing perk subcommand:", error);
     }
-}
-
-async function layerPerkIcons(backgroundUrl: string, iconUrl: string, canvasWidth: number = 512, canvasHeight: number = 512): Promise<Buffer> {
-    const canvas = createCanvas(canvasWidth, canvasHeight);
-    const ctx = canvas.getContext('2d');
-
-    const backgroundImage = await loadImage(backgroundUrl);
-    const iconImage = await loadImage(iconUrl);
-
-    ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
-
-    const iconSize = 512;
-    const x = (canvas.width - iconSize) / 2;
-    const y = (canvas.height - iconSize) / 2;
-    ctx.drawImage(iconImage, x, y, iconSize, iconSize);
-
-    return canvas.toBuffer();
 }
 
 export async function handlePerkCommandAutocompleteInteraction(interaction: AutocompleteInteraction) {

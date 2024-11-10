@@ -4,6 +4,12 @@
       "perk_information": "Informacje o umiejętności",
       "generic_perk": "Ogólna umiejętność",
       "description": "Opis"
+    },
+    "addon_subcommand": {
+      "addon_information": "Informacje o dodatku",
+      "description": "Opis",
+      "rarity": "Rzadkość",
+      "role": "Rola"
     }
   }
 }
