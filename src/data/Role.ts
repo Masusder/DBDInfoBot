@@ -13,6 +13,10 @@ interface IRole {
         perkBackground: string;
         charPortrait: string;
         hexColor: ColorResolvable;
+    },
+    None: {
+        localizedName: string;
+        hexColor: ColorResolvable;
     }
 }
 
@@ -28,5 +32,9 @@ export const Role: IRole = {
         perkBackground: combineBaseUrlWithPath('/images/Other/KillerRarity.png'),
         charPortrait: combineBaseUrlWithPath('/images/Other/CharPortraitKiller.png'),
         hexColor: "#ff0000"
+    },
+    None: {
+        localizedName: "roles.none",
+        hexColor: "#808080"
     }
 }

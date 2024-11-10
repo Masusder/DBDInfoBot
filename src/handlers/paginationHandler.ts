@@ -14,6 +14,7 @@ export interface IPaginationOptions {
     generateEmbed: (pageItems: any[], currentPage: number, totalPages: number) => EmbedBuilder;
     interactionUserId: string;
     interactionReply: Message;
+    timeout?: number;
 }
 
 export const generatePaginationButtons = (page: number, totalPages: number) => {
@@ -76,12 +77,13 @@ export async function paginationHandler(options: IPaginationOptions) {
 
     await interactionReply.edit({
         embeds: [generateEmbed(getItemsForPage(currentPage), currentPage, totalPages)],
-        components: [generatePaginationButtons(currentPage, totalPages)]
+        components: [generatePaginationButtons(currentPage, totalPages)],
+        attachments: []
     });
 
     const collector = interactionReply.createMessageComponentCollector({
         filter: (i): i is ButtonInteraction => i.isButton(),
-        time: 60_000
+        time: options.timeout
     });
 
     collector.on('collect', async(interaction: ButtonInteraction) => {
@@ -97,7 +99,8 @@ export async function paginationHandler(options: IPaginationOptions) {
 
             await interaction.update({
                 embeds: [generateEmbed(getItemsForPage(currentPage), currentPage, totalPages)],
-                components: [generatePaginationButtons(currentPage, totalPages)]
+                components: [generatePaginationButtons(currentPage, totalPages)],
+                attachments: []
             });
         }
     });

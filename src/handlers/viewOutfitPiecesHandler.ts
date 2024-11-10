@@ -2,11 +2,11 @@ import {
     ButtonInteraction,
     EmbedBuilder
 } from 'discord.js';
-import { getCosmeticDataById } from '../services/cosmeticService';
+import { getCosmeticDataById } from '@services/cosmeticService';
 import {
     combineImages,
     getCosmeticPiecesCombinedImage
-} from '../commands/cosmeticCommand';
+} from '@commands/cosmeticCommand';
 import { extractInteractionId } from '@utils/stringUtils';
 
 export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {

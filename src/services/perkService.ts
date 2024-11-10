@@ -3,13 +3,11 @@ import {
     initializeGameDataCache
 } from "../cache";
 import {
-    Character,
     Perk
 } from "../types";
 import { EGameData } from "@utils/dataUtils";
 import { Locale } from "discord.js";
 import { PerkExtended } from "../types/perk";
-import { getCachedCharacters } from "./characterService";
 
 export async function initializePerksCache(locale: Locale): Promise<void> {
     await initializeGameDataCache<Perk>('/api/perks', EGameData.PerkData, locale);

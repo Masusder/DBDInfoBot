@@ -30,10 +30,10 @@ import {
     Rarities
 } from "../data";
 import { Cosmetic } from "../types";
-import fetchAndResizeImage from '../utils/resizeImage';
 import debounceAsync from "../utils/debounce";
 import axios from "axios";
 import { getTranslation } from "@utils/localizationUtils";
+import { fetchAndResizeImage } from "@utils/imageUtils";
 
 
 export const data = new SlashCommandBuilder()

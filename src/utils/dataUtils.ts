@@ -8,16 +8,19 @@ import {
     Character,
     Cosmetic,
     Offering,
-    Perk
+    Perk,
+    Item
 } from "../types";
 import { Locale } from "discord.js";
+import { getCachedItems } from "@services/itemService";
 
 export enum EGameData {
     CosmeticData = 'cosmeticData',
     CharacterData = 'characterData',
     PerkData = 'perkData',
     AddonData = 'addonData',
-    OfferingData = 'offeringData'
+    OfferingData = 'offeringData',
+    ItemData = 'itemData'
 }
 
 interface GameDataOptions {
@@ -26,6 +29,7 @@ interface GameDataOptions {
     perkData?: boolean;
     addonData?: boolean;
     offeringData?: boolean;
+    itemData?: boolean;
 }
 
 interface GameData {
@@ -34,6 +38,7 @@ interface GameData {
     perkData: { [key: string]: Perk };
     addonData: { [key: string]: Addon };
     offeringData: { [key: string]: Offering };
+    itemData: { [key: string]: Item };
 }
 
 export async function getGameData(options: GameDataOptions = {}, locale: Locale): Promise<GameData> {
@@ -42,7 +47,8 @@ export async function getGameData(options: GameDataOptions = {}, locale: Locale)
         characterData: getCachedCharacters,
         perkData: getCachedPerks,
         addonData: getCachedAddons,
-        offeringData: getCachedOfferings
+        offeringData: getCachedOfferings,
+        itemData: getCachedItems
     };
 
     const tasks = Object.entries(dataFetchers)

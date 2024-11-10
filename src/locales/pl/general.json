@@ -13,6 +13,20 @@
   },
   "roles": {
     "killer": "Zabójca",
-    "survivor": "Ocalały"
+    "survivor": "Ocalały",
+    "none": "Uniwersalny"
+  },
+  "difficulties": {
+    "easy": "Łatwy",
+    "intermediate": "Średniozaawansowany",
+    "hard": "Trudny",
+    "very_hard": "Bardzo trudny",
+    "none": "Brak"
+  },
+  "genders": {
+    "male": "Mężczyzna",
+    "female": "Kobieta",
+    "not_human": "Potwór",
+    "multiple": "Wiele płci"
   }
 }

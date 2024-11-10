@@ -15,7 +15,7 @@ import {
     formatHtmlToDiscordMarkdown,
 } from "@utils/stringUtils";
 import { getTranslation } from "@utils/localizationUtils";
-import { layerIcons } from "@commands/infoCommandComponents/infoUtils";
+import { layerIcons } from "@commands/infoSubCommands/infoUtils";
 
 export async function handlePerkCommandInteraction(interaction: ChatInputCommandInteraction) {
     const perkName = interaction.options.getString('name');

@@ -8,7 +8,10 @@
         "description": "Podaj typ, o której chcesz uzyskać informacje.",
         "choices": {
           "perk": "Umiejętność",
-          "addon": "Dodatek"
+          "addon": "Dodatek",
+          "item": "Przedmiot",
+          "offering": "Dar",
+          "character": "Postać"
         }
       },
       "name": {

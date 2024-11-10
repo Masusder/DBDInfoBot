@@ -11,7 +11,7 @@ import {
     formatHtmlToDiscordMarkdown
 } from "@utils/stringUtils";
 import { getTranslation } from "@utils/localizationUtils";
-import { layerIcons } from "@commands/infoCommandComponents/infoUtils";
+import { layerIcons } from "@commands/infoSubCommands/infoUtils";
 import {
     getAddonChoices,
     getAddonDataByName
@@ -31,7 +31,7 @@ export async function handleAddonCommandInteraction(interaction: ChatInputComman
 
         if (!addonData) return;
 
-        const role = addonData.Role as 'Killer' | 'Survivor';
+        const role = addonData.Role as 'Killer' | 'Survivor' | 'None';
         const roleData = Role[role];
 
         const rarity = addonData.Rarity;

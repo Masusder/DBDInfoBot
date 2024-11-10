@@ -8,8 +8,8 @@ import {
     getCharacterChoices,
     getCharacterDataByIndex,
     getCharacterIndexByName
-} from "../services/characterService";
-import { getCosmeticListByCharacterIndex } from "../services/cosmeticService";
+} from "@services/characterService";
+import { getCosmeticListByCharacterIndex } from "@services/cosmeticService";
 import {
     combineBaseUrlWithPath,
     formatInclusionVersion

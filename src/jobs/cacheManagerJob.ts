@@ -1,10 +1,11 @@
 import cron from 'node-cron';
 import {
+    initializeAddonsCache,
     initializeCharactersCache,
     initializeCosmeticCache,
+    initializeOfferingCache,
     initializePerksCache,
-    initializeAddonsCache,
-    initializeOfferingCache
+    initializeItemsCache
 } from "../services";
 import { Locale } from "discord.js";
 import { EGameData } from "@utils/dataUtils";
@@ -34,6 +35,9 @@ export async function initializeGameDataCache(cacheKey: EGameData, locale: Local
             break;
         case EGameData.CosmeticData:
             await initializeCosmeticCache(locale);
+            break;
+        case EGameData.ItemData:
+            await initializeItemsCache(locale);
             break;
         default:
             throw new Error(`Invalid cacheKey: ${cacheKey}`);

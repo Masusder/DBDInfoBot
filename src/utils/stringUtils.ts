@@ -21,7 +21,7 @@ export function formatHtmlToDiscordMarkdown(html: string): string {
     // Replace <b> with **bold** text (Discord markdown for bold)
     html = html.replace(/<b>(.*?)<\/b>/g, '**$1**');
 
-    // Replace uncommon, rare, very rare classes with their respective color spans
+    // Replace uncommon, rare, very rare classes with bold markdown as Discord doesn't allow color formatting
     html = html.replace(/<span class='uncommon-rarity-color'>(.*?)<\/span>/g, '**$1**');
     html = html.replace(/<span class='rare-rarity-color'>(.*?)<\/span>/g, '**$1**');
     html = html.replace(/<span class='veryrare-rarity-color'>(.*?)<\/span>/g, '**$1**');

@@ -10,6 +10,29 @@
       "description": "Opis",
       "rarity": "Rzadkość",
       "role": "Rola"
+    },
+    "item_subcommand": {
+      "item_information": "Informacje o przedmiocie",
+      "character": "Postać",
+      "rarity": "Rzadkość",
+      "role": "Rola"
+    },
+    "offering_subcommand": {
+      "offering_information": "Informacje o darze",
+      "description": "Opis",
+      "rarity": "Rzadkość",
+      "role": "Rola",
+      "retired": "Ten dar został wycofany."
+    },
+    "character_subcommand": {
+      "character_information": "Informacje o postaci",
+      "description": "Opis",
+      "role": "Rola",
+      "gender": "Płeć",
+      "difficulty": "Poziom trudności",
+      "backstory": "Historia -",
+      "read_backstory": "Przeczytaj historię",
+      "character_backstory": "Historia postaci"
     }
   }
 }

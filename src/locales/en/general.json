@@ -13,6 +13,20 @@
   },
   "roles": {
     "killer": "Killer",
-    "survivor": "Survivor"
+    "survivor": "Survivor",
+    "none": "Universal"
+  },
+  "difficulties": {
+    "easy": "Easy",
+    "intermediate": "Intermediate",
+    "hard": "Hard",
+    "very_hard": "Very Hard",
+    "none": "None"
+  },
+  "genders": {
+    "male": "Male",
+    "female": "Female",
+    "not_human": "Monster",
+    "multiple": "Multiple"
   }
 }

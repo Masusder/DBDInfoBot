@@ -6,12 +6,24 @@ import {
 import {
     handlePerkCommandAutocompleteInteraction,
     handlePerkCommandInteraction
-} from "./infoCommandComponents/perk";
+} from "@commands/infoSubCommands/perk";
 import i18next from "i18next";
 import {
     handleAddonCommandAutocompleteInteraction,
     handleAddonCommandInteraction
-} from "@commands/infoCommandComponents/addon";
+} from "@commands/infoSubCommands/addon";
+import {
+    handleItemCommandAutocompleteInteraction,
+    handleItemCommandInteraction
+} from "@commands/infoSubCommands/item";
+import {
+    handleOfferingCommandAutocompleteInteraction,
+    handleOfferingCommandInteraction
+} from "@commands/infoSubCommands/offering";
+import {
+    handleCharacterCommandAutocompleteInteraction,
+    handleCharacterCommandInteraction
+} from "@commands/infoSubCommands/character";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -137,6 +149,72 @@ export const data = i18next.isInitialized
                         'zh-TW': i18next.t('info_command.options.type.choices.addon', { lng: 'zh-Hant' })
                     },
                     value: 'addon'
+                },
+                {
+                    name: i18next.t('info_command.options.type.choices.item', { lng: 'en' }),
+                    name_localizations: {
+                        'en-US': i18next.t('info_command.options.type.choices.item', { lng: 'en' }),
+                        'en-GB': i18next.t('info_command.options.type.choices.item', { lng: 'en' }),
+                        'de': i18next.t('info_command.options.type.choices.item', { lng: 'de' }),
+                        'es-ES': i18next.t('info_command.options.type.choices.item', { lng: 'es' }),
+                        'es-419': i18next.t('info_command.options.type.choices.item', { lng: 'es-MX' }),
+                        'fr': i18next.t('info_command.options.type.choices.item', { lng: 'fr' }),
+                        'it': i18next.t('info_command.options.type.choices.item', { lng: 'it' }),
+                        'ja': i18next.t('info_command.options.type.choices.item', { lng: 'ja' }),
+                        'ko': i18next.t('info_command.options.type.choices.item', { lng: 'ko' }),
+                        'pl': i18next.t('info_command.options.type.choices.item', { lng: 'pl' }),
+                        'pt-BR': i18next.t('info_command.options.type.choices.item', { lng: 'pt-BR' }),
+                        'ru': i18next.t('info_command.options.type.choices.item', { lng: 'ru' }),
+                        'th': i18next.t('info_command.options.type.choices.item', { lng: 'th' }),
+                        'tr': i18next.t('info_command.options.type.choices.item', { lng: 'tr' }),
+                        'zh-CN': i18next.t('info_command.options.type.choices.item', { lng: 'zh-Hans' }),
+                        'zh-TW': i18next.t('info_command.options.type.choices.item', { lng: 'zh-Hant' })
+                    },
+                    value: 'item'
+                },
+                {
+                    name: i18next.t('info_command.options.type.choices.offering', { lng: 'en' }),
+                    name_localizations: {
+                        'en-US': i18next.t('info_command.options.type.choices.offering', { lng: 'en' }),
+                        'en-GB': i18next.t('info_command.options.type.choices.offering', { lng: 'en' }),
+                        'de': i18next.t('info_command.options.type.choices.offering', { lng: 'de' }),
+                        'es-ES': i18next.t('info_command.options.type.choices.offering', { lng: 'es' }),
+                        'es-419': i18next.t('info_command.options.type.choices.offering', { lng: 'es-MX' }),
+                        'fr': i18next.t('info_command.options.type.choices.offering', { lng: 'fr' }),
+                        'it': i18next.t('info_command.options.type.choices.offering', { lng: 'it' }),
+                        'ja': i18next.t('info_command.options.type.choices.offering', { lng: 'ja' }),
+                        'ko': i18next.t('info_command.options.type.choices.offering', { lng: 'ko' }),
+                        'pl': i18next.t('info_command.options.type.choices.offering', { lng: 'pl' }),
+                        'pt-BR': i18next.t('info_command.options.type.choices.offering', { lng: 'pt-BR' }),
+                        'ru': i18next.t('info_command.options.type.choices.offering', { lng: 'ru' }),
+                        'th': i18next.t('info_command.options.type.choices.offering', { lng: 'th' }),
+                        'tr': i18next.t('info_command.options.type.choices.offering', { lng: 'tr' }),
+                        'zh-CN': i18next.t('info_command.options.type.choices.offering', { lng: 'zh-Hans' }),
+                        'zh-TW': i18next.t('info_command.options.type.choices.offering', { lng: 'zh-Hant' })
+                    },
+                    value: 'offering'
+                },
+                {
+                    name: i18next.t('info_command.options.type.choices.character', { lng: 'en' }),
+                    name_localizations: {
+                        'en-US': i18next.t('info_command.options.type.choices.character', { lng: 'en' }),
+                        'en-GB': i18next.t('info_command.options.type.choices.character', { lng: 'en' }),
+                        'de': i18next.t('info_command.options.type.choices.character', { lng: 'de' }),
+                        'es-ES': i18next.t('info_command.options.type.choices.character', { lng: 'es' }),
+                        'es-419': i18next.t('info_command.options.type.choices.character', { lng: 'es-MX' }),
+                        'fr': i18next.t('info_command.options.type.choices.character', { lng: 'fr' }),
+                        'it': i18next.t('info_command.options.type.choices.character', { lng: 'it' }),
+                        'ja': i18next.t('info_command.options.type.choices.character', { lng: 'ja' }),
+                        'ko': i18next.t('info_command.options.type.choices.character', { lng: 'ko' }),
+                        'pl': i18next.t('info_command.options.type.choices.character', { lng: 'pl' }),
+                        'pt-BR': i18next.t('info_command.options.type.choices.character', { lng: 'pt-BR' }),
+                        'ru': i18next.t('info_command.options.type.choices.character', { lng: 'ru' }),
+                        'th': i18next.t('info_command.options.type.choices.character', { lng: 'th' }),
+                        'tr': i18next.t('info_command.options.type.choices.character', { lng: 'tr' }),
+                        'zh-CN': i18next.t('info_command.options.type.choices.character', { lng: 'zh-Hans' }),
+                        'zh-TW': i18next.t('info_command.options.type.choices.character', { lng: 'zh-Hant' })
+                    },
+                    value: 'character'
                 }
             )
     )
@@ -193,6 +271,15 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         case 'addon':
             await handleAddonCommandInteraction(interaction);
             break;
+        case 'item':
+            await handleItemCommandInteraction(interaction);
+            break;
+        case 'offering':
+            await handleOfferingCommandInteraction(interaction);
+            break;
+        case 'character':
+            await handleCharacterCommandInteraction(interaction);
+            break;
         default:
             await interaction.reply('Unknown command type.');
     }
@@ -208,6 +295,15 @@ export async function autocomplete(interaction: AutocompleteInteraction) {
             break;
         case 'addon':
             await handleAddonCommandAutocompleteInteraction(interaction);
+            break;
+        case 'item':
+            await handleItemCommandAutocompleteInteraction(interaction);
+            break;
+        case 'offering':
+            await handleOfferingCommandAutocompleteInteraction(interaction);
+            break;
+        case 'character':
+            await handleCharacterCommandAutocompleteInteraction(interaction);
             break;
         default:
             break;
