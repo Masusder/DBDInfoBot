@@ -1,0 +1,20 @@
+{
+  "info_command": {
+    "name": "info",
+    "description": "Uzyskaj szczegółowe informacje o funkcjach gry.",
+    "options": {
+      "type": {
+        "name": "typ",
+        "description": "Podaj typ, o której chcesz uzyskać informacje.",
+        "choices": {
+          "perk": "Umiejętność",
+          "addon": "Dodatek"
+        }
+      },
+      "name": {
+        "name": "nazwa",
+        "description": "Podaj nazwę elementu, o którym chcesz uzyskać informacje."
+      }
+    }
+  }
+}

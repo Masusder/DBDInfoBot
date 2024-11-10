@@ -8,7 +8,11 @@ export interface Perk {
     IconFilePathList: string;
     Categories?: string;
     Tag: string;
-    Role: string;
+    Role: 'Killer' | 'Survivor';
     TeachableLevel: number;
     Tunables: string[][];
+}
+
+export interface PerkExtended extends Perk {
+    PerkId: string;
 }

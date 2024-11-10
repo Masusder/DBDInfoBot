@@ -1,0 +1,9 @@
+{
+  "info_command": {
+    "perk_subcommand": {
+      "perk_information": "Informacje o umiejętności",
+      "generic_perk": "Ogólna umiejętność",
+      "description": "Opis"
+    }
+  }
+}

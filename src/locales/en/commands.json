@@ -1,0 +1,20 @@
+{
+  "info_command": {
+    "name": "info",
+    "description": "Retrieve detailed information about game features.",
+    "options": {
+      "type": {
+        "name": "type",
+        "description": "Specify the type of game feature you want information about.",
+        "choices": {
+          "perk": "Perk",
+          "addon": "Add-on"
+        }
+      },
+      "name": {
+        "name": "name",
+        "description": "Specify the name of the game feature you want information about."
+      }
+    }
+  }
+}

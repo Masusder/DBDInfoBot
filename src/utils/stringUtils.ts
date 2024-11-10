@@ -1,6 +1,7 @@
 import Constants from "../constants";
 import { Locale } from "discord.js";
 import { DiscordLocaleToDbdLangCode } from "@data/Languages";
+import i18next from "i18next";
 
 export function extractInteractionId(customId: string): string | null {
     const parts = customId.split('::');
@@ -8,7 +9,11 @@ export function extractInteractionId(customId: string): string | null {
 }
 
 export function combineBaseUrlWithPath(relativePath: string): string {
-    return `${Constants.DBDINFO_BASE_URL}${relativePath}`;
+    // Remove any trailing slash from the base URL and any leading slash from the relative path
+    const baseUrl = Constants.DBDINFO_BASE_URL.replace(/\/+$/, '');
+    const path = relativePath.replace(/^\/+/, '');
+
+    return `${baseUrl}/${path}`;
 }
 
 export function formatInclusionVersion(inclusionVersion: string): string {
@@ -22,4 +27,35 @@ export function localizeCacheKey(cacheKey: string, locale: Locale): string {
 
 export function mapDiscordLocaleToDbdLang(discordLocale: Locale) {
     return DiscordLocaleToDbdLangCode[discordLocale] || 'en';
+}
+
+export function getTranslation(key: string, locale: Locale, ns: string = 'commands'): string {
+    return i18next.t(key, { lng: mapDiscordLocaleToDbdLang(locale), ns });
+}
+
+export function formatHtmlToDiscordMarkdown(html: string): string {
+    // Replace <b> with **bold** text (Discord markdown for bold)
+    html = html.replace(/<b>(.*?)<\/b>/g, '**$1**');
+
+    // Replace uncommon, rare, very rare classes with their respective color spans
+    html = html.replace(/<span class='uncommon-rarity-color'>(.*?)<\/span>/g, '**$1**');
+    html = html.replace(/<span class='rare-rarity-color'>(.*?)<\/span>/g, '**$1**');
+    html = html.replace(/<span class='veryrare-rarity-color'>(.*?)<\/span>/g, '**$1**');
+
+    // Replace <span class='slash-dbd-fix'> with `/`
+    html = html.replace(/<span class='slash-dbd-fix'>(.*?)<\/span>/g, '$1');
+
+    // Replace <br> tags with newlines (\n) for Discord formatting
+    html = html.replace(/<br\s*\/?>/g, '\n');
+
+    // Replace <span class="FlavorText"> with italic text (Discord markdown for italics)
+    html = html.replace(/<span class="FlavorText">(.*?)<\/span>/g, '*$1*');
+
+    // Replace <li> with Discord list markdown (- or *) and add a newline after each item
+    html = html.replace(/<li>(.*?)<\/li>/g, '- $1\n');
+
+    // Clean up any remaining HTML tags
+    html = html.replace(/<\/?[^>]+(>|$)/g, "");
+
+    return html;
 }

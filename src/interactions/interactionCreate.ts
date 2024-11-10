@@ -80,6 +80,10 @@ import {
     autocompleteCharacter as autocompleteCharacterBuildList,
     autocompleteInclusionVersion as autocompleteInclusionVersionBuildList
 } from "../commands/buildListCommand";
+import {
+    execute as executeInfo,
+    autocomplete as autocompleteInfo
+} from "@commands/infoCommand"
 
 interface CommandHandler {
     execute: (interaction: ChatInputCommandInteraction) => Promise<void>;
@@ -115,6 +119,14 @@ const commandHandlers: Record<string, CommandHandler> = {
             if (focusedOption.name === 'version') {
                 await autocompleteInclusionVersionBuildList(interaction);
             }
+        }
+    },
+    info: {
+        execute: async (interaction: ChatInputCommandInteraction) => {
+            await executeInfo(interaction);
+        },
+        autocomplete: async (interaction: AutocompleteInteraction) => {
+            await autocompleteInfo(interaction);
         }
     }
 };

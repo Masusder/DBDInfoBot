@@ -1,0 +1,9 @@
+{
+  "info_command": {
+    "perk_subcommand": {
+      "perk_information": "Perk Information",
+      "generic_perk": "Generic Perk",
+      "description": "Description"
+    }
+  }
+}

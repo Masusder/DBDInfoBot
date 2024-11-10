@@ -13,7 +13,7 @@ import { getCosmeticListByCharacterIndex } from "../services/cosmeticService";
 import {
     combineBaseUrlWithPath,
     formatInclusionVersion
-} from "../utils/stringUtils";
+} from "@utils/stringUtils";
 import { CosmeticTypes } from "../data";
 import { paginationHandler } from "../handlers/paginationHandler";
 

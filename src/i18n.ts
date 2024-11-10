@@ -8,12 +8,20 @@ async function initI18next() {
             .init({
                 lng: 'en',
                 fallbackLng: 'en',
-                ns: ['commands'],
+                preload: [
+                    'en', 'de', 'es', 'es-MX', 'fr', 'it', 'ja',
+                    'ko', 'pl', 'pt-BR', 'ru', 'th', 'tr', 'zh-Hans', 'zh-Hant'
+                ],
+                supportedLngs: [
+                    'en', 'de', 'es', 'es-MX', 'fr', 'it', 'ja',
+                    'ko', 'pl', 'pt-BR', 'ru', 'th', 'tr', 'zh-Hans', 'zh-Hant'
+                ],
+                ns: ['commands', 'messages'],
                 defaultNS: 'commands',
                 backend: {
-                    loadPath: 'locales/{{lng}}/{{ns}}.json',
+                    loadPath: 'src/locales/{{lng}}/{{ns}}.json'
                 },
-                saveMissing: true, // If true, saves missing translations for debugging
+                saveMissing: true // If true, saves missing translations for debugging
             });
 
         console.log('i18next initialized successfully');
