@@ -3,21 +3,37 @@ import {
     initializeGameDataCache
 } from '../cache';
 import { Character } from "../types";
-import { EGameData } from "../utils/dataUtils";
+import { EGameData } from "@utils/dataUtils";
+import { Locale } from "discord.js";
+import { CharacterExtended } from "../types/character";
 
-export async function initializeCharactersCache(): Promise<void> {
-    await initializeGameDataCache<Character>('/api/characters', EGameData.CharacterData);
+export async function initializeCharactersCache(locale: Locale): Promise<void> {
+    await initializeGameDataCache<Character>('/api/characters', EGameData.CharacterData, locale);
 }
 
 // region Helpers
+
+// Retrieve a single character by exact name
+export async function getCharacterDataByName(name: string, locale: Locale): Promise<CharacterExtended | undefined> {
+    const cachedCharacters = await getCachedCharacters(locale);
+
+    const characterId = Object.keys(cachedCharacters).find(key => cachedCharacters[key].Name.toLowerCase() === name.toLowerCase());
+
+    if (characterId) {
+        return { CharacterIndex: characterId, ...cachedCharacters[characterId] };
+    }
+
+    return undefined;
+}
+
 // Retrieve a single character by index
-export async function getCharacterDataByIndex(index: string | number): Promise<Character | undefined> {
-    const cachedCharacters = await getCachedCharacters();
+export async function getCharacterDataByIndex(index: string | number, locale: Locale): Promise<Character | undefined> {
+    const cachedCharacters = await getCachedCharacters(locale);
     return cachedCharacters[index];
 }
 
-export async function getCharacterChoices(query: string): Promise<Character[]> {
-    const cachedCharacters = await getCachedCharacters();
+export async function getCharacterChoices(query: string, locale: Locale): Promise<Character[]> {
+    const cachedCharacters = await getCachedCharacters(locale);
 
     const lowerCaseQuery = query.toLowerCase();
     return Object.entries(cachedCharacters)
@@ -27,8 +43,16 @@ export async function getCharacterChoices(query: string): Promise<Character[]> {
         });
 }
 
-export async function getCharacterIndexByName(name: string | null): Promise<number | undefined> {
-    const cachedCharacters = await getCachedCharacters();
+// Retrieve character that matches the specified parent item
+export async function getCharacterByParentItem(parentItem: string, locale: Locale): Promise<Character | undefined> {
+    const cachedCharacters = await getCachedCharacters(locale);
+
+    return Object.values(cachedCharacters).find(character => character.ParentItem === parentItem);
+}
+
+// Retrieve character index by its name
+export async function getCharacterIndexByName(name: string | null, locale: Locale): Promise<number | undefined> {
+    const cachedCharacters = await getCachedCharacters(locale);
 
     if (!name) return undefined;
 
@@ -42,8 +66,8 @@ export async function getCharacterIndexByName(name: string | null): Promise<numb
     return undefined;
 }
 
-export async function getCachedCharacters(): Promise<{ [key: string]: Character }> {
-    return getCachedGameData<Character>('characterData', initializeCharactersCache);
+export async function getCachedCharacters(locale: Locale): Promise<{ [key: string]: Character }> {
+    return getCachedGameData<Character>('characterData', locale, () => initializeCharactersCache(locale));
 }
 
 // endregion

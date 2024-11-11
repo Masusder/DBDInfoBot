@@ -1,0 +1,45 @@
+{
+  "info_command": {
+    "perk_subcommand": {
+      "perk_information": "Perk Information",
+      "generic_perk": "Generic Perk",
+      "description": "Description"
+    },
+    "addon_subcommand": {
+      "addon_information": "Add-on Information",
+      "description": "Description",
+      "rarity": "Rarity",
+      "role": "Role"
+    },
+    "item_subcommand": {
+      "item_information": "Item Information",
+      "description": "Description",
+      "character": "Character",
+      "rarity": "Rarity",
+      "role": "Role"
+    },
+    "offering_subcommand": {
+      "item_information": "Offering Information",
+      "description": "Description",
+      "rarity": "Rarity",
+      "role": "Role",
+      "retired": "This offering has been retired."
+    },
+    "character_subcommand": {
+      "character_information": "Character Information",
+      "description": "Description",
+      "role": "Role",
+      "gender": "Gender",
+      "difficulty": "Difficulty",
+      "backstory": "Backstory of",
+      "read_backstory": "Read Backstory",
+      "character_backstory": "Character backstory"
+    }
+  },
+  "shrine_command": {
+    "author_title": "This week's Shrine of Secrets",
+    "character": "Character",
+    "time_left": "Time Left to Refresh:",
+    "shrine_active": ["Shrine Active from", "to"]
+  }
+}

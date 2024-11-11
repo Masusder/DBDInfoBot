@@ -1,22 +1,26 @@
-import { getCachedCharacters } from "../services/characterService";
-import { getCachedPerks } from "../services/perkService";
-import { getCachedAddons } from "../services/addonService";
-import { getCachedOfferings } from "../services/offeringService";
-import { getCachedCosmetics } from "../services/cosmeticService";
+import { getCachedCharacters } from "@services/characterService";
+import { getCachedPerks } from "@services/perkService";
+import { getCachedAddons } from "@services/addonService";
+import { getCachedOfferings } from "@services/offeringService";
+import { getCachedCosmetics } from "@services/cosmeticService";
 import {
     Addon,
     Character,
     Cosmetic,
     Offering,
-    Perk
+    Perk,
+    Item
 } from "../types";
+import { Locale } from "discord.js";
+import { getCachedItems } from "@services/itemService";
 
 export enum EGameData {
     CosmeticData = 'cosmeticData',
     CharacterData = 'characterData',
     PerkData = 'perkData',
     AddonData = 'addonData',
-    OfferingData = 'offeringData'
+    OfferingData = 'offeringData',
+    ItemData = 'itemData'
 }
 
 interface GameDataOptions {
@@ -25,6 +29,7 @@ interface GameDataOptions {
     perkData?: boolean;
     addonData?: boolean;
     offeringData?: boolean;
+    itemData?: boolean;
 }
 
 interface GameData {
@@ -33,20 +38,22 @@ interface GameData {
     perkData: { [key: string]: Perk };
     addonData: { [key: string]: Addon };
     offeringData: { [key: string]: Offering };
+    itemData: { [key: string]: Item };
 }
 
-export async function getGameData(options: GameDataOptions = {}): Promise<GameData> {
-    const dataFetchers: { [key in keyof GameDataOptions]: () => Promise<any> } = {
+export async function getGameData(options: GameDataOptions = {}, locale: Locale): Promise<GameData> {
+    const dataFetchers: { [key in keyof GameDataOptions]: (locale: Locale) => Promise<any> } = {
         cosmeticData: getCachedCosmetics,
         characterData: getCachedCharacters,
         perkData: getCachedPerks,
         addonData: getCachedAddons,
-        offeringData: getCachedOfferings
+        offeringData: getCachedOfferings,
+        itemData: getCachedItems
     };
 
     const tasks = Object.entries(dataFetchers)
         .filter(([key]) => options[key as keyof GameDataOptions])
-        .map(([_, fetcher]) => fetcher());
+        .map(([_, fetcher]) => fetcher(locale));
 
     const results = await Promise.all(tasks);
     return Object.keys(dataFetchers).reduce((acc, key) => {

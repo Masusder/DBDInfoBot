@@ -14,3 +14,7 @@ export interface Addon {
     Bloodweb: boolean;
     Image: string;
 }
+
+export interface AddonExtended extends Addon {
+    AddonId: string;
+}

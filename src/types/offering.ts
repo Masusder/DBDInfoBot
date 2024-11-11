@@ -12,3 +12,7 @@ export interface Offering {
     Rarity: string;
     Image: string;
 }
+
+export interface OfferingExtended extends Offering {
+    OfferingId: string;
+}

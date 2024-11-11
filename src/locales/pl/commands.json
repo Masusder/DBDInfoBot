@@ -1,0 +1,28 @@
+{
+  "info_command": {
+    "name": "info",
+    "description": "Uzyskaj szczegółowe informacje o funkcjach gry.",
+    "options": {
+      "type": {
+        "name": "typ",
+        "description": "Podaj typ, o której chcesz uzyskać informacje.",
+        "choices": {
+          "perk": "Umiejętność",
+          "addon": "Dodatek",
+          "item": "Przedmiot",
+          "offering": "Dar",
+          "character": "Postać",
+          "cosmetic": "Kosmetyk"
+        }
+      },
+      "name": {
+        "name": "nazwa",
+        "description": "Podaj nazwę elementu, o którym chcesz uzyskać informacje."
+      }
+    }
+  },
+  "shrine_command": {
+    "name": "ołtarz",
+    "description": "Sprawdź cotygodniowy Ołtarz Tajemnic."
+  }
+}

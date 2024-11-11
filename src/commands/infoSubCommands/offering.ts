@@ -1,0 +1,104 @@
+import {
+    APIEmbedField,
+    AutocompleteInteraction,
+    ChatInputCommandInteraction,
+    ColorResolvable,
+    EmbedBuilder
+} from "discord.js";
+import { Role } from "@data/Role";
+import {
+    combineBaseUrlWithPath,
+    formatHtmlToDiscordMarkdown
+} from "@utils/stringUtils";
+import { getTranslation } from "@utils/localizationUtils";
+import { layerIcons } from "@commands/infoSubCommands/infoUtils";
+import {
+    getOfferingChoices,
+    getOfferingDataByName
+} from "@services/offeringService";
+import { Rarities } from "@data/Rarities";
+
+export async function handleOfferingCommandInteraction(interaction: ChatInputCommandInteraction) {
+    const offeringName = interaction.options.getString('name');
+    const locale = interaction.locale;
+
+    if (!offeringName) return;
+
+    try {
+        await interaction.deferReply();
+
+        const offeringData = await getOfferingDataByName(offeringName, locale);
+
+        if (!offeringData) return;
+
+        const role = offeringData.Role as 'Killer' | 'Survivor' | 'None';
+        const roleData = Role[role];
+
+        const rarity = offeringData.Rarity;
+        const rarityData = Rarities[rarity];
+
+        const offeringBackgroundUrl = rarityData.offeringBackgroundPath;
+        const offeringIconUrl = combineBaseUrlWithPath(offeringData.Image);
+        const imageBuffer = await layerIcons(offeringBackgroundUrl, offeringIconUrl);
+
+        const markdownDescription = formatHtmlToDiscordMarkdown(offeringData.Description);
+        const description = offeringData.Available === "Retired" ?
+            `${markdownDescription}\n\n**${getTranslation('info_command.offering_subcommand.retired', locale, 'messages')}**`
+            : markdownDescription;
+
+        const fields: APIEmbedField[] = [
+            {
+                name: getTranslation('info_command.offering_subcommand.role', locale, 'messages'),
+                value: getTranslation(roleData.localizedName, locale, 'general'),
+                inline: true
+            },
+            {
+                name: getTranslation('info_command.offering_subcommand.rarity', locale, 'messages'),
+                value: getTranslation(rarityData.localizedName, locale, 'general'),
+                inline: true
+            },
+            {
+                name: getTranslation('info_command.offering_subcommand.description', locale, 'messages'),
+                value: description,
+                inline: false
+            }];
+
+        const embed = new EmbedBuilder()
+            .setColor(rarityData.color as ColorResolvable)
+            .setTitle(offeringName)
+            .setFields(fields)
+            .setTimestamp()
+            .setThumbnail(`attachment://offeringImage_${offeringData.OfferingId}.png`)
+            .setAuthor({
+                name: getTranslation('info_command.offering_subcommand.offering_information', locale, 'messages'),
+                iconURL: combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_offerings.png')
+            });
+
+        await interaction.editReply({
+            embeds: [embed],
+            files: [{
+                attachment: imageBuffer,
+                name: `offeringImage_${offeringData.OfferingId}.png`
+            }]
+        });
+    } catch (error) {
+        console.error("Error executing offering subcommand:", error);
+    }
+}
+
+export async function handleOfferingCommandAutocompleteInteraction(interaction: AutocompleteInteraction) {
+    try {
+        const locale = interaction.locale;
+        const focusedValue = interaction.options.getFocused().toLowerCase();
+        const choices = await getOfferingChoices(focusedValue, locale);
+
+        const options = choices.slice(0, 25).map(offering => ({
+            name: offering.Name,
+            value: offering.Name
+        }));
+
+        await interaction.respond(options);
+    } catch (error) {
+        console.error("Error handling autocomplete interaction:", error);
+    }
+}

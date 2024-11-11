@@ -1,0 +1,44 @@
+{
+  "info_command": {
+    "perk_subcommand": {
+      "perk_information": "Informacje o umiejętności",
+      "generic_perk": "Ogólna umiejętność",
+      "description": "Opis"
+    },
+    "addon_subcommand": {
+      "addon_information": "Informacje o dodatku",
+      "description": "Opis",
+      "rarity": "Rzadkość",
+      "role": "Rola"
+    },
+    "item_subcommand": {
+      "item_information": "Informacje o przedmiocie",
+      "character": "Postać",
+      "rarity": "Rzadkość",
+      "role": "Rola"
+    },
+    "offering_subcommand": {
+      "offering_information": "Informacje o darze",
+      "description": "Opis",
+      "rarity": "Rzadkość",
+      "role": "Rola",
+      "retired": "Ten dar został wycofany."
+    },
+    "character_subcommand": {
+      "character_information": "Informacje o postaci",
+      "description": "Opis",
+      "role": "Rola",
+      "gender": "Płeć",
+      "difficulty": "Poziom trudności",
+      "backstory": "Historia -",
+      "read_backstory": "Przeczytaj historię",
+      "character_backstory": "Historia postaci"
+    }
+  },
+  "shrine_command": {
+    "author_title": "Świątynia Tajemnic tego tygodnia",
+    "character": "Postać",
+    "time_left": "Pozostały czas na odświeżenie:",
+    "shrine_active": ["Świątynia aktywna od", "do"]
+  }
+}

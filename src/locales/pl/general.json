@@ -1,0 +1,36 @@
+{
+  "rarities": {
+    "common": "Zwykłe",
+    "uncommon": "Niezwykłe",
+    "rare": "Rzadkie",
+    "very_rare": "Bardzo Rzadkie",
+    "ultra_rare": "Ultra Rzadkie",
+    "legendary": "Legendarny",
+    "special_event": "Specjalne Wydarzenie",
+    "artifact": "Artefakt",
+    "limited": "Ograniczone",
+    "unknown": "N/A"
+  },
+  "roles": {
+    "killer": "Zabójca",
+    "survivor": "Ocalały",
+    "none": "Uniwersalny"
+  },
+  "difficulties": {
+    "easy": "Łatwy",
+    "intermediate": "Średniozaawansowany",
+    "hard": "Trudny",
+    "very_hard": "Bardzo trudny",
+    "none": "Brak"
+  },
+  "genders": {
+    "male": "Mężczyzna",
+    "female": "Kobieta",
+    "not_human": "Potwór",
+    "multiple": "Wiele płci"
+  },
+  "currencies": {
+    "bloodpoints": "Punkty krwi",
+    "shards": "Błyszczące odłamki"
+  }
+}

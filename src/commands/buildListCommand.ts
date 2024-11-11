@@ -21,9 +21,9 @@ import {
     generatePaginationButtons,
     TPaginationType
 } from "../handlers/paginationHandler";
-import { BuildCategories } from "../data/BuildCategories";
-import { combineBaseUrlWithPath } from "../utils/stringUtils";
-import { getGameData } from "../utils/dataUtils";
+import { BuildCategories } from "@data/BuildCategories";
+import { combineBaseUrlWithPath } from "@utils/stringUtils";
+import { getGameData } from "@utils/dataUtils";
 import {
     Character,
     Perk,
@@ -164,6 +164,7 @@ async function createEmbed(
 
 export async function execute(interaction: ChatInputCommandInteraction) {
     let currentPage = interaction.options.getNumber('page') || 1;
+    const locale = interaction.locale;
 
     const filters: IBuildFilters = {
         page: currentPage - 1,
@@ -189,7 +190,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             perkData: true,
             addonData: true,
             offeringData: true
-        });
+        }, locale);
 
         const embed = await createEmbed(filters.role, builds, currentPage, totalPages, characterData, perkData, addonData, offeringData, interaction.user.username);
 
@@ -243,9 +244,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 // region Autocomplete
 export async function autocompleteCharacter(interaction: AutocompleteInteraction) {
     try {
+        const locale = interaction.locale;
         const focusedValue = interaction.options.getFocused();
         const role = interaction.options.getString('role');
-        const choices = await getCharacterChoices(focusedValue);
+        const choices = await getCharacterChoices(focusedValue, locale);
 
         const filteredChoices = choices.filter(character => {
             return !role || character.Role === role;

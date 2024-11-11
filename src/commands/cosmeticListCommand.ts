@@ -8,12 +8,12 @@ import {
     getCharacterChoices,
     getCharacterDataByIndex,
     getCharacterIndexByName
-} from "../services/characterService";
-import { getCosmeticListByCharacterIndex } from "../services/cosmeticService";
+} from "@services/characterService";
+import { getCosmeticListByCharacterIndex } from "@services/cosmeticService";
 import {
     combineBaseUrlWithPath,
     formatInclusionVersion
-} from "../utils/stringUtils";
+} from "@utils/stringUtils";
 import { CosmeticTypes } from "../data";
 import { paginationHandler } from "../handlers/paginationHandler";
 
@@ -32,26 +32,27 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: ChatInputCommandInteraction) {
     const characterName = interaction.options.getString('character');
+    const locale = interaction.locale;
 
     if (!characterName) return;
 
     try {
         await interaction.deferReply();
 
-        const characterIndex = await getCharacterIndexByName(characterName);
+        const characterIndex = await getCharacterIndexByName(characterName, locale);
 
         if (!characterIndex) {
             await interaction.editReply({ content: 'Character not found.' });
             return;
         }
 
-        const cosmetics = await getCosmeticListByCharacterIndex(characterIndex);
+        const cosmetics = await getCosmeticListByCharacterIndex(characterIndex, locale);
         if (cosmetics.length === 0) {
             await interaction.editReply({ content: 'No cosmetics found for this character.' });
             return;
         }
 
-        const characterData = await getCharacterDataByIndex(characterIndex);
+        const characterData = await getCharacterDataByIndex(characterIndex, locale);
 
         if (!characterData) return;
 
@@ -92,8 +93,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 // region Autocomplete
 export async function autocomplete(interaction: AutocompleteInteraction) {
     try {
+        const locale = interaction.locale;
         const focusedValue = interaction.options.getFocused();
-        const choices = await getCharacterChoices(focusedValue);
+        const choices = await getCharacterChoices(focusedValue, locale);
         const options = choices.slice(0, 25).map(character => ({
             name: character.Name,
             value: character.Name

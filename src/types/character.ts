@@ -15,3 +15,7 @@ export interface Character {
     Id: string;
     CharacterIndex?: string;
 }
+
+export interface CharacterExtended extends Character {
+    CharacterIndex: string;
+}

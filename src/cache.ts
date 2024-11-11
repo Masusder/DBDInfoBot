@@ -1,11 +1,17 @@
 import NodeCache from 'node-cache';
 import axios from "./utils/apiClient";
-import { EGameData } from "./utils/dataUtils";
+import { EGameData } from "@utils/dataUtils";
+import { Locale } from "discord.js";
+import {
+    localizeCacheKey,
+    mapDiscordLocaleToDbdLang
+} from "@utils/localizationUtils";
 
-const globalCache = new NodeCache({ stdTTL: 3600 });
+const globalCache = new NodeCache({ stdTTL: 14_400 });
+const processedKeys = new Set<string>();
 
-export function setCache<T>(key: string, data: T): void {
-    globalCache.set(key, data);
+export function setCache<T>(key: string, data: T, ttl: number = 3600): void {
+    globalCache.set(key, data, ttl);
 }
 
 export function getCache<T>(key: string): T | undefined {
@@ -17,37 +23,51 @@ export function getCache<T>(key: string): T | undefined {
     return cachedData;
 }
 
-export async function initializeGameDataCache<T>(endpoint: string, cacheKey: EGameData): Promise<void> {
+export async function initializeGameDataCache<T>(endpoint: string, cacheKey: EGameData, locale: Locale): Promise<void> {
     if (!Object.values(EGameData).includes(cacheKey)) {
         throw new Error(`Caching is not allowed for the key: ${cacheKey}.`);
     }
 
+    const dbdLocale = mapDiscordLocaleToDbdLang(locale);
+    const localizedCacheKey = localizeCacheKey(cacheKey, locale);
+
+    if (processedKeys.has(localizedCacheKey)) return; // Exit if already processing this cache key
+
+    processedKeys.add(localizedCacheKey);
+
     try {
-        const response = await axios.get(endpoint);
+        const response = await axios.get(endpoint, {
+            headers: { 'Cookie': `language=${dbdLocale}` },
+            withCredentials: true,
+        });
         if (response.data.success) {
             const data: { [key: string]: T } = response.data.data;
-            setCache(cacheKey, data);
-            console.log(`Fetched and cached ${Object.keys(data).length} items for ${cacheKey}.`);
+            setCache(localizedCacheKey, data);
+            console.log(`Fetched and cached ${Object.keys(data).length} items for ${localizedCacheKey}.`);
         } else {
-            console.error(`Failed to fetch ${cacheKey}: API responded with success = false`);
+            console.error(`Failed to fetch ${localizedCacheKey}: API responded with success = false`);
         }
     } catch (error) {
-        console.error(`Error fetching ${cacheKey}:`, error);
+        console.error(`Error fetching ${localizedCacheKey}:`, error);
+    } finally {
+        processedKeys.delete(localizedCacheKey);
     }
 }
 
-export async function getCachedGameData<T>(cacheKey: string, initializer: () => Promise<void>): Promise<{ [key: string]: T }> {
-    let cachedData = getCache<{ [key: string]: T }>(cacheKey);
+export async function getCachedGameData<T>(cacheKey: string, locale: Locale, initializer: () => Promise<void>): Promise<{ [key: string]: T }> {
+    const localizedCacheKey = localizeCacheKey(cacheKey, locale);
+    let cachedData = getCache<{ [key: string]: T }>(localizedCacheKey);
 
     if (!cachedData || Object.keys(cachedData).length === 0) {
-        console.warn(`${cacheKey} cache expired or empty. Fetching new data...`);
+        console.warn(`${localizedCacheKey} cache expired or empty. Fetching new data...`);
         await initializer();
-        cachedData = getCache<{ [key: string]: T }>(cacheKey) || {};
+        cachedData = getCache<{ [key: string]: T }>(localizedCacheKey) || {};
     }
 
     return cachedData;
 }
 
+// noinspection JSUnusedGlobalSymbols
 export function debugCache(): void {
     if (process.env.BRANCH !== 'dev') {
         throw Error("You're only allowed to use debug cache method on development branch.")
