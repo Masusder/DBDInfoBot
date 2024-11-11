@@ -11,7 +11,8 @@
           "addon": "Dodatek",
           "item": "Przedmiot",
           "offering": "Dar",
-          "character": "Postać"
+          "character": "Postać",
+          "cosmetic": "Kosmetyk"
         }
       },
       "name": {

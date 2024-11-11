@@ -1,10 +1,6 @@
 import { Interaction, ChatInputCommandInteraction, AutocompleteInteraction } from 'discord.js';
 import buttonInteractionCreate from './buttonInteractionCreate';
 import {
-    execute as executeCosmetic,
-    debouncedAutocomplete as autocompleteCosmetic
-} from '../commands/cosmeticCommand';
-import {
     execute as executeCosmeticList,
     autocomplete as autocompleteCosmeticList
 } from "../commands/cosmeticListCommand";
@@ -25,14 +21,6 @@ interface CommandHandler {
 }
 
 const commandHandlers: Record<string, CommandHandler> = {
-    cosmetic: {
-        execute: async (interaction: ChatInputCommandInteraction) => {
-            await executeCosmetic(interaction);
-        },
-        autocomplete: async (interaction: AutocompleteInteraction) => {
-            await autocompleteCosmetic(interaction);
-        }
-    },
     cosmetics: {
         execute: async (interaction: ChatInputCommandInteraction) => {
             await executeCosmeticList(interaction);

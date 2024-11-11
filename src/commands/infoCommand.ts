@@ -24,6 +24,10 @@ import {
     handleCharacterCommandAutocompleteInteraction,
     handleCharacterCommandInteraction
 } from "@commands/infoSubCommands/character";
+import {
+    handleCosmeticCommandAutocompleteInteraction,
+    handleCosmeticCommandInteraction
+} from "@commands/infoSubCommands/cosmetic";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -215,6 +219,28 @@ export const data = i18next.isInitialized
                         'zh-TW': i18next.t('info_command.options.type.choices.character', { lng: 'zh-Hant' })
                     },
                     value: 'character'
+                },
+                {
+                    name: i18next.t('info_command.options.type.choices.cosmetic', { lng: 'en' }),
+                    name_localizations: {
+                        'en-US': i18next.t('info_command.options.type.choices.cosmetic', { lng: 'en' }),
+                        'en-GB': i18next.t('info_command.options.type.choices.cosmetic', { lng: 'en' }),
+                        'de': i18next.t('info_command.options.type.choices.cosmetic', { lng: 'de' }),
+                        'es-ES': i18next.t('info_command.options.type.choices.cosmetic', { lng: 'es' }),
+                        'es-419': i18next.t('info_command.options.type.choices.cosmetic', { lng: 'es-MX' }),
+                        'fr': i18next.t('info_command.options.type.choices.cosmetic', { lng: 'fr' }),
+                        'it': i18next.t('info_command.options.type.choices.cosmetic', { lng: 'it' }),
+                        'ja': i18next.t('info_command.options.type.choices.cosmetic', { lng: 'ja' }),
+                        'ko': i18next.t('info_command.options.type.choices.cosmetic', { lng: 'ko' }),
+                        'pl': i18next.t('info_command.options.type.choices.cosmetic', { lng: 'pl' }),
+                        'pt-BR': i18next.t('info_command.options.type.choices.cosmetic', { lng: 'pt-BR' }),
+                        'ru': i18next.t('info_command.options.type.choices.cosmetic', { lng: 'ru' }),
+                        'th': i18next.t('info_command.options.type.choices.cosmetic', { lng: 'th' }),
+                        'tr': i18next.t('info_command.options.type.choices.cosmetic', { lng: 'tr' }),
+                        'zh-CN': i18next.t('info_command.options.type.choices.cosmetic', { lng: 'zh-Hans' }),
+                        'zh-TW': i18next.t('info_command.options.type.choices.cosmetic', { lng: 'zh-Hant' })
+                    },
+                    value: 'cosmetic'
                 }
             )
     )
@@ -280,6 +306,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         case 'character':
             await handleCharacterCommandInteraction(interaction);
             break;
+        case 'cosmetic':
+            await handleCosmeticCommandInteraction(interaction);
+            break;
         default:
             await interaction.reply('Unknown command type.');
     }
@@ -304,6 +333,9 @@ export async function autocomplete(interaction: AutocompleteInteraction) {
             break;
         case 'character':
             await handleCharacterCommandAutocompleteInteraction(interaction);
+            break;
+        case 'cosmetic':
+            await handleCosmeticCommandAutocompleteInteraction(interaction);
             break;
         default:
             break;

@@ -11,7 +11,8 @@
           "addon": "Add-on",
           "item": "Item",
           "offering": "Offering",
-          "character": "Character"
+          "character": "Character",
+          "cosmetic": "Cosmetic"
         }
       },
       "name": {

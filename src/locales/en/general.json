@@ -31,6 +31,7 @@
   },
   "currencies": {
     "bloodpoints": "Bloodpoints",
-    "shards": "Shards"
+    "shards": "Shards",
+    "auric_cells": "Auric Cells"
   }
 }

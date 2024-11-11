@@ -1,13 +1,18 @@
 import {
     ButtonInteraction,
-    EmbedBuilder
+    EmbedBuilder,
+    Locale
 } from 'discord.js';
 import { getCosmeticDataById } from '@services/cosmeticService';
 import {
-    combineImages,
-    getCosmeticPiecesCombinedImage
-} from '@commands/cosmeticCommand';
-import { extractInteractionId } from '@utils/stringUtils';
+    combineBaseUrlWithPath,
+    extractInteractionId
+} from '@utils/stringUtils';
+import axios from "axios";
+import {
+    createCanvas,
+    loadImage
+} from "canvas";
 
 export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
     const cosmeticId = extractInteractionId(interaction.customId);
@@ -48,4 +53,47 @@ export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
         files: [{ attachment: combinedImageBuffer, name: 'combined-outfit-pieces.png' }],
         ephemeral: true
     });
+}
+
+async function getCosmeticPiecesCombinedImage(cosmeticPieces: string[]) {
+    const urls: string[] = [];
+    for (const cosmeticPieceId of cosmeticPieces) {
+        const cosmeticPieceData = await getCosmeticDataById(cosmeticPieceId, Locale.EnglishUS);
+
+        if (cosmeticPieceData) {
+            urls.push(combineBaseUrlWithPath(cosmeticPieceData.IconFilePathList));
+        }
+    }
+
+    return urls;
+}
+
+async function combineImages(imageUrls: string[]): Promise<Buffer> {
+    const imageBuffers: Buffer[] = await Promise.all(
+        imageUrls.map(async(url) => {
+            try {
+                const response = await axios.get(url, { responseType: 'arraybuffer' });
+                return Buffer.from(response.data);
+            } catch (error) {
+                console.error(`Error fetching image from ${url}:`, error);
+                throw error;
+            }
+        })
+    );
+
+    const images = await Promise.all(imageBuffers.map(buffer => loadImage(buffer)));
+
+    const totalWidth = images.reduce((sum, img) => sum + img.width, 0);
+    const maxHeight = Math.max(...images.map(img => img.height));
+
+    const canvas = createCanvas(totalWidth, maxHeight);
+    const ctx = canvas.getContext('2d');
+
+    let currentX = 0;
+    for (const img of images) {
+        ctx.drawImage(img, currentX, 0);
+        currentX += img.width;
+    }
+
+    return canvas.toBuffer('image/png');
 }
