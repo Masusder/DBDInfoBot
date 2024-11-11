@@ -19,7 +19,12 @@ async function checkAndScheduleShrine(client: Client) {
     try {
         console.log('Checking Shrine...');
         const shrineData = await getCachedShrine();
-        if (!shrineData?.currentShrine) return;
+
+        if (!shrineData?.currentShrine) {
+            console.log("No current Shrine data found. Scheduling next check in 5 minutes.");
+            setTimeout(() => checkAndScheduleShrine(client), 5 * 60 * 1000); // Retry in 5 minutes
+            return;
+        }
 
         const { currentShrine } = shrineData;
 
