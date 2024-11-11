@@ -34,5 +34,11 @@
       "read_backstory": "Przeczytaj historię",
       "character_backstory": "Historia postaci"
     }
+  },
+  "shrine_command": {
+    "author_title": "Świątynia Tajemnic tego tygodnia",
+    "character": "Postać",
+    "time_left": "Pozostały czas na odświeżenie:",
+    "shrine_active": ["Świątynia aktywna od", "do"]
   }
 }

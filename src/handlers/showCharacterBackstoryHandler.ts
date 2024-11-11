@@ -15,6 +15,7 @@ import {
     paginationHandler
 } from "./paginationHandler";
 import { getTranslation } from "@utils/localizationUtils";
+import { sendUnauthorizedMessage } from "./unauthorizedHandler";
 
 const MAX_DESCRIPTION_LENGTH = 4000;
 
@@ -63,7 +64,13 @@ function createBackstoryEmbeds(backstory: string, characterName: string, color: 
 }
 
 export async function showCharacterBackstoryHandler(interaction: ButtonInteraction) {
-    const characterIndex = extractInteractionId(interaction.customId);
+    const [_, characterIndex, userId] = interaction.customId.split('::');
+
+    if (userId !== interaction.user.id) {
+        await sendUnauthorizedMessage(interaction);
+        return;
+    }
+
     const locale = interaction.locale;
 
     if (!characterIndex) {

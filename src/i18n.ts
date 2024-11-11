@@ -21,7 +21,8 @@ async function initI18next() {
                 backend: {
                     loadPath: 'src/locales/{{lng}}/{{ns}}.json'
                 },
-                saveMissing: true // If true, saves missing translations for debugging
+                saveMissingTo: 'current',
+                saveMissing: process.env.BRANCH === 'dev' // If true, saves missing translations for debugging
             });
 
         console.log('i18next initialized successfully');

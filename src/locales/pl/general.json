@@ -28,5 +28,9 @@
     "female": "Kobieta",
     "not_human": "Potwór",
     "multiple": "Wiele płci"
+  },
+  "currencies": {
+    "bloodpoints": "Punkty krwi",
+    "shards": "Błyszczące odłamki"
   }
 }

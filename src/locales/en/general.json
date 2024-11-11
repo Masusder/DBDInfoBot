@@ -28,5 +28,9 @@
     "female": "Female",
     "not_human": "Monster",
     "multiple": "Multiple"
+  },
+  "currencies": {
+    "bloodpoints": "Bloodpoints",
+    "shards": "Shards"
   }
 }

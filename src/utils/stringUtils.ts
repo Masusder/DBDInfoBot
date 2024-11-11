@@ -1,4 +1,5 @@
 import Constants from "../constants";
+import * as crypto from 'crypto';
 
 export function extractInteractionId(customId: string): string | null {
     const parts = customId.split('::');
@@ -42,4 +43,36 @@ export function formatHtmlToDiscordMarkdown(html: string): string {
     html = html.replace(/<\/?[^>]+(>|$)/g, "");
 
     return html;
+}
+
+export function formatNumber(number: number | undefined | null): string {
+    if (number === undefined || number === null || isNaN(number)) {
+        return "0";
+    }
+
+    try {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    } catch (error) {
+        console.error("Error formatting number:", error);
+        return "0";
+    }
+}
+
+export function adjustForTimezone(dateString: string) {
+    const date = new Date(dateString);
+    const timezoneOffset = date.getTimezoneOffset() * 60000;
+    return date.getTime() - timezoneOffset;
+}
+
+export function generateCustomId(input: string) {
+    const hash =  crypto.createHash('sha256').update(input).digest('base64');
+
+    return hash.slice(0, 8);
+}
+
+export function compareCustomId(input1:string, input2:string): boolean {
+    const shortId1 = generateCustomId(input1);
+    const shortId2 = generateCustomId(input2);
+
+    return shortId1 === shortId2;
 }

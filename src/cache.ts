@@ -10,8 +10,8 @@ import {
 const globalCache = new NodeCache({ stdTTL: 3600 });
 const processedKeys = new Set<string>();
 
-export function setCache<T>(key: string, data: T): void {
-    globalCache.set(key, data);
+export function setCache<T>(key: string, data: T, ttl: number = 3600): void {
+    globalCache.set(key, data, ttl);
 }
 
 export function getCache<T>(key: string): T | undefined {

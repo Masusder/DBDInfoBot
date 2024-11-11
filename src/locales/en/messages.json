@@ -35,5 +35,11 @@
       "read_backstory": "Read Backstory",
       "character_backstory": "Character backstory"
     }
+  },
+  "shrine_command": {
+    "author_title": "This week's Shrine of Secrets",
+    "character": "Character",
+    "time_left": "Time Left to Refresh:",
+    "shrine_active": ["Shrine Active from", "to"]
   }
 }

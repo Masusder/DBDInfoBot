@@ -19,5 +19,9 @@
         "description": "Podaj nazwę elementu, o którym chcesz uzyskać informacje."
       }
     }
+  },
+  "shrine_command": {
+    "name": "ołtarz",
+    "description": "Sprawdź cotygodniowy Ołtarz Tajemnic."
   }
 }

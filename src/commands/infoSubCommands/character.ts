@@ -89,7 +89,7 @@ export async function handleCharacterCommandInteraction(interaction: ChatInputCo
             .setImage(`attachment://characterBackground_${characterData.CharacterIndex}.png`);
 
         const backstoryButton = new ButtonBuilder()
-            .setCustomId(`show_character_backstory::${characterData.CharacterIndex}`)
+            .setCustomId(`show_character_backstory::${characterData.CharacterIndex}::${interaction.user.id}`)
             .setLabel(getTranslation('info_command.character_subcommand.read_backstory', locale, 'messages'))
             .setStyle(ButtonStyle.Primary);
 

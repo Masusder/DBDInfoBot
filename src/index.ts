@@ -5,7 +5,8 @@ import {
 } from 'discord.js';
 import {
     startTweetJob,
-    startCacheManagerJob
+    startCacheManagerJob,
+    startShrineJob
 } from "./jobs/";
 import interactionCreate from "./interactions/interactionCreate";
 import { bulkProcessInitialization } from "./jobs/cacheManagerJob";
@@ -30,6 +31,8 @@ client.once(Events.ClientReady, async readyClient => {
         await bulkProcessInitialization();
         // Check for new tweets every 60 seconds
         await startTweetJob(client);
+        // Check for new Shrine every 60 seconds
+        await startShrineJob(client);
     }
 });
 

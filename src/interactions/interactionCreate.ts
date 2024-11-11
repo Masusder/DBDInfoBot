@@ -16,7 +16,8 @@ import {
 import {
     execute as executeInfo,
     autocomplete as autocompleteInfo
-} from "@commands/infoCommand"
+} from "@commands/infoCommand";
+import { execute as executeShrine } from "@commands/shrineCommand";
 
 interface CommandHandler {
     execute: (interaction: ChatInputCommandInteraction) => Promise<void>;
@@ -60,6 +61,11 @@ const commandHandlers: Record<string, CommandHandler> = {
         },
         autocomplete: async (interaction: AutocompleteInteraction) => {
             await autocompleteInfo(interaction);
+        }
+    },
+    shrine: {
+        execute: async (interaction: ChatInputCommandInteraction) => {
+            await executeShrine(interaction);
         }
     }
 };
