@@ -7,7 +7,7 @@ import {
     mapDiscordLocaleToDbdLang
 } from "@utils/localizationUtils";
 
-const globalCache = new NodeCache({ stdTTL: 3600 });
+const globalCache = new NodeCache({ stdTTL: 14_400 });
 const processedKeys = new Set<string>();
 
 export function setCache<T>(key: string, data: T, ttl: number = 3600): void {

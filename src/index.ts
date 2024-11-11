@@ -5,11 +5,9 @@ import {
 } from 'discord.js';
 import {
     startTweetJob,
-    startCacheManagerJob,
     startShrineJob
 } from "./jobs/";
 import interactionCreate from "./interactions/interactionCreate";
-import { bulkProcessInitialization } from "./jobs/cacheManagerJob";
 import initI18next from "./i18n";
 import dotenv from 'dotenv';
 
@@ -22,13 +20,8 @@ const DISCORD_TOKEN: string | undefined = process.env.DISCORD_TOKEN;
 client.once(Events.ClientReady, async readyClient => {
     console.log(`Logged in as ${readyClient.user.tag}`);
 
-    // Refresh cached data every hour
-    await startCacheManagerJob();
-
     // Don't run during development
     if (process.env.BRANCH !== 'dev') {
-        // Initialize data
-        await bulkProcessInitialization();
         // Check for new tweets every 60 seconds
         await startTweetJob(client);
         // Check for new Shrine every 60 seconds
