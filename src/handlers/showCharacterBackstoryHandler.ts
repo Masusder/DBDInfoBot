@@ -12,8 +12,8 @@ import {
 import { getCharacterDataByIndex } from "@services/characterService";
 import {
     IPaginationOptions,
-    paginationHandler
-} from "./paginationHandler";
+    genericPaginationHandler
+} from "./genericPaginationHandler";
 import { getTranslation } from "@utils/localizationUtils";
 import { sendUnauthorizedMessage } from "./unauthorizedHandler";
 
@@ -99,5 +99,5 @@ export async function showCharacterBackstoryHandler(interaction: ButtonInteracti
         timeout: 300_000 // 5 minutes
     };
 
-    await paginationHandler(paginationOptions);
+    await genericPaginationHandler(paginationOptions);
 }

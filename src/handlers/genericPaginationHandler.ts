@@ -12,6 +12,7 @@ export interface IPaginationOptions {
     items: any[];
     itemsPerPage: number;
     generateEmbed: (pageItems: any[], currentPage: number, totalPages: number) => EmbedBuilder;
+    generateImage?: (pageItems: any[]) => Promise<Buffer>;
     interactionUserId: string;
     interactionReply: Message;
     timeout?: number;
@@ -64,8 +65,8 @@ export function determineNewPage(currentPage: number, paginationType: TPaginatio
     }
 }
 
-export async function paginationHandler(options: IPaginationOptions) {
-    const { items, itemsPerPage, generateEmbed, interactionUserId, interactionReply } = options;
+export async function genericPaginationHandler(options: IPaginationOptions) {
+    const { items, itemsPerPage, generateEmbed, generateImage, interactionUserId, interactionReply } = options;
 
     let currentPage = 1;
     const totalPages = Math.ceil(items.length / itemsPerPage);
@@ -75,11 +76,24 @@ export async function paginationHandler(options: IPaginationOptions) {
         return items.slice(start, start + itemsPerPage);
     };
 
-    await interactionReply.edit({
-        embeds: [generateEmbed(getItemsForPage(currentPage), currentPage, totalPages)],
-        components: [generatePaginationButtons(currentPage, totalPages)],
-        attachments: []
-    });
+    const updatePageContent = async () => {
+        const itemsForPage = getItemsForPage(currentPage);
+        const embed = generateEmbed(itemsForPage, currentPage, totalPages);
+
+        let image: Buffer | undefined = undefined;
+        if (generateImage) {
+            image = await generateImage(itemsForPage);
+            embed.setImage('attachment://generated_image.png');
+        }
+
+        await interactionReply.edit({
+            embeds: [embed],
+            components: [generatePaginationButtons(currentPage, totalPages)],
+            files: image ? [{ attachment: image, name: 'generated_image.png' }] : []
+        });
+    };
+
+    await updatePageContent();
 
     const collector = interactionReply.createMessageComponentCollector({
         filter: (i): i is ButtonInteraction => i.isButton(),
@@ -87,6 +101,7 @@ export async function paginationHandler(options: IPaginationOptions) {
     });
 
     collector.on('collect', async(interaction: ButtonInteraction) => {
+        await interaction.deferUpdate();
         const [action, paginationType] = interaction.customId.split('::');
 
         if (action === 'pagination') {
@@ -97,11 +112,7 @@ export async function paginationHandler(options: IPaginationOptions) {
 
             currentPage = determineNewPage(currentPage, paginationType as TPaginationType, totalPages);
 
-            await interaction.update({
-                embeds: [generateEmbed(getItemsForPage(currentPage), currentPage, totalPages)],
-                components: [generatePaginationButtons(currentPage, totalPages)],
-                attachments: []
-            });
+            await updatePageContent();
         }
     });
 

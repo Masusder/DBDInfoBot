@@ -20,7 +20,7 @@ import {
     determineNewPage,
     generatePaginationButtons,
     TPaginationType
-} from "../handlers/paginationHandler";
+} from "../handlers/genericPaginationHandler";
 import { BuildCategories } from "@data/BuildCategories";
 import { combineBaseUrlWithPath } from "@utils/stringUtils";
 import { getGameData } from "@utils/dataUtils";

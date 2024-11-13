@@ -24,5 +24,19 @@
   "shrine_command": {
     "name": "ołtarz",
     "description": "Sprawdź cotygodniowy Ołtarz Tajemnic."
+  },
+  "list_command": {
+    "name": "lista",
+    "description": "Uzyskaj listę określonych elementów z poszczególnej funkcji gry.",
+    "cosmetics_subcommand": {
+      "name": "kosmetyki",
+      "description": "Uzyskaj listę kosmetyków.",
+      "options": {
+        "character": {
+          "name": "postać",
+          "description": "Podaj nazwę postaci."
+        }
+      }
+    }
   }
 }

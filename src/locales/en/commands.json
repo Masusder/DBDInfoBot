@@ -24,5 +24,19 @@
   "shrine_command": {
     "name": "shrine",
     "description": "Check weekly Shrine of Secrets."
+  },
+  "list_command": {
+    "name": "list",
+    "description": "Retrieve list of specified game feature items.",
+    "cosmetics_subcommand": {
+      "name": "cosmetics",
+      "description": "Retrieve list of cosmetics.",
+      "options": {
+        "character": {
+          "name": "character",
+          "description": "Name of the character."
+        }
+      }
+    }
   }
 }
