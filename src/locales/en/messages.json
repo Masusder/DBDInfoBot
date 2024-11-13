@@ -19,7 +19,7 @@
       "role": "Role"
     },
     "offering_subcommand": {
-      "item_information": "Offering Information",
+      "offering_information": "Offering Information",
       "description": "Description",
       "rarity": "Rarity",
       "role": "Role",
