@@ -1,5 +1,7 @@
 import Constants from "../constants";
 import * as crypto from 'crypto';
+import { getTranslation } from "@utils/localizationUtils";
+import { Locale } from "discord.js";
 
 export function extractInteractionId(customId: string): string | null {
     const parts = customId.split('::');
@@ -14,8 +16,8 @@ export function combineBaseUrlWithPath(relativePath: string): string {
     return `${baseUrl}/${path}`;
 }
 
-export function formatInclusionVersion(inclusionVersion: string): string {
-    return inclusionVersion === "Legacy" ? "Before 5.5.0" : inclusionVersion;
+export function formatInclusionVersion(inclusionVersion: string, locale: Locale): string {
+    return inclusionVersion === "Legacy" ? getTranslation('legacy', locale, 'general') : inclusionVersion;
 }
 
 export function formatHtmlToDiscordMarkdown(html: string): string {
@@ -58,7 +60,7 @@ export function formatNumber(number: number | undefined | null): string {
     }
 }
 
-export function adjustForTimezone(dateString: string) {
+export function adjustForTimezone(dateString: string): number {
     const date = new Date(dateString);
     const timezoneOffset = date.getTimezoneOffset() * 60000;
     return date.getTime() - timezoneOffset;

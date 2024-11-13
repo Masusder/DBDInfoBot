@@ -7,36 +7,37 @@ import {
     ButtonStyle,
     ChatInputCommandInteraction,
     ColorResolvable,
-    EmbedBuilder
+    EmbedBuilder,
+    Locale
 } from 'discord.js';
 import {
     getCosmeticChoicesFromIndex,
-    getCosmeticDataByName
+    getCosmeticDataById
 } from "@services/cosmeticService";
-import { Rarities } from "@data/Rarities";
+import { Rarities, CosmeticTypes} from "data"
 import {
+    adjustForTimezone,
     combineBaseUrlWithPath,
-    formatInclusionVersion
+    formatInclusionVersion,
+    formatNumber
 } from "@utils/stringUtils";
 import { fetchAndResizeImage } from "@utils/imageUtils";
-import { CosmeticTypes } from "@data/CosmeticTypes";
 import { getCachedCharacters } from "@services/characterService";
 import { getTranslation } from "@utils/localizationUtils";
 import { Cosmetic } from "../../types";
 
-// TODO: localize this
 export async function handleCosmeticCommandInteraction(interaction: ChatInputCommandInteraction) {
-    const cosmeticName = interaction.options.getString('name');
+    const cosmeticId = interaction.options.getString('name');
     const locale = interaction.locale;
 
-    if (!cosmeticName) return;
+    if (!cosmeticId) return;
 
     try {
         await interaction.deferReply();
 
-        const cosmeticData = await getCosmeticDataByName(cosmeticName, locale);
+        const cosmeticData = await getCosmeticDataById(cosmeticId, locale);
         if (!cosmeticData) {
-            await interaction.followUp(`No cosmetic found for "${cosmeticName}".`);
+            await interaction.followUp(`${getTranslation('info_command.cosmetic_subcommand.cosmetic_not_found', locale, 'errors')} "${cosmeticId}".`);
             return;
         }
 
@@ -45,24 +46,22 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
         const imageUrl = combineBaseUrlWithPath(cosmeticData.IconFilePathList);
         const resizedImageBuffer = await fetchAndResizeImage(imageUrl, 256, null);
 
-        const attachment = new AttachmentBuilder(resizedImageBuffer, { name: 'resized-image.png' });
+        const attachment = new AttachmentBuilder(resizedImageBuffer, { name: `cosmetic_${cosmeticData.CosmeticId}.png` });
 
         const isPurchasable = cosmeticData.Purchasable;
 
-        const releaseDate = cosmeticData.ReleaseDate ? new Date(cosmeticData.ReleaseDate) : null;
-        const formattedReleaseDate = releaseDate ? releaseDate.toLocaleDateString(locale, {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        }) : 'N/A';
+        const adjustedReleaseDateUnix = cosmeticData.ReleaseDate ? Math.floor(adjustForTimezone(cosmeticData.ReleaseDate) / 1000) : null;
+        const formattedReleaseDate = adjustedReleaseDateUnix ? `<t:${adjustedReleaseDateUnix}>` : 'N/A';
 
-        const prettyCosmeticType = CosmeticTypes[cosmeticData.Type] || "Unknown";
+        const cosmeticType = CosmeticTypes[cosmeticData.Type];
+        const localizedCosmeticType = cosmeticType ? getTranslation(cosmeticType, locale, 'general') : "N/A";
 
         const outfitPieces: string[] = cosmeticData.OutfitItems || [];
 
-        // TODO: add limited availability check
+        const isPastLimitedAvaibilityEndDate = cosmeticData.LimitedTimeEndDate ? new Date() > new Date(adjustForTimezone(cosmeticData.LimitedTimeEndDate)) : false;
+
         const priceFields: APIEmbedField[] = [];
-        if (cosmeticData.Prices && isPurchasable) {
+        if (cosmeticData.Prices && isPurchasable && !isPastLimitedAvaibilityEndDate) {
             const cellsPrice = cosmeticData.Prices.find(price => price.Cells);
             const shardsPrice = cosmeticData.Prices.find(price => price.Shards);
 
@@ -73,12 +72,16 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
 
                 if (discountPercentage > 0) {
                     priceFields.push({
-                        name: 'Auric Cells',
+                        name: getTranslation('currencies.auric_cells', locale, 'general'),
                         value: `~~${originalCellsPrice}~~ ${discountedCellsPrice}`,
                         inline: true
                     });
                 } else if (originalCellsPrice !== 0) {
-                    priceFields.push({ name: 'Auric Cells', value: `${originalCellsPrice}`, inline: true });
+                    priceFields.push({
+                        name: getTranslation('currencies.auric_cells', locale, 'general'),
+                        value: `${originalCellsPrice}`,
+                        inline: true
+                    });
                 }
             }
 
@@ -89,17 +92,21 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
 
                 if (discountPercentage > 0) {
                     priceFields.push({
-                        name: 'Shards',
-                        value: `~~${originalShardsPrice}~~ ${discountedShardsPrice}`,
+                        name: getTranslation('currencies.shards', locale, 'general'),
+                        value: `~~${formatNumber(originalShardsPrice)}~~ ${formatNumber(discountedShardsPrice)}`,
                         inline: true
                     });
                 } else if (originalShardsPrice !== 0) {
-                    priceFields.push({ name: 'Shards', value: `${originalShardsPrice}`, inline: true });
+                    priceFields.push({
+                        name: getTranslation('currencies.shards', locale, 'general'),
+                        value: `${formatNumber(originalShardsPrice)}`,
+                        inline: true
+                    });
                 }
             }
         }
 
-        const embedTitle = formatEmbedTitle(cosmeticData.CosmeticName, cosmeticData.Unbreakable);
+        const embedTitle = formatEmbedTitle(cosmeticData.CosmeticName, cosmeticData.Unbreakable, locale);
 
         const characterData = await getCachedCharacters(locale);
         const characterIndex = cosmeticData.Character;
@@ -109,7 +116,7 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
         const fields: APIEmbedField[] = [];
         if (characterIndex !== -1) {
             fields.push({
-                name: 'Character',
+                name: getTranslation('info_command.cosmetic_subcommand.character', locale, 'messages'),
                 value: characterData[characterIndex].Name,
                 inline: true
             });
@@ -117,7 +124,7 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
 
         if (cosmeticData.CollectionName) {
             fields.push({
-                name: 'Collection',
+                name: getTranslation('info_command.cosmetic_subcommand.collection', locale, 'messages'),
                 value: cosmeticData.CollectionName,
                 inline: true
             });
@@ -125,19 +132,44 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
 
         fields.push(
             {
-                name: 'Rarity',
+                name: getTranslation('info_command.cosmetic_subcommand.rarity', locale, 'messages'),
                 value: getTranslation(Rarities[cosmeticData.Rarity]?.localizedName, locale, 'general') || 'N/A',
                 inline: true
             },
             {
-                name: 'Inclusion Version',
-                value: formatInclusionVersion(cosmeticData.InclusionVersion) || 'N/A',
+                name: getTranslation('info_command.cosmetic_subcommand.inclusion_version', locale, 'messages'),
+                value: formatInclusionVersion(cosmeticData.InclusionVersion, locale) || 'N/A',
                 inline: true
             },
-            { name: 'Type', value: prettyCosmeticType, inline: true },
-            { name: 'Release Date', value: isPurchasable ? formattedReleaseDate : 'N/A', inline: true },
-            ...priceFields
+            {
+                name: getTranslation('info_command.cosmetic_subcommand.type', locale, 'messages'),
+                value: localizedCosmeticType,
+                inline: true
+            },
+            {
+                name: getTranslation('info_command.cosmetic_subcommand.release_date', locale, 'messages'),
+                value: isPurchasable && !isPastLimitedAvaibilityEndDate ? formattedReleaseDate : 'N/A',
+                inline: true
+            },
+            ...priceFields,
         );
+
+        const temporaryDiscounts = cosmeticData.TemporaryDiscounts;
+
+        if (temporaryDiscounts && temporaryDiscounts.length > 0 && isPurchasable && !isPastLimitedAvaibilityEndDate) {
+            const discountEndDate = temporaryDiscounts[0].endDate;
+            const adjustedDiscountEndDate = adjustForTimezone(discountEndDate);
+
+            if (new Date(adjustedDiscountEndDate) > new Date()) {
+                const adjustedDiscountEndDateUnix = Math.floor(adjustedDiscountEndDate / 1000);
+
+                fields.push({
+                    name: getTranslation('info_command.cosmetic_subcommand.sale', locale, 'messages'),
+                    value: `<t:${adjustedDiscountEndDateUnix}>`,
+                    inline: true
+                })
+            }
+        }
 
         const filteredFields = fields.filter((field): field is APIEmbedField => field !== null);
 
@@ -146,18 +178,21 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
             .setTitle(embedTitle)
             .setDescription(cosmeticData.Description)
             .addFields(filteredFields)
-            .setImage('attachment://resized-image.png')
+            .setImage(`attachment://cosmetic_${cosmeticData.CosmeticId}.png`)
             .setTimestamp()
-            .setFooter({ text: 'Cosmetic Information' })
-            .setThumbnail(cosmeticData.Unbreakable ? combineBaseUrlWithPath('/images/Other/CosmeticSetIcon.png') : '');
+            .setFooter({ text: getTranslation('info_command.cosmetic_subcommand.cosmetic_info', locale, 'messages') });
+
+        if (cosmeticData.Unbreakable) {
+            embed.setThumbnail(combineBaseUrlWithPath('/images/Other/CosmeticSetIcon.png'));
+        }
 
         const viewImagesButton = new ButtonBuilder()
             .setCustomId(`view_outfit_pieces::${cosmeticData.CosmeticId}`)
-            .setLabel('View Outfit Pieces')
+            .setLabel(getTranslation('info_command.cosmetic_subcommand.view_pieces', locale, 'messages'))
             .setStyle(ButtonStyle.Secondary);
 
         const redirectButton = new ButtonBuilder()
-            .setLabel('More Info')
+            .setLabel(getTranslation('info_command.cosmetic_subcommand.more_info', locale, 'messages'))
             .setStyle(ButtonStyle.Link)
             .setURL(cosmeticDetails);
 
@@ -179,9 +214,9 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
 }
 
 // region Cosmetic Utils
-function formatEmbedTitle(cosmeticName: string, isUnbreakable: boolean): string {
+function formatEmbedTitle(cosmeticName: string, isUnbreakable: boolean, locale: Locale): string {
     if (isUnbreakable) {
-        return `${cosmeticName.trim()} (Linked Cosmetic)`;
+        return `${cosmeticName.trim()} (${getTranslation('info_command.cosmetic_subcommand.linked_cosmetic', locale, 'messages')})`;
     }
 
     return cosmeticName;
@@ -219,8 +254,8 @@ export async function handleCosmeticCommandAutocompleteInteraction(interaction: 
         const choices = await getCosmeticChoicesFromIndex(focusedValue, locale);
 
         const options = choices.slice(0, 25).map(cosmetic => ({
-            name: cosmetic.CosmeticName,
-            value: cosmetic.CosmeticName
+            name: `${cosmetic.CosmeticName} (ID: ${cosmetic.CosmeticId})`,
+            value: cosmetic.CosmeticId
         }));
 
         await interaction.respond(options);

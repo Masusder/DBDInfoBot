@@ -2,11 +2,14 @@ import {
     ButtonInteraction,
     EmbedBuilder
 } from "discord.js";
+import { getTranslation } from "@utils/localizationUtils";
 
 export async function sendUnauthorizedMessage(interaction: ButtonInteraction) {
+    const locale = interaction.locale;
+
     const embed = new EmbedBuilder()
         .setColor('Red')
-        .setDescription(':x: Only the person who used the command can do that.');
+        .setDescription(`:x: ${getTranslation('general.unauthorized', locale, 'errors')}`);
 
     try {
         if (interaction.replied || interaction.deferred) {

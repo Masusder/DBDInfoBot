@@ -66,7 +66,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
             pageItems.forEach(cosmetic => {
                 const cosmeticDescription = cosmetic.Description.length > 45 ? cosmetic.Description.substring(0, 45) + '..' : cosmetic.Description;
-                const description = `${cosmeticDescription}\n\nInclusion Version: **${formatInclusionVersion(cosmetic.InclusionVersion)}**\nType: **${CosmeticTypes[cosmetic.Type]}**`;
+                const description = `${cosmeticDescription}\n\nInclusion Version: **${formatInclusionVersion(cosmetic.InclusionVersion, locale)}**\nType: **${CosmeticTypes[cosmetic.Type]}**`;
 
                 embed.addFields({
                     name: cosmetic.CosmeticName,

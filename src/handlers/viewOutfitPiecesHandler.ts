@@ -13,27 +13,28 @@ import {
     createCanvas,
     loadImage
 } from "canvas";
+import { getTranslation } from "@utils/localizationUtils";
 
 export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
     const cosmeticId = extractInteractionId(interaction.customId);
     const locale = interaction.locale;
 
     if (!cosmeticId) {
-        await interaction.followUp({ content: 'Invalid cosmetic ID.', ephemeral: true });
+        await interaction.followUp({ content: getTranslation('info_command.cosmetic_subcommand.button_interaction.invalid_id', locale, 'errors'), ephemeral: true });
         return;
     }
 
     const cosmeticData = await getCosmeticDataById(cosmeticId, locale);
     if (!cosmeticData) {
-        await interaction.followUp({ content: 'Error retrieving cosmetic data.', ephemeral: true });
+        await interaction.followUp({ content: getTranslation('info_command.cosmetic_subcommand.button_interaction.error_retrieving_data', locale, 'errors'), ephemeral: true });
         return;
     }
 
-    const outfitPieces = await getCosmeticPiecesCombinedImage(cosmeticData.OutfitItems);
+    const outfitPieces = await getCosmeticPiecesCombinedImage(cosmeticData.OutfitItems, locale);
     const combinedImageBuffer = await combineImages(outfitPieces);
 
     const embed = new EmbedBuilder()
-        .setTitle(`Outfit Pieces for ${cosmeticData.CosmeticName}`)
+        .setTitle(`${getTranslation('info_command.cosmetic_subcommand.button_interaction.outfit_pieces', locale, 'messages')} ${cosmeticData.CosmeticName}`)
         .setColor(interaction.message.embeds[0].color)
         .setImage('attachment://combined-outfit-pieces.png');
 
@@ -55,10 +56,10 @@ export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
     });
 }
 
-async function getCosmeticPiecesCombinedImage(cosmeticPieces: string[]) {
+async function getCosmeticPiecesCombinedImage(cosmeticPieces: string[], locale: Locale) {
     const urls: string[] = [];
     for (const cosmeticPieceId of cosmeticPieces) {
-        const cosmeticPieceData = await getCosmeticDataById(cosmeticPieceId, Locale.EnglishUS);
+        const cosmeticPieceData = await getCosmeticDataById(cosmeticPieceId, locale);
 
         if (cosmeticPieceData) {
             urls.push(combineBaseUrlWithPath(cosmeticPieceData.IconFilePathList));

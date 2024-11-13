@@ -1,0 +1,14 @@
+{
+  "info_command": {
+    "cosmetic_subcommand": {
+      "cosmetic_not_found": "No cosmetic found for",
+      "button_interaction": {
+        "invalid_id": "Invalid cosmetic ID.",
+        "error_retrieving_data": "Error retrieving cosmetic data."
+      }
+    }
+  },
+  "general": {
+    "unauthorized": "Only the person who used the command can do that."
+  }
+}

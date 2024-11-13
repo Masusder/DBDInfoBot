@@ -33,12 +33,31 @@
       "backstory": "Historia -",
       "read_backstory": "Przeczytaj historię",
       "character_backstory": "Historia postaci"
+    },
+    "cosmetic_subcommand": {
+      "character": "Postać",
+      "collection": "Kolekcja",
+      "rarity": "Rzadkość",
+      "inclusion_version": "Wersja wydania",
+      "type": "Typ",
+      "release_date": "Data wydania",
+      "sale": "Koniec wyprzedaży",
+      "cosmetic_info": "Informacje o kosmetyku",
+      "more_info": "Więcej informacji",
+      "view_pieces": "Zobacz elementy stroju",
+      "linked_cosmetic": "Połączony kosmetyk",
+      "button_interaction": {
+        "outfit_pieces": "Elementy stroju dla"
+      }
     }
   },
   "shrine_command": {
     "author_title": "Świątynia Tajemnic tego tygodnia",
     "character": "Postać",
     "time_left": "Pozostały czas na odświeżenie:",
-    "shrine_active": ["Świątynia aktywna od", "do"]
+    "shrine_active": [
+      "Świątynia aktywna od",
+      "do"
+    ]
   }
 }

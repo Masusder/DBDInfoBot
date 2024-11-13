@@ -34,12 +34,31 @@
       "backstory": "Backstory of",
       "read_backstory": "Read Backstory",
       "character_backstory": "Character backstory"
+    },
+    "cosmetic_subcommand": {
+      "character": "Character",
+      "collection": "Collection",
+      "rarity": "Rarity",
+      "inclusion_version": "Inclusion Version",
+      "type": "Type",
+      "release_date": "Release Date",
+      "sale": "Sale Ends",
+      "cosmetic_info": "Cosmetic Information",
+      "more_info": "More Info",
+      "view_pieces": "View Outfit Pieces",
+      "linked_cosmetic": "Linked Cosmetic",
+      "button_interaction": {
+        "outfit_pieces": "Outfit Pieces for"
+      }
     }
   },
   "shrine_command": {
     "author_title": "This week's Shrine of Secrets",
     "character": "Character",
     "time_left": "Time Left to Refresh:",
-    "shrine_active": ["Shrine Active from", "to"]
+    "shrine_active": [
+      "Shrine Active from",
+      "to"
+    ]
   }
 }

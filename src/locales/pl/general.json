@@ -31,6 +31,21 @@
   },
   "currencies": {
     "bloodpoints": "Punkty krwi",
-    "shards": "Błyszczące odłamki"
-  }
+    "shards": "Błyszczące odłamki",
+    "auric_cells": "Złociste mikrobiomy"
+  },
+  "cosmetic_types": {
+    "outfit": "Strój",
+    "survivor_head": "Głowa ocalałego",
+    "survivor_torso": "Tułów ocalałego",
+    "survivor_legs": "Nogi ocalałego",
+    "killer_head": "Głowa zabójcy",
+    "killer_body": "Ciało zabójcy",
+    "killer_weapon": "Broń zabójcy",
+    "charm": "Breloczek",
+    "badge": "Odznaka",
+    "banner": "Baner",
+    "power": "Moc"
+  },
+  "legacy": "Przed 5.5.0"
 }
