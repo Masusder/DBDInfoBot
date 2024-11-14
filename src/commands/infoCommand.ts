@@ -109,7 +109,7 @@ export const data = i18next.isInitialized
                 'zh-TW': i18next.t('info_command.options.type.description', { lng: 'zh-Hant' })
             })
             .setRequired(true)
-            .addChoices(
+            .setChoices(
                 {
                     name: i18next.t('info_command.options.type.choices.perk', { lng: 'en' }),
                     name_localizations: {

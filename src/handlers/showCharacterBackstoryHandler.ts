@@ -96,7 +96,8 @@ export async function showCharacterBackstoryHandler(interaction: ButtonInteracti
         generateEmbed: (pageItems) => pageItems[0],
         interactionUserId: interaction.user.id,
         interactionReply: await interaction.editReply({ content: "" }),
-        timeout: 300_000 // 5 minutes
+        timeout: 300_000, // 5 minutes
+        locale
     };
 
     await genericPaginationHandler(paginationOptions);

@@ -60,5 +60,15 @@
       "Shrine Active from",
       "to"
     ]
+  },
+  "generic_pagination": {
+    "first": "First",
+    "previous": "Previous",
+    "page_number": [
+      "Page",
+      "of"
+    ],
+    "next": "Next",
+    "last": "Last"
   }
 }

@@ -196,7 +196,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
         const replyMessage = await interaction.editReply({
             embeds: [embed],
-            components: [generatePaginationButtons(currentPage, totalPages + 1)]
+            components: [generatePaginationButtons(currentPage, totalPages + 1, locale)]
         });
 
         const collector = replyMessage.createMessageComponentCollector({
@@ -226,7 +226,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
                 await i.update({
                     embeds: [newEmbed],
-                    components: [generatePaginationButtons(currentPage, totalPages + 1)]
+                    components: [generatePaginationButtons(currentPage, totalPages + 1, locale)]
                 });
             } catch (error) {
                 console.error("Error handling pagination:", error);

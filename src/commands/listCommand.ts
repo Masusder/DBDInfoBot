@@ -2,12 +2,32 @@ import i18next from "i18next";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import {
     AutocompleteInteraction,
-    ChatInputCommandInteraction
+    ChatInputCommandInteraction,
+    Locale
 } from "discord.js";
 import {
     handleCosmeticListCommandAutocompleteInteraction,
     handleCosmeticListCommandInteraction
 } from "@commands/listSubCommands/cosmetics";
+import { Rarities } from "@data/Rarities";
+import { mapDiscordLocaleToDbdLang } from "@utils/localizationUtils";
+
+const rarityChoices = Object.keys(Rarities)
+    .filter(rarity => rarity !== "N/A")
+    .map(rarity => {
+    const localizedName = Rarities[rarity].localizedName;
+
+    const name_localizations: Record<string, string> = {};
+    Object.values(Locale).forEach(locale => {
+        name_localizations[locale] = i18next.t(localizedName, { lng: mapDiscordLocaleToDbdLang(locale), ns: 'general' });
+    });
+
+    return {
+        name: i18next.t(localizedName, { lng: 'en', ns: 'general' }),
+        name_localizations,
+        value: rarity
+    };
+});
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -112,7 +132,7 @@ export const data = i18next.isInitialized
                             'zh-CN': i18next.t('list_command.cosmetics_subcommand.options.character.name', { lng: 'zh-Hans' }),
                             'zh-TW': i18next.t('list_command.cosmetics_subcommand.options.character.name', { lng: 'zh-Hant' })
                         })
-                        .setDescription('Name of the character.')
+                        .setDescription(i18next.t('list_command.cosmetics_subcommand.options.character.description', { lng: 'en' }))
                         .setDescriptionLocalizations({
                             'en-US': i18next.t('list_command.cosmetics_subcommand.options.character.description', { lng: 'en' }),
                             'en-GB': i18next.t('list_command.cosmetics_subcommand.options.character.description', { lng: 'en' }),
@@ -132,7 +152,134 @@ export const data = i18next.isInitialized
                             'zh-TW': i18next.t('list_command.cosmetics_subcommand.options.character.description', { lng: 'zh-Hant' })
                         })
                         .setAutocomplete(true)
-                        .setRequired(true)
+                        .setRequired(false)
+                )
+                .addStringOption(option =>
+                    option
+                        .setName('rarity')
+                        .setNameLocalizations({
+                            'en-US': i18next.t('list_command.cosmetics_subcommand.options.rarity.name', { lng: 'en' }),
+                            'en-GB': i18next.t('list_command.cosmetics_subcommand.options.rarity.name', { lng: 'en' }),
+                            'de': i18next.t('list_command.cosmetics_subcommand.options.rarity.name', { lng: 'de' }),
+                            'es-ES': i18next.t('list_command.cosmetics_subcommand.options.rarity.name', { lng: 'es' }),
+                            'es-419': i18next.t('list_command.cosmetics_subcommand.options.rarity.name', { lng: 'es-MX' }),
+                            'fr': i18next.t('list_command.cosmetics_subcommand.options.rarity.name', { lng: 'fr' }),
+                            'it': i18next.t('list_command.cosmetics_subcommand.options.rarity.name', { lng: 'it' }),
+                            'ja': i18next.t('list_command.cosmetics_subcommand.options.rarity.name', { lng: 'ja' }),
+                            'ko': i18next.t('list_command.cosmetics_subcommand.options.rarity.name', { lng: 'ko' }),
+                            'pl': i18next.t('list_command.cosmetics_subcommand.options.rarity.name', { lng: 'pl' }),
+                            'pt-BR': i18next.t('list_command.cosmetics_subcommand.options.rarity.name', { lng: 'pt-BR' }),
+                            'ru': i18next.t('list_command.cosmetics_subcommand.options.rarity.name', { lng: 'ru' }),
+                            'th': i18next.t('list_command.cosmetics_subcommand.options.rarity.name', { lng: 'th' }),
+                            'tr': i18next.t('list_command.cosmetics_subcommand.options.rarity.name', { lng: 'tr' }),
+                            'zh-CN': i18next.t('list_command.cosmetics_subcommand.options.rarity.name', { lng: 'zh-Hans' }),
+                            'zh-TW': i18next.t('list_command.cosmetics_subcommand.options.rarity.name', { lng: 'zh-Hant' })
+                        })
+                        .setDescription(i18next.t('list_command.cosmetics_subcommand.options.rarity.description', { lng: 'en' }))
+                        .setDescriptionLocalizations({
+                            'en-US': i18next.t('list_command.cosmetics_subcommand.options.rarity.description', { lng: 'en' }),
+                            'en-GB': i18next.t('list_command.cosmetics_subcommand.options.rarity.description', { lng: 'en' }),
+                            'de': i18next.t('list_command.cosmetics_subcommand.options.rarity.description', { lng: 'de' }),
+                            'es-ES': i18next.t('list_command.cosmetics_subcommand.options.rarity.description', { lng: 'es' }),
+                            'es-419': i18next.t('list_command.cosmetics_subcommand.options.rarity.description', { lng: 'es-MX' }),
+                            'fr': i18next.t('list_command.cosmetics_subcommand.options.rarity.description', { lng: 'fr' }),
+                            'it': i18next.t('list_command.cosmetics_subcommand.options.rarity.description', { lng: 'it' }),
+                            'ja': i18next.t('list_command.cosmetics_subcommand.options.rarity.description', { lng: 'ja' }),
+                            'ko': i18next.t('list_command.cosmetics_subcommand.options.rarity.description', { lng: 'ko' }),
+                            'pl': i18next.t('list_command.cosmetics_subcommand.options.rarity.description', { lng: 'pl' }),
+                            'pt-BR': i18next.t('list_command.cosmetics_subcommand.options.rarity.description', { lng: 'pt-BR' }),
+                            'ru': i18next.t('list_command.cosmetics_subcommand.options.rarity.description', { lng: 'ru' }),
+                            'th': i18next.t('list_command.cosmetics_subcommand.options.rarity.description', { lng: 'th' }),
+                            'tr': i18next.t('list_command.cosmetics_subcommand.options.rarity.description', { lng: 'tr' }),
+                            'zh-CN': i18next.t('list_command.cosmetics_subcommand.options.rarity.description', { lng: 'zh-Hans' }),
+                            'zh-TW': i18next.t('list_command.cosmetics_subcommand.options.rarity.description', { lng: 'zh-Hant' })
+                        })
+                        .setChoices(...rarityChoices)
+                        .setRequired(false)
+                )
+                .addBooleanOption(option =>
+                    option
+                        .setName('purchasable')
+                        .setNameLocalizations({
+                            'en-US': i18next.t('list_command.cosmetics_subcommand.options.purchasable.name', { lng: 'en' }),
+                            'en-GB': i18next.t('list_command.cosmetics_subcommand.options.purchasable.name', { lng: 'en' }),
+                            'de': i18next.t('list_command.cosmetics_subcommand.options.purchasable.name', { lng: 'de' }),
+                            'es-ES': i18next.t('list_command.cosmetics_subcommand.options.purchasable.name', { lng: 'es' }),
+                            'es-419': i18next.t('list_command.cosmetics_subcommand.options.purchasable.name', { lng: 'es-MX' }),
+                            'fr': i18next.t('list_command.cosmetics_subcommand.options.purchasable.name', { lng: 'fr' }),
+                            'it': i18next.t('list_command.cosmetics_subcommand.options.purchasable.name', { lng: 'it' }),
+                            'ja': i18next.t('list_command.cosmetics_subcommand.options.purchasable.name', { lng: 'ja' }),
+                            'ko': i18next.t('list_command.cosmetics_subcommand.options.purchasable.name', { lng: 'ko' }),
+                            'pl': i18next.t('list_command.cosmetics_subcommand.options.purchasable.name', { lng: 'pl' }),
+                            'pt-BR': i18next.t('list_command.cosmetics_subcommand.options.purchasable.name', { lng: 'pt-BR' }),
+                            'ru': i18next.t('list_command.cosmetics_subcommand.options.purchasable.name', { lng: 'ru' }),
+                            'th': i18next.t('list_command.cosmetics_subcommand.options.purchasable.name', { lng: 'th' }),
+                            'tr': i18next.t('list_command.cosmetics_subcommand.options.purchasable.name', { lng: 'tr' }),
+                            'zh-CN': i18next.t('list_command.cosmetics_subcommand.options.purchasable.name', { lng: 'zh-Hans' }),
+                            'zh-TW': i18next.t('list_command.cosmetics_subcommand.options.purchasable.name', { lng: 'zh-Hant' })
+                        })
+                        .setDescription(i18next.t('list_command.cosmetics_subcommand.options.purchasable.description', { lng: 'en' }))
+                        .setDescriptionLocalizations({
+                            'en-US': i18next.t('list_command.cosmetics_subcommand.options.purchasable.description', { lng: 'en' }),
+                            'en-GB': i18next.t('list_command.cosmetics_subcommand.options.purchasable.description', { lng: 'en' }),
+                            'de': i18next.t('list_command.cosmetics_subcommand.options.purchasable.description', { lng: 'de' }),
+                            'es-ES': i18next.t('list_command.cosmetics_subcommand.options.purchasable.description', { lng: 'es' }),
+                            'es-419': i18next.t('list_command.cosmetics_subcommand.options.purchasable.description', { lng: 'es-MX' }),
+                            'fr': i18next.t('list_command.cosmetics_subcommand.options.purchasable.description', { lng: 'fr' }),
+                            'it': i18next.t('list_command.cosmetics_subcommand.options.purchasable.description', { lng: 'it' }),
+                            'ja': i18next.t('list_command.cosmetics_subcommand.options.purchasable.description', { lng: 'ja' }),
+                            'ko': i18next.t('list_command.cosmetics_subcommand.options.purchasable.description', { lng: 'ko' }),
+                            'pl': i18next.t('list_command.cosmetics_subcommand.options.purchasable.description', { lng: 'pl' }),
+                            'pt-BR': i18next.t('list_command.cosmetics_subcommand.options.purchasable.description', { lng: 'pt-BR' }),
+                            'ru': i18next.t('list_command.cosmetics_subcommand.options.purchasable.description', { lng: 'ru' }),
+                            'th': i18next.t('list_command.cosmetics_subcommand.options.purchasable.description', { lng: 'th' }),
+                            'tr': i18next.t('list_command.cosmetics_subcommand.options.purchasable.description', { lng: 'tr' }),
+                            'zh-CN': i18next.t('list_command.cosmetics_subcommand.options.purchasable.description', { lng: 'zh-Hans' }),
+                            'zh-TW': i18next.t('list_command.cosmetics_subcommand.options.purchasable.description', { lng: 'zh-Hant' })
+                        })
+                        .setRequired(false)
+                )
+                .addBooleanOption(option =>
+                    option
+                        .setName('linked')
+                        .setNameLocalizations({
+                            'en-US': i18next.t('list_command.cosmetics_subcommand.options.linked.name', { lng: 'en' }),
+                            'en-GB': i18next.t('list_command.cosmetics_subcommand.options.linked.name', { lng: 'en' }),
+                            'de': i18next.t('list_command.cosmetics_subcommand.options.linked.name', { lng: 'de' }),
+                            'es-ES': i18next.t('list_command.cosmetics_subcommand.options.linked.name', { lng: 'es' }),
+                            'es-419': i18next.t('list_command.cosmetics_subcommand.options.linked.name', { lng: 'es-MX' }),
+                            'fr': i18next.t('list_command.cosmetics_subcommand.options.linked.name', { lng: 'fr' }),
+                            'it': i18next.t('list_command.cosmetics_subcommand.options.linked.name', { lng: 'it' }),
+                            'ja': i18next.t('list_command.cosmetics_subcommand.options.linked.name', { lng: 'ja' }),
+                            'ko': i18next.t('list_command.cosmetics_subcommand.options.linked.name', { lng: 'ko' }),
+                            'pl': i18next.t('list_command.cosmetics_subcommand.options.linked.name', { lng: 'pl' }),
+                            'pt-BR': i18next.t('list_command.cosmetics_subcommand.options.linked.name', { lng: 'pt-BR' }),
+                            'ru': i18next.t('list_command.cosmetics_subcommand.options.linked.name', { lng: 'ru' }),
+                            'th': i18next.t('list_command.cosmetics_subcommand.options.linked.name', { lng: 'th' }),
+                            'tr': i18next.t('list_command.cosmetics_subcommand.options.linked.name', { lng: 'tr' }),
+                            'zh-CN': i18next.t('list_command.cosmetics_subcommand.options.linked.name', { lng: 'zh-Hans' }),
+                            'zh-TW': i18next.t('list_command.cosmetics_subcommand.options.linked.name', { lng: 'zh-Hant' })
+                        })
+                        .setDescription(i18next.t('list_command.cosmetics_subcommand.options.linked.description', { lng: 'en' }))
+                        .setDescriptionLocalizations({
+                            'en-US': i18next.t('list_command.cosmetics_subcommand.options.linked.description', { lng: 'en' }),
+                            'en-GB': i18next.t('list_command.cosmetics_subcommand.options.linked.description', { lng: 'en' }),
+                            'de': i18next.t('list_command.cosmetics_subcommand.options.linked.description', { lng: 'de' }),
+                            'es-ES': i18next.t('list_command.cosmetics_subcommand.options.linked.description', { lng: 'es' }),
+                            'es-419': i18next.t('list_command.cosmetics_subcommand.options.linked.description', { lng: 'es-MX' }),
+                            'fr': i18next.t('list_command.cosmetics_subcommand.options.linked.description', { lng: 'fr' }),
+                            'it': i18next.t('list_command.cosmetics_subcommand.options.linked.description', { lng: 'it' }),
+                            'ja': i18next.t('list_command.cosmetics_subcommand.options.linked.description', { lng: 'ja' }),
+                            'ko': i18next.t('list_command.cosmetics_subcommand.options.linked.description', { lng: 'ko' }),
+                            'pl': i18next.t('list_command.cosmetics_subcommand.options.linked.description', { lng: 'pl' }),
+                            'pt-BR': i18next.t('list_command.cosmetics_subcommand.options.linked.description', { lng: 'pt-BR' }),
+                            'ru': i18next.t('list_command.cosmetics_subcommand.options.linked.description', { lng: 'ru' }),
+                            'th': i18next.t('list_command.cosmetics_subcommand.options.linked.description', { lng: 'th' }),
+                            'tr': i18next.t('list_command.cosmetics_subcommand.options.linked.description', { lng: 'tr' }),
+                            'zh-CN': i18next.t('list_command.cosmetics_subcommand.options.linked.description', { lng: 'zh-Hans' }),
+                            'zh-TW': i18next.t('list_command.cosmetics_subcommand.options.linked.description', { lng: 'zh-Hant' })
+                        })
+                        .setRequired(false)
                 )
         ) : undefined;
 

@@ -35,6 +35,18 @@
         "character": {
           "name": "postać",
           "description": "Podaj nazwę postaci."
+        },
+        "purchasable": {
+          "name": "do_kupienia",
+          "description": "Określ, czy kosmetyk ma być dostępny do kupienia, czy nie."
+        },
+        "linked": {
+          "name": "połączony",
+          "description": "Określ, czy kosmetyk powinien być zestawem połączonym, czy nie."
+        },
+        "rarity": {
+          "name": "rzadkość",
+          "description": "Określ rzadkość kosmetyku."
         }
       }
     }

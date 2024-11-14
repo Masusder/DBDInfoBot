@@ -35,6 +35,18 @@
         "character": {
           "name": "character",
           "description": "Name of the character."
+        },
+        "purchasable": {
+          "name": "purchasable",
+          "description": "Specify whether cosmetic should be available for purchase or not."
+        },
+        "linked": {
+          "name": "linked",
+          "description": "Specify whether cosmetic should be a linked set or not."
+        },
+        "rarity": {
+          "name": "rarity",
+          "description": "Specify rarity of the cosmetic."
         }
       }
     }

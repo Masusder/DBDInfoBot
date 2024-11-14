@@ -1,18 +1,20 @@
 import {
     AutocompleteInteraction,
     ChatInputCommandInteraction,
+    ColorResolvable,
     EmbedBuilder
 } from "discord.js";
 import {
     getCharacterChoices,
     getCharacterDataByIndex
 } from "@services/characterService";
-import { getCosmeticListByCharacterIndex } from "@services/cosmeticService";
+import {
+    getFilteredCosmeticsList
+} from "@services/cosmeticService";
 import {
     combineBaseUrlWithPath,
-    formatInclusionVersion
+    formatHtmlToDiscordMarkdown
 } from "@utils/stringUtils";
-import { CosmeticTypes } from "@data/CosmeticTypes";
 import { genericPaginationHandler } from "../../handlers/genericPaginationHandler";
 import { getTranslation } from "@utils/localizationUtils";
 import { Cosmetic } from "../../types";
@@ -22,47 +24,60 @@ import {
     loadImage
 } from "canvas";
 import { Role } from "@data/Role";
+import { Rarities } from "@data/Rarities";
 
 const COSMETICS_PER_PAGE = 6;
 
 // TODO: localize this
 export async function handleCosmeticListCommandInteraction(interaction: ChatInputCommandInteraction) {
-    const characterIndexString = interaction.options.getString('character');
     const locale = interaction.locale;
-
-    if (!characterIndexString) return;
 
     try {
         await interaction.deferReply();
 
-        const characterIndex = parseInt(characterIndexString);
+        const filters = constructFilters(interaction);
 
-        const cosmetics = await getCosmeticListByCharacterIndex(characterIndex, locale);
+        const { Character = -1, Rarity } = filters; // Deconstruct filters for use
+
+        const cosmetics = await getFilteredCosmeticsList(filters, locale);
+
         if (cosmetics.length === 0) {
-            await interaction.editReply({ content: 'No cosmetics found for this character.' });
+            await interaction.editReply({ content: 'No cosmetics found.' });
             return;
         }
 
-        const characterData = await getCharacterDataByIndex(characterIndex, locale);
+        const generateEmbed = async(pageItems: Cosmetic[]) => {
+            let title = `Found a total of ${cosmetics.length} cosmetics`;
 
-        if (!characterData) return;
+            // Let user know that filters were applied
+            const filterCount = Object.keys(filters).length;
+            if (filterCount > 0) {
+                title += ` (Filters applied: ${filterCount})`;
+            }
 
-        const generateEmbed = (pageItems: any[]) => {
-            const roleColor = Role[characterData.Role as 'Killer' | 'Survivor'].hexColor;
+            const embedColor = Rarity ? Rarities[Rarity].color : '#5865f2';
+
             const embed = new EmbedBuilder()
-                .setTitle(`Cosmetics for ${characterData.Name} (${cosmetics.length} Total)`)
-                .setColor(roleColor)
+                .setTitle(title)
+                .setColor(embedColor as ColorResolvable)
                 .setFooter({ text: `List of cosmetics` })
-                .setTimestamp()
-                .setThumbnail(combineBaseUrlWithPath(characterData.IconFilePath));
+                .setTimestamp();
+
+            if (Character !== -1) {
+                const characterData = await getCharacterDataByIndex(Character, locale);
+                if (characterData) {
+                    const characterPortrait = combineBaseUrlWithPath(characterData.IconFilePath);
+                    embed.setThumbnail(characterPortrait);
+                }
+            }
 
             pageItems.forEach(cosmetic => {
-                const cosmeticDescription = cosmetic.Description.length > 45 ? cosmetic.Description.substring(0, 45) + '..' : cosmetic.Description;
-                //const description = `${cosmeticDescription}\n\nInclusion Version - ${formatInclusionVersion(cosmetic.InclusionVersion, locale)}\nType - ${getTranslation(CosmeticTypes[cosmetic.Type], locale, 'general')}`;
+                const description = formatHtmlToDiscordMarkdown(cosmetic.Description);
+                const formattedAndTruncatedDescription = description.length > 45 ? description.substring(0, 45) + '..' : description;
 
                 embed.addFields({
                     name: cosmetic.CosmeticName,
-                    value: cosmeticDescription,
+                    value: formattedAndTruncatedDescription,
                     inline: true
                 });
             });
@@ -70,7 +85,7 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
             return embed;
         };
 
-        const generateImage = async (pageItems: any[]) => {
+        const generateImage = async(pageItems: Cosmetic[]) => {
             const imageUrls: string[] = [];
             pageItems.forEach((cosmetic: Cosmetic) => {
                 imageUrls.push(combineBaseUrlWithPath(cosmetic.IconFilePathList));
@@ -85,7 +100,10 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
             generateEmbed,
             generateImage,
             interactionUserId: interaction.user.id,
-            interactionReply: await interaction.editReply({ content: `For more information about a specific cosmetic, use the command: \`/info Cosmetic <cosmetic_name>\`` })
+            interactionReply: await interaction.editReply({
+                content: `For more information about a specific cosmetic, use the command: \`/info Cosmetic <cosmetic_name>\``
+            }),
+            locale
         });
     } catch (error) {
         console.error("Error executing cosmetics list subcommand:", error);
@@ -93,9 +111,35 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
 }
 
 // region Cosmetic List Utils
+
+function constructFilters(interaction: ChatInputCommandInteraction): Partial<Cosmetic> {
+    const characterIndexString = interaction.options.getString('character');
+    const isLinked = interaction.options.getBoolean('linked');
+    const isPurchasable = interaction.options.getBoolean('purchasable');
+    const rarity = interaction.options.getString('rarity');
+    const filters: Partial<Cosmetic> = {};
+
+    if (characterIndexString) {
+        filters.Character = parseInt(characterIndexString);
+    }
+
+    if (isLinked !== null) {
+        filters.Unbreakable = isLinked;
+    }
+
+    if (isPurchasable !== null) {
+        filters.Purchasable = isPurchasable;
+    }
+
+    if (rarity !== null) {
+        filters.Rarity = rarity;
+    }
+
+    return filters;
+}
 async function combineImages(imageUrls: string[]): Promise<Buffer> {
     const imageBuffers: Buffer[] = await Promise.all(
-        imageUrls.map(async (url) => {
+        imageUrls.map(async(url) => {
             try {
                 const response = await axios.get(url, { responseType: 'arraybuffer' });
                 return Buffer.from(response.data);
@@ -121,7 +165,7 @@ async function combineImages(imageUrls: string[]): Promise<Buffer> {
     const ctx = canvas.getContext('2d');
 
     let currentX = 0;
-    let currentY = 0
+    let currentY = 0;
 
     images.forEach((img, index) => {
         // If we have placed maxImagesPerRow images in a row, move to the next row
@@ -152,7 +196,7 @@ export async function handleCosmeticListCommandAutocompleteInteraction(interacti
 
         await interaction.respond(options);
     } catch (error) {
-        console.error("Error handling autocomplete interaction:", error);
+        console.error("Error handling cosmetic list autocomplete interaction:", error);
     }
 }
 

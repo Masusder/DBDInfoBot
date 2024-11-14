@@ -65,11 +65,11 @@ export async function getCosmeticChoicesFromIndex(query: string, locale: Locale)
 }
 
 // Retrieve a single cosmetic by exact name
-export async function getCosmeticDataByName(name: string, locale: Locale): Promise<Cosmetic | undefined> {
-    const cachedCosmetics = await getCachedCosmetics(locale);
-
-    return Object.values(cachedCosmetics).find(cosmetic => cosmetic.CosmeticName.toLowerCase() === name.toLowerCase());
-}
+// export async function getCosmeticDataByName(name: string, locale: Locale): Promise<Cosmetic | undefined> {
+//     const cachedCosmetics = await getCachedCosmetics(locale);
+//
+//     return Object.values(cachedCosmetics).find(cosmetic => cosmetic.CosmeticName.toLowerCase() === name.toLowerCase());
+// }
 
 // Retrieve list of cosmetics using character's index
 export async function getCosmeticListByCharacterIndex(index: number, locale: Locale): Promise<Cosmetic[]> {
@@ -78,6 +78,53 @@ export async function getCosmeticListByCharacterIndex(index: number, locale: Loc
     return Object.values(cosmeticData).filter((cosmetic: Cosmetic) => {
         return cosmetic.Character === index;
     });
+}
+
+/**
+ * Retrieve a list of filtered cosmetics based on optional filter criteria.
+ *
+ * @param filters - An optional object containing filter properties from the Cosmetic interface.
+ * @param locale - The locale for which to retrieve the cosmetics.
+ *
+ * @example
+ * const filteredCosmetics = await getFilteredCosmeticsList({
+ *     Character: 1,
+ *     Rarity: "Epic",
+ *     Purchasable: true,
+ * }, Locale.EN_US);
+ *
+ * @returns A promise that resolves to an array of filtered Cosmetic objects.
+ */
+export async function getFilteredCosmeticsList(filters: Partial<Cosmetic> = {}, locale: Locale): Promise<Cosmetic[]> {
+    const cosmetics = await getCachedCosmetics(locale);
+
+    // These aren't cosmetics
+    // so, I don't want them obviously
+    // Hard-coded to improve performance
+    let excludeItems = new Set([
+        "cellsPack_25",
+        "cellsPack_50",
+        "cellsPack_75",
+        "HalloweenEventCurrency",
+        "BonusBloodpoints",
+        "WinterEventCurrency",
+        "SpringEventCurrency",
+        "AnniversaryEventCurrency",
+        "Shards"
+    ]);
+    for (const itemId of excludeItems) {
+        delete cosmetics[itemId];
+    }
+
+    let cosmeticList = Object.values(cosmetics);
+
+    for (const [key, value] of Object.entries(filters)) {
+        if (value !== undefined) {
+            cosmeticList = cosmeticList.filter((cosmetic: Cosmetic) => (cosmetic as any)[key] === value);
+        }
+    }
+
+    return cosmeticList;
 }
 
 // Retrieve a single cosmetic by ID

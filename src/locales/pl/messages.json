@@ -59,5 +59,15 @@
       "Świątynia aktywna od",
       "do"
     ]
+  },
+  "generic_pagination": {
+    "first": "Pierwsza",
+    "previous": "Poprzednia",
+    "page_number": [
+      "Strona",
+      "z"
+    ],
+    "next": "Następna",
+    "last": "Ostatnia"
   }
 }

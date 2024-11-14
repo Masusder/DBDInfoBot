@@ -4,45 +4,48 @@ import {
     ButtonInteraction,
     ButtonStyle,
     EmbedBuilder,
+    Locale,
     Message
 } from "discord.js";
+import { getTranslation } from "@utils/localizationUtils";
 import { sendUnauthorizedMessage } from "./unauthorizedHandler";
 
 export interface IPaginationOptions {
     items: any[];
     itemsPerPage: number;
-    generateEmbed: (pageItems: any[], currentPage: number, totalPages: number) => EmbedBuilder;
+    generateEmbed: (pageItems: any[], currentPage: number, totalPages: number) => EmbedBuilder | Promise<EmbedBuilder>;
     generateImage?: (pageItems: any[]) => Promise<Buffer>;
     interactionUserId: string;
     interactionReply: Message;
     timeout?: number;
+    locale: Locale;
 }
 
-export const generatePaginationButtons = (page: number, totalPages: number) => {
+export const generatePaginationButtons = (page: number, totalPages: number, locale: Locale) => {
     return new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
             .setCustomId('pagination::first')
-            .setLabel('First')
+            .setLabel(getTranslation('generic_pagination.first', locale, 'messages'))
             .setStyle(ButtonStyle.Primary)
             .setDisabled(page === 1),
         new ButtonBuilder()
             .setCustomId('pagination::previous')
-            .setLabel('Previous')
+            .setLabel(getTranslation('generic_pagination.previous', locale, 'messages'))
             .setStyle(ButtonStyle.Secondary)
             .setDisabled(page === 1),
         new ButtonBuilder()
             .setCustomId(`pagination::current::${page}::${totalPages}`)
-            .setLabel(`Page ${page} of ${totalPages}`)
+            .setLabel(`${getTranslation('generic_pagination.page_number.0', locale, 'messages')} ${page} ${getTranslation('generic_pagination.page_number.1', locale, 'messages')} ${totalPages}`)
             .setStyle(ButtonStyle.Secondary)
             .setDisabled(true),
         new ButtonBuilder()
             .setCustomId('pagination::next')
-            .setLabel('Next')
+            .setLabel(getTranslation('generic_pagination.next', locale, 'messages'))
             .setStyle(ButtonStyle.Secondary)
             .setDisabled(page === totalPages),
         new ButtonBuilder()
             .setCustomId('pagination::last')
-            .setLabel('Last')
+            .setLabel(getTranslation('generic_pagination.last', locale, 'messages'))
             .setStyle(ButtonStyle.Primary)
             .setDisabled(page === totalPages)
     );
@@ -76,9 +79,9 @@ export async function genericPaginationHandler(options: IPaginationOptions) {
         return items.slice(start, start + itemsPerPage);
     };
 
-    const updatePageContent = async () => {
+    const updatePageContent = async(locale: Locale) => {
         const itemsForPage = getItemsForPage(currentPage);
-        const embed = generateEmbed(itemsForPage, currentPage, totalPages);
+        const embed = await generateEmbed(itemsForPage, currentPage, totalPages);
 
         let image: Buffer | undefined = undefined;
         if (generateImage) {
@@ -88,12 +91,12 @@ export async function genericPaginationHandler(options: IPaginationOptions) {
 
         await interactionReply.edit({
             embeds: [embed],
-            components: [generatePaginationButtons(currentPage, totalPages)],
+            components: [generatePaginationButtons(currentPage, totalPages, locale)],
             files: image ? [{ attachment: image, name: 'generated_image.png' }] : []
         });
     };
 
-    await updatePageContent();
+    await updatePageContent(options.locale);
 
     const collector = interactionReply.createMessageComponentCollector({
         filter: (i): i is ButtonInteraction => i.isButton(),
@@ -102,6 +105,7 @@ export async function genericPaginationHandler(options: IPaginationOptions) {
 
     collector.on('collect', async(interaction: ButtonInteraction) => {
         await interaction.deferUpdate();
+        const locale = interaction.locale;
         const [action, paginationType] = interaction.customId.split('::');
 
         if (action === 'pagination') {
@@ -112,7 +116,7 @@ export async function genericPaginationHandler(options: IPaginationOptions) {
 
             currentPage = determineNewPage(currentPage, paginationType as TPaginationType, totalPages);
 
-            await updatePageContent();
+            await updatePageContent(locale);
         }
     });
 
