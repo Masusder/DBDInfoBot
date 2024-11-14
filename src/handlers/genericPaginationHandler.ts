@@ -121,6 +121,10 @@ export async function genericPaginationHandler(options: IPaginationOptions) {
     });
 
     collector.on('end', async() => {
-        await interactionReply.edit({ components: [] });
+        try {
+            await interactionReply.edit({ components: [] });
+        } catch (error) {
+            console.error("Error handling pagination ('end' event):", error);
+        }
     });
 }
