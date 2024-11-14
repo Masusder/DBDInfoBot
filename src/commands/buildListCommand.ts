@@ -234,7 +234,11 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         });
 
         collector.on('end', () => {
-            replyMessage.edit({ components: [] });
+            try {
+                replyMessage.edit({ components: [] });
+            } catch (error) {
+                console.error("Error handling pagination ('end' event):", error);
+            }
         });
     } catch (error) {
         console.error("Error executing build_list command:", error);
