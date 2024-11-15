@@ -9,11 +9,13 @@ import {
     getCharacterDataByIndex
 } from "@services/characterService";
 import {
-    getFilteredCosmeticsList
+    getFilteredCosmeticsList,
+    getInclusionVersionsForCosmetics
 } from "@services/cosmeticService";
 import {
     combineBaseUrlWithPath,
-    formatHtmlToDiscordMarkdown
+    formatHtmlToDiscordMarkdown,
+    formatInclusionVersion
 } from "@utils/stringUtils";
 import { genericPaginationHandler } from "../../handlers/genericPaginationHandler";
 import { getTranslation } from "@utils/localizationUtils";
@@ -23,12 +25,10 @@ import {
     createCanvas,
     loadImage
 } from "canvas";
-import { Role } from "@data/Role";
 import { Rarities } from "@data/Rarities";
 
 const COSMETICS_PER_PAGE = 6;
 
-// TODO: localize this
 export async function handleCosmeticListCommandInteraction(interaction: ChatInputCommandInteraction) {
     const locale = interaction.locale;
 
@@ -36,31 +36,32 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
         await interaction.deferReply();
 
         const filters = constructFilters(interaction);
+        const filterCount = Object.keys(filters).length;
 
         const { Character = -1, Rarity } = filters; // Deconstruct filters for use
 
         const cosmetics = await getFilteredCosmeticsList(filters, locale);
 
         if (cosmetics.length === 0) {
-            await interaction.editReply({ content: 'No cosmetics found.' });
+            const message = filterCount > 0
+                ? getTranslation('list_command.cosmetics_subcommand.cosmetics_not_found_filters', locale, 'errors')
+                : getTranslation('list_command.cosmetics_subcommand.cosmetics_not_found', locale, 'errors');
+            await interaction.editReply({ content: message });
             return;
         }
 
         const generateEmbed = async(pageItems: Cosmetic[]) => {
-            let title = `Found a total of ${cosmetics.length} cosmetics`;
+            let title = `${getTranslation('list_command.cosmetics_subcommand.found_total.0', locale, 'messages')} ${cosmetics.length} ${getTranslation('list_command.cosmetics_subcommand.found_total.1', locale, 'messages')}`;
 
             // Let user know that filters were applied
-            const filterCount = Object.keys(filters).length;
-            if (filterCount > 0) {
-                title += ` (Filters applied: ${filterCount})`;
-            }
+            if (filterCount > 0) title += ` (${getTranslation('list_command.cosmetics_subcommand.filters_applied', locale, 'messages')}: ${filterCount})`;
 
             const embedColor = Rarity ? Rarities[Rarity].color : '#5865f2';
 
             const embed = new EmbedBuilder()
                 .setTitle(title)
                 .setColor(embedColor as ColorResolvable)
-                .setFooter({ text: `List of cosmetics` })
+                .setFooter({ text: getTranslation('list_command.cosmetics_subcommand.cosmetics_list', locale, 'messages') })
                 .setTimestamp();
 
             if (Character !== -1) {
@@ -101,7 +102,7 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
             generateImage,
             interactionUserId: interaction.user.id,
             interactionReply: await interaction.editReply({
-                content: `For more information about a specific cosmetic, use the command: \`/info Cosmetic <cosmetic_name>\``
+                content: `${getTranslation('list_command.cosmetics_subcommand.more_info.0', locale, 'messages')}: \`/${getTranslation('list_command.cosmetics_subcommand.more_info.1', locale, 'messages')}\``
             }),
             locale
         });
@@ -117,26 +118,20 @@ function constructFilters(interaction: ChatInputCommandInteraction): Partial<Cos
     const isLinked = interaction.options.getBoolean('linked');
     const isPurchasable = interaction.options.getBoolean('purchasable');
     const rarity = interaction.options.getString('rarity');
+    const inclusionVersion = interaction.options.getString('inclusion_version');
+    const type = interaction.options.getString('type');
     const filters: Partial<Cosmetic> = {};
 
-    if (characterIndexString) {
-        filters.Character = parseInt(characterIndexString);
-    }
-
-    if (isLinked !== null) {
-        filters.Unbreakable = isLinked;
-    }
-
-    if (isPurchasable !== null) {
-        filters.Purchasable = isPurchasable;
-    }
-
-    if (rarity !== null) {
-        filters.Rarity = rarity;
-    }
+    if (characterIndexString) filters.Character = parseInt(characterIndexString);
+    if (isLinked !== null) filters.Unbreakable = isLinked;
+    if (isPurchasable !== null) filters.Purchasable = isPurchasable;
+    if (rarity !== null) filters.Rarity = rarity;
+    if (inclusionVersion !== null) filters.InclusionVersion = inclusionVersion;
+    if (type !== null) filters.Type = type;
 
     return filters;
 }
+
 async function combineImages(imageUrls: string[]): Promise<Buffer> {
     const imageBuffers: Buffer[] = await Promise.all(
         imageUrls.map(async(url) => {
@@ -186,18 +181,45 @@ async function combineImages(imageUrls: string[]): Promise<Buffer> {
 // region Autocomplete
 export async function handleCosmeticListCommandAutocompleteInteraction(interaction: AutocompleteInteraction) {
     try {
-        const locale = interaction.locale;
-        const focusedValue = interaction.options.getFocused();
-        const choices = await getCharacterChoices(focusedValue, locale);
-        const options = choices.slice(0, 25).map(character => ({
-            name: character.Name,
-            value: character.CharacterIndex as string
-        }));
-
-        await interaction.respond(options);
+        const focusedOption = interaction.options.getFocused(true);
+        switch (focusedOption.name) {
+            case 'character':
+                await autocompleteCharacters(interaction);
+                break;
+            case 'inclusion_version':
+                await autocompleteInclusionVersion(interaction);
+                break;
+            default:
+                break;
+        }
     } catch (error) {
         console.error("Error handling cosmetic list autocomplete interaction:", error);
     }
+}
+
+async function autocompleteCharacters(interaction: AutocompleteInteraction) {
+    const locale = interaction.locale;
+    const focusedValue = interaction.options.getFocused();
+    const choices = await getCharacterChoices(focusedValue, locale);
+    const options = choices.slice(0, 25).map(character => ({
+        name: character.Name,
+        value: character.CharacterIndex as string
+    }));
+
+    await interaction.respond(options);
+}
+
+async function autocompleteInclusionVersion(interaction: AutocompleteInteraction) {
+    const locale = interaction.locale;
+    const inclusionVersions = await getInclusionVersionsForCosmetics(locale)
+    const options = Array.from(inclusionVersions)
+        .slice(0, 25)
+        .map(version => ({
+            name: formatInclusionVersion(version, locale),
+            value: version
+        }));
+
+    await interaction.respond(options);
 }
 
 // endregion

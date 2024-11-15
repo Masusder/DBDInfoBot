@@ -51,6 +51,20 @@
       }
     }
   },
+  "list_command": {
+    "cosmetics_subcommand": {
+      "found_total": [
+        "Znaleziono łącznie",
+        "kosmetyków"
+      ],
+      "filters_applied": "Zastosowano filtry",
+      "cosmetics_list": "Lista kosmetyków",
+      "more_info": [
+        "Aby uzyskać więcej informacji o konkretnym kosmetyku, użyj polecenia",
+        "info Kosmetyk <nazwa_kosmetyku>"
+      ]
+    }
+  },
   "shrine_command": {
     "author_title": "Świątynia Tajemnic tego tygodnia",
     "character": "Postać",

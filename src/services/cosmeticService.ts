@@ -72,13 +72,13 @@ export async function getCosmeticChoicesFromIndex(query: string, locale: Locale)
 // }
 
 // Retrieve list of cosmetics using character's index
-export async function getCosmeticListByCharacterIndex(index: number, locale: Locale): Promise<Cosmetic[]> {
-    const cosmeticData = await getCachedCosmetics(locale);
-
-    return Object.values(cosmeticData).filter((cosmetic: Cosmetic) => {
-        return cosmetic.Character === index;
-    });
-}
+// export async function getCosmeticListByCharacterIndex(index: number, locale: Locale): Promise<Cosmetic[]> {
+//     const cosmeticData = await getCachedCosmetics(locale);
+//
+//     return Object.values(cosmeticData).filter((cosmetic: Cosmetic) => {
+//         return cosmetic.Character === index;
+//     });
+// }
 
 /**
  * Retrieve a list of filtered cosmetics based on optional filter criteria.
@@ -125,6 +125,31 @@ export async function getFilteredCosmeticsList(filters: Partial<Cosmetic> = {}, 
     }
 
     return cosmeticList;
+}
+
+/**
+ * Retrieves a set of unique inclusion versions for cosmetics.
+ *
+ * @param locale The locale used to retrieve the cosmetics data.
+ *
+ * @returns A Promise that resolves to an array of strings, where each string represents a unique inclusion
+ *          version associated with the cosmetics.
+ *
+ * @example
+ * const inclusionVersions = await getInclusionVersionsForCosmetics(Locale.EN_US);
+ * console.log(inclusionVersions); // Sorted array of unique inclusion versions for the specified locale.
+ */
+export async function getInclusionVersionsForCosmetics(locale: Locale): Promise<string[]> {
+    const cosmetics = await getCachedCosmetics(locale);
+
+    const inclusionVersions = new Set<string>();
+    Object.values(cosmetics).forEach((cosmetic: Cosmetic) => {
+        if (cosmetic.InclusionVersion) {
+            inclusionVersions.add(cosmetic.InclusionVersion);
+        }
+    });
+
+    return Array.from(inclusionVersions).sort().reverse();
 }
 
 // Retrieve a single cosmetic by ID

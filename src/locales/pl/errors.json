@@ -8,6 +8,12 @@
       }
     }
   },
+  "list_command": {
+    "cosmetics_subcommand": {
+      "cosmetics_not_found": "Nie znaleziono kosmetyków.",
+      "cosmetics_not_found_filters": "Nie znaleziono kosmetyków dla zastosowanych filtrów."
+    }
+  },
   "general": {
     "unauthorized": "Tylko osoba, która użyła polecenia, może to zrobić."
   }

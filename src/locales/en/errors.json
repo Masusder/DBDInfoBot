@@ -8,6 +8,12 @@
       }
     }
   },
+  "list_command": {
+    "cosmetics_subcommand": {
+      "cosmetics_not_found": "No cosmetics found.",
+      "cosmetics_not_found_filters": "No cosmetics found for the applied filters."
+    }
+  },
   "general": {
     "unauthorized": "Only the person who used the command can do that."
   }

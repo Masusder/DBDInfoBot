@@ -47,6 +47,14 @@
         "rarity": {
           "name": "rzadkość",
           "description": "Określ rzadkość kosmetyku."
+        },
+        "type": {
+          "name": "typ",
+          "description": "Określ typ kosmetyku."
+        },
+        "inclusion_version": {
+          "name": "wersja_dodania",
+          "description": "Określ wersję, w której został dodany kosmetyk."
         }
       }
     }

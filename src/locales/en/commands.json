@@ -47,6 +47,14 @@
         "rarity": {
           "name": "rarity",
           "description": "Specify rarity of the cosmetic."
+        },
+        "type": {
+          "name": "type",
+          "description": "Specify type of the cosmetic."
+        },
+        "inclusion_version": {
+          "name": "inclusion_version",
+          "description": "Specify inclusion version of the cosmetic."
         }
       }
     }
