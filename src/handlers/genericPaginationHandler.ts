@@ -21,8 +21,12 @@ export interface IPaginationOptions {
     locale: Locale;
 }
 
-export const generatePaginationButtons = (page: number, totalPages: number, locale: Locale) => {
-    return new ActionRowBuilder<ButtonBuilder>().addComponents(
+export const generatePaginationButtons = (page: number, totalPages: number, locale: Locale, showPageNumbers: boolean = true) => {
+    const actionRow1 = new ActionRowBuilder<ButtonBuilder>();
+    const actionRow2 = new ActionRowBuilder<ButtonBuilder>();
+    const actionRow3 = new ActionRowBuilder<ButtonBuilder>();
+
+    actionRow1.addComponents(
         new ButtonBuilder()
             .setCustomId('pagination::first')
             .setLabel(getTranslation('generic_pagination.first', locale, 'messages'))
@@ -49,12 +53,45 @@ export const generatePaginationButtons = (page: number, totalPages: number, loca
             .setStyle(ButtonStyle.Primary)
             .setDisabled(page === totalPages)
     );
+
+    if (showPageNumbers) {
+        const pagesToShow = 10;
+        const startPage = Math.max(1, page - Math.floor(pagesToShow / 2));
+        const endPage = Math.min(totalPages, startPage + pagesToShow - 1);
+
+        const pageButtons = [];
+        for (let i = startPage; i <= endPage; i++) {
+            pageButtons.push(
+                new ButtonBuilder()
+                    .setCustomId(`pagination::page::${i}`)
+                    .setLabel(i.toString())
+                    .setStyle(ButtonStyle.Secondary)
+                    .setDisabled(i === page)
+            );
+        }
+
+        // Split the page buttons into two action rows (5 buttons per row)
+        // This is required as Discord has limit of 5 component items
+        const firstRowPageButtons = pageButtons.slice(0, 5);
+        const secondRowPageButtons = pageButtons.slice(5, 10);
+
+        firstRowPageButtons.forEach((button) => actionRow2.addComponents(button));
+        secondRowPageButtons.forEach((button) => actionRow3.addComponents(button));
+    }
+
+    const components = [actionRow1];
+    if (actionRow3.components.length > 0) components.unshift(actionRow3);
+    if (actionRow2.components.length > 0) components.unshift(actionRow2);
+
+    return components;
 };
 
-export type TPaginationType = 'first' | 'previous' | 'next' | 'last';
+export type TPaginationType = 'page' | 'first' | 'previous' | 'next' | 'last';
 
-export function determineNewPage(currentPage: number, paginationType: TPaginationType, totalPages: number): number {
+export function determineNewPage(currentPage: number, paginationType: TPaginationType, totalPages: number, pageNumber: string): number {
     switch (paginationType) {
+        case 'page':
+            return parseInt(pageNumber, 10);
         case 'first':
             return 1;
         case 'previous':
@@ -91,7 +128,7 @@ export async function genericPaginationHandler(options: IPaginationOptions) {
 
         await interactionReply.edit({
             embeds: [embed],
-            components: [generatePaginationButtons(currentPage, totalPages, locale)],
+            components: generatePaginationButtons(currentPage, totalPages, locale),
             files: image ? [{ attachment: image, name: 'generated_image.png' }] : []
         });
     };
@@ -104,19 +141,23 @@ export async function genericPaginationHandler(options: IPaginationOptions) {
     });
 
     collector.on('collect', async(interaction: ButtonInteraction) => {
-        await interaction.deferUpdate();
-        const locale = interaction.locale;
-        const [action, paginationType] = interaction.customId.split('::');
+        try {
+            await interaction.deferUpdate();
+            const locale = interaction.locale;
+            const [action, paginationType, pageNumber] = interaction.customId.split('::');
 
-        if (action === 'pagination') {
-            if (interaction.user.id !== interactionUserId) {
-                await sendUnauthorizedMessage(interaction);
-                return;
+            if (action === 'pagination') {
+                if (interaction.user.id !== interactionUserId) {
+                    await sendUnauthorizedMessage(interaction);
+                    return;
+                }
+
+                currentPage = determineNewPage(currentPage, paginationType as TPaginationType, totalPages, pageNumber);
+
+                await updatePageContent(locale);
             }
-
-            currentPage = determineNewPage(currentPage, paginationType as TPaginationType, totalPages);
-
-            await updatePageContent(locale);
+        } catch (error) {
+            console.error("Error handling pagination:", error);
         }
     });
 

@@ -196,7 +196,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
         const replyMessage = await interaction.editReply({
             embeds: [embed],
-            components: [generatePaginationButtons(currentPage, totalPages + 1, locale)]
+            components: generatePaginationButtons(currentPage, totalPages + 1, locale)
         });
 
         const collector = replyMessage.createMessageComponentCollector({
@@ -211,9 +211,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     return;
                 }
 
-                const [_, paginationType] = i.customId.split('::');
+                const [_, paginationType, pageNumber] = i.customId.split('::');
 
-                currentPage = determineNewPage(currentPage, paginationType as TPaginationType, totalPages + 1);
+                currentPage = determineNewPage(currentPage, paginationType as TPaginationType, totalPages + 1, pageNumber);
 
                 const newFilters: IBuildFilters = { ...filters, page: currentPage - 1 };
                 const { builds: newBuilds, totalPages: newTotalPages } = await retrieveBuilds(newFilters);
@@ -226,7 +226,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
                 await i.update({
                     embeds: [newEmbed],
-                    components: [generatePaginationButtons(currentPage, totalPages + 1, locale)]
+                    components: generatePaginationButtons(currentPage, totalPages + 1, locale)
                 });
             } catch (error) {
                 console.error("Error handling pagination:", error);
