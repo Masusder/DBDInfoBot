@@ -65,17 +65,16 @@ export async function handleBuildCommandInteraction(interaction: ChatInputComman
         const perks = [perk1, perk2, perk3, perk4].filter(perk => perk !== "None");
 
         const fields: APIEmbedField[] = [];
-        if (perks.length > 0) {
-            const perksPrettyList = [perk1, perk2, perk3, perk4]
-                .filter(perk => perk !== "None")
-                .map(perk => `- ${perkData[perk]?.Name ?? '- Unknown Perk'}`); // TODO: localize
 
-            fields.push({
-                name: "Perks", // TODO: localize
-                value: perksPrettyList.length ? perksPrettyList.join(' \n ') : "Any perks", // TODO: localize
-                inline: true
-            });
-        }
+        const perksPrettyList = perks
+            .map(perk => `- ${perkData[perk]?.Name ?? '- Unknown Perk'}`); // TODO: localize
+
+        fields.push({
+            name: "Perks", // TODO: localize
+            value: perksPrettyList.length ? perksPrettyList.join(' \n ') : "Any perks", // TODO: localize
+            inline: true
+        });
+
 
         const addons = [addon1, addon2].filter(addon => addon !== "None");
         const prettyAddons = addons.filter(Boolean)
