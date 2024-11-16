@@ -122,7 +122,7 @@ export async function handleBuildCommandInteraction(interaction: ChatInputComman
             day: "numeric"
         });
 
-        const formattedDescription = description ? formatHtmlToDiscordMarkdown(description) : "Description for this build wasn't provided."; // TODO: localize
+        const formattedDescription = description ? description : "Description for this build wasn't provided."; // TODO: localize
 
         const embed = new EmbedBuilder()
             .setColor(roleColor)
