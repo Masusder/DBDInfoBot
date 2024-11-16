@@ -1,10 +1,20 @@
 import axios from '../utils/apiClient';
-import { IBuildFilters } from "../types/build";
+import {
+    IBuild,
+    IBuildFilters
+} from "../types";
 import {
     getCache,
     setCache
 } from "../cache";
 
+/**
+ * Fetches a list of builds from the API based on the provided filters.
+ *
+ * @param filters - An object containing the filters for retrieving builds.
+ *                  Includes properties like page, role, character, category, rating, version, and searchInput.
+ * @returns A promise resolving to the build data if successful, or undefined if the request fails.
+ */
 export async function retrieveBuilds(filters: IBuildFilters): Promise<any | undefined> {
     try {
         const response = await axios.get(`/api/builds/${filters.page}?role=${filters.role}&character=${filters.character}&category=${filters.category}&rating=${filters.rating}&version=${filters.version}&searchInput=${filters.searchInput}`);
@@ -18,6 +28,31 @@ export async function retrieveBuilds(filters: IBuildFilters): Promise<any | unde
     }
 }
 
+/**
+ * Fetches detailed information for a specific build by its ID.
+ *
+ * @param id - The unique identifier of the build.
+ * @returns A promise resolving to the build data if successful, or undefined if the request fails.
+ */
+export async function retrieveBuildById(id: string): Promise<IBuild | undefined> {
+    try {
+        const response = await axios.get(`/api/build/find/${id}`);
+        if (response.data.success) {
+            return response.data.data;
+        } else {
+            console.error("Failed to fetch builds: API responded with success = false");
+        }
+    } catch (error) {
+        console.error('Error fetching builds:', error);
+    }
+}
+
+/**
+ * Retrieves the inclusion versions of builds, using a cached value if available.
+ * If the cache is empty or expired, fetches the data from the API and updates the cache.
+ *
+ * @returns A promise resolving to an array of inclusion versions.
+ */
 export async function getCachedInclusionVersions(): Promise<string[]> {
     let inclusionVersions = getCache<string[]>('buildInclusionVersions');
 

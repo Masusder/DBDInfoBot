@@ -211,7 +211,7 @@ async function autocompleteCharacters(interaction: AutocompleteInteraction) {
 
 async function autocompleteInclusionVersion(interaction: AutocompleteInteraction) {
     const locale = interaction.locale;
-    const inclusionVersions = await getInclusionVersionsForCosmetics(locale)
+    const inclusionVersions = await getInclusionVersionsForCosmetics(locale);
     const options = Array.from(inclusionVersions)
         .slice(0, 25)
         .map(version => ({

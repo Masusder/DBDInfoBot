@@ -4,6 +4,10 @@ import { Cosmetic } from "./cosmetic";
 import { Perk } from "./perk";
 import { Offering } from "./offering";
 import { Item } from "./item";
+import {
+    IBuildFilters,
+    IBuild
+} from "./build";
 
 export {
     Addon,
@@ -11,5 +15,7 @@ export {
     Cosmetic,
     Perk,
     Offering,
-    Item
+    Item,
+    IBuild,
+    IBuildFilters
 };

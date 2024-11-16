@@ -60,8 +60,8 @@ export function formatNumber(number: number | undefined | null): string {
     }
 }
 
-export function adjustForTimezone(dateString: string): number {
-    const date = new Date(dateString);
+export function adjustForTimezone(dateString: string | Date): number {
+    const date = dateString instanceof Date ? dateString : new Date(dateString);
     const timezoneOffset = date.getTimezoneOffset() * 60000;
     return date.getTime() - timezoneOffset;
 }

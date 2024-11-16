@@ -207,7 +207,6 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
             files: [attachment],
             components: outfitPieces.length > 0 ? [actionRow] : []
         });
-
     } catch (error) {
         console.error("Error executing cosmetic subcommand:", error);
     }

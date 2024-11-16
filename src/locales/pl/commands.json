@@ -12,7 +12,8 @@
           "item": "Przedmiot",
           "offering": "Dar",
           "character": "Postać",
-          "cosmetic": "Kosmetyk"
+          "cosmetic": "Kosmetyk",
+          "build": "Ekwipunek"
         }
       },
       "name": {

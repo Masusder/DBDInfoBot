@@ -12,7 +12,8 @@
           "item": "Item",
           "offering": "Offering",
           "character": "Character",
-          "cosmetic": "Cosmetic"
+          "cosmetic": "Cosmetic",
+          "build": "Build"
         }
       },
       "name": {

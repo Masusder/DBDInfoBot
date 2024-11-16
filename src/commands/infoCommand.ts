@@ -28,6 +28,10 @@ import {
     handleCosmeticCommandAutocompleteInteraction,
     handleCosmeticCommandInteraction
 } from "@commands/infoSubCommands/cosmetic";
+import {
+    handleBuildCommandAutocompleteInteraction,
+    handleBuildCommandInteraction
+} from "@commands/infoSubCommands/build";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -241,6 +245,28 @@ export const data = i18next.isInitialized
                         'zh-TW': i18next.t('info_command.options.type.choices.cosmetic', { lng: 'zh-Hant' })
                     },
                     value: 'cosmetic'
+                },
+                {
+                    name: i18next.t('info_command.options.type.choices.build', { lng: 'en' }),
+                    name_localizations: {
+                        'en-US': i18next.t('info_command.options.type.choices.build', { lng: 'en' }),
+                        'en-GB': i18next.t('info_command.options.type.choices.build', { lng: 'en' }),
+                        'de': i18next.t('info_command.options.type.choices.build', { lng: 'de' }),
+                        'es-ES': i18next.t('info_command.options.type.choices.build', { lng: 'es' }),
+                        'es-419': i18next.t('info_command.options.type.choices.build', { lng: 'es-MX' }),
+                        'fr': i18next.t('info_command.options.type.choices.build', { lng: 'fr' }),
+                        'it': i18next.t('info_command.options.type.choices.build', { lng: 'it' }),
+                        'ja': i18next.t('info_command.options.type.choices.build', { lng: 'ja' }),
+                        'ko': i18next.t('info_command.options.type.choices.build', { lng: 'ko' }),
+                        'pl': i18next.t('info_command.options.type.choices.build', { lng: 'pl' }),
+                        'pt-BR': i18next.t('info_command.options.type.choices.build', { lng: 'pt-BR' }),
+                        'ru': i18next.t('info_command.options.type.choices.build', { lng: 'ru' }),
+                        'th': i18next.t('info_command.options.type.choices.build', { lng: 'th' }),
+                        'tr': i18next.t('info_command.options.type.choices.build', { lng: 'tr' }),
+                        'zh-CN': i18next.t('info_command.options.type.choices.build', { lng: 'zh-Hans' }),
+                        'zh-TW': i18next.t('info_command.options.type.choices.build', { lng: 'zh-Hant' })
+                    },
+                    value: 'build'
                 }
             )
     )
@@ -309,6 +335,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         case 'cosmetic':
             await handleCosmeticCommandInteraction(interaction);
             break;
+        case 'build':
+            await handleBuildCommandInteraction(interaction);
+            break;
         default:
             await interaction.reply('Unknown command type.');
     }
@@ -336,6 +365,9 @@ export async function autocomplete(interaction: AutocompleteInteraction) {
             break;
         case 'cosmetic':
             await handleCosmeticCommandAutocompleteInteraction(interaction);
+            break;
+        case 'build':
+            await handleBuildCommandAutocompleteInteraction(interaction);
             break;
         default:
             break;
