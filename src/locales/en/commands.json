@@ -58,6 +58,10 @@
           "description": "Specify inclusion version of the cosmetic."
         }
       }
+    },
+    "builds_subcommand": {
+      "name": "builds",
+      "description": "Retrieve list of builds."
     }
   }
 }

@@ -16,13 +16,11 @@ async function deployCommands() {
 
         // Command imports are lazy loaded
         // Because we need to serialize the commands after i18next initialization
-        const { data: buildListCommand } = await import('@commands/buildListCommand');
         const { data: infoCommand } = await import('@commands/infoCommand');
         const { data: shrineCommand } = await import('@commands/shrineCommand');
         const { data: listCommand } = await import('@commands/listCommand');
 
         const commands = [
-            buildListCommand.toJSON(),
             infoCommand?.toJSON(),
             shrineCommand?.toJSON(),
             listCommand?.toJSON()

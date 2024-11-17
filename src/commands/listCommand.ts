@@ -10,25 +10,36 @@ import {
     handleCosmeticListCommandInteraction
 } from "@commands/listSubCommands/cosmetics";
 import { Rarities } from "@data/Rarities";
-import { mapDiscordLocaleToDbdLang } from "@utils/localizationUtils";
+import {
+    getTranslation,
+    mapDiscordLocaleToDbdLang
+} from "@utils/localizationUtils";
 import { CosmeticTypes } from "@data/CosmeticTypes";
+import { BuildCategories } from "@data/BuildCategories";
+import {
+    handleBuildsListCommandAutocompleteInteraction,
+    handleBuildsListCommandInteraction
+} from "@commands/listSubCommands/builds";
 
 const rarityChoices = Object.keys(Rarities)
     .filter(rarity => rarity !== "N/A")
     .map(rarity => {
-    const localizedName = Rarities[rarity].localizedName;
+        const localizedName = Rarities[rarity].localizedName;
 
-    const name_localizations: Record<string, string> = {};
-    Object.values(Locale).forEach(locale => {
-        name_localizations[locale] = i18next.t(localizedName, { lng: mapDiscordLocaleToDbdLang(locale), ns: 'general' });
+        const name_localizations: Record<string, string> = {};
+        Object.values(Locale).forEach(locale => {
+            name_localizations[locale] = i18next.t(localizedName, {
+                lng: mapDiscordLocaleToDbdLang(locale),
+                ns: 'general'
+            });
+        });
+
+        return {
+            name: i18next.t(localizedName, { lng: 'en', ns: 'general' }),
+            name_localizations,
+            value: rarity
+        };
     });
-
-    return {
-        name: i18next.t(localizedName, { lng: 'en', ns: 'general' }),
-        name_localizations,
-        value: rarity
-    };
-});
 
 const typeChoices = Object.keys(CosmeticTypes)
     .map(type => {
@@ -36,7 +47,10 @@ const typeChoices = Object.keys(CosmeticTypes)
 
         const name_localizations: Record<string, string> = {};
         Object.values(Locale).forEach(locale => {
-            name_localizations[locale] = i18next.t(localizedName, { lng: mapDiscordLocaleToDbdLang(locale), ns: 'general' });
+            name_localizations[locale] = i18next.t(localizedName, {
+                lng: mapDiscordLocaleToDbdLang(locale),
+                ns: 'general'
+            });
         });
 
         return {
@@ -45,6 +59,22 @@ const typeChoices = Object.keys(CosmeticTypes)
             value: type
         };
     });
+
+const buildCategories = Object.entries(BuildCategories).map(([value, name]) => {
+    const name_localizations: Record<string, string> = {};
+    Object.values(Locale).forEach(locale => {
+        name_localizations[locale] = i18next.t(name, {
+            lng: mapDiscordLocaleToDbdLang(locale),
+            ns: 'general'
+        });
+    });
+
+    return {
+        name: i18next.t(name, { lng: 'en', ns: 'general' }),
+        name_localizations,
+        value
+    };
+});
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -88,6 +118,105 @@ export const data = i18next.isInitialized
         })
         // The reason why I'm going to use subcommand and not string option
         // is to have support for individual choices for each subcommand
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('builds')
+                .setNameLocalizations({
+                    'en-US': i18next.t('list_command.builds_subcommand.name', { lng: 'en' }),
+                    'en-GB': i18next.t('list_command.builds_subcommand.name', { lng: 'en' }),
+                    'de': i18next.t('list_command.builds_subcommand.name', { lng: 'de' }),
+                    'es-ES': i18next.t('list_command.builds_subcommand.name', { lng: 'es' }),
+                    'es-419': i18next.t('list_command.builds_subcommand.name', { lng: 'es-MX' }),
+                    'fr': i18next.t('list_command.builds_subcommand.name', { lng: 'fr' }),
+                    'it': i18next.t('list_command.builds_subcommand.name', { lng: 'it' }),
+                    'ja': i18next.t('list_command.builds_subcommand.name', { lng: 'ja' }),
+                    'ko': i18next.t('list_command.builds_subcommand.name', { lng: 'ko' }),
+                    'pl': i18next.t('list_command.builds_subcommand.name', { lng: 'pl' }),
+                    'pt-BR': i18next.t('list_command.builds_subcommand.name', { lng: 'pt-BR' }),
+                    'ru': i18next.t('list_command.builds_subcommand.name', { lng: 'ru' }),
+                    'th': i18next.t('list_command.builds_subcommand.name', { lng: 'th' }),
+                    'tr': i18next.t('list_command.builds_subcommand.name', { lng: 'tr' }),
+                    'zh-CN': i18next.t('list_command.builds_subcommand.name', { lng: 'zh-Hans' }),
+                    'zh-TW': i18next.t('list_command.builds_subcommand.name', { lng: 'zh-Hant' })
+                })
+                .setDescription(i18next.t('list_command.builds_subcommand.description', { lng: 'en' }))
+                .setDescriptionLocalizations({
+                    'en-US': i18next.t('list_command.builds_subcommand.description', { lng: 'en' }),
+                    'en-GB': i18next.t('list_command.builds_subcommand.description', { lng: 'en' }),
+                    'de': i18next.t('list_command.builds_subcommand.description', { lng: 'de' }),
+                    'es-ES': i18next.t('list_command.builds_subcommand.description', { lng: 'es' }),
+                    'es-419': i18next.t('list_command.builds_subcommand.description', { lng: 'es-MX' }),
+                    'fr': i18next.t('list_command.builds_subcommand.description', { lng: 'fr' }),
+                    'it': i18next.t('list_command.builds_subcommand.description', { lng: 'it' }),
+                    'ja': i18next.t('list_command.builds_subcommand.description', { lng: 'ja' }),
+                    'ko': i18next.t('list_command.builds_subcommand.description', { lng: 'ko' }),
+                    'pl': i18next.t('list_command.builds_subcommand.description', { lng: 'pl' }),
+                    'pt-BR': i18next.t('list_command.builds_subcommand.description', { lng: 'pt-BR' }),
+                    'ru': i18next.t('list_command.builds_subcommand.description', { lng: 'ru' }),
+                    'th': i18next.t('list_command.builds_subcommand.description', { lng: 'th' }),
+                    'tr': i18next.t('list_command.builds_subcommand.description', { lng: 'tr' }),
+                    'zh-CN': i18next.t('list_command.builds_subcommand.description', { lng: 'zh-Hans' }),
+                    'zh-TW': i18next.t('list_command.builds_subcommand.description', { lng: 'zh-Hant' })
+                })
+                .addStringOption(option =>
+                    option
+                        .setName('role')
+                        .setDescription('Role for the build')
+                        .setRequired(true)
+                        .addChoices(
+                            { name: 'Killer', value: 'Killer' },
+                            { name: 'Survivor', value: 'Survivor' }
+                        )
+                )
+                .addNumberOption(option =>
+                    option
+                        .setName('page')
+                        .setDescription('Page number (default is 1)')
+                        .setRequired(false)
+                        .setMinValue(1)
+                        .setMaxValue(9999)
+                )
+                .addStringOption(option =>
+                    option
+                        .setName('title')
+                        .setDescription('Title of the build')
+                        .setRequired(false)
+                )
+                .addStringOption(option =>
+                    option
+                        .setName('category')
+                        .setDescription('Category of the build')
+                        .setRequired(false)
+                        .addChoices(...buildCategories)
+                )
+                .addStringOption(option =>
+                    option
+                        .setName('character')
+                        .setDescription('Character for the build')
+                        .setRequired(false)
+                        .setAutocomplete(true)
+                )
+                .addStringOption(option =>
+                    option
+                        .setName('version')
+                        .setDescription('Game version for the build')
+                        .setRequired(false)
+                        .setAutocomplete(true)
+                )
+                .addNumberOption(option =>
+                    option
+                        .setName('rating')
+                        .setDescription('Minimum rating for the build')
+                        .setRequired(false)
+                        .addChoices(
+                            { name: "One Star", value: 1 },
+                            { name: "Two Stars", value: 2 },
+                            { name: "Three Stars", value: 3 },
+                            { name: "Four Stars", value: 4 },
+                            { name: "Five Stars", value: 5 }
+                        )
+                )
+        )
         .addSubcommand(subcommand =>
             subcommand
                 .setName('cosmetics')
@@ -388,13 +517,17 @@ export const data = i18next.isInitialized
 
 export async function execute(interaction: ChatInputCommandInteraction) {
     const subcommand = interaction.options.getSubcommand();
+    const locale = interaction.locale;
 
     switch (subcommand) {
         case 'cosmetics':
             await handleCosmeticListCommandInteraction(interaction);
             break;
+        case 'builds':
+            await handleBuildsListCommandInteraction(interaction);
+            break;
         default:
-            await interaction.reply('Unknown subcommand.');
+            await interaction.reply(getTranslation('list_command.unknown_subcommand', locale, 'errors'));
     }
 }
 
@@ -404,6 +537,9 @@ export async function autocomplete(interaction: AutocompleteInteraction) {
     switch (subcommand) {
         case 'cosmetics':
             await handleCosmeticListCommandAutocompleteInteraction(interaction);
+            break;
+        case 'builds':
+            await handleBuildsListCommandAutocompleteInteraction(interaction);
             break;
         default:
             break;

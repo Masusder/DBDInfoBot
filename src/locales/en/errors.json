@@ -16,6 +16,7 @@
     }
   },
   "list_command": {
+    "unknown_subcommand": "Unknown subcommand.",
     "cosmetics_subcommand": {
       "cosmetics_not_found": "No cosmetics found.",
       "cosmetics_not_found_filters": "No cosmetics found for the applied filters."

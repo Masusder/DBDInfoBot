@@ -58,6 +58,10 @@
           "description": "Określ wersję, w której został dodany kosmetyk."
         }
       }
+    },
+    "builds_subcommand": {
+      "name": "ekwipunki",
+      "description": "Uzyskaj listę ekwipunków."
     }
   }
 }

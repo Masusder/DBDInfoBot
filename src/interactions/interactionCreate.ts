@@ -5,11 +5,6 @@ import {
 } from 'discord.js';
 import buttonInteractionCreate from './buttonInteractionCreate';
 import {
-    execute as executeBuildList,
-    autocompleteCharacter as autocompleteCharacterBuildList,
-    autocompleteInclusionVersion as autocompleteInclusionVersionBuildList
-} from "../commands/buildListCommand";
-import {
     execute as executeInfo,
     autocomplete as autocompleteInfo
 } from "@commands/infoCommand";
@@ -25,20 +20,6 @@ interface CommandHandler {
 }
 
 const commandHandlers: Record<string, CommandHandler> = {
-    builds: {
-        execute: async(interaction: ChatInputCommandInteraction) => {
-            await executeBuildList(interaction);
-        },
-        autocomplete: async(interaction: AutocompleteInteraction) => {
-            const focusedOption = interaction.options.getFocused(true);
-            if (focusedOption.name === 'character') {
-                await autocompleteCharacterBuildList(interaction);
-            }
-            if (focusedOption.name === 'version') {
-                await autocompleteInclusionVersionBuildList(interaction);
-            }
-        }
-    },
     info: {
         execute: async(interaction: ChatInputCommandInteraction) => {
             await executeInfo(interaction);
@@ -47,17 +28,17 @@ const commandHandlers: Record<string, CommandHandler> = {
             await autocompleteInfo(interaction);
         }
     },
-    shrine: {
-        execute: async(interaction: ChatInputCommandInteraction) => {
-            await executeShrine(interaction);
-        }
-    },
     list: {
         execute: async(interaction: ChatInputCommandInteraction) => {
             await executeList(interaction);
         },
         autocomplete: async(interaction: AutocompleteInteraction) => {
             await autocompleteList(interaction);
+        }
+    },
+    shrine: {
+        execute: async(interaction: ChatInputCommandInteraction) => {
+            await executeShrine(interaction);
         }
     }
 };
