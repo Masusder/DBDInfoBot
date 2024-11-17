@@ -6,6 +6,13 @@
         "invalid_id": "Invalid cosmetic ID.",
         "error_retrieving_data": "Error retrieving cosmetic data."
       }
+    },
+    "build_subcommand": {
+      "build_not_found": "Not found any Build with specified ID."
+    },
+    "character_subcommand": {
+      "invalid_index": "Invalid character index.",
+      "error_retrieving_data": "Error retrieving character data."
     }
   },
   "list_command": {

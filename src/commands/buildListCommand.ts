@@ -8,14 +8,14 @@ import {
 import {
     IBuild,
     IBuildFilters
-} from "../types/build";
+} from "../types";
 import {
     getCachedInclusionVersions,
     retrieveBuilds
-} from "../services/buildService";
+} from "@services/buildService";
 import {
     getCharacterChoices
-} from "../services/characterService";
+} from "@services/characterService";
 import {
     determineNewPage,
     generatePaginationButtons,

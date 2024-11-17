@@ -6,6 +6,13 @@
         "invalid_id": "Nieprawidłowy identyfikator kosmetyku.",
         "error_retrieving_data": "Błąd podczas pobierania danych kosmetyków."
       }
+    },
+    "build_subcommand": {
+      "build_not_found": "Nie znaleziono żadnego ekwipunku ze wskazanym ID."
+    },
+    "character_subcommand": {
+      "invalid_index": "Nieprawidłowy indeks postaci.",
+      "error_retrieving_data": "Wystąpił błąd podczas pobierania danych postaci."
     }
   },
   "list_command": {

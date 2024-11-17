@@ -50,6 +50,31 @@
       "button_interaction": {
         "outfit_pieces": "Outfit Pieces for"
       }
+    },
+    "build_subcommand": {
+      "unknown_perk": "Unknown Perk",
+      "unknown_addon": "Unknown Add-on",
+      "perks": "Perks",
+      "item_addons": "Item + Add-ons",
+      "power_addons": "Power + Add-ons",
+      "offering": "Offering",
+      "category": "Category",
+      "character": "Character",
+      "rating": "Rating",
+      "rating_desc": [
+        "from a total of",
+        "votes"
+      ],
+      "any_perks": "Any perks",
+      "any_item": "Any item",
+      "any_power": "Any power",
+      "any_offering": "Any offering",
+      "desc_not_provided": "Description for this build wasn't provided.",
+      "build_info": "Build Information",
+      "created_by": [
+        "Created by",
+        "on"
+      ]
     }
   },
   "list_command": {

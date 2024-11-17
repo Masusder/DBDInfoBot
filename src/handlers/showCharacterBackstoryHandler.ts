@@ -2,11 +2,9 @@ import {
     ButtonInteraction,
     ColorResolvable,
     EmbedBuilder,
-    Locale,
-    User
+    Locale
 } from 'discord.js';
 import {
-    extractInteractionId,
     formatHtmlToDiscordMarkdown
 } from '@utils/stringUtils';
 import { getCharacterDataByIndex } from "@services/characterService";
@@ -17,7 +15,7 @@ import {
 import { getTranslation } from "@utils/localizationUtils";
 import { sendUnauthorizedMessage } from "./unauthorizedHandler";
 
-const MAX_DESCRIPTION_LENGTH = 4000;
+const MAX_DESCRIPTION_LENGTH = 3000;
 
 // Helper function to create the embed
 function createEmbed(description: string, characterName: string, color: number | null, locale: Locale) {
@@ -74,13 +72,19 @@ export async function showCharacterBackstoryHandler(interaction: ButtonInteracti
     const locale = interaction.locale;
 
     if (!characterIndex) {
-        await interaction.followUp({ content: 'Invalid character index.', ephemeral: true });
+        await interaction.followUp({
+            content: getTranslation('info_command.character_subcommand.invalid_index', locale, 'errors'),
+            ephemeral: true
+        });
         return;
     }
 
     const characterData = await getCharacterDataByIndex(characterIndex, locale);
     if (!characterData) {
-        await interaction.followUp({ content: 'Error retrieving character data.', ephemeral: true });
+        await interaction.followUp({
+            content: getTranslation('info_command.character_subcommand.error_retrieving_data', locale, 'errors'),
+            ephemeral: true
+        });
         return;
     }
 

@@ -47,5 +47,14 @@
     "banner": "Banner",
     "power": "Power"
   },
+  "build_categories": {
+    "fun": "Fun",
+    "tome_challenge": "Tome Challenge",
+    "competitive": "Competitive",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "other": "Other"
+  },
   "legacy": "Before 5.5.0"
 }

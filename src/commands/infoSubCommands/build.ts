@@ -8,17 +8,16 @@ import { retrieveBuildById } from "@services/buildService";
 import { getTranslation } from "@utils/localizationUtils";
 import {
     adjustForTimezone,
-    combineBaseUrlWithPath,
-    formatHtmlToDiscordMarkdown
+    combineBaseUrlWithPath
 } from "@utils/stringUtils";
 import { Role } from "@data/Role";
-import {
-    getCachedPerks
-} from "@services/perkService";
+import { BuildCategories } from "@data/BuildCategories";
+import { getCachedPerks } from "@services/perkService";
 import { getCachedItems } from "@services/itemService";
 import { getCachedAddons } from "@services/addonService";
 import { createLoadoutCanvas } from "@utils/imageUtils";
 import { getCachedOfferings } from "@services/offeringService";
+import { getCachedCharacters } from "@services/characterService";
 
 export async function handleBuildCommandInteraction(interaction: ChatInputCommandInteraction) {
     const buildId = interaction.options.getString('name');
@@ -29,16 +28,17 @@ export async function handleBuildCommandInteraction(interaction: ChatInputComman
     try {
         await interaction.deferReply();
 
-        const [buildData, perkData, itemData, addonData, offeringData] = await Promise.all([
+        const [buildData, perkData, itemData, addonData, offeringData, characterData] = await Promise.all([
             retrieveBuildById(buildId),
             getCachedPerks(locale),
             getCachedItems(locale),
             getCachedAddons(locale),
-            getCachedOfferings(locale)
+            getCachedOfferings(locale),
+            getCachedCharacters(locale)
         ]);
 
         if (!buildData || !perkData || !itemData || !addonData || !offeringData) {
-            const message = "Not found any Build with specified ID."; // TODO: localize
+            const message = getTranslation('info_command.build_subcommand.build_not_found', locale, 'errors');
             await interaction.editReply({ content: message });
             return;
         }
@@ -57,7 +57,9 @@ export async function handleBuildCommandInteraction(interaction: ChatInputComman
             itemPower,
             addon1,
             addon2,
-            offering
+            offering,
+            category,
+            character
         } = buildData;
 
         const roleColor = Role[role].hexColor;
@@ -67,50 +69,64 @@ export async function handleBuildCommandInteraction(interaction: ChatInputComman
         const fields: APIEmbedField[] = [];
 
         const perksPrettyList = perks
-            .map(perk => `- ${perkData[perk]?.Name ?? '- Unknown Perk'}`); // TODO: localize
+            .map(perk => `- ${perkData[perk]?.Name ?? `- ${getTranslation('info_command.build_subcommand.unknown_perk', locale, 'messages')}`}`);
 
         fields.push({
-            name: "Perks", // TODO: localize
-            value: perksPrettyList.length ? perksPrettyList.join(' \n ') : "Any perks", // TODO: localize
+            name: getTranslation('info_command.build_subcommand.perks', locale, 'messages'),
+            value: perksPrettyList.length ? perksPrettyList.join(' \n ') : getTranslation('info_command.build_subcommand.any_perks', locale, 'messages'),
             inline: true
         });
 
-
         const addons = [addon1, addon2].filter(addon => addon !== "None");
         const prettyAddons = addons.filter(Boolean)
-            .map(addon => addonData[addon]?.Name ?? ' - Unknown Add-on') // TODO: localize
+            .map(addon => addonData[addon]?.Name ?? ` - ${getTranslation('info_command.build_subcommand.unknown_addon', locale, 'messages')}`)
             .map(addon => ` - ${addon}`)
             .join(' \n ');
         if (role === 'Survivor') {
-            const item = itemPower && itemPower !== "None" ? ` - ${itemData[itemPower].Name}` : "Any item"; // TODO: localize
+            const item = itemPower && itemPower !== "None" ? ` - ${itemData[itemPower].Name}` : getTranslation('info_command.build_subcommand.any_item', locale, 'messages');
             fields.push({
-                name: "Item + Add-ons", // TODO: localize
+                name: getTranslation('info_command.build_subcommand.item_addons', locale, 'messages'),
                 value: item + ' \n ' + prettyAddons,
                 inline: true
             });
         } else if (role === 'Killer') {
-            const power = itemPower && itemPower !== "None" ? ` - ${itemData[itemPower].Name}` : "Any power"; // TODO: localize
+            const power = itemPower && itemPower !== "None" ? ` - ${itemData[itemPower].Name}` : getTranslation('info_command.build_subcommand.any_power', locale, 'messages');
 
             fields.push({
-                name: "Power + Add-ons", // TODO: localize
+                name: getTranslation('info_command.build_subcommand.power_addons', locale, 'messages'),
                 value: power + ' \n ' + prettyAddons,
                 inline: true
             });
         }
 
-        const offeringPretty = offering && offering !== "None" ? offeringData[offering].Name : "Any offering"; // TODO: localize
+        const offeringPretty = offering && offering !== "None" ? offeringData[offering].Name : getTranslation('info_command.build_subcommand.any_offering', locale, 'messages');
         fields.push({
-            name: "Offering", // TODO: localize
+            name: getTranslation('info_command.build_subcommand.offering', locale, 'messages'),
             value: offeringPretty,
             inline: true
         });
 
+        const categoryPretty = BuildCategories[category];
+        fields.push({
+            name: getTranslation('info_command.build_subcommand.category', locale, 'messages'),
+            value: getTranslation(categoryPretty, locale, 'general'),
+            inline: true
+        });
+
+        const characterIndex = character != "None" ? parseInt(character) : -1;
+        if (character && characterIndex !== -1) {
+            fields.push({
+                name: getTranslation('info_command.build_subcommand.character', locale, 'messages'),
+                value: characterData[characterIndex].Name,
+                inline: true
+            });
+        }
+
         const averageRating = Math.round(buildData.averageRating);
         const stars = '⭐'.repeat(averageRating) + '☆'.repeat(5 - averageRating);
-
         fields.push({
-            name: "Rating", // TODO: localize
-            value: `${stars} from a total of ${ratingCount} votes`, // TODO: localize
+            name: getTranslation('info_command.build_subcommand.rating', locale, 'messages'),
+            value: `${stars} ${getTranslation('info_command.build_subcommand.rating_desc.0', locale, 'messages')} ${ratingCount} ${getTranslation('info_command.build_subcommand.rating_desc.1', locale, 'messages')}`,
             inline: false
         });
 
@@ -121,7 +137,7 @@ export async function handleBuildCommandInteraction(interaction: ChatInputComman
             day: "numeric"
         });
 
-        const formattedDescription = description ? description : "Description for this build wasn't provided."; // TODO: localize
+        const formattedDescription = description ? description : getTranslation('info_command.build_subcommand.desc_not_provided', locale, 'messages');
 
         const embed = new EmbedBuilder()
             .setColor(roleColor)
@@ -132,12 +148,16 @@ export async function handleBuildCommandInteraction(interaction: ChatInputComman
             .setFields(fields)
             .setTimestamp()
             .setAuthor({
-                name: 'Build Information', // TODO: localize
+                name: getTranslation('info_command.build_subcommand.build_info', locale, 'messages'),
                 iconURL: combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_loadout.png')
             })
             .setFooter({
-                text: `Created by ${username} on ${creationDatePretty}` // TODO: localize
+                text: `${getTranslation('info_command.build_subcommand.created_by.0', locale, 'messages')} ${username} ${getTranslation('info_command.build_subcommand.created_by.1', locale, 'messages')} ${creationDatePretty}`
             });
+
+        if (characterIndex !== -1) {
+            embed.setThumbnail(combineBaseUrlWithPath(characterData[characterIndex].IconFilePath));
+        }
 
         // Send reply early without image, so user doesn't have to wait
         await interaction.editReply({ embeds: [embed] });

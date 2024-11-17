@@ -49,6 +49,31 @@
       "button_interaction": {
         "outfit_pieces": "Elementy stroju dla"
       }
+    },
+    "build_subcommand": {
+      "unknown_perk": "Nieznana umiejętność",
+      "unknown_addon": "Nieznany dodatek",
+      "perks": "Umiejętności",
+      "item_addons": "Przedmiot + Dodatki",
+      "power_addons": "Moc + Dodatki",
+      "offering": "Dar",
+      "category": "Kategoria",
+      "character": "Postać",
+      "rating": "Ocena",
+      "rating_desc": [
+        "z łącznej ilości",
+        "głosu(ów)"
+      ],
+      "any_perks": "Dowolne umiejętności",
+      "any_item": "Dowolny przedmiot",
+      "any_power": "Dowolna moc",
+      "any_offering": "Dowolny dar",
+      "desc_not_provided": "Opis dla tego ekwipunku nie został podany.",
+      "build_info": "Informacje o ekwipunku",
+      "created_by": [
+        "Utworzony przez",
+        "dnia"
+      ]
     }
   },
   "list_command": {

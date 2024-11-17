@@ -47,5 +47,14 @@
     "banner": "Baner",
     "power": "Moc"
   },
+  "build_categories": {
+    "fun": "Zabawa",
+    "tome_challenge": "Wyzwanie Tomu",
+    "competitive": "Konkurencyjny",
+    "beginner": "Początkujący",
+    "intermediate": "Średnio zaawansowany",
+    "advanced": "Zaawansowany",
+    "other": "Inny"
+  },
   "legacy": "Przed 5.5.0"
 }
