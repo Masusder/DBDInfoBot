@@ -5,7 +5,7 @@
     "options": {
       "type": {
         "name": "typ",
-        "description": "Podaj typ, o której chcesz uzyskać informacje.",
+        "description": "Podaj typ, o którym chcesz uzyskać informacje.",
         "choices": {
           "perk": "Umiejętność",
           "addon": "Dodatek",
