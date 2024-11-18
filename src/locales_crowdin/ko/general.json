@@ -1,0 +1,60 @@
+{
+  "rarities": {
+    "common": "Common",
+    "uncommon": "Uncommon",
+    "rare": "Rare",
+    "very_rare": "Very Rare",
+    "ultra_rare": "Ultra Rare",
+    "legendary": "Legendary",
+    "special_event": "Special Event",
+    "artifact": "Artifact",
+    "limited": "Limited",
+    "unknown": "N/A"
+  },
+  "roles": {
+    "killer": "Killer",
+    "survivor": "Survivor",
+    "none": "Universal"
+  },
+  "difficulties": {
+    "easy": "Easy",
+    "intermediate": "Intermediate",
+    "hard": "Hard",
+    "very_hard": "Very Hard",
+    "none": "None"
+  },
+  "genders": {
+    "male": "Male",
+    "female": "Female",
+    "not_human": "Monster",
+    "multiple": "Multiple"
+  },
+  "currencies": {
+    "bloodpoints": "Bloodpoints",
+    "shards": "Shards",
+    "auric_cells": "Auric Cells"
+  },
+  "cosmetic_types": {
+    "outfit": "Outfit",
+    "survivor_head": "Survivor's Head",
+    "survivor_torso": "Survivor's Torso",
+    "survivor_legs": "Survivor's Legs",
+    "killer_head": "Killer's Head",
+    "killer_body": "Killer's Body",
+    "killer_weapon": "Killer's Weapon",
+    "charm": "Charm",
+    "badge": "Badge",
+    "banner": "Banner",
+    "power": "Power"
+  },
+  "build_categories": {
+    "fun": "Fun",
+    "tome_challenge": "Tome Challenge",
+    "competitive": "Competitive",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "other": "Other"
+  },
+  "legacy": "Before 5.5.0"
+}
