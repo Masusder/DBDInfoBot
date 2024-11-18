@@ -1,67 +1,67 @@
 {
   "info_command": {
-    "name": "info",
-    "description": "Uzyskaj szczegółowe informacje o funkcjach gry.",
+    "name": "информация",
+    "description": "Получить подробные сведения об игровых элементах.",
     "options": {
       "type": {
-        "name": "typ",
-        "description": "Podaj typ, o której chcesz uzyskać informacje.",
+        "name": "тип",
+        "description": "Укажите тип игрового элемента, о котором вы хотели бы получить больше информации.",
         "choices": {
-          "perk": "Umiejętność",
-          "addon": "Dodatek",
-          "item": "Przedmiot",
-          "offering": "Dar",
-          "character": "Postać",
-          "cosmetic": "Kosmetyk",
-          "build": "Ekwipunek"
+          "perk": "Навык",
+          "addon": "Улучшение",
+          "item": "Предмет",
+          "offering": "Подношение",
+          "character": "Персонаж",
+          "cosmetic": "Косметический предмет",
+          "build": "Сборка"
         }
       },
       "name": {
-        "name": "nazwa",
-        "description": "Podaj nazwę elementu, o którym chcesz uzyskać informacje."
+        "name": "имя",
+        "description": "Укажите название игрового элемента, о котором вы хотели бы получить больше информации."
       }
     }
   },
   "shrine_command": {
-    "name": "sanktuarium",
-    "description": "Sprawdź cotygodniowe Sanktuarium Tajemnic."
+    "name": "храм",
+    "description": "Просмотреть еженедельный Храм Тайн."
   },
   "list_command": {
-    "name": "lista",
-    "description": "Uzyskaj listę określonych elementów z poszczególnej funkcji gry.",
+    "name": "список",
+    "description": "Получить список указанных игровых элементов.",
     "cosmetics_subcommand": {
-      "name": "kosmetyki",
-      "description": "Uzyskaj listę kosmetyków.",
+      "name": "косметические предметы",
+      "description": "Получить список косметических предметов.",
       "options": {
         "character": {
-          "name": "postać",
-          "description": "Podaj nazwę postaci."
+          "name": "персонаж",
+          "description": "Имя персонажа."
         },
         "purchasable": {
-          "name": "do_kupienia",
-          "description": "Określ, czy kosmetyk ma być dostępny do kupienia, czy nie."
+          "name": "продаётся",
+          "description": "Укажите должен ли продаваться косметический предмет."
         },
         "linked": {
-          "name": "połączony",
-          "description": "Określ, czy kosmetyk powinien być zestawem połączonym, czy nie."
+          "name": "разделяемый",
+          "description": "Укажите должен ли разделяться косметический предмет."
         },
         "rarity": {
-          "name": "rzadkość",
-          "description": "Określ rzadkość kosmetyku."
+          "name": "редкость",
+          "description": "Укажите редкость косметического предмета."
         },
         "type": {
-          "name": "typ",
-          "description": "Określ typ kosmetyku."
+          "name": "тип",
+          "description": "Укажите тип косметического предмета."
         },
         "inclusion_version": {
-          "name": "wersja_dodania",
-          "description": "Określ wersję, w której został dodany kosmetyk."
+          "name": "добавлен с версии",
+          "description": "Укажите в какой версии был добавлен косметический предмет."
         }
       }
     },
     "builds_subcommand": {
-      "name": "ekwipunki",
-      "description": "Uzyskaj listę ekwipunków."
+      "name": "сборки",
+      "description": "Получить список сборок."
     }
   }
 }
