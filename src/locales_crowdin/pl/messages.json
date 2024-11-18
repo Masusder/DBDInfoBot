@@ -61,10 +61,9 @@
       "category": "Kategoria",
       "character": "Postać",
       "rating": "Ocena",
-      "rating_desc": [
-        "z łącznej ilości",
-        "głosu(ów)"
-      ],
+      "rating_desc": "z łącznej ilości",
+      "vote": "głosu",
+      "votes": "głosów",
       "any_perks": "Dowolne umiejętności",
       "any_item": "Dowolny przedmiot",
       "any_power": "Dowolna moc",
