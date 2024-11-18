@@ -13,6 +13,7 @@
     },
     "item_subcommand": {
       "item_information": "Informacje o przedmiocie",
+      "description": "Opis",
       "character": "Postać",
       "rarity": "Rzadkość",
       "role": "Rola"
