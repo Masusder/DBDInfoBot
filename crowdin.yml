@@ -1,3 +1,3 @@
 files:
-  - source: /src/locales/*/*.json
-    translation: /src/locales_crowdin/%locale%/%original_file_name%
+  - source: /src/locales/en/*.json
+    translation: /src/locales_crowdin/%two_letters_code%/%original_file_name%
