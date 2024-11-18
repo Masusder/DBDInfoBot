@@ -1,0 +1,67 @@
+{
+  "info_command": {
+    "name": "info",
+    "description": "Retrieve detailed information about game features.",
+    "options": {
+      "type": {
+        "name": "type",
+        "description": "Specify the type of game feature you want information about.",
+        "choices": {
+          "perk": "Perk",
+          "addon": "Add-on",
+          "item": "Item",
+          "offering": "Offering",
+          "character": "Character",
+          "cosmetic": "Cosmetic",
+          "build": "Build"
+        }
+      },
+      "name": {
+        "name": "name",
+        "description": "Specify the name of the game feature you want information about."
+      }
+    }
+  },
+  "shrine_command": {
+    "name": "shrine",
+    "description": "Check weekly Shrine of Secrets."
+  },
+  "list_command": {
+    "name": "list",
+    "description": "Retrieve list of specified game feature items.",
+    "cosmetics_subcommand": {
+      "name": "cosmetics",
+      "description": "Retrieve list of cosmetics.",
+      "options": {
+        "character": {
+          "name": "character",
+          "description": "Name of the character."
+        },
+        "purchasable": {
+          "name": "purchasable",
+          "description": "Specify whether cosmetic should be available for purchase or not."
+        },
+        "linked": {
+          "name": "linked",
+          "description": "Specify whether cosmetic should be a linked set or not."
+        },
+        "rarity": {
+          "name": "rarity",
+          "description": "Specify rarity of the cosmetic."
+        },
+        "type": {
+          "name": "type",
+          "description": "Specify type of the cosmetic."
+        },
+        "inclusion_version": {
+          "name": "inclusion_version",
+          "description": "Specify inclusion version of the cosmetic."
+        }
+      }
+    },
+    "builds_subcommand": {
+      "name": "builds",
+      "description": "Retrieve list of builds."
+    }
+  }
+}
