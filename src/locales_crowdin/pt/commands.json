@@ -1,67 +1,67 @@
 {
   "info_command": {
     "name": "info",
-    "description": "Retrieve detailed information about game features.",
+    "description": "Uzyskaj szczegółowe informacje o funkcjach gry.",
     "options": {
       "type": {
-        "name": "type",
-        "description": "Specify the type of game feature you want information about.",
+        "name": "typ",
+        "description": "Podaj typ, o której chcesz uzyskać informacje.",
         "choices": {
-          "perk": "Perk",
-          "addon": "Add-on",
-          "item": "Item",
-          "offering": "Offering",
-          "character": "Character",
-          "cosmetic": "Cosmetic",
-          "build": "Build"
+          "perk": "Umiejętność",
+          "addon": "Dodatek",
+          "item": "Przedmiot",
+          "offering": "Dar",
+          "character": "Postać",
+          "cosmetic": "Kosmetyk",
+          "build": "Ekwipunek"
         }
       },
       "name": {
-        "name": "name",
-        "description": "Specify the name of the game feature you want information about."
+        "name": "nazwa",
+        "description": "Podaj nazwę elementu, o którym chcesz uzyskać informacje."
       }
     }
   },
   "shrine_command": {
-    "name": "shrine",
-    "description": "Check weekly Shrine of Secrets."
+    "name": "sanktuarium",
+    "description": "Sprawdź cotygodniowe Sanktuarium Tajemnic."
   },
   "list_command": {
-    "name": "list",
-    "description": "Retrieve list of specified game feature items.",
+    "name": "lista",
+    "description": "Uzyskaj listę określonych elementów z poszczególnej funkcji gry.",
     "cosmetics_subcommand": {
-      "name": "cosmetics",
-      "description": "Retrieve list of cosmetics.",
+      "name": "kosmetyki",
+      "description": "Uzyskaj listę kosmetyków.",
       "options": {
         "character": {
-          "name": "character",
-          "description": "Name of the character."
+          "name": "postać",
+          "description": "Podaj nazwę postaci."
         },
         "purchasable": {
-          "name": "purchasable",
-          "description": "Specify whether cosmetic should be available for purchase or not."
+          "name": "do_kupienia",
+          "description": "Określ, czy kosmetyk ma być dostępny do kupienia, czy nie."
         },
         "linked": {
-          "name": "linked",
-          "description": "Specify whether cosmetic should be a linked set or not."
+          "name": "połączony",
+          "description": "Określ, czy kosmetyk powinien być zestawem połączonym, czy nie."
         },
         "rarity": {
-          "name": "rarity",
-          "description": "Specify rarity of the cosmetic."
+          "name": "rzadkość",
+          "description": "Określ rzadkość kosmetyku."
         },
         "type": {
-          "name": "type",
-          "description": "Specify type of the cosmetic."
+          "name": "typ",
+          "description": "Określ typ kosmetyku."
         },
         "inclusion_version": {
-          "name": "inclusion_version",
-          "description": "Specify inclusion version of the cosmetic."
+          "name": "wersja_dodania",
+          "description": "Określ wersję, w której został dodany kosmetyk."
         }
       }
     },
     "builds_subcommand": {
-      "name": "builds",
-      "description": "Retrieve list of builds."
+      "name": "ekwipunki",
+      "description": "Uzyskaj listę ekwipunków."
     }
   }
 }
