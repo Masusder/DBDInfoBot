@@ -1,28 +1,28 @@
 {
   "info_command": {
     "cosmetic_subcommand": {
-      "cosmetic_not_found": "Nie znaleziono kosmetyku dla",
+      "cosmetic_not_found": "Не найдено косметических предметов для",
       "button_interaction": {
-        "invalid_id": "Nieprawidłowy identyfikator kosmetyku.",
-        "error_retrieving_data": "Błąd podczas pobierania danych kosmetyków."
+        "invalid_id": "Неверный ID предмета.",
+        "error_retrieving_data": "Не удалось получить информацию о косметическом предмете."
       }
     },
     "build_subcommand": {
-      "build_not_found": "Nie znaleziono żadnego ekwipunku ze wskazanym ID."
+      "build_not_found": "Неверный ID сборки."
     },
     "character_subcommand": {
-      "invalid_index": "Nieprawidłowy indeks postaci.",
-      "error_retrieving_data": "Wystąpił błąd podczas pobierania danych postaci."
+      "invalid_index": "Неверный индекс персонажа.",
+      "error_retrieving_data": "Не удалось получить информацию о персонаже."
     }
   },
   "list_command": {
-    "unknown_subcommand": "Nieznana podkomenda.",
+    "unknown_subcommand": "Неизвестный аргумент.",
     "cosmetics_subcommand": {
-      "cosmetics_not_found": "Nie znaleziono kosmetyków.",
-      "cosmetics_not_found_filters": "Nie znaleziono kosmetyków dla zastosowanych filtrów."
+      "cosmetics_not_found": "Не удалось найти косметические предметы.",
+      "cosmetics_not_found_filters": "Не удалось найти косметические предметы по указанным фильтрам."
     }
   },
   "general": {
-    "unauthorized": "Tylko osoba, która użyła polecenia, może to zrobić."
+    "unauthorized": "Только тот, кто изначально вызвал команду, может это сделать."
   }
 }
