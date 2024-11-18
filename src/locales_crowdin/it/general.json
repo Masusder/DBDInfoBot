@@ -1,60 +1,60 @@
 {
   "rarities": {
-    "common": "Common",
-    "uncommon": "Uncommon",
-    "rare": "Rare",
-    "very_rare": "Very Rare",
-    "ultra_rare": "Ultra Rare",
-    "legendary": "Legendary",
-    "special_event": "Special Event",
-    "artifact": "Artifact",
-    "limited": "Limited",
+    "common": "Zwykłe",
+    "uncommon": "Niezwykłe",
+    "rare": "Rzadkie",
+    "very_rare": "Bardzo Rzadkie",
+    "ultra_rare": "Ultra Rzadkie",
+    "legendary": "Legendarny",
+    "special_event": "Specjalne Wydarzenie",
+    "artifact": "Artefakt",
+    "limited": "Ograniczone",
     "unknown": "N/A"
   },
   "roles": {
-    "killer": "Killer",
-    "survivor": "Survivor",
-    "none": "Universal"
+    "killer": "Zabójca",
+    "survivor": "Ocalały",
+    "none": "Uniwersalny"
   },
   "difficulties": {
-    "easy": "Easy",
-    "intermediate": "Intermediate",
-    "hard": "Hard",
-    "very_hard": "Very Hard",
-    "none": "None"
+    "easy": "Łatwy",
+    "intermediate": "Średniozaawansowany",
+    "hard": "Trudny",
+    "very_hard": "Bardzo trudny",
+    "none": "Brak"
   },
   "genders": {
-    "male": "Male",
-    "female": "Female",
-    "not_human": "Monster",
-    "multiple": "Multiple"
+    "male": "Mężczyzna",
+    "female": "Kobieta",
+    "not_human": "Potwór",
+    "multiple": "Wiele płci"
   },
   "currencies": {
-    "bloodpoints": "Bloodpoints",
-    "shards": "Shards",
-    "auric_cells": "Auric Cells"
+    "bloodpoints": "Punkty krwi",
+    "shards": "Błyszczące odłamki",
+    "auric_cells": "Złociste mikrobiomy"
   },
   "cosmetic_types": {
-    "outfit": "Outfit",
-    "survivor_head": "Survivor's Head",
-    "survivor_torso": "Survivor's Torso",
-    "survivor_legs": "Survivor's Legs",
-    "killer_head": "Killer's Head",
-    "killer_body": "Killer's Body",
-    "killer_weapon": "Killer's Weapon",
-    "charm": "Charm",
-    "badge": "Badge",
-    "banner": "Banner",
-    "power": "Power"
+    "outfit": "Strój",
+    "survivor_head": "Głowa ocalałego",
+    "survivor_torso": "Tułów ocalałego",
+    "survivor_legs": "Nogi ocalałego",
+    "killer_head": "Głowa zabójcy",
+    "killer_body": "Ciało zabójcy",
+    "killer_weapon": "Broń zabójcy",
+    "charm": "Breloczek",
+    "badge": "Odznaka",
+    "banner": "Baner",
+    "power": "Moc"
   },
   "build_categories": {
-    "fun": "Fun",
-    "tome_challenge": "Tome Challenge",
-    "competitive": "Competitive",
-    "beginner": "Beginner",
-    "intermediate": "Intermediate",
-    "advanced": "Advanced",
-    "other": "Other"
+    "fun": "Zabawa",
+    "tome_challenge": "Wyzwanie Tomu",
+    "competitive": "Konkurencyjny",
+    "beginner": "Początkujący",
+    "intermediate": "Średnio zaawansowany",
+    "advanced": "Zaawansowany",
+    "other": "Inny"
   },
-  "legacy": "Before 5.5.0"
+  "legacy": "Przed 5.5.0"
 }
