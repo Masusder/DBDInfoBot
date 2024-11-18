@@ -1,10 +1,11 @@
 import {
     ButtonInteraction,
-    EmbedBuilder
+    EmbedBuilder,
+    StringSelectMenuInteraction
 } from "discord.js";
 import { getTranslation } from "@utils/localizationUtils";
 
-export async function sendUnauthorizedMessage(interaction: ButtonInteraction) {
+export async function sendUnauthorizedMessage(interaction: ButtonInteraction | StringSelectMenuInteraction) {
     const locale = interaction.locale;
 
     const embed = new EmbedBuilder()

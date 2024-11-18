@@ -1,8 +1,11 @@
 import {
+    ActionRowBuilder,
     AutocompleteInteraction,
     ButtonInteraction,
     ChatInputCommandInteraction,
-    EmbedBuilder
+    EmbedBuilder,
+    StringSelectMenuBuilder,
+    StringSelectMenuInteraction
 } from "discord.js";
 import { getCharacterChoices } from "@services/characterService";
 import {
@@ -22,6 +25,7 @@ import {
     IBuildFilters,
     Perk
 } from "../../types";
+import { handleBuildCommandInteraction } from "@commands/infoSubCommands/build";
 
 // TODO: localize this
 export async function handleBuildsListCommandInteraction(interaction: ChatInputCommandInteraction) {
@@ -49,51 +53,62 @@ export async function handleBuildsListCommandInteraction(interaction: ChatInputC
 
         const perkData = await getCachedPerks(locale);
 
-        const embed = await createEmbed(filters.role, builds, currentPage, totalPages, perkData, interaction.user.username);
+        const embed = await createEmbed(filters.role, builds, currentPage, totalPages, perkData);
+
+        const stringMenu = createStringMenu(builds);
 
         const replyMessage = await interaction.editReply({
-            content: `For more information about a specific build, grab Build ID from list below and use the command: \`/info Build <build_id>\``,
             embeds: [embed],
-            components: generatePaginationButtons(currentPage, totalPages + 1, locale)
+            components: [stringMenu, ...generatePaginationButtons(currentPage, totalPages + 1, locale)]
         });
 
         const collector = replyMessage.createMessageComponentCollector({
-            filter: (i): i is ButtonInteraction => i.isButton(),
+            filter: (i): i is ButtonInteraction | StringSelectMenuInteraction => i.isButton() || i.isStringSelectMenu(),
             time: 60_000
         });
 
-        collector.on('collect', async(i: ButtonInteraction) => {
+        collector.on('collect', async(i: ButtonInteraction | StringSelectMenuInteraction) => {
             try {
                 if (i.user.id !== interaction.user.id) {
                     await sendUnauthorizedMessage(i);
                     return;
                 }
 
-                const [_, paginationType, pageNumber] = i.customId.split('::');
+                if (i.isButton()) {
+                    const [_, paginationType, pageNumber] = i.customId.split('::');
 
-                currentPage = determineNewPage(currentPage, paginationType as TPaginationType, totalPages + 1, pageNumber);
+                    currentPage = determineNewPage(currentPage, paginationType as TPaginationType, totalPages + 1, pageNumber);
 
-                const newFilters: IBuildFilters = { ...filters, page: currentPage - 1 };
-                const { builds: newBuilds, totalPages: newTotalPages } = await retrieveBuilds(newFilters);
+                    const newFilters: IBuildFilters = { ...filters, page: currentPage - 1 };
+                    const { builds: newBuilds, totalPages: newTotalPages } = await retrieveBuilds(newFilters);
 
-                if (!newBuilds || newBuilds.length === 0) {
-                    return await i.update({ content: "No builds found with the specified filters.", components: [] });
+                    if (!newBuilds || newBuilds.length === 0) {
+                        return await i.update({
+                            content: "No builds found with the specified filters.",
+                            components: []
+                        });
+                    }
+
+                    const newEmbed = await createEmbed(filters.role, newBuilds, currentPage, newTotalPages, perkData);
+
+                    await i.update({
+                        embeds: [newEmbed],
+                        components: [createStringMenu(newBuilds), ...generatePaginationButtons(currentPage, totalPages + 1, locale)]
+                    });
                 }
 
-                const newEmbed = await createEmbed(filters.role, newBuilds, currentPage, newTotalPages, perkData, interaction.user.username);
-
-                await i.update({
-                    embeds: [newEmbed],
-                    components: generatePaginationButtons(currentPage, totalPages + 1, locale)
-                });
+                // Handle select menu interactions
+                if (i.isStringSelectMenu()) {
+                    await handleBuildCommandInteraction(i);
+                }
             } catch (error) {
                 console.error("Error handling pagination:", error);
             }
         });
 
-        collector.on('end', () => {
+        collector.on('end', async() => {
             try {
-                replyMessage.edit({ components: [] });
+                await replyMessage.edit({ components: [] });
             } catch (error) {
                 console.error("Error handling pagination ('end' event):", error);
             }
@@ -109,14 +124,13 @@ async function createEmbed(
     builds: IBuild[],
     currentPage: number,
     totalPages: number,
-    perkData: { [key: string]: Perk },
-    username: string) {
+    perkData: { [key: string]: Perk }) {
     const embed = new EmbedBuilder()
         .setTitle(`Build List - Page ${currentPage} of ${totalPages + 1}`)
         .setColor(role === 'Survivor' ? "#1e90ff" : "Red")
         .setDescription(`[You can create your own build here!](${combineBaseUrlWithPath('/builds/create')})\nHere are the builds matching your filters:`)
         .setTimestamp()
-        .setFooter({ text: `Builds List | Requested by ${username}`, iconURL: undefined })
+        .setFooter({ text: 'Builds List' })
         .setThumbnail(combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_loadout.png'));
 
     builds.forEach((build: IBuild, index: number) => {
@@ -128,16 +142,31 @@ async function createEmbed(
             .map(perk => `${perkData[perk]?.Name ?? 'Unknown Perk'}`)
             .join(', ') || 'Any Perks';
 
-
         embed.addFields({
             name: buildTitle,
-            value: `${perksList} \n\n Build ID: \`${build.buildId}\``,
+            value: perksList,
             inline: false
         });
     });
 
     return embed;
 }
+
+function createStringMenu(builds: any) {
+    const selectMenu = new StringSelectMenuBuilder()
+        .setCustomId('builds-selection')
+        .setPlaceholder('Select a build to get details')
+        .addOptions(
+            builds.map((build: IBuild, index: number) => ({
+                label: `${index + 1}. ${build.title}`,
+                description: `Created by: ${build.username}`,
+                value: build.buildId
+            }))
+        );
+
+    return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectMenu);
+}
+
 // endregion
 
 // region Autocomplete
@@ -158,6 +187,7 @@ export async function handleBuildsListCommandAutocompleteInteraction(interaction
         console.error("Error handling cosmetic list autocomplete interaction:", error);
     }
 }
+
 export async function autocompleteCharacter(interaction: AutocompleteInteraction) {
     try {
         const locale = interaction.locale;

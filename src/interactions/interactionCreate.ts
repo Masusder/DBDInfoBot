@@ -74,5 +74,10 @@ export default async(interaction: Interaction) => {
         return;
     }
 
+    if (interaction.isStringSelectMenu()) {
+        // do nothing
+        return;
+    }
+
     console.warn('Unhandled interaction type or command:', interaction);
 };

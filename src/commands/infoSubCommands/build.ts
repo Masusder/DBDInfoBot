@@ -2,7 +2,9 @@ import {
     APIEmbedField,
     AutocompleteInteraction,
     ChatInputCommandInteraction,
-    EmbedBuilder
+    EmbedBuilder,
+    Message,
+    StringSelectMenuInteraction
 } from "discord.js";
 import { retrieveBuildById } from "@services/buildService";
 import { getTranslation } from "@utils/localizationUtils";
@@ -19,14 +21,20 @@ import { createLoadoutCanvas } from "@utils/imageUtils";
 import { getCachedOfferings } from "@services/offeringService";
 import { getCachedCharacters } from "@services/characterService";
 
-export async function handleBuildCommandInteraction(interaction: ChatInputCommandInteraction) {
-    const buildId = interaction.options.getString('name');
+export async function handleBuildCommandInteraction(interaction: ChatInputCommandInteraction | StringSelectMenuInteraction) {
+    const buildId = interaction.isChatInputCommand()
+        ? interaction.options.getString('name')
+        : interaction.values?.[0];
     const locale = interaction.locale;
 
     if (!buildId) return;
 
     try {
-        await interaction.deferReply();
+        if (interaction.isChatInputCommand()) {
+            await interaction.deferReply();
+        } else if (interaction.isStringSelectMenu()) {
+            await interaction.deferUpdate();
+        }
 
         const [buildData, perkData, itemData, addonData, offeringData, characterData] = await Promise.all([
             retrieveBuildById(buildId),
@@ -146,13 +154,12 @@ export async function handleBuildCommandInteraction(interaction: ChatInputComman
             .setDescription(formattedDescription)
             .setImage('attachment://loadout.png')
             .setFields(fields)
-            .setTimestamp()
             .setAuthor({
                 name: getTranslation('info_command.build_subcommand.build_info', locale, 'messages'),
                 iconURL: combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_loadout.png')
             })
             .setFooter({
-                text: `${getTranslation('info_command.build_subcommand.created_by.0', locale, 'messages')} ${username} ${getTranslation('info_command.build_subcommand.created_by.1', locale, 'messages')} ${creationDatePretty}`
+                text: `${getTranslation('info_command.build_subcommand.created_by.0', locale, 'messages')} ${username} ${getTranslation('info_command.build_subcommand.created_by.1', locale, 'messages')} ${creationDatePretty} | ID: ${buildId}`
             });
 
         if (characterIndex !== -1) {
@@ -160,17 +167,31 @@ export async function handleBuildCommandInteraction(interaction: ChatInputComman
         }
 
         // Send reply early without image, so user doesn't have to wait
-        await interaction.editReply({ embeds: [embed] });
+        let followUpMsg = null as Message | null;
+        if (interaction.isChatInputCommand()) {
+            await interaction.editReply({ embeds: [embed] });
+        } else {
+            followUpMsg = await interaction.followUp({ embeds: [embed] });
+        }
 
         const loadoutBuffer = await createLoadoutCanvas(role, locale, perks, itemPower, offering, addons);
 
-        // Attach processed image
-        await interaction.editReply({
-            files: [{
-                attachment: loadoutBuffer,
-                name: 'loadout.png'
-            }]
-        });
+        // Attach the processed image
+        if (interaction.isChatInputCommand()) {
+            await interaction.editReply({
+                files: [{
+                    attachment: loadoutBuffer,
+                    name: 'loadout.png'
+                }]
+            });
+        } else if (interaction.isStringSelectMenu()) {
+            await followUpMsg?.edit({
+                files: [{
+                    attachment: loadoutBuffer,
+                    name: 'loadout.png'
+                }]
+            });
+        }
     } catch (error) {
         console.error("Error executing build subcommand:", error);
     }
