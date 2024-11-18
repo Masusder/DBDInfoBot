@@ -99,7 +99,7 @@ export async function showCharacterBackstoryHandler(interaction: ButtonInteracti
         itemsPerPage: 1,
         generateEmbed: (pageItems) => pageItems[0],
         interactionUserId: interaction.user.id,
-        interactionReply: await interaction.editReply({ content: "" }),
+        interactionReply: interaction,
         timeout: 300_000, // 5 minutes
         locale
     };

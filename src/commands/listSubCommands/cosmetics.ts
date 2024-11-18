@@ -60,6 +60,7 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
 
             const embed = new EmbedBuilder()
                 .setTitle(title)
+                .setDescription(`${getTranslation('list_command.cosmetics_subcommand.more_info.0', locale, 'messages')}: \`/${getTranslation('list_command.cosmetics_subcommand.more_info.1', locale, 'messages')}\``)
                 .setColor(embedColor as ColorResolvable)
                 .setFooter({ text: getTranslation('list_command.cosmetics_subcommand.cosmetics_list', locale, 'messages') })
                 .setTimestamp();
@@ -101,9 +102,7 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
             generateEmbed,
             generateImage,
             interactionUserId: interaction.user.id,
-            interactionReply: await interaction.editReply({
-                content: `${getTranslation('list_command.cosmetics_subcommand.more_info.0', locale, 'messages')}: \`/${getTranslation('list_command.cosmetics_subcommand.more_info.1', locale, 'messages')}\``
-            }),
+            interactionReply: interaction,
             locale
         });
     } catch (error) {

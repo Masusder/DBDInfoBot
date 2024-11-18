@@ -3,6 +3,7 @@ import {
     ButtonBuilder,
     ButtonInteraction,
     ButtonStyle,
+    ChatInputCommandInteraction,
     EmbedBuilder,
     Locale,
     Message
@@ -16,7 +17,7 @@ export interface IPaginationOptions {
     generateEmbed: (pageItems: any[], currentPage: number, totalPages: number) => EmbedBuilder | Promise<EmbedBuilder>;
     generateImage?: (pageItems: any[]) => Promise<Buffer>;
     interactionUserId: string;
-    interactionReply: Message;
+    interactionReply: ChatInputCommandInteraction | ButtonInteraction;
     timeout?: number;
     locale: Locale;
 }
@@ -54,7 +55,7 @@ export const generatePaginationButtons = (page: number, totalPages: number, loca
             .setDisabled(page === totalPages)
     );
 
-    if (showPageNumbers) {
+    if (showPageNumbers && totalPages > 1) {
         const pagesToShow = 10;
         const startPage = Math.max(1, page - Math.floor(pagesToShow / 2));
         const endPage = Math.min(totalPages, startPage + pagesToShow - 1);
@@ -126,16 +127,16 @@ export async function genericPaginationHandler(options: IPaginationOptions) {
             embed.setImage('attachment://generated_image.png');
         }
 
-        await interactionReply.edit({
+        return await interactionReply.editReply({
             embeds: [embed],
             components: generatePaginationButtons(currentPage, totalPages, locale),
             files: image ? [{ attachment: image, name: 'generated_image.png' }] : []
         });
     };
 
-    await updatePageContent(options.locale);
+    const message = await updatePageContent(options.locale);
 
-    const collector = interactionReply.createMessageComponentCollector({
+    const collector = message.createMessageComponentCollector({
         filter: (i): i is ButtonInteraction => i.isButton(),
         time: options.timeout
     });
@@ -163,7 +164,7 @@ export async function genericPaginationHandler(options: IPaginationOptions) {
 
     collector.on('end', async() => {
         try {
-            await interactionReply.edit({ components: [] });
+            await interactionReply.editReply({ components: [] });
         } catch (error) {
             console.error("Error handling pagination ('end' event):", error);
         }
