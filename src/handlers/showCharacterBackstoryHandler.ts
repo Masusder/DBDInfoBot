@@ -17,7 +17,6 @@ import { sendUnauthorizedMessage } from "./unauthorizedHandler";
 
 const MAX_DESCRIPTION_LENGTH = 3000;
 
-// Helper function to create the embed
 function createEmbed(description: string, characterName: string, color: number | null, locale: Locale) {
     return new EmbedBuilder()
         .setTitle(`${getTranslation('info_command.character_subcommand.backstory', locale, 'messages')} ${characterName}`)

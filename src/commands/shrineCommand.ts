@@ -59,7 +59,7 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
         const shrineData = await getCachedShrine();
         const perkData = await getCachedPerks(locale);
 
-        if (!shrineData && !shrineData.currentShrine && !perkData) return;
+        if (!shrineData || !shrineData.currentShrine || !perkData) return;
 
         const { currentShrine } = shrineData;
 

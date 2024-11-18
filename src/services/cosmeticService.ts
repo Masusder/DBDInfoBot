@@ -8,8 +8,17 @@ import { Cosmetic } from '../types';
 import { EGameData } from "@utils/dataUtils";
 import { localizeCacheKey } from "@utils/localizationUtils";
 
+// Holds indexed cosmetics for fast querying by locale
 let indexedCosmetics: Map<string, Map<string, Cosmetic[]>> = new Map();
 
+/**
+ * Initializes the cosmetic cache for the specified locale.
+ * Fetches cosmetic data from the API and stores it in the cache, then indexes the cosmetics for quick lookup.
+ *
+ * @param locale - The locale to load cosmetic data for.
+ *
+ * @returns {Promise<void>} A promise that resolves when the cosmetic cache is initialized and indexed.
+ */
 export async function initializeCosmeticCache(locale: Locale): Promise<void> {
     await initializeGameDataCache<Cosmetic>('/api/cosmetics', EGameData.CosmeticData, locale);
 
@@ -21,7 +30,13 @@ export async function initializeCosmeticCache(locale: Locale): Promise<void> {
     }
 }
 
-// Build an indexed cosmetics map for fast querying
+/**
+ * Indexes the cosmetics data to allow fast querying by substring of the cosmetic name.
+ * This creates a map of cosmetic names and their substrings for efficient lookups.
+ *
+ * @param cosmetics - The list of cosmetics to index.
+ * @param locale - The locale to index cosmetics for.
+ */
 function indexCosmetics(cosmetics: { [key: string]: Cosmetic }, locale: Locale) {
     console.log(`Indexing cosmetics for language: ${locale}.`);
 
@@ -53,7 +68,15 @@ function indexCosmetics(cosmetics: { [key: string]: Cosmetic }, locale: Locale) 
 
 // region Helpers
 
-// Filter cosmetics by name using index table
+/**
+ * Retrieves a list of cosmetics matching the query from the indexed cosmetics for the given locale.
+ * If the index is not present or expired, it will initialize the cache.
+ *
+ * @param query - The search query to match cosmetic names against.
+ * @param locale - The locale to fetch the cosmetic data for.
+ *
+ * @returns {Promise<Cosmetic[]>} A promise that resolves to a list of matching cosmetics.
+ */
 export async function getCosmeticChoicesFromIndex(query: string, locale: Locale): Promise<Cosmetic[]> {
     const languageMap = indexedCosmetics.get(locale);
     if (!languageMap) {
@@ -64,27 +87,13 @@ export async function getCosmeticChoicesFromIndex(query: string, locale: Locale)
     return languageMap ? languageMap.get(query) || [] : [];
 }
 
-// Retrieve a single cosmetic by exact name
-// export async function getCosmeticDataByName(name: string, locale: Locale): Promise<Cosmetic | undefined> {
-//     const cachedCosmetics = await getCachedCosmetics(locale);
-//
-//     return Object.values(cachedCosmetics).find(cosmetic => cosmetic.CosmeticName.toLowerCase() === name.toLowerCase());
-// }
-
-// Retrieve list of cosmetics using character's index
-// export async function getCosmeticListByCharacterIndex(index: number, locale: Locale): Promise<Cosmetic[]> {
-//     const cosmeticData = await getCachedCosmetics(locale);
-//
-//     return Object.values(cosmeticData).filter((cosmetic: Cosmetic) => {
-//         return cosmetic.Character === index;
-//     });
-// }
-
 /**
  * Retrieve a list of filtered cosmetics based on optional filter criteria.
  *
  * @param filters - An optional object containing filter properties from the Cosmetic interface.
  * @param locale - The locale for which to retrieve the cosmetics.
+ *
+ * @returns {Promise<Cosmetic[]>} A promise that resolves to an array of filtered Cosmetic objects.
  *
  * @example
  * const filteredCosmetics = await getFilteredCosmeticsList({
@@ -93,7 +102,6 @@ export async function getCosmeticChoicesFromIndex(query: string, locale: Locale)
  *     Purchasable: true,
  * }, Locale.EN_US);
  *
- * @returns A promise that resolves to an array of filtered Cosmetic objects.
  */
 export async function getFilteredCosmeticsList(filters: Partial<Cosmetic> = {}, locale: Locale): Promise<Cosmetic[]> {
     const cosmetics = await getCachedCosmetics(locale);
@@ -132,7 +140,7 @@ export async function getFilteredCosmeticsList(filters: Partial<Cosmetic> = {}, 
  *
  * @param locale The locale used to retrieve the cosmetics data.
  *
- * @returns A Promise that resolves to an array of strings, where each string represents a unique inclusion
+ * @returns {Promise<string[]>} A Promise that resolves to an array of strings, where each string represents a unique inclusion
  *          version associated with the cosmetics.
  *
  * @example
@@ -152,12 +160,27 @@ export async function getInclusionVersionsForCosmetics(locale: Locale): Promise<
     return Array.from(inclusionVersions).sort().reverse();
 }
 
-// Retrieve a single cosmetic by ID
+/**
+ * Retrieves a single cosmetic by its ID.
+ *
+ * @param id - The ID of the cosmetic to retrieve.
+ * @param locale - The locale to fetch the cosmetic data for.
+ *
+ * @returns {Promise<Cosmetic | undefined>} A promise that resolves to the cosmetic's data if found, or undefined if not.
+ */
 export async function getCosmeticDataById(id: string, locale: Locale): Promise<Cosmetic | undefined> {
     const cachedCosmetics = await getCachedCosmetics(locale);
     return cachedCosmetics[id];
 }
 
+/**
+ * Retrieves the cached cosmetic data for the specified locale.
+ * If the data is not already cached, it will initialize the cache.
+ *
+ * @param locale - The locale to fetch the cached cosmetic data for.
+ *
+ * @returns {Promise<{ [key: string]: Cosmetic }>} A promise that resolves to the cached cosmetic data.
+ */
 export async function getCachedCosmetics(locale: Locale): Promise<{ [key: string]: Cosmetic }> {
     return getCachedGameData<Cosmetic>('cosmeticData', locale, () => initializeCosmeticCache(locale));
 }

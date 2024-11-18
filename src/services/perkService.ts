@@ -3,19 +3,33 @@ import {
     initializeGameDataCache
 } from "../cache";
 import {
-    Perk
+    Perk,
+    PerkExtended
 } from "../types";
 import { EGameData } from "@utils/dataUtils";
 import { Locale } from "discord.js";
-import { PerkExtended } from "../types/perk";
 
+/**
+ * Initializes the cache for perks by fetching data from the API and storing it.
+ *
+ * @param locale - The locale used for retrieving the perk data.
+ *
+ * @returns {Promise<void>} A promise that resolves once the perk cache is initialized.
+ */
 export async function initializePerksCache(locale: Locale): Promise<void> {
     await initializeGameDataCache<Perk>('/api/perks', EGameData.PerkData, locale);
 }
 
 // region Helpers
 
-// Retrieve a single perk by exact name
+/**
+ * Retrieves a perk by its exact name.
+ *
+ * @param name - The name of the perk to be fetched.
+ * @param locale - The locale in which to retrieve the perk data.
+ *
+ * @returns {Promise<PerkExtended | undefined>} A promise that resolves to a PerkExtended object if found, or undefined if not.
+ */
 export async function getPerkDataByName(name: string, locale: Locale): Promise<PerkExtended | undefined> {
     const cachedPerks = await getCachedPerks(locale);
 
@@ -28,6 +42,14 @@ export async function getPerkDataByName(name: string, locale: Locale): Promise<P
     return undefined;
 }
 
+/**
+ * Retrieves a list of perks that match the given query string.
+ *
+ * @param query - The query string to search for in perk names.
+ * @param locale - The locale used to retrieve the perk data.
+ *
+ * @returns {Promise<Perk[]>} A promise that resolves to an array of perks whose names match the query string.
+ */
 export async function getPerkChoices(query: string, locale: Locale): Promise<Perk[]> {
     const cachedPerks = await getCachedPerks(locale);
 
@@ -36,6 +58,13 @@ export async function getPerkChoices(query: string, locale: Locale): Promise<Per
         .filter(perk => perk.Name.toLowerCase().includes(lowerCaseQuery));
 }
 
+/**
+ * Retrieves cached perk data for a specified locale.
+ *
+ * @param locale - The locale used to retrieve the cached perks.
+ *
+ * @returns {Promise<{ [key: string]: Perk }>} A promise that resolves to an object containing the cached perk data.
+ */
 export async function getCachedPerks(locale: Locale): Promise<{ [key: string]: Perk }> {
     return getCachedGameData<Perk>('perkData', locale, () => initializePerksCache(locale));
 }

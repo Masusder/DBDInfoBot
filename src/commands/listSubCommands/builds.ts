@@ -45,7 +45,12 @@ export async function handleBuildsListCommandInteraction(interaction: ChatInputC
     try {
         await interaction.deferReply();
 
-        const { builds, totalPages } = await retrieveBuilds(filters);
+        const buildsList = await retrieveBuilds(filters);
+        if (!buildsList) {
+            return await interaction.editReply({ content: "Failed to retrieve builds data." });
+        }
+
+        const { builds, totalPages } = buildsList;
 
         if (!builds || builds.length === 0) {
             return await interaction.editReply({ content: "No builds found with the specified filters." });
@@ -80,7 +85,11 @@ export async function handleBuildsListCommandInteraction(interaction: ChatInputC
                     currentPage = determineNewPage(currentPage, paginationType as TPaginationType, totalPages + 1, pageNumber);
 
                     const newFilters: IBuildFilters = { ...filters, page: currentPage - 1 };
-                    const { builds: newBuilds, totalPages: newTotalPages } = await retrieveBuilds(newFilters);
+
+                    const buildsList = await retrieveBuilds(newFilters);
+                    if (!buildsList) return await i.update({ content: "Failed to retrieve builds data.", components: [] });
+
+                    const { builds: newBuilds, totalPages: newTotalPages } = buildsList;
 
                     if (!newBuilds || newBuilds.length === 0) {
                         return await i.update({

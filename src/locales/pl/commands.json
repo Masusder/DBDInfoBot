@@ -23,8 +23,8 @@
     }
   },
   "shrine_command": {
-    "name": "ołtarz",
-    "description": "Sprawdź cotygodniowy Ołtarz Tajemnic."
+    "name": "sanktuarium",
+    "description": "Sprawdź cotygodniowe Sanktuarium Tajemnic."
   },
   "list_command": {
     "name": "lista",

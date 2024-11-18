@@ -33,3 +33,11 @@ export interface IBuild {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export interface IBuildsResponse {
+    builds: IBuild[];
+    availableVersions: string[];
+    totalPages: number;
+    currentPage: number;
+    totalBuilds: number;
+}

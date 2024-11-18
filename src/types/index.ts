@@ -1,21 +1,51 @@
-import { Addon } from "./addon";
-import { Character } from "./character";
+import {
+    Addon,
+    AddonExtended
+} from "./addon";
+import {
+    Character,
+    CharacterExtended
+} from "./character";
 import { Cosmetic } from "./cosmetic";
-import { Perk } from "./perk";
-import { Offering } from "./offering";
-import { Item } from "./item";
+import {
+    Perk,
+    PerkExtended
+} from "./perk";
+import {
+    Offering,
+    OfferingExtended
+} from "./offering";
+import {
+    Item,
+    ItemExtended
+} from "./item";
 import {
     IBuildFilters,
-    IBuild
+    IBuild,
+    IBuildsResponse
 } from "./build";
+import {
+    IShrine,
+    IShrineItem,
+    IShrinePerkItem
+} from "./shrine";
 
 export {
     Addon,
+    AddonExtended,
     Character,
+    CharacterExtended,
     Cosmetic,
     Perk,
+    PerkExtended,
     Offering,
+    OfferingExtended,
     Item,
+    ItemExtended,
     IBuild,
-    IBuildFilters
+    IBuildFilters,
+    IBuildsResponse,
+    IShrine,
+    IShrineItem,
+    IShrinePerkItem
 };

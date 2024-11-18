@@ -91,11 +91,11 @@
     }
   },
   "shrine_command": {
-    "author_title": "Świątynia Tajemnic tego tygodnia",
+    "author_title": "Sanktuarium Tajemnic tego tygodnia",
     "character": "Postać",
     "time_left": "Pozostały czas na odświeżenie:",
     "shrine_active": [
-      "Świątynia aktywna od",
+      "Sanktuarium aktywne od",
       "do"
     ]
   },
