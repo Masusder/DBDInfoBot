@@ -1,28 +1,28 @@
 {
   "info_command": {
     "cosmetic_subcommand": {
-      "cosmetic_not_found": "No cosmetic found for",
+      "cosmetic_not_found": "Nie znaleziono kosmetyku dla",
       "button_interaction": {
-        "invalid_id": "Invalid cosmetic ID.",
-        "error_retrieving_data": "Error retrieving cosmetic data."
+        "invalid_id": "Nieprawidłowy identyfikator kosmetyku.",
+        "error_retrieving_data": "Błąd podczas pobierania danych kosmetyków."
       }
     },
     "build_subcommand": {
-      "build_not_found": "Not found any Build with specified ID."
+      "build_not_found": "Nie znaleziono żadnego ekwipunku ze wskazanym ID."
     },
     "character_subcommand": {
-      "invalid_index": "Invalid character index.",
-      "error_retrieving_data": "Error retrieving character data."
+      "invalid_index": "Nieprawidłowy indeks postaci.",
+      "error_retrieving_data": "Wystąpił błąd podczas pobierania danych postaci."
     }
   },
   "list_command": {
-    "unknown_subcommand": "Unknown subcommand.",
+    "unknown_subcommand": "Nieznana podkomenda.",
     "cosmetics_subcommand": {
-      "cosmetics_not_found": "No cosmetics found.",
-      "cosmetics_not_found_filters": "No cosmetics found for the applied filters."
+      "cosmetics_not_found": "Nie znaleziono kosmetyków.",
+      "cosmetics_not_found_filters": "Nie znaleziono kosmetyków dla zastosowanych filtrów."
     }
   },
   "general": {
-    "unauthorized": "Only the person who used the command can do that."
+    "unauthorized": "Tylko osoba, która użyła polecenia, może to zrobić."
   }
 }
