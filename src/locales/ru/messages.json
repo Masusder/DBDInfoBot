@@ -1,0 +1,113 @@
+{
+  "info_command": {
+    "perk_subcommand": {
+      "perk_information": "Информация о Навыке",
+      "generic_perk": "Стандартный Навык",
+      "description": "Описание"
+    },
+    "addon_subcommand": {
+      "addon_information": "Информация об улучшении",
+      "description": "Описание",
+      "rarity": "Редкость",
+      "role": "Роль"
+    },
+    "item_subcommand": {
+      "item_information": "Информация о Предмете",
+      "description": "Описание",
+      "character": "Персонаж",
+      "rarity": "Редкость",
+      "role": "Роль"
+    },
+    "offering_subcommand": {
+      "offering_information": "Информация о подношении",
+      "description": "Описание",
+      "rarity": "Редкость",
+      "role": "Роль",
+      "retired": "Подношение больше не работает."
+    },
+    "character_subcommand": {
+      "character_information": "Информация о Персонаже",
+      "description": "Описание",
+      "role": "Роль",
+      "gender": "Гендер",
+      "difficulty": "Сложность",
+      "backstory": "Предыстория -",
+      "read_backstory": "Прочитать Предысторию",
+      "character_backstory": "Предыстория персонажа"
+    },
+    "cosmetic_subcommand": {
+      "character": "Персонаж",
+      "collection": "Коллекция",
+      "rarity": "Редкость",
+      "inclusion_version": "Добавлен с Версии",
+      "type": "Тип",
+      "release_date": "Дата Выхода",
+      "sale": "Скидка Заканчивается",
+      "cosmetic_info": "Информация о Косметическом Предмете",
+      "more_info": "Больше Информации",
+      "view_pieces": "Просмотреть комплектацию",
+      "linked_cosmetic": "Неразъединяемый",
+      "button_interaction": {
+        "outfit_pieces": "Комплектация для"
+      }
+    },
+    "build_subcommand": {
+      "unknown_perk": "Неизвестный Навык",
+      "unknown_addon": "Неизвестное Улучшение",
+      "perks": "Навыки",
+      "item_addons": "Предметы + Улучшения",
+      "power_addons": "Сила + Улучшения",
+      "offering": "Подношение",
+      "category": "Категория",
+      "character": "Персонаж",
+      "rating": "Оценка",
+      "rating_desc": [
+        "на основании",
+        "голоса(ов)"
+      ],
+      "any_perks": "Любые навыки",
+      "any_item": "Любой предмет",
+      "any_power": "Любая сила",
+      "any_offering": "Любое подношение",
+      "desc_not_provided": "К этой сборке не прилагается описание.",
+      "build_info": "Описание Сборки",
+      "created_by": [
+        "Создана",
+        ""
+      ]
+    }
+  },
+  "list_command": {
+    "cosmetics_subcommand": {
+      "found_total": [
+        "Найдено",
+        "косметических предметов"
+      ],
+      "filters_applied": "Фильтры применены",
+      "cosmetics_list": "Список косметических предметов",
+      "more_info": [
+        "Получить подробную информацию о косметическом предмете можно при помощи команды",
+        "информация Косметический предмет <cosmetic_name>"
+      ]
+    }
+  },
+  "shrine_command": {
+    "author_title": "Храм Тайн на этой неделе",
+    "character": "Персонаж",
+    "time_left": "До Обновления:",
+    "shrine_active": [
+      "Храм Тайн активен с",
+      "до"
+    ]
+  },
+  "generic_pagination": {
+    "first": "Первая",
+    "previous": "Предыдущая",
+    "page_number": [
+      "Страница",
+      "из"
+    ],
+    "next": "Следующая",
+    "last": "Последняя"
+  }
+}

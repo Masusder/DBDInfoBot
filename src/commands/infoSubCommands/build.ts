@@ -130,11 +130,15 @@ export async function handleBuildCommandInteraction(interaction: ChatInputComman
             });
         }
 
+        const voteText = ratingCount && ratingCount > 1
+            ? getTranslation('info_command.build_subcommand.votes', locale, 'messages')
+            : getTranslation('info_command.build_subcommand.vote', locale, 'messages');
+
         const averageRating = Math.round(buildData.averageRating);
         const stars = '⭐'.repeat(averageRating) + '☆'.repeat(5 - averageRating);
         fields.push({
             name: getTranslation('info_command.build_subcommand.rating', locale, 'messages'),
-            value: `${stars} ${getTranslation('info_command.build_subcommand.rating_desc.0', locale, 'messages')} ${ratingCount} ${getTranslation('info_command.build_subcommand.rating_desc.1', locale, 'messages')}`,
+            value: `${stars} ${getTranslation('info_command.build_subcommand.rating_desc', locale, 'messages')} ${ratingCount} ${voteText}`,
             inline: false
         });
 
