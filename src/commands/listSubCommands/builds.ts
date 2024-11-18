@@ -47,13 +47,13 @@ export async function handleBuildsListCommandInteraction(interaction: ChatInputC
 
         const buildsList = await retrieveBuilds(filters);
         if (!buildsList) {
-            return await interaction.editReply({ content: "Failed to retrieve builds data." });
+            return await interaction.editReply({ content: "Failed to retrieve builds data." }); // TODO: localize this
         }
 
         const { builds, totalPages } = buildsList;
 
         if (!builds || builds.length === 0) {
-            return await interaction.editReply({ content: "No builds found with the specified filters." });
+            return await interaction.editReply({ content: "No builds found with the specified filters." }); // TODO: localize this
         }
 
         const perkData = await getCachedPerks(locale);
@@ -87,13 +87,13 @@ export async function handleBuildsListCommandInteraction(interaction: ChatInputC
                     const newFilters: IBuildFilters = { ...filters, page: currentPage - 1 };
 
                     const buildsList = await retrieveBuilds(newFilters);
-                    if (!buildsList) return await i.update({ content: "Failed to retrieve builds data.", components: [] });
+                    if (!buildsList) return await i.update({ content: "Failed to retrieve builds data.", components: [] }); // TODO: localize this
 
                     const { builds: newBuilds, totalPages: newTotalPages } = buildsList;
 
                     if (!newBuilds || newBuilds.length === 0) {
                         return await i.update({
-                            content: "No builds found with the specified filters.",
+                            content: "No builds found with the specified filters.", // TODO: localize this
                             components: []
                         });
                     }
@@ -135,21 +135,21 @@ async function createEmbed(
     totalPages: number,
     perkData: { [key: string]: Perk }) {
     const embed = new EmbedBuilder()
-        .setTitle(`Build List - Page ${currentPage} of ${totalPages + 1}`)
+        .setTitle(`Build List - Page ${currentPage} of ${totalPages + 1}`) // TODO: localize this
         .setColor(role === 'Survivor' ? "#1e90ff" : "Red")
-        .setDescription(`[You can create your own build here!](${combineBaseUrlWithPath('/builds/create')})\nHere are the builds matching your filters:`)
+        .setDescription(`[You can create your own build here!](${combineBaseUrlWithPath('/builds/create')})\nHere are the builds matching your filters:`) // TODO: localize this
         .setTimestamp()
         .setFooter({ text: 'Builds List' })
         .setThumbnail(combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_loadout.png'));
 
     builds.forEach((build: IBuild, index: number) => {
-        const buildTitle = `${index + 1}. ${build.title} | Created by: ${build.username}`;
+        const buildTitle = `${index + 1}. ${build.title} | Created by: ${build.username}`; // TODO: localize this
 
         const perksList = [build.perk1, build.perk2, build.perk3, build.perk4]
             .filter(Boolean)
             .filter(perk => perk !== "None")
-            .map(perk => `${perkData[perk]?.Name ?? 'Unknown Perk'}`)
-            .join(', ') || 'Any Perks';
+            .map(perk => `${perkData[perk]?.Name ?? 'Unknown Perk'}`) // TODO: localize this
+            .join(', ') || 'Any Perks'; // TODO: localize this
 
         embed.addFields({
             name: buildTitle,
@@ -164,11 +164,11 @@ async function createEmbed(
 function createStringMenu(builds: any) {
     const selectMenu = new StringSelectMenuBuilder()
         .setCustomId('builds-selection')
-        .setPlaceholder('Select a build to get details')
+        .setPlaceholder('Select a build to get details') // TODO: localize this
         .addOptions(
             builds.map((build: IBuild, index: number) => ({
                 label: `${index + 1}. ${build.title}`,
-                description: `Created by: ${build.username}`,
+                description: `Created by: ${build.username}`, // TODO: localize this
                 value: build.buildId
             }))
         );
