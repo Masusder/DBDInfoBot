@@ -61,7 +61,7 @@
     },
     "builds_subcommand": {
       "name": "сборки",
-      "description": "Получить список сборок. "
+      "description": "Получить список сборок."
     }
   }
 }
