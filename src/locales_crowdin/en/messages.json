@@ -1,113 +1,112 @@
 {
   "info_command": {
     "perk_subcommand": {
-      "perk_information": "Perk Information",
-      "generic_perk": "Generic Perk",
-      "description": "Description"
+      "perk_information": "Informacje o umiejętności",
+      "generic_perk": "Ogólna umiejętność",
+      "description": "Opis"
     },
     "addon_subcommand": {
-      "addon_information": "Add-on Information",
-      "description": "Description",
-      "rarity": "Rarity",
-      "role": "Role"
+      "addon_information": "Informacje o dodatku",
+      "description": "Opis",
+      "rarity": "Rzadkość",
+      "role": "Rola"
     },
     "item_subcommand": {
-      "item_information": "Item Information",
-      "description": "Description",
-      "character": "Character",
-      "rarity": "Rarity",
-      "role": "Role"
+      "item_information": "Informacje o przedmiocie",
+      "character": "Postać",
+      "rarity": "Rzadkość",
+      "role": "Rola"
     },
     "offering_subcommand": {
-      "offering_information": "Offering Information",
-      "description": "Description",
-      "rarity": "Rarity",
-      "role": "Role",
-      "retired": "This offering has been retired."
+      "offering_information": "Informacje o darze",
+      "description": "Opis",
+      "rarity": "Rzadkość",
+      "role": "Rola",
+      "retired": "Ten dar został wycofany."
     },
     "character_subcommand": {
-      "character_information": "Character Information",
-      "description": "Description",
-      "role": "Role",
-      "gender": "Gender",
-      "difficulty": "Difficulty",
-      "backstory": "Backstory of",
-      "read_backstory": "Read Backstory",
-      "character_backstory": "Character backstory"
+      "character_information": "Informacje o postaci",
+      "description": "Opis",
+      "role": "Rola",
+      "gender": "Płeć",
+      "difficulty": "Poziom trudności",
+      "backstory": "Historia -",
+      "read_backstory": "Przeczytaj historię",
+      "character_backstory": "Historia postaci"
     },
     "cosmetic_subcommand": {
-      "character": "Character",
-      "collection": "Collection",
-      "rarity": "Rarity",
-      "inclusion_version": "Inclusion Version",
-      "type": "Type",
-      "release_date": "Release Date",
-      "sale": "Sale Ends",
-      "cosmetic_info": "Cosmetic Information",
-      "more_info": "More Info",
-      "view_pieces": "View Outfit Pieces",
-      "linked_cosmetic": "Linked Cosmetic",
+      "character": "Postać",
+      "collection": "Kolekcja",
+      "rarity": "Rzadkość",
+      "inclusion_version": "Wersja wydania",
+      "type": "Typ",
+      "release_date": "Data wydania",
+      "sale": "Koniec wyprzedaży",
+      "cosmetic_info": "Informacje o kosmetyku",
+      "more_info": "Więcej informacji",
+      "view_pieces": "Zobacz elementy stroju",
+      "linked_cosmetic": "Połączony kosmetyk",
       "button_interaction": {
-        "outfit_pieces": "Outfit Pieces for"
+        "outfit_pieces": "Elementy stroju dla"
       }
     },
     "build_subcommand": {
-      "unknown_perk": "Unknown Perk",
-      "unknown_addon": "Unknown Add-on",
-      "perks": "Perks",
-      "item_addons": "Item + Add-ons",
-      "power_addons": "Power + Add-ons",
-      "offering": "Offering",
-      "category": "Category",
-      "character": "Character",
-      "rating": "Rating",
+      "unknown_perk": "Nieznana umiejętność",
+      "unknown_addon": "Nieznany dodatek",
+      "perks": "Umiejętności",
+      "item_addons": "Przedmiot + Dodatki",
+      "power_addons": "Moc + Dodatki",
+      "offering": "Dar",
+      "category": "Kategoria",
+      "character": "Postać",
+      "rating": "Ocena",
       "rating_desc": [
-        "from a total of",
-        "votes"
+        "z łącznej ilości",
+        "głosu(ów)"
       ],
-      "any_perks": "Any perks",
-      "any_item": "Any item",
-      "any_power": "Any power",
-      "any_offering": "Any offering",
-      "desc_not_provided": "Description for this build wasn't provided.",
-      "build_info": "Build Information",
+      "any_perks": "Dowolne umiejętności",
+      "any_item": "Dowolny przedmiot",
+      "any_power": "Dowolna moc",
+      "any_offering": "Dowolny dar",
+      "desc_not_provided": "Opis dla tego ekwipunku nie został podany.",
+      "build_info": "Informacje o ekwipunku",
       "created_by": [
-        "Created by",
-        "on"
+        "Utworzony przez",
+        "dnia"
       ]
     }
   },
   "list_command": {
     "cosmetics_subcommand": {
       "found_total": [
-        "Found a total of",
-        "cosmetics"
+        "Znaleziono łącznie",
+        "kosmetyków"
       ],
-      "filters_applied": "Filters applied",
-      "cosmetics_list": "List of cosmetics",
+      "filters_applied": "Zastosowano filtry",
+      "cosmetics_list": "Lista kosmetyków",
       "more_info": [
-        "For more information about a specific cosmetic, use the command",
-        "info Cosmetic <cosmetic_name>"
+        "Aby uzyskać więcej informacji o konkretnym kosmetyku, użyj polecenia",
+        "info Kosmetyk <nazwa_kosmetyku>"
       ]
     }
   },
   "shrine_command": {
-    "author_title": "This week's Shrine of Secrets",
-    "character": "Character",
-    "time_left": "Time Left to Refresh:",
+    "author_title": "Sanktuarium Tajemnic tego tygodnia",
+    "character": "Postać",
+    "time_left": "Pozostały czas na odświeżenie:",
     "shrine_active": [
-      "Shrine Active from",
-      "to"
+      "Sanktuarium aktywne od",
+      "do"
     ]
   },
   "generic_pagination": {
-    "first": "First",
-    "previous": "Previous",
+    "first": "Pierwsza",
+    "previous": "Poprzednia",
     "page_number": [
-      "Page",
-      "of"
+      "Strona",
+      "z"
     ],
-    "next": "Next",
-    "last": "Last"
+    "next": "Następna",
+    "last": "Ostatnia"
   }
 }
