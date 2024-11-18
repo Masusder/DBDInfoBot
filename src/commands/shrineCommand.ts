@@ -19,7 +19,10 @@ import {
     formatNumber,
     generateCustomId
 } from "@utils/stringUtils";
-import { getTranslation } from "@utils/localizationUtils";
+import {
+    commandLocalizationHelper,
+    getTranslation
+} from "@utils/localizationUtils";
 import {
     createCanvas,
     loadImage
@@ -31,43 +34,9 @@ import { layerIcons } from "@commands/infoSubCommands/infoUtils";
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
         .setName('shrine')
-        .setNameLocalizations({
-            'en-US': i18next.t('shrine_command.name', { lng: 'en' }),
-            'en-GB': i18next.t('shrine_command.name', { lng: 'en' }),
-            'de': i18next.t('shrine_command.name', { lng: 'de' }),
-            'es-ES': i18next.t('shrine_command.name', { lng: 'es' }),
-            'es-419': i18next.t('shrine_command.name', { lng: 'es-MX' }),
-            'fr': i18next.t('shrine_command.name', { lng: 'fr' }),
-            'it': i18next.t('shrine_command.name', { lng: 'it' }),
-            'ja': i18next.t('shrine_command.name', { lng: 'ja' }),
-            'ko': i18next.t('shrine_command.name', { lng: 'ko' }),
-            'pl': i18next.t('shrine_command.name', { lng: 'pl' }),
-            'pt-BR': i18next.t('shrine_command.name', { lng: 'pt-BR' }),
-            'ru': i18next.t('shrine_command.name', { lng: 'ru' }),
-            'th': i18next.t('shrine_command.name', { lng: 'th' }),
-            'tr': i18next.t('shrine_command.name', { lng: 'tr' }),
-            'zh-CN': i18next.t('shrine_command.name', { lng: 'zh-Hans' }),
-            'zh-TW': i18next.t('shrine_command.name', { lng: 'zh-Hant' })
-        })
+        .setNameLocalizations(commandLocalizationHelper('shrine_command.name'))
         .setDescription(i18next.t('shrine_command.description', { lng: 'en' }))
-        .setDescriptionLocalizations({
-            'en-US': i18next.t('shrine_command.description', { lng: 'en' }),
-            'en-GB': i18next.t('shrine_command.description', { lng: 'en' }),
-            'de': i18next.t('shrine_command.description', { lng: 'de' }),
-            'es-ES': i18next.t('shrine_command.description', { lng: 'es' }),
-            'es-419': i18next.t('shrine_command.description', { lng: 'es-MX' }),
-            'fr': i18next.t('shrine_command.description', { lng: 'fr' }),
-            'it': i18next.t('shrine_command.description', { lng: 'it' }),
-            'ja': i18next.t('shrine_command.description', { lng: 'ja' }),
-            'ko': i18next.t('shrine_command.description', { lng: 'ko' }),
-            'pl': i18next.t('shrine_command.description', { lng: 'pl' }),
-            'pt-BR': i18next.t('shrine_command.description', { lng: 'pt-BR' }),
-            'ru': i18next.t('shrine_command.description', { lng: 'ru' }),
-            'th': i18next.t('shrine_command.description', { lng: 'th' }),
-            'tr': i18next.t('shrine_command.description', { lng: 'tr' }),
-            'zh-CN': i18next.t('shrine_command.description', { lng: 'zh-Hans' }),
-            'zh-TW': i18next.t('shrine_command.description', { lng: 'zh-Hant' })
-        }) : undefined;
+        .setDescriptionLocalizations(commandLocalizationHelper('shrine_command.description')) : undefined;
 
 type ShrinePerk = {
     id: string;
