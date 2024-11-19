@@ -20,6 +20,10 @@
     "cosmetics_subcommand": {
       "cosmetics_not_found": "Nessun cosmetico trovato.",
       "cosmetics_not_found_filters": "Nessun cosmetico trovato per i filtri applicati."
+    },
+    "builds_subcommand": {
+      "error_retrieving_data": "Failed to retrieve builds data.",
+      "builds_not_found_filters": "No builds found with the specified filters."
     }
   },
   "general": {
