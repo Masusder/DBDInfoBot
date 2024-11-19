@@ -4,6 +4,7 @@ import {
     ButtonInteraction,
     ChatInputCommandInteraction,
     EmbedBuilder,
+    Locale,
     StringSelectMenuBuilder,
     StringSelectMenuInteraction
 } from "discord.js";
@@ -26,8 +27,8 @@ import {
     Perk
 } from "../../types";
 import { handleBuildCommandInteraction } from "@commands/infoSubCommands/build";
+import { getTranslation } from "@utils/localizationUtils";
 
-// TODO: localize this
 export async function handleBuildsListCommandInteraction(interaction: ChatInputCommandInteraction) {
     let currentPage = interaction.options.getNumber('page') || 1;
     const locale = interaction.locale;
@@ -47,20 +48,20 @@ export async function handleBuildsListCommandInteraction(interaction: ChatInputC
 
         const buildsList = await retrieveBuilds(filters);
         if (!buildsList) {
-            return await interaction.editReply({ content: "Failed to retrieve builds data." }); // TODO: localize this
+            return await interaction.editReply({ content: getTranslation('list_command.builds_subcommand.error_retrieving_data', locale, 'errors') });
         }
 
         const { builds, totalPages } = buildsList;
 
         if (!builds || builds.length === 0) {
-            return await interaction.editReply({ content: "No builds found with the specified filters." }); // TODO: localize this
+            return await interaction.editReply({ content: getTranslation('list_command.builds_subcommand.builds_not_found_filters', locale, 'errors') });
         }
 
         const perkData = await getCachedPerks(locale);
 
-        const embed = await createEmbed(filters.role, builds, currentPage, totalPages, perkData);
+        const embed = await createEmbed(filters.role, builds, currentPage, totalPages, perkData, locale);
 
-        const stringMenu = createStringMenu(builds);
+        const stringMenu = createStringMenu(builds, locale);
 
         const replyMessage = await interaction.editReply({
             embeds: [embed],
@@ -87,22 +88,22 @@ export async function handleBuildsListCommandInteraction(interaction: ChatInputC
                     const newFilters: IBuildFilters = { ...filters, page: currentPage - 1 };
 
                     const buildsList = await retrieveBuilds(newFilters);
-                    if (!buildsList) return await i.update({ content: "Failed to retrieve builds data.", components: [] }); // TODO: localize this
+                    if (!buildsList) return await i.update({ content: getTranslation('list_command.builds_subcommand.error_retrieving_data', locale, 'errors'), components: [] });
 
                     const { builds: newBuilds, totalPages: newTotalPages } = buildsList;
 
                     if (!newBuilds || newBuilds.length === 0) {
                         return await i.update({
-                            content: "No builds found with the specified filters.", // TODO: localize this
+                            content: getTranslation('list_command.builds_subcommand.builds_not_found_filters', locale, 'errors'),
                             components: []
                         });
                     }
 
-                    const newEmbed = await createEmbed(filters.role, newBuilds, currentPage, newTotalPages, perkData);
+                    const newEmbed = await createEmbed(filters.role, newBuilds, currentPage, newTotalPages, perkData, locale);
 
                     await i.update({
                         embeds: [newEmbed],
-                        components: [createStringMenu(newBuilds), ...generatePaginationButtons(currentPage, totalPages + 1, locale)]
+                        components: [createStringMenu(newBuilds, locale), ...generatePaginationButtons(currentPage, totalPages + 1, locale)]
                     });
                 }
 
@@ -133,23 +134,24 @@ async function createEmbed(
     builds: IBuild[],
     currentPage: number,
     totalPages: number,
-    perkData: { [key: string]: Perk }) {
+    perkData: { [key: string]: Perk },
+    locale: Locale) {
     const embed = new EmbedBuilder()
-        .setTitle(`Build List - Page ${currentPage} of ${totalPages + 1}`) // TODO: localize this
+        .setTitle(`${getTranslation('list_command.builds_subcommand.builds_list', locale, 'messages')} - ${getTranslation('list_command.builds_subcommand.builds_list_page.0', locale, 'messages')} ${currentPage} ${getTranslation('list_command.builds_subcommand.builds_list_page.1', locale, 'messages')} ${totalPages + 1}`)
         .setColor(role === 'Survivor' ? "#1e90ff" : "Red")
-        .setDescription(`[You can create your own build here!](${combineBaseUrlWithPath('/builds/create')})\nHere are the builds matching your filters:`) // TODO: localize this
+        .setDescription(`[${getTranslation('list_command.builds_subcommand.create_your_own_build', locale, 'messages')}](${combineBaseUrlWithPath('/builds/create')})\n${getTranslation('list_command.builds_subcommand.builds_matching_filters', locale, 'messages')}`)
         .setTimestamp()
-        .setFooter({ text: 'Builds List' })
+        .setFooter({ text: getTranslation('list_command.builds_subcommand.builds_list', locale, 'messages') })
         .setThumbnail(combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_loadout.png'));
 
     builds.forEach((build: IBuild, index: number) => {
-        const buildTitle = `${index + 1}. ${build.title} | Created by: ${build.username}`; // TODO: localize this
+        const buildTitle = `${index + 1}. ${build.title} | ${getTranslation('list_command.builds_subcommand.created_by', locale, 'messages')} ${build.username}`;
 
         const perksList = [build.perk1, build.perk2, build.perk3, build.perk4]
             .filter(Boolean)
             .filter(perk => perk !== "None")
-            .map(perk => `${perkData[perk]?.Name ?? 'Unknown Perk'}`) // TODO: localize this
-            .join(', ') || 'Any Perks'; // TODO: localize this
+            .map(perk => `${perkData[perk]?.Name ?? getTranslation('list_command.builds_subcommand.unknown_perk', locale, 'messages')}`)
+            .join(', ') || getTranslation('list_command.builds_subcommand.any_perks', locale, 'messages');
 
         embed.addFields({
             name: buildTitle,
@@ -161,14 +163,14 @@ async function createEmbed(
     return embed;
 }
 
-function createStringMenu(builds: any) {
+function createStringMenu(builds: IBuild[], locale: Locale) {
     const selectMenu = new StringSelectMenuBuilder()
         .setCustomId('builds-selection')
-        .setPlaceholder('Select a build to get details') // TODO: localize this
+        .setPlaceholder(getTranslation('list_command.builds_subcommand.select_for_details', locale, 'messages'))
         .addOptions(
             builds.map((build: IBuild, index: number) => ({
                 label: `${index + 1}. ${build.title}`,
-                description: `Created by: ${build.username}`, // TODO: localize this
+                description: `${getTranslation('list_command.builds_subcommand.created_by', locale, 'messages')} ${build.username}`,
                 value: build.buildId
             }))
         );

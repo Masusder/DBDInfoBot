@@ -94,17 +94,29 @@ export const data = i18next.isInitialized
                 .addStringOption(option =>
                     option
                         .setName('role')
-                        .setDescription('Role for the build')
+                        .setNameLocalizations(commandLocalizationHelper('list_command.builds_subcommand.options.role.name'))
+                        .setDescription(i18next.t('list_command.builds_subcommand.options.role.description', { lng: 'en' }))
+                        .setDescriptionLocalizations(commandLocalizationHelper('list_command.builds_subcommand.options.role.description'))
                         .setRequired(true)
                         .addChoices(
-                            { name: 'Killer', value: 'Killer' },
-                            { name: 'Survivor', value: 'Survivor' }
+                            {
+                                name: i18next.t('list_command.builds_subcommand.options.role.choices.killer', { lng: 'en' }),
+                                name_localizations: commandLocalizationHelper('list_command.builds_subcommand.options.role.choices.killer'),
+                                value: 'Killer'
+                            },
+                            {
+                                name: i18next.t('list_command.builds_subcommand.options.role.choices.survivor', { lng: 'en' }),
+                                name_localizations: commandLocalizationHelper('list_command.builds_subcommand.options.role.choices.survivor'),
+                                value: 'Survivor'
+                            }
                         )
                 )
                 .addNumberOption(option =>
                     option
                         .setName('page')
-                        .setDescription('Page number (default is 1)')
+                        .setNameLocalizations(commandLocalizationHelper('list_command.builds_subcommand.options.page.name'))
+                        .setDescription(i18next.t('list_command.builds_subcommand.options.page.description', { lng: 'en' }))
+                        .setDescriptionLocalizations(commandLocalizationHelper('list_command.builds_subcommand.options.page.description'))
                         .setRequired(false)
                         .setMinValue(1)
                         .setMaxValue(9999)
@@ -112,41 +124,71 @@ export const data = i18next.isInitialized
                 .addStringOption(option =>
                     option
                         .setName('title')
-                        .setDescription('Title of the build')
+                        .setNameLocalizations(commandLocalizationHelper('list_command.builds_subcommand.options.title.name'))
+                        .setDescription(i18next.t('list_command.builds_subcommand.options.title.description', { lng: 'en' }))
+                        .setDescriptionLocalizations(commandLocalizationHelper('list_command.builds_subcommand.options.title.description'))
                         .setRequired(false)
                 )
                 .addStringOption(option =>
                     option
                         .setName('category')
-                        .setDescription('Category of the build')
+                        .setNameLocalizations(commandLocalizationHelper('list_command.builds_subcommand.options.category.name'))
+                        .setDescription(i18next.t('list_command.builds_subcommand.options.category.description', { lng: 'en' }))
+                        .setDescriptionLocalizations(commandLocalizationHelper('list_command.builds_subcommand.options.category.description'))
                         .setRequired(false)
                         .addChoices(...buildCategories)
                 )
                 .addStringOption(option =>
                     option
                         .setName('character')
-                        .setDescription('Character for the build')
+                        .setNameLocalizations(commandLocalizationHelper('list_command.builds_subcommand.options.character.name'))
+                        .setDescription(i18next.t('list_command.builds_subcommand.options.character.description', { lng: 'en' }))
+                        .setDescriptionLocalizations(commandLocalizationHelper('list_command.builds_subcommand.options.character.description'))
                         .setRequired(false)
                         .setAutocomplete(true)
                 )
                 .addStringOption(option =>
                     option
                         .setName('version')
-                        .setDescription('Game version for the build')
+                        .setNameLocalizations(commandLocalizationHelper('list_command.builds_subcommand.options.version.name'))
+                        .setDescription(i18next.t('list_command.builds_subcommand.options.version.description', { lng: 'en' }))
+                        .setDescriptionLocalizations(commandLocalizationHelper('list_command.builds_subcommand.options.version.description'))
                         .setRequired(false)
                         .setAutocomplete(true)
                 )
                 .addNumberOption(option =>
                     option
                         .setName('rating')
-                        .setDescription('Minimum rating for the build')
+                        .setNameLocalizations(commandLocalizationHelper('list_command.builds_subcommand.options.rating.name'))
+                        .setDescription(i18next.t('list_command.builds_subcommand.options.rating.description', { lng: 'en' }))
+                        .setDescriptionLocalizations(commandLocalizationHelper('list_command.builds_subcommand.options.rating.description'))
                         .setRequired(false)
                         .addChoices(
-                            { name: "One Star", value: 1 },
-                            { name: "Two Stars", value: 2 },
-                            { name: "Three Stars", value: 3 },
-                            { name: "Four Stars", value: 4 },
-                            { name: "Five Stars", value: 5 }
+                            {
+                                name: i18next.t('list_command.builds_subcommand.options.rating.choices.one_star', { lng: 'en' }),
+                                name_localizations: commandLocalizationHelper('list_command.builds_subcommand.options.rating.choices.one_star'),
+                                value: 1
+                            },
+                            {
+                                name: i18next.t('list_command.builds_subcommand.options.rating.choices.two_stars', { lng: 'en' }),
+                                name_localizations: commandLocalizationHelper('list_command.builds_subcommand.options.rating.choices.two_stars'),
+                                value: 2
+                            },
+                            {
+                                name: i18next.t('list_command.builds_subcommand.options.rating.choices.three_stars', { lng: 'en' }),
+                                name_localizations: commandLocalizationHelper('list_command.builds_subcommand.options.rating.choices.three_stars'),
+                                value: 3
+                            },
+                            {
+                                name: i18next.t('list_command.builds_subcommand.options.rating.choices.four_stars', { lng: 'en' }),
+                                name_localizations: commandLocalizationHelper('list_command.builds_subcommand.options.rating.choices.four_stars'),
+                                value: 4
+                            },
+                            {
+                                name: i18next.t('list_command.builds_subcommand.options.rating.choices.five_stars', { lng: 'en' }),
+                                name_localizations: commandLocalizationHelper('list_command.builds_subcommand.options.rating.choices.five_stars'),
+                                value: 5
+                            }
                         )
                 )
         )
