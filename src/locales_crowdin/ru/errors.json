@@ -20,6 +20,10 @@
     "cosmetics_subcommand": {
       "cosmetics_not_found": "Не удалось найти косметические предметы.",
       "cosmetics_not_found_filters": "Не удалось найти косметические предметы по указанным фильтрам."
+    },
+    "builds_subcommand": {
+      "error_retrieving_data": "Failed to retrieve builds data.",
+      "builds_not_found_filters": "No builds found with the specified filters."
     }
   },
   "general": {
