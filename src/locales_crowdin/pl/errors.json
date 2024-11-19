@@ -20,6 +20,10 @@
     "cosmetics_subcommand": {
       "cosmetics_not_found": "Nie znaleziono kosmetyków.",
       "cosmetics_not_found_filters": "Nie znaleziono kosmetyków dla zastosowanych filtrów."
+    },
+    "builds_subcommand": {
+      "error_retrieving_data": "Nie udało się pobrać danych ekwipunku.",
+      "builds_not_found_filters": "Nie znaleziono ekwipunków spełniających podane filtry."
     }
   },
   "general": {
