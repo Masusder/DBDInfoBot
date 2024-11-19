@@ -88,6 +88,19 @@
         "Получить подробную информацию о косметическом предмете можно при помощи команды",
         "информация Косметический предмет <cosmetic_name>"
       ]
+    },
+    "builds_subcommand": {
+      "builds_list_page": [
+        "Page",
+        "of"
+      ],
+      "create_your_own_build": "You can create your own build here!",
+      "builds_matching_filters": "Here are the builds matching your filters:",
+      "builds_list": "Builds List",
+      "created_by": "Created by:",
+      "unknown_perk": "Unknown Perk",
+      "any_perks": "Any Perks",
+      "select_for_details": "Select a build to view details."
     }
   },
   "shrine_command": {
