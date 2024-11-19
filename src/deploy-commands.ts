@@ -1,4 +1,7 @@
-import { REST, Routes } from 'discord.js';
+import {
+    REST,
+    Routes
+} from 'discord.js';
 import initI18next from "./i18n";
 import i18next from "i18next";
 import * as dotenv from 'dotenv';
@@ -13,16 +16,14 @@ async function deployCommands() {
 
         // Command imports are lazy loaded
         // Because we need to serialize the commands after i18next initialization
-        const { data: cosmeticListCommand } = await import('@commands/cosmeticListCommand');
-        const { data: buildListCommand } = await import('@commands/buildListCommand');
         const { data: infoCommand } = await import('@commands/infoCommand');
-        const { data: shrineCommand} = await import('@commands/shrineCommand');
+        const { data: shrineCommand } = await import('@commands/shrineCommand');
+        const { data: listCommand } = await import('@commands/listCommand');
 
         const commands = [
-            cosmeticListCommand.toJSON(),
-            buildListCommand.toJSON(),
             infoCommand?.toJSON(),
-            shrineCommand?.toJSON()
+            shrineCommand?.toJSON(),
+            listCommand?.toJSON()
         ];
 
         const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN!);
@@ -49,6 +50,6 @@ async function initializeAndDeploy() {
     }
 }
 
-(async () => {
+(async() => {
     await initializeAndDeploy();
 })();

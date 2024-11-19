@@ -1,0 +1,113 @@
+{
+  "info_command": {
+    "perk_subcommand": {
+      "perk_information": "Informacje o umiejętności",
+      "generic_perk": "Ogólna umiejętność",
+      "description": "Opis"
+    },
+    "addon_subcommand": {
+      "addon_information": "Informacje o dodatku",
+      "description": "Opis",
+      "rarity": "Rzadkość",
+      "role": "Rola"
+    },
+    "item_subcommand": {
+      "item_information": "Informacje o przedmiocie",
+      "description": "Description",
+      "character": "Postać",
+      "rarity": "Rzadkość",
+      "role": "Rola"
+    },
+    "offering_subcommand": {
+      "offering_information": "Informacje o darze",
+      "description": "Opis",
+      "rarity": "Rzadkość",
+      "role": "Rola",
+      "retired": "Ten dar został wycofany."
+    },
+    "character_subcommand": {
+      "character_information": "Informacje o postaci",
+      "description": "Opis",
+      "role": "Rola",
+      "gender": "Płeć",
+      "difficulty": "Poziom trudności",
+      "backstory": "Historia -",
+      "read_backstory": "Przeczytaj historię",
+      "character_backstory": "Historia postaci"
+    },
+    "cosmetic_subcommand": {
+      "character": "Postać",
+      "collection": "Kolekcja",
+      "rarity": "Rzadkość",
+      "inclusion_version": "Wersja wydania",
+      "type": "Typ",
+      "release_date": "Data wydania",
+      "sale": "Koniec wyprzedaży",
+      "cosmetic_info": "Informacje o kosmetyku",
+      "more_info": "Więcej informacji",
+      "view_pieces": "Zobacz elementy stroju",
+      "linked_cosmetic": "Połączony kosmetyk",
+      "button_interaction": {
+        "outfit_pieces": "Elementy stroju dla"
+      }
+    },
+    "build_subcommand": {
+      "unknown_perk": "Nieznana umiejętność",
+      "unknown_addon": "Nieznany dodatek",
+      "perks": "Umiejętności",
+      "item_addons": "Przedmiot + Dodatki",
+      "power_addons": "Moc + Dodatki",
+      "offering": "Dar",
+      "category": "Kategoria",
+      "character": "Postać",
+      "rating": "Ocena",
+      "rating_desc": [
+        "z łącznej ilości",
+        "głosu(ów)"
+      ],
+      "any_perks": "Dowolne umiejętności",
+      "any_item": "Dowolny przedmiot",
+      "any_power": "Dowolna moc",
+      "any_offering": "Dowolny dar",
+      "desc_not_provided": "Opis dla tego ekwipunku nie został podany.",
+      "build_info": "Informacje o ekwipunku",
+      "created_by": [
+        "Utworzony przez",
+        "dnia"
+      ]
+    }
+  },
+  "list_command": {
+    "cosmetics_subcommand": {
+      "found_total": [
+        "Znaleziono łącznie",
+        "kosmetyków"
+      ],
+      "filters_applied": "Zastosowano filtry",
+      "cosmetics_list": "Lista kosmetyków",
+      "more_info": [
+        "Aby uzyskać więcej informacji o konkretnym kosmetyku, użyj polecenia",
+        "info Kosmetyk <nazwa_kosmetyku>"
+      ]
+    }
+  },
+  "shrine_command": {
+    "author_title": "Sanktuarium Tajemnic tego tygodnia",
+    "character": "Postać",
+    "time_left": "Pozostały czas na odświeżenie:",
+    "shrine_active": [
+      "Sanktuarium aktywne od",
+      "do"
+    ]
+  },
+  "generic_pagination": {
+    "first": "Pierwsza",
+    "previous": "Poprzednia",
+    "page_number": [
+      "Strona",
+      "z"
+    ],
+    "next": "Następna",
+    "last": "Ostatnia"
+  }
+}

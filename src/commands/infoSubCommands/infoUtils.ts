@@ -1,14 +1,17 @@
 import {
     createCanvas,
+    Image,
     loadImage
 } from "canvas";
 
-export async function layerIcons(backgroundUrl: string, iconUrl: string, canvasWidth: number = 512, canvasHeight: number = 512): Promise<Buffer> {
+export async function layerIcons(background: string | Buffer | Image, icon: string | Buffer | Image, canvasWidth: number = 512, canvasHeight: number = 512): Promise<Buffer> {
     const canvas = createCanvas(canvasWidth, canvasHeight);
     const ctx = canvas.getContext('2d');
 
-    const backgroundImage = await loadImage(backgroundUrl);
-    const iconImage = await loadImage(iconUrl);
+    const [backgroundImage, iconImage] = await Promise.all([
+        background instanceof Image ? background : loadImage(background),
+        icon instanceof Image ? icon : loadImage(icon),
+    ]);
 
     ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
 

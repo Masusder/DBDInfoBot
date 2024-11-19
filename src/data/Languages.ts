@@ -1,27 +1,5 @@
 import { Locale } from "discord.js";
 
-// export type TLang =
-//     'de'
-//     | 'en'
-//     | 'es'
-//     | 'es-MX'
-//     | 'fr'
-//     | 'it'
-//     | 'ja'
-//     | 'ko'
-//     | 'pl'
-//     | 'pt-BR'
-//     | 'ru'
-//     | 'th'
-//     | 'tr'
-//     | 'zh-Hans'
-//     | 'zh-Hant';
-
-// interface ILang {
-//     code: string;
-//     name: string;
-// }
-
 export const DiscordLocaleToDbdLangCode: Record<Locale, string> = {
     [Locale.EnglishUS]: 'en',
     [Locale.EnglishGB]: 'en',

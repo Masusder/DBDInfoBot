@@ -24,7 +24,7 @@ client.once(Events.ClientReady, async readyClient => {
     if (process.env.BRANCH !== 'dev') {
         // Check for new tweets every 60 seconds
         await startTweetJob(client);
-        // Check for new Shrine every 60 seconds
+        // Check for new Shrine
         await startShrineJob(client);
     }
 });
