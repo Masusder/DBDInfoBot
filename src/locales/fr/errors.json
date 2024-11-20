@@ -1,35 +1,35 @@
 {
   "info_command": {
     "cosmetic_subcommand": {
-      "cosmetic_not_found": "No cosmetic found for",
+      "cosmetic_not_found": "Aucun cosmétique n'a été trouvé pour",
       "button_interaction": {
-        "invalid_id": "Invalid cosmetic ID.",
-        "error_retrieving_data": "Error retrieving cosmetic data."
+        "invalid_id": "ID du cosmétique non valide.",
+        "error_retrieving_data": "Erreur dans la récupération des données cosmétiques."
       }
     },
     "build_subcommand": {
-      "build_not_found": "Not found any Build with specified ID."
+      "build_not_found": "Aucun build n'a été trouvé avec l'ID spécifié."
     },
     "character_subcommand": {
-      "invalid_index": "Invalid character index.",
-      "error_retrieving_data": "Error retrieving character data."
+      "invalid_index": "Index des personnages non valide.",
+      "error_retrieving_data": "Erreur dans la récupération des données de personnages."
     },
     "collection_subcommand": {
-      "error_retrieving_data": "Failed to retrieve collections or cosmetics data."
+      "error_retrieving_data": "Échec de l'extraction des données relatives aux collections ou aux cosmétiques."
     }
   },
   "list_command": {
-    "unknown_subcommand": "Unknown subcommand.",
+    "unknown_subcommand": "Sous-commande inconnue.",
     "cosmetics_subcommand": {
-      "cosmetics_not_found": "No cosmetics found.",
-      "cosmetics_not_found_filters": "No cosmetics found for the applied filters."
+      "cosmetics_not_found": "Aucun cosmétique trouvé.",
+      "cosmetics_not_found_filters": "Aucun cosmétique trouvé pour les filtres appliqués."
     },
     "builds_subcommand": {
-      "error_retrieving_data": "Failed to retrieve builds data.",
-      "builds_not_found_filters": "No builds found with the specified filters."
+      "error_retrieving_data": "Échec de la récupération des données des builds.",
+      "builds_not_found_filters": "Aucun build trouvé avec les filtres spécifiés."
     }
   },
   "general": {
-    "unauthorized": "Only the person who used the command can do that."
+    "unauthorized": "Seule la personne qui a utilisé la commande peut faire cela."
   }
 }
