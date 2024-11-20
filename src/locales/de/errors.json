@@ -13,6 +13,9 @@
     "character_subcommand": {
       "invalid_index": "Invalid character index.",
       "error_retrieving_data": "Error retrieving character data."
+    },
+    "collection_subcommand": {
+      "error_retrieving_data": "Failed to retrieve collections or cosmetics data."
     }
   },
   "list_command": {

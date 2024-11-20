@@ -74,6 +74,15 @@
         "Utworzony przez",
         "dnia"
       ]
+    },
+    "collection_subcommand": {
+      "total_of_cosmetics": [
+        "Łącznie",
+        "kosmetyków"
+      ],
+      "collection_inclusion_version": "Ta kolekcja została wprowadzona w wersji:",
+      "collection_info": "Informacje o kolekcji",
+      "collection_last_updated": "Ostatnia aktualizacja kolekcji miała miejsce"
     }
   },
   "list_command": {
