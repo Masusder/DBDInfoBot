@@ -15,7 +15,7 @@
       "error_retrieving_data": "Не удалось получить информацию о персонаже."
     },
     "collection_subcommand": {
-      "error_retrieving_data": "Failed to retrieve collections or cosmetics data."
+      "error_retrieving_data": "Не удалось получить информацию о коллекциях или косметике."
     }
   },
   "list_command": {
