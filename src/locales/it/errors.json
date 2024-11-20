@@ -13,6 +13,9 @@
     "character_subcommand": {
       "invalid_index": "Indice del personaggio non valido.",
       "error_retrieving_data": "Errore durante il recupero dei dati del personaggio."
+    },
+    "collection_subcommand": {
+      "error_retrieving_data": "Failed to retrieve collections or cosmetics data."
     }
   },
   "list_command": {
@@ -22,8 +25,8 @@
       "cosmetics_not_found_filters": "Nessun cosmetico trovato per i filtri applicati."
     },
     "builds_subcommand": {
-      "error_retrieving_data": "Failed to retrieve builds data.",
-      "builds_not_found_filters": "No builds found with the specified filters."
+      "error_retrieving_data": "Recupero dati delle builds non riusciti.",
+      "builds_not_found_filters": "Nessuna build trovata con i filtri specificati."
     }
   },
   "general": {
