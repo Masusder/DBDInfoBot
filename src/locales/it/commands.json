@@ -1,0 +1,109 @@
+{
+  "info_command": {
+    "name": "info",
+    "description": "Recupera informazioni dettagliate sulle funzionalità del gioco.",
+    "options": {
+      "type": {
+        "name": "tipo",
+        "description": "Specifica il tipo di funzionalità del gioco su cui desideri informazioni.",
+        "choices": {
+          "perk": "Perk",
+          "addon": "Add-on",
+          "item": "Oggetto",
+          "offering": "Offerta",
+          "character": "Personaggio",
+          "cosmetic": "Cosmetico",
+          "build": "Build",
+          "collection": "Collection"
+        }
+      },
+      "name": {
+        "name": "nome",
+        "description": "Specifica il nome della funzionalità del gioco su cui desideri informazioni."
+      }
+    }
+  },
+  "shrine_command": {
+    "name": "reliquiario",
+    "description": "Controlla il Reliquiario dei Segreti settimanale."
+  },
+  "list_command": {
+    "name": "lista",
+    "description": "Recupera l'elenco delle funzionalità di gioco specificate.",
+    "cosmetics_subcommand": {
+      "name": "cosmetici",
+      "description": "Recupera la lista dei Cosmetici.",
+      "options": {
+        "character": {
+          "name": "personaggio",
+          "description": "Nome del Personaggio."
+        },
+        "purchasable": {
+          "name": "acquistabile",
+          "description": "Specificare se il cosmetico deve essere disponibile per l'acquisto o meno."
+        },
+        "linked": {
+          "name": "collegato",
+          "description": "Specifica se il cosmetico deve essere un set collegato o meno."
+        },
+        "rarity": {
+          "name": "rarità",
+          "description": "Specifica la rarità dei cosmetici."
+        },
+        "type": {
+          "name": "tipo",
+          "description": "Specifica il tipo di Cosmetico."
+        },
+        "inclusion_version": {
+          "name": "incluso_nella_versione",
+          "description": "Specifica la versione in cui è incluso il cosmetico."
+        }
+      }
+    },
+    "builds_subcommand": {
+      "name": "builds",
+      "description": "Recupera l'elenco delle Build.",
+      "options": {
+        "role": {
+          "name": "ruolo",
+          "description": "Ruolo per la build.",
+          "choices": {
+            "killer": "Killer",
+            "survivor": "Sopravvissuto"
+          }
+        },
+        "page": {
+          "name": "pagina",
+          "description": "Numero della pagina (predefinito è 1)."
+        },
+        "title": {
+          "name": "titolo",
+          "description": "Titolo della build."
+        },
+        "category": {
+          "name": "categoria",
+          "description": "Categoria della build."
+        },
+        "character": {
+          "name": "personaggio",
+          "description": "Personaggio per la build."
+        },
+        "version": {
+          "name": "versione",
+          "description": "Versione del gioco per la build."
+        },
+        "rating": {
+          "name": "valutazione",
+          "description": "Valutazione minima per la build.",
+          "choices": {
+            "one_star": "Una Stella",
+            "two_stars": "Due Stelle",
+            "three_stars": "Tre Stelle",
+            "four_stars": "Quattro Stelle",
+            "five_stars": "Cinque Stelle"
+          }
+        }
+      }
+    }
+  }
+}

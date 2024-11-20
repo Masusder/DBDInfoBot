@@ -1,0 +1,35 @@
+{
+  "info_command": {
+    "cosmetic_subcommand": {
+      "cosmetic_not_found": "Не найдено косметических предметов для",
+      "button_interaction": {
+        "invalid_id": "Неверный ID косметического предмета.",
+        "error_retrieving_data": "Не удалось получить информацию о косметическом предмете."
+      }
+    },
+    "build_subcommand": {
+      "build_not_found": "Не найдено сборок с указанным ID."
+    },
+    "character_subcommand": {
+      "invalid_index": "Неверный индекс персонажа.",
+      "error_retrieving_data": "Не удалось получить информацию о персонаже."
+    },
+    "collection_subcommand": {
+      "error_retrieving_data": "Failed to retrieve collections or cosmetics data."
+    }
+  },
+  "list_command": {
+    "unknown_subcommand": "Неизвестный аргумент.",
+    "cosmetics_subcommand": {
+      "cosmetics_not_found": "Не удалось найти косметические предметы.",
+      "cosmetics_not_found_filters": "Не найдено косметических предметов по указанным фильтрам."
+    },
+    "builds_subcommand": {
+      "error_retrieving_data": "Не удалось получить информацию о сборке.",
+      "builds_not_found_filters": "Не найдено сборок по указанным фильтрам."
+    }
+  },
+  "general": {
+    "unauthorized": "Только тот, кто применил команду, может сделать это."
+  }
+}

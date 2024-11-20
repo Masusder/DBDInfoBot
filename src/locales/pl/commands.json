@@ -1,0 +1,109 @@
+{
+  "info_command": {
+    "name": "info",
+    "description": "Uzyskaj szczegółowe informacje o funkcjach gry.",
+    "options": {
+      "type": {
+        "name": "typ",
+        "description": "Podaj typ, o którym chcesz uzyskać informacje.",
+        "choices": {
+          "perk": "Umiejętność",
+          "addon": "Dodatek",
+          "item": "Przedmiot",
+          "offering": "Dar",
+          "character": "Postać",
+          "cosmetic": "Kosmetyk",
+          "build": "Ekwipunek",
+          "collection": "Kolekcja"
+        }
+      },
+      "name": {
+        "name": "nazwa",
+        "description": "Podaj nazwę elementu, o którym chcesz uzyskać informacje."
+      }
+    }
+  },
+  "shrine_command": {
+    "name": "sanktuarium",
+    "description": "Sprawdź cotygodniowe Sanktuarium Tajemnic."
+  },
+  "list_command": {
+    "name": "lista",
+    "description": "Uzyskaj listę określonych elementów z poszczególnej funkcji gry.",
+    "cosmetics_subcommand": {
+      "name": "kosmetyki",
+      "description": "Uzyskaj listę kosmetyków.",
+      "options": {
+        "character": {
+          "name": "postać",
+          "description": "Podaj nazwę postaci."
+        },
+        "purchasable": {
+          "name": "do_kupienia",
+          "description": "Określ, czy kosmetyk ma być dostępny do kupienia, czy nie."
+        },
+        "linked": {
+          "name": "połączony",
+          "description": "Określ, czy kosmetyk powinien być zestawem połączonym, czy nie."
+        },
+        "rarity": {
+          "name": "rzadkość",
+          "description": "Określ rzadkość kosmetyku."
+        },
+        "type": {
+          "name": "typ",
+          "description": "Określ typ kosmetyku."
+        },
+        "inclusion_version": {
+          "name": "wersja_dodania",
+          "description": "Określ wersję, w której został dodany kosmetyk."
+        }
+      }
+    },
+    "builds_subcommand": {
+      "name": "ekwipunki",
+      "description": "Uzyskaj listę ekwipunków.",
+      "options": {
+        "role": {
+          "name": "rola",
+          "description": "Rola ekwipunku.",
+          "choices": {
+            "killer": "Zabójca",
+            "survivor": "Ocalały"
+          }
+        },
+        "page": {
+          "name": "strona",
+          "description": "Numer strony (domyślnie 1)."
+        },
+        "title": {
+          "name": "tytuł",
+          "description": "Tytuł ekwipunku."
+        },
+        "category": {
+          "name": "kategoria",
+          "description": "Kategoria ekwipunku."
+        },
+        "character": {
+          "name": "postać",
+          "description": "Postać związana z ekwipunkiem."
+        },
+        "version": {
+          "name": "wersja",
+          "description": "Wersja gry związana z ekwipunkiem."
+        },
+        "rating": {
+          "name": "ocena",
+          "description": "Minimalna ocena dla danego ekwipunku.",
+          "choices": {
+            "one_star": "Jedna gwiazdka",
+            "two_stars": "Dwie gwiazdki",
+            "three_stars": "Trzy gwiazdki",
+            "four_stars": "Cztery gwiazdki",
+            "five_stars": "Pięć gwiazdek"
+          }
+        }
+      }
+    }
+  }
+}

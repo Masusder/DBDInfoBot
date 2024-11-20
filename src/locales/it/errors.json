@@ -1,0 +1,35 @@
+{
+  "info_command": {
+    "cosmetic_subcommand": {
+      "cosmetic_not_found": "Nessun cosmetico trovato per",
+      "button_interaction": {
+        "invalid_id": "ID del cosmetico non trovato.",
+        "error_retrieving_data": "Errore durante il recupero di dati dei cosmetici."
+      }
+    },
+    "build_subcommand": {
+      "build_not_found": "Non è stata trovata alcuna build con l'ID specificato."
+    },
+    "character_subcommand": {
+      "invalid_index": "Indice del personaggio non valido.",
+      "error_retrieving_data": "Errore durante il recupero dei dati del personaggio."
+    },
+    "collection_subcommand": {
+      "error_retrieving_data": "Failed to retrieve collections or cosmetics data."
+    }
+  },
+  "list_command": {
+    "unknown_subcommand": "Sottocomando sconosciuto.",
+    "cosmetics_subcommand": {
+      "cosmetics_not_found": "Nessun cosmetico trovato.",
+      "cosmetics_not_found_filters": "Nessun cosmetico trovato per i filtri applicati."
+    },
+    "builds_subcommand": {
+      "error_retrieving_data": "Recupero dati delle builds non riusciti.",
+      "builds_not_found_filters": "Nessuna build trovata con i filtri specificati."
+    }
+  },
+  "general": {
+    "unauthorized": "Solo la persona che ha utilizzato il comando può farlo."
+  }
+}

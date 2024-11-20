@@ -1,0 +1,35 @@
+{
+  "info_command": {
+    "cosmetic_subcommand": {
+      "cosmetic_not_found": "Nie znaleziono kosmetyku dla",
+      "button_interaction": {
+        "invalid_id": "Nieprawidłowy identyfikator kosmetyku.",
+        "error_retrieving_data": "Błąd podczas pobierania danych kosmetyków."
+      }
+    },
+    "build_subcommand": {
+      "build_not_found": "Nie znaleziono żadnego ekwipunku ze wskazanym ID."
+    },
+    "character_subcommand": {
+      "invalid_index": "Nieprawidłowy indeks postaci.",
+      "error_retrieving_data": "Wystąpił błąd podczas pobierania danych postaci."
+    },
+    "collection_subcommand": {
+      "error_retrieving_data": "Nie udało się pobrać danych dotyczących kolekcji lub kosmetyków."
+    }
+  },
+  "list_command": {
+    "unknown_subcommand": "Nieznana pod komenda.",
+    "cosmetics_subcommand": {
+      "cosmetics_not_found": "Nie znaleziono kosmetyków.",
+      "cosmetics_not_found_filters": "Nie znaleziono kosmetyków dla zastosowanych filtrów."
+    },
+    "builds_subcommand": {
+      "error_retrieving_data": "Nie udało się pobrać danych ekwipunku.",
+      "builds_not_found_filters": "Nie znaleziono ekwipunków spełniających podane filtry."
+    }
+  },
+  "general": {
+    "unauthorized": "Tylko osoba, która użyła polecenia, może to zrobić."
+  }
+}
