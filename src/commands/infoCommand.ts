@@ -33,65 +33,74 @@ import {
     handleBuildCommandInteraction
 } from "@commands/infoSubCommands/build";
 import { commandLocalizationHelper } from "@utils/localizationUtils";
+import {
+    handleCollectionCommandAutocompleteInteraction,
+    handleCollectionCommandInteraction
+} from "@commands/infoSubCommands/collection";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
-    .setName('info')
-    .setNameLocalizations(commandLocalizationHelper('info_command.name'))
-    .setDescription(i18next.t('info_command.description', { lng: 'en' }))
-    .setDescriptionLocalizations(commandLocalizationHelper('info_command.description'))
-    .addStringOption(option =>
-        option.setName('type')
-            .setNameLocalizations(commandLocalizationHelper('info_command.options.type.name'))
-            .setDescription(i18next.t('info_command.options.type.description', { lng: 'en' }))
-            .setDescriptionLocalizations(commandLocalizationHelper('info_command.options.type.description'))
-            .setRequired(true)
-            .setChoices(
-                {
-                    name: i18next.t('info_command.options.type.choices.perk', { lng: 'en' }),
-                    name_localizations: commandLocalizationHelper('info_command.options.type.choices.perk'),
-                    value: 'perk'
-                },
-                {
-                    name: i18next.t('info_command.options.type.choices.addon', { lng: 'en' }),
-                    name_localizations: commandLocalizationHelper('info_command.options.type.choices.addon'),
-                    value: 'addon'
-                },
-                {
-                    name: i18next.t('info_command.options.type.choices.item', { lng: 'en' }),
-                    name_localizations: commandLocalizationHelper('info_command.options.type.choices.item'),
-                    value: 'item'
-                },
-                {
-                    name: i18next.t('info_command.options.type.choices.offering', { lng: 'en' }),
-                    name_localizations: commandLocalizationHelper('info_command.options.type.choices.offering'),
-                    value: 'offering'
-                },
-                {
-                    name: i18next.t('info_command.options.type.choices.character', { lng: 'en' }),
-                    name_localizations: commandLocalizationHelper('info_command.options.type.choices.character'),
-                    value: 'character'
-                },
-                {
-                    name: i18next.t('info_command.options.type.choices.cosmetic', { lng: 'en' }),
-                    name_localizations: commandLocalizationHelper('info_command.options.type.choices.cosmetic'),
-                    value: 'cosmetic'
-                },
-                {
-                    name: i18next.t('info_command.options.type.choices.build', { lng: 'en' }),
-                    name_localizations: commandLocalizationHelper('info_command.options.type.choices.build'),
-                    value: 'build'
-                }
-            )
-    )
-    .addStringOption(option =>
-        option.setName('name')
-            .setNameLocalizations(commandLocalizationHelper('info_command.options.name.name'))
-            .setDescription(i18next.t('info_command.options.name.description', { lng: 'en' }))
-            .setDescriptionLocalizations(commandLocalizationHelper('info_command.options.name.description'))
-            .setRequired(true)
-            .setAutocomplete(true)
-    ) : undefined;
+        .setName('info')
+        .setNameLocalizations(commandLocalizationHelper('info_command.name'))
+        .setDescription(i18next.t('info_command.description', { lng: 'en' }))
+        .setDescriptionLocalizations(commandLocalizationHelper('info_command.description'))
+        .addStringOption(option =>
+            option.setName('type')
+                .setNameLocalizations(commandLocalizationHelper('info_command.options.type.name'))
+                .setDescription(i18next.t('info_command.options.type.description', { lng: 'en' }))
+                .setDescriptionLocalizations(commandLocalizationHelper('info_command.options.type.description'))
+                .setRequired(true)
+                .setChoices(
+                    {
+                        name: i18next.t('info_command.options.type.choices.perk', { lng: 'en' }),
+                        name_localizations: commandLocalizationHelper('info_command.options.type.choices.perk'),
+                        value: 'perk'
+                    },
+                    {
+                        name: i18next.t('info_command.options.type.choices.addon', { lng: 'en' }),
+                        name_localizations: commandLocalizationHelper('info_command.options.type.choices.addon'),
+                        value: 'addon'
+                    },
+                    {
+                        name: i18next.t('info_command.options.type.choices.item', { lng: 'en' }),
+                        name_localizations: commandLocalizationHelper('info_command.options.type.choices.item'),
+                        value: 'item'
+                    },
+                    {
+                        name: i18next.t('info_command.options.type.choices.offering', { lng: 'en' }),
+                        name_localizations: commandLocalizationHelper('info_command.options.type.choices.offering'),
+                        value: 'offering'
+                    },
+                    {
+                        name: i18next.t('info_command.options.type.choices.character', { lng: 'en' }),
+                        name_localizations: commandLocalizationHelper('info_command.options.type.choices.character'),
+                        value: 'character'
+                    },
+                    {
+                        name: i18next.t('info_command.options.type.choices.cosmetic', { lng: 'en' }),
+                        name_localizations: commandLocalizationHelper('info_command.options.type.choices.cosmetic'),
+                        value: 'cosmetic'
+                    },
+                    {
+                        name: i18next.t('info_command.options.type.choices.build', { lng: 'en' }),
+                        name_localizations: commandLocalizationHelper('info_command.options.type.choices.build'),
+                        value: 'build'
+                    },
+                    {
+                        name: i18next.t('info_command.options.type.choices.collection', { lng: 'en' }),
+                        name_localizations: commandLocalizationHelper('info_command.options.type.choices.collection'),
+                        value: 'collection'
+                    }
+                )
+        )
+        .addStringOption(option =>
+            option.setName('name')
+                .setNameLocalizations(commandLocalizationHelper('info_command.options.name.name'))
+                .setDescription(i18next.t('info_command.options.name.description', { lng: 'en' }))
+                .setDescriptionLocalizations(commandLocalizationHelper('info_command.options.name.description'))
+                .setRequired(true)
+                .setAutocomplete(true)
+        ) : undefined;
 
 export async function execute(interaction: ChatInputCommandInteraction) {
     const type = interaction.options.getString('type');
@@ -117,6 +126,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             break;
         case 'build':
             await handleBuildCommandInteraction(interaction);
+            break;
+        case 'collection':
+            await handleCollectionCommandInteraction(interaction);
             break;
         default:
             await interaction.reply('Unknown command type.');
@@ -148,6 +160,9 @@ export async function autocomplete(interaction: AutocompleteInteraction) {
             break;
         case 'build':
             await handleBuildCommandAutocompleteInteraction(interaction);
+            break;
+        case 'collection':
+            await handleCollectionCommandAutocompleteInteraction(interaction);
             break;
         default:
             break;

@@ -11,7 +11,7 @@ import {
     formatHtmlToDiscordMarkdown
 } from "@utils/stringUtils";
 import { getTranslation } from "@utils/localizationUtils";
-import { layerIcons } from "@commands/infoSubCommands/infoUtils";
+import { layerIcons } from "@utils/imageUtils";
 import {
     getOfferingChoices,
     getOfferingDataByName

@@ -29,7 +29,7 @@ import {
 } from "canvas";
 import { Perk } from "../types";
 import { Role } from "@data/Role";
-import { layerIcons } from "@commands/infoSubCommands/infoUtils";
+import { layerIcons } from "@utils/imageUtils";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()

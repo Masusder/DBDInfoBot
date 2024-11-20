@@ -19,7 +19,7 @@ async function initI18next() {
                 ns: ['commands', 'messages', 'general', 'errors'],
                 defaultNS: 'commands',
                 backend: {
-                    loadPath: 'src/locales/{{lng}}/{{ns}}.json'
+                    loadPath: 'src/locales_crowdin/{{lng}}/{{ns}}.json'
                 },
                 saveMissingTo: 'current',
                 saveMissing: process.env.BRANCH === 'dev' // If true, saves missing translations for debugging

@@ -29,6 +29,7 @@ import {
     IShrineItem,
     IShrinePerkItem
 } from "./shrine";
+import { Collection } from "./collection";
 
 export {
     Addon,
@@ -47,5 +48,6 @@ export {
     IBuildsResponse,
     IShrine,
     IShrineItem,
-    IShrinePerkItem
+    IShrinePerkItem,
+    Collection
 };

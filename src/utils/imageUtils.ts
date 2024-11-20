@@ -3,12 +3,12 @@ import sharp from 'sharp';
 import {
     CanvasRenderingContext2D,
     createCanvas,
+    Image,
     loadImage
 } from 'canvas';
 import { Locale } from "discord.js";
 import { Role } from "@data/Role";
 import { combineBaseUrlWithPath } from "@utils/stringUtils";
-import { layerIcons } from "@commands/infoSubCommands/infoUtils";
 import { getCachedPerks } from "@services/perkService";
 import { getCachedAddons } from "@services/addonService";
 import { Rarities } from "@data/Rarities";
@@ -24,6 +24,25 @@ export const fetchAndResizeImage = async(imageUrl: string, width: number | null,
 
     return await sharp(response.data).resize(width, height).toBuffer();
 };
+
+export async function layerIcons(background: string | Buffer | Image, icon: string | Buffer | Image, canvasWidth: number = 512, canvasHeight: number = 512): Promise<Buffer> {
+    const canvas = createCanvas(canvasWidth, canvasHeight);
+    const ctx = canvas.getContext('2d');
+
+    const [backgroundImage, iconImage] = await Promise.all([
+        background instanceof Image ? background : loadImage(background),
+        icon instanceof Image ? icon : loadImage(icon),
+    ]);
+
+    ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+
+    const iconSize = 512;
+    const x = (canvas.width - iconSize) / 2;
+    const y = (canvas.height - iconSize) / 2;
+    ctx.drawImage(iconImage, x, y, iconSize, iconSize);
+
+    return canvas.toBuffer();
+}
 
 function calculateDimensions(image: { width: number; height: number }, maxWidth: number): {
     width: number;
@@ -142,6 +161,50 @@ export async function createLoadoutCanvas(
             }
         }
     }
+
+    return canvas.toBuffer('image/png');
+}
+
+export async function combineImagesIntoGrid(imageUrls: string[], maxImagesPerRow: number = 3, maxImagesPerColumn: number = 2): Promise<Buffer> {
+    const imageBuffers: Buffer[] = await Promise.all(
+        imageUrls.map(async(url) => {
+            try {
+                const response = await axios.get(url, { responseType: 'arraybuffer' });
+                return Buffer.from(response.data);
+            } catch (error) {
+                console.error(`Error fetching image from ${url}:`, error);
+                throw error;
+            }
+        })
+    );
+
+    const images = await Promise.all(imageBuffers.map((buffer) => loadImage(buffer)));
+
+    // const maxImagesPerRow = 3;
+    // const maxImagesPerColumn = 2;
+
+    const maxWidth = Math.max(...images.map((img) => img.width));
+    const maxHeight = Math.max(...images.map((img) => img.height));
+
+    const totalWidth = maxWidth * maxImagesPerRow; // Total width for 3 columns
+    const totalHeight = maxHeight * maxImagesPerColumn; // Total height for 2 rows
+
+    const canvas = createCanvas(totalWidth, totalHeight);
+    const ctx = canvas.getContext('2d');
+
+    let currentX = 0;
+    let currentY = 0;
+
+    images.forEach((img, index) => {
+        // If we have placed maxImagesPerRow images in a row, move to the next row
+        if (index > 0 && index % maxImagesPerRow === 0) {
+            currentX = 0;
+            currentY += maxHeight;
+        }
+
+        ctx.drawImage(img, currentX, currentY);
+        currentX += maxWidth;
+    });
 
     return canvas.toBuffer('image/png');
 }

@@ -5,8 +5,7 @@ import {
     ButtonStyle,
     ChatInputCommandInteraction,
     EmbedBuilder,
-    Locale,
-    Message
+    Locale
 } from "discord.js";
 import { getTranslation } from "@utils/localizationUtils";
 import { sendUnauthorizedMessage } from "./unauthorizedHandler";
@@ -20,6 +19,7 @@ export interface IPaginationOptions {
     interactionReply: ChatInputCommandInteraction | ButtonInteraction;
     timeout?: number;
     locale: Locale;
+    showPageNumbers?: boolean;
 }
 
 export const generatePaginationButtons = (page: number, totalPages: number, locale: Locale, showPageNumbers: boolean = true) => {
@@ -121,17 +121,28 @@ export async function genericPaginationHandler(options: IPaginationOptions) {
         const itemsForPage = getItemsForPage(currentPage);
         const embed = await generateEmbed(itemsForPage, currentPage, totalPages);
 
-        let image: Buffer | undefined = undefined;
+        const response = await interactionReply.editReply({
+            embeds: [embed],
+            components: generatePaginationButtons(currentPage, totalPages, locale, options?.showPageNumbers),
+            files: []
+        });
+
         if (generateImage) {
-            image = await generateImage(itemsForPage);
-            embed.setImage('attachment://generated_image.png');
+            try {
+                const image = await generateImage(itemsForPage);
+                if (image) {
+                    embed.setImage('attachment://generated_image.png');
+                    await interactionReply.editReply({
+                        embeds: [embed],
+                        files: [{ attachment: image, name: 'generated_image.png' }],
+                    });
+                }
+            } catch (error) {
+                console.error("Error generating image:", error);
+            }
         }
 
-        return await interactionReply.editReply({
-            embeds: [embed],
-            components: generatePaginationButtons(currentPage, totalPages, locale),
-            files: image ? [{ attachment: image, name: 'generated_image.png' }] : []
-        });
+        return response;
     };
 
     const message = await updatePageContent(options.locale);

@@ -1,67 +1,109 @@
 {
   "info_command": {
     "name": "info",
-    "description": "Uzyskaj szczegółowe informacje o funkcjach gry.",
+    "description": "Retrieve detailed information about game features.",
     "options": {
       "type": {
-        "name": "typ",
-        "description": "Podaj typ, o której chcesz uzyskać informacje.",
+        "name": "type",
+        "description": "Specify the type of game feature you want information about.",
         "choices": {
-          "perk": "Umiejętność",
-          "addon": "Dodatek",
-          "item": "Przedmiot",
-          "offering": "Dar",
-          "character": "Postać",
-          "cosmetic": "Kosmetyk",
-          "build": "Ekwipunek"
+          "perk": "Perk",
+          "addon": "Add-on",
+          "item": "Item",
+          "offering": "Offering",
+          "character": "Character",
+          "cosmetic": "Cosmetic",
+          "build": "Build",
+          "collection": "Collection"
         }
       },
       "name": {
-        "name": "nazwa",
-        "description": "Podaj nazwę elementu, o którym chcesz uzyskać informacje."
+        "name": "name",
+        "description": "Specify the name of the game feature you want information about."
       }
     }
   },
   "shrine_command": {
-    "name": "sanktuarium",
-    "description": "Sprawdź cotygodniowe Sanktuarium Tajemnic."
+    "name": "shrine",
+    "description": "Check weekly Shrine of Secrets."
   },
   "list_command": {
-    "name": "lista",
-    "description": "Uzyskaj listę określonych elementów z poszczególnej funkcji gry.",
+    "name": "list",
+    "description": "Retrieve list of specified game feature items.",
     "cosmetics_subcommand": {
-      "name": "kosmetyki",
-      "description": "Uzyskaj listę kosmetyków.",
+      "name": "cosmetics",
+      "description": "Retrieve list of cosmetics.",
       "options": {
         "character": {
-          "name": "postać",
-          "description": "Podaj nazwę postaci."
+          "name": "character",
+          "description": "Name of the character."
         },
         "purchasable": {
-          "name": "do_kupienia",
-          "description": "Określ, czy kosmetyk ma być dostępny do kupienia, czy nie."
+          "name": "purchasable",
+          "description": "Specify whether cosmetic should be available for purchase or not."
         },
         "linked": {
-          "name": "połączony",
-          "description": "Określ, czy kosmetyk powinien być zestawem połączonym, czy nie."
+          "name": "linked",
+          "description": "Specify whether cosmetic should be a linked set or not."
         },
         "rarity": {
-          "name": "rzadkość",
-          "description": "Określ rzadkość kosmetyku."
+          "name": "rarity",
+          "description": "Specify rarity of the cosmetic."
         },
         "type": {
-          "name": "typ",
-          "description": "Określ typ kosmetyku."
+          "name": "type",
+          "description": "Specify type of the cosmetic."
         },
         "inclusion_version": {
-          "name": "wersja_dodania",
-          "description": "Określ wersję, w której został dodany kosmetyk."
+          "name": "inclusion_version",
+          "description": "Specify inclusion version of the cosmetic."
         }
       }
     },
     "builds_subcommand": {
-      "name": "ekwipunki",
-      "description": "Uzyskaj listę ekwipunków."
+      "name": "builds",
+      "description": "Retrieve list of builds.",
+      "options": {
+        "role": {
+          "name": "role",
+          "description": "Role for the build.",
+          "choices": {
+            "killer": "Killer",
+            "survivor": "Survivor"
+          }
+        },
+        "page": {
+          "name": "page",
+          "description": "Page number (default is 1)."
+        },
+        "title": {
+          "name": "title",
+          "description": "Title of the build."
+        },
+        "category": {
+          "name": "category",
+          "description": "Category of the build."
+        },
+        "character": {
+          "name": "character",
+          "description": "Character for the build."
+        },
+        "version": {
+          "name": "version",
+          "description": "Game version for the build."
+        },
+        "rating": {
+          "name": "rating",
+          "description": "Minimum rating for the build.",
+          "choices": {
+            "one_star": "One Star",
+            "two_stars": "Two Stars",
+            "three_stars": "Three Stars",
+            "four_stars": "Four Stars",
+            "five_stars": "Five Stars"
+          }
+        }
+      }
     }
   }
 }

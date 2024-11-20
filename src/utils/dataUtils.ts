@@ -20,7 +20,8 @@ export enum EGameData {
     PerkData = 'perkData',
     AddonData = 'addonData',
     OfferingData = 'offeringData',
-    ItemData = 'itemData'
+    ItemData = 'itemData',
+    CollectionData = 'collectionData'
 }
 
 // interface GameDataOptions {

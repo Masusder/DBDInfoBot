@@ -13,7 +13,6 @@ import {
     formatHtmlToDiscordMarkdown
 } from "@utils/stringUtils";
 import { getTranslation } from "@utils/localizationUtils";
-import { layerIcons } from "@commands/infoSubCommands/infoUtils";
 import {
     getCharacterChoices,
     getCharacterDataByName
@@ -21,7 +20,8 @@ import {
 import { Difficulties } from "@data/Difficulties";
 import { Genders } from "@data/Genders";
 import {
-    fetchAndResizeImage
+    fetchAndResizeImage,
+    layerIcons
 } from "@utils/imageUtils";
 
 export async function handleCharacterCommandInteraction(interaction: ChatInputCommandInteraction) {
