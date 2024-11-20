@@ -13,7 +13,8 @@
           "offering": "Offerta",
           "character": "Personaggio",
           "cosmetic": "Cosmetico",
-          "build": "Build"
+          "build": "Build",
+          "collection": "Collection"
         }
       },
       "name": {
@@ -54,7 +55,7 @@
           "description": "Specifica il tipo di Cosmetico."
         },
         "inclusion_version": {
-          "name": "incluso nella versione",
+          "name": "incluso_nella_versione",
           "description": "Specifica la versione in cui è incluso il cosmetico."
         }
       }
@@ -64,42 +65,42 @@
       "description": "Recupera l'elenco delle Build.",
       "options": {
         "role": {
-          "name": "role",
-          "description": "Role for the build.",
+          "name": "ruolo",
+          "description": "Ruolo per la build.",
           "choices": {
             "killer": "Killer",
-            "survivor": "Survivor"
+            "survivor": "Sopravvissuto"
           }
         },
         "page": {
-          "name": "page",
-          "description": "Page number (default is 1)."
+          "name": "pagina",
+          "description": "Numero della pagina (predefinito è 1)."
         },
         "title": {
-          "name": "title",
-          "description": "Title of the build."
+          "name": "titolo",
+          "description": "Titolo della build."
         },
         "category": {
-          "name": "category",
-          "description": "Category of the build."
+          "name": "categoria",
+          "description": "Categoria della build."
         },
         "character": {
-          "name": "character",
-          "description": "Character for the build."
+          "name": "personaggio",
+          "description": "Personaggio per la build."
         },
         "version": {
-          "name": "version",
-          "description": "Game version for the build."
+          "name": "versione",
+          "description": "Versione del gioco per la build."
         },
         "rating": {
-          "name": "rating",
-          "description": "Minimum rating for the build.",
+          "name": "valutazione",
+          "description": "Valutazione minima per la build.",
           "choices": {
-            "one_star": "One Star",
-            "two_stars": "Two Stars",
-            "three_stars": "Three Stars",
-            "four_stars": "Four Stars",
-            "five_stars": "Five Stars"
+            "one_star": "Una Stella",
+            "two_stars": "Due Stelle",
+            "three_stars": "Tre Stelle",
+            "four_stars": "Quattro Stelle",
+            "five_stars": "Cinque Stelle"
           }
         }
       }
