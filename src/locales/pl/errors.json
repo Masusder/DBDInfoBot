@@ -13,6 +13,9 @@
     "character_subcommand": {
       "invalid_index": "Nieprawidłowy indeks postaci.",
       "error_retrieving_data": "Wystąpił błąd podczas pobierania danych postaci."
+    },
+    "collection_subcommand": {
+      "error_retrieving_data": "Nie udało się pobrać danych dotyczących kolekcji lub kosmetyków."
     }
   },
   "list_command": {
