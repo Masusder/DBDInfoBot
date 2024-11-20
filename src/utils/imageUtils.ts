@@ -180,9 +180,6 @@ export async function combineImagesIntoGrid(imageUrls: string[], maxImagesPerRow
 
     const images = await Promise.all(imageBuffers.map((buffer) => loadImage(buffer)));
 
-    // const maxImagesPerRow = 3;
-    // const maxImagesPerColumn = 2;
-
     const maxWidth = Math.max(...images.map((img) => img.width));
     const maxHeight = Math.max(...images.map((img) => img.height));
 
