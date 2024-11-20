@@ -1,11 +1,11 @@
 {
   "info_command": {
     "name": "информация",
-    "description": "Получить подробные сведения об игровых элементах.",
+    "description": "Получите подробную информацию об элементах игры.",
     "options": {
       "type": {
         "name": "тип",
-        "description": "Укажите тип игрового элемента, о котором вы хотели бы получить больше информации.",
+        "description": "Укажите тип элемента игры, информацию о котором хотите получить.",
         "choices": {
           "perk": "Навык",
           "addon": "Улучшение",
@@ -13,25 +13,26 @@
           "offering": "Подношение",
           "character": "Персонаж",
           "cosmetic": "Косметический предмет",
-          "build": "Сборка"
+          "build": "Сборка",
+          "collection": "Collection"
         }
       },
       "name": {
-        "name": "имя",
-        "description": "Укажите название игрового элемента, о котором вы хотели бы получить больше информации."
+        "name": "название",
+        "description": "Укажите название элемента игры, информацию о котором хотите получить."
       }
     }
   },
   "shrine_command": {
     "name": "храм",
-    "description": "Просмотреть еженедельный Храм Тайн."
+    "description": "Проверьте еженедельный Храм тайн."
   },
   "list_command": {
     "name": "список",
     "description": "Получить список указанных игровых элементов.",
     "cosmetics_subcommand": {
-      "name": "косметические_предметы",
-      "description": "Получить список косметических предметов.",
+      "name": "косметика",
+      "description": "Получите список косметических предметов.",
       "options": {
         "character": {
           "name": "персонаж",
@@ -39,11 +40,11 @@
         },
         "purchasable": {
           "name": "продаётся",
-          "description": "Укажите должен ли продаваться косметический предмет."
+          "description": "Укажите, должен ли продаваться косметический предмет."
         },
         "linked": {
-          "name": "разделяемый",
-          "description": "Укажите должен ли разделяться косметический предмет."
+          "name": "цельность",
+          "description": "Укажите, должен ли косметический предмет быть цельным набором одежды."
         },
         "rarity": {
           "name": "редкость",
@@ -64,42 +65,42 @@
       "description": "Получить список сборок.",
       "options": {
         "role": {
-          "name": "role",
-          "description": "Role for the build.",
+          "name": "роль",
+          "description": "Роль для сборки.",
           "choices": {
-            "killer": "Killer",
-            "survivor": "Survivor"
+            "killer": "Убийца",
+            "survivor": "Выживший"
           }
         },
         "page": {
-          "name": "page",
-          "description": "Page number (default is 1)."
+          "name": "страница",
+          "description": "Номер страницы (по умолчанию 1)."
         },
         "title": {
-          "name": "title",
-          "description": "Title of the build."
+          "name": "название",
+          "description": "Название сборки."
         },
         "category": {
-          "name": "category",
-          "description": "Category of the build."
+          "name": "категория",
+          "description": "Категория сборки."
         },
         "character": {
-          "name": "character",
-          "description": "Character for the build."
+          "name": "персонаж",
+          "description": "Персонаж для сборки."
         },
         "version": {
-          "name": "version",
-          "description": "Game version for the build."
+          "name": "версия",
+          "description": "Версия игры для сборки."
         },
         "rating": {
-          "name": "rating",
-          "description": "Minimum rating for the build.",
+          "name": "рейтинг",
+          "description": "Минимальный рейтинг для сборки.",
           "choices": {
-            "one_star": "One Star",
-            "two_stars": "Two Stars",
-            "three_stars": "Three Stars",
-            "four_stars": "Four Stars",
-            "five_stars": "Five Stars"
+            "one_star": "Одна звезда",
+            "two_stars": "Две звезды",
+            "three_stars": "Три звезды",
+            "four_stars": "Четыре звезды",
+            "five_stars": "Пять звёзд"
           }
         }
       }
