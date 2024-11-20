@@ -13,7 +13,8 @@
           "offering": "Offering",
           "character": "Character",
           "cosmetic": "Cosmetic",
-          "build": "Build"
+          "build": "Build",
+          "collection": "Collection"
         }
       },
       "name": {
