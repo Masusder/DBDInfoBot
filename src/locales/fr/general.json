@@ -1,60 +1,60 @@
 {
   "rarities": {
-    "common": "Common",
-    "uncommon": "Uncommon",
+    "common": "Commun(e)",
+    "uncommon": "Insolite",
     "rare": "Rare",
-    "very_rare": "Very Rare",
+    "very_rare": "Très Rare",
     "ultra_rare": "Ultra Rare",
-    "legendary": "Legendary",
-    "special_event": "Special Event",
-    "artifact": "Artifact",
-    "limited": "Limited",
+    "legendary": "Légendaire",
+    "special_event": "Événement Spécial",
+    "artifact": "Artefact",
+    "limited": "Limité",
     "unknown": "N/A"
   },
   "roles": {
-    "killer": "Killer",
-    "survivor": "Survivor",
-    "none": "Universal"
+    "killer": "Tueur",
+    "survivor": "Survivant",
+    "none": "Universel"
   },
   "difficulties": {
-    "easy": "Easy",
-    "intermediate": "Intermediate",
-    "hard": "Hard",
-    "very_hard": "Very Hard",
-    "none": "None"
+    "easy": "Facile",
+    "intermediate": "Intermédiaire",
+    "hard": "Difficile",
+    "very_hard": "Très Difficile",
+    "none": "Aucune"
   },
   "genders": {
-    "male": "Male",
-    "female": "Female",
-    "not_human": "Monster",
+    "male": "Homme",
+    "female": "Femme",
+    "not_human": "Monstre",
     "multiple": "Multiple"
   },
   "currencies": {
-    "bloodpoints": "Bloodpoints",
-    "shards": "Shards",
-    "auric_cells": "Auric Cells"
+    "bloodpoints": "Points de Sang",
+    "shards": "Éclats",
+    "auric_cells": "Cellules d'Ora"
   },
   "cosmetic_types": {
-    "outfit": "Outfit",
-    "survivor_head": "Survivor's Head",
-    "survivor_torso": "Survivor's Torso",
-    "survivor_legs": "Survivor's Legs",
-    "killer_head": "Killer's Head",
-    "killer_body": "Killer's Body",
-    "killer_weapon": "Killer's Weapon",
-    "charm": "Charm",
-    "badge": "Badge",
-    "banner": "Banner",
-    "power": "Power"
+    "outfit": "Tenue",
+    "survivor_head": "Tête de Survivant",
+    "survivor_torso": "Torse de Survivant",
+    "survivor_legs": "Jambes de Survivant",
+    "killer_head": "Tête de Tueur",
+    "killer_body": "Corps de Tueur",
+    "killer_weapon": "Arme de Tueur",
+    "charm": "Charme",
+    "badge": "Écusson",
+    "banner": "Bannière",
+    "power": "Pouvoir"
   },
   "build_categories": {
-    "fun": "Fun",
-    "tome_challenge": "Tome Challenge",
-    "competitive": "Competitive",
-    "beginner": "Beginner",
-    "intermediate": "Intermediate",
-    "advanced": "Advanced",
-    "other": "Other"
+    "fun": "Amusant",
+    "tome_challenge": "Défi de Tome",
+    "competitive": "Compétitif",
+    "beginner": "Débutant",
+    "intermediate": "Intermédiaire",
+    "advanced": "Avancé",
+    "other": "Autre"
   },
-  "legacy": "Before 5.5.0"
+  "legacy": "Avant la version 5.5.0"
 }
