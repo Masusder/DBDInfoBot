@@ -1,6 +1,10 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import {
+    ActionRowBuilder,
     APIEmbedField,
+    ApplicationEmojiManager,
+    ButtonBuilder,
+    ButtonStyle,
     ChatInputCommandInteraction,
     EmbedBuilder,
     Locale,
@@ -27,9 +31,13 @@ import {
     createCanvas,
     loadImage
 } from "canvas";
-import { Perk } from "../types";
+import {
+    IShrinePerkItem,
+    Perk
+} from "../types";
 import { Role } from "@data/Role";
 import { layerIcons } from "@utils/imageUtils";
+import Constants from "../constants";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -37,12 +45,6 @@ export const data = i18next.isInitialized
         .setNameLocalizations(commandLocalizationHelper('shrine_command.name'))
         .setDescription(i18next.t('shrine_command.description', { lng: 'en' }))
         .setDescriptionLocalizations(commandLocalizationHelper('shrine_command.description')) : undefined;
-
-type ShrinePerk = {
-    id: string;
-    bloodpoints: number;
-    shards: number[];
-};
 
 type CorrectlyCasedPerkData = {
     [key: string]: { bloodpoints: number; shards: number[] };
@@ -64,7 +66,7 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
         const { currentShrine } = shrineData;
 
         const correctlyCasedPerkData: CorrectlyCasedPerkData = currentShrine.perks
-            .reduce((acc: CorrectlyCasedPerkData, perk: ShrinePerk) => {
+            .reduce((acc: CorrectlyCasedPerkData, perk: IShrinePerkItem) => {
                 const [correctKey, _] = Object.entries(perkData).find(
                     ([key]) => key.toLowerCase() === perk.id.toLowerCase()
                 ) || [];
@@ -79,7 +81,9 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
                 return acc;
             }, {});
 
+        let currenciesMessage = "";
         const perksList: APIEmbedField[] = [];
+        const buttons: ButtonBuilder[] = [];
         for (const perkId of Object.keys(correctlyCasedPerkData)) {
             const perkInfo = perkData[perkId];
 
@@ -90,16 +94,27 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
 
             if (perkInfo.Character !== -1) {
                 const characterData = await getCharacterDataByIndex(perkInfo.Character, locale);
-                characterName = characterData ? `- ${getTranslation('shrine_command.character', locale, 'messages')}: ${characterData.Name}\n` : '';
+                characterName = characterData ? `${getTranslation('shrine_command.character', locale, 'messages')}: ${characterData.Name}` : '';
+            }
+
+            if (!currenciesMessage) {
+                currenciesMessage = `\n\n**${getTranslation('currencies.shards', locale, 'general')}:** ${correctlyCasedPerkData[perkId].shards.join('/')} \n**${getTranslation('currencies.bloodpoints', locale, 'general')}:** ${formatNumber(correctlyCasedPerkData[perkId].bloodpoints)}`
             }
 
             const perkField = {
                 name: perkName,
-                value: `${characterName}- ${getTranslation('currencies.shards', locale, 'general')}: ${correctlyCasedPerkData[perkId].shards.join('/')} \n- ${getTranslation('currencies.bloodpoints', locale, 'general')}: ${formatNumber(correctlyCasedPerkData[perkId].bloodpoints)}`,
+                value: `${characterName}`,
                 inline: true
             };
 
             perksList.push(perkField);
+
+            const perkButton = new ButtonBuilder()
+                .setCustomId(`shrine_perk::${perkId}`)
+                .setLabel(perkName)
+                .setStyle(ButtonStyle.Secondary);
+
+            buttons.push(perkButton);
         }
 
         perksList.filter(Boolean);
@@ -109,7 +124,7 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
 
         const startDateUnix = Math.floor(adjustedStartDate / 1000);
         const adjustedEndDateUnix = Math.floor(adjustedEndDate / 1000);
-        getTranslation('shrine_command.time_left', locale, 'messages')
+
         const description = `**${getTranslation('shrine_command.time_left', locale, 'messages')}** <t:${adjustedEndDateUnix}:R>\n**${getTranslation('shrine_command.shrine_active.0', locale, 'messages')}** <t:${startDateUnix}> ${getTranslation('shrine_command.shrine_active.1', locale, 'messages')} <t:${adjustedEndDateUnix}>`;
 
         const shrineCanvasBuffer = await createShrineCanvas(correctlyCasedPerkData, perkData);
@@ -118,7 +133,7 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
 
         const embed = new EmbedBuilder()
             .setColor("#1e90ff")
-            .setDescription(description)
+            .setDescription(description + currenciesMessage)
             .setFields(perksList)
             .setImage('attachment://shrine-of-secrets.png')
             .setTimestamp()
@@ -130,21 +145,26 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
                 text: `ID: ${customId}` // Custom ID to match for Shrine cron job
             });
 
+        const row = new ActionRowBuilder<ButtonBuilder>().addComponents(buttons);
+
         if (interaction instanceof ChatInputCommandInteraction) {
             await interaction.editReply({
                 embeds: [embed],
                 files: [{
                     attachment: shrineCanvasBuffer,
                     name: 'shrine-of-secrets.png'
-                }]
+                }],
+                components: [row]
             });
         } else {
             await channel?.send({
+                content: `<@&${Constants.DBDLEAKS_SHRINE_NOTIFICATION_ROLE}>`,
                 embeds: [embed],
                 files: [{
                     attachment: shrineCanvasBuffer,
                     name: 'shrine-of-secrets.png'
-                }]
+                }],
+                components: [row]
             });
         }
     } catch (error) {

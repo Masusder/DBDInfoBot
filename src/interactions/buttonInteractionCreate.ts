@@ -1,6 +1,7 @@
 import { ButtonInteraction } from 'discord.js';
 import { viewOutfitPiecesHandler } from '../handlers/viewOutfitPiecesHandler';
 import { showCharacterBackstoryHandler } from "../handlers/showCharacterBackstoryHandler";
+import { handlePerkCommandInteraction } from "@commands/infoSubCommands/perk";
 
 export default async(interaction: ButtonInteraction) => {
     if (!interaction.deferred) await interaction.deferUpdate();
@@ -13,6 +14,9 @@ export default async(interaction: ButtonInteraction) => {
             break;
         case 'show_character_backstory':
             await showCharacterBackstoryHandler(interaction);
+            break;
+        case 'shrine_perk':
+            await handlePerkCommandInteraction(interaction);
             break;
         default:
             console.warn(`Unhandled interaction type: ${interaction.customId}`);

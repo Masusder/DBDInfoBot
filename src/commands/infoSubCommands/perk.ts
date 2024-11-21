@@ -1,12 +1,13 @@
 import {
     APIEmbedField,
     AutocompleteInteraction,
+    ButtonInteraction,
     ChatInputCommandInteraction,
     EmbedBuilder
 } from 'discord.js';
 import {
     getPerkChoices,
-    getPerkDataByName
+    getPerkDataById
 } from "@services/perkService";
 import { Role } from "@data/Role";
 import { getCharacterDataByIndex } from "@services/characterService";
@@ -17,16 +18,18 @@ import {
 import { getTranslation } from "@utils/localizationUtils";
 import { layerIcons } from "@utils/imageUtils";
 
-export async function handlePerkCommandInteraction(interaction: ChatInputCommandInteraction) {
-    const perkName = interaction.options.getString('name');
+export async function handlePerkCommandInteraction(interaction: ChatInputCommandInteraction | ButtonInteraction) {
+    const perkId = interaction instanceof ButtonInteraction ? interaction.customId.split("::")[1] : interaction.options.getString('name');
     const locale = interaction.locale;
 
-    if (!perkName) return;
+    if (!perkId) return;
 
     try {
-        await interaction.deferReply();
+        if (!(interaction instanceof ButtonInteraction)) {
+            await interaction.deferReply();
+        }
 
-        const perkData = await getPerkDataByName(perkName, locale);
+        const perkData = await getPerkDataById(perkId, locale);
 
         if (!perkData) return;
 
@@ -42,6 +45,7 @@ export async function handlePerkCommandInteraction(interaction: ChatInputCommand
         let characterName: string | null = null;
         if (characterData) characterName = characterData.Name;
 
+        const perkName = perkData.Name;
         const title = characterName ? `${perkName} (${characterName})` : `${perkName} (${getTranslation('info_command.perk_subcommand.generic_perk', locale, 'messages')})`;
 
         const field: APIEmbedField = {
@@ -60,13 +64,24 @@ export async function handlePerkCommandInteraction(interaction: ChatInputCommand
                 iconURL: combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_perks.png')
             });
 
-        await interaction.editReply({
-            embeds: [embed],
-            files: [{
-                attachment: imageBuffer,
-                name: `perkImage_${perkData.PerkId}.png`
-            }]
-        });
+        if (interaction instanceof ButtonInteraction) {
+            await interaction.followUp({
+                embeds: [embed],
+                files: [{
+                    attachment: imageBuffer,
+                    name: `perkImage_${perkData.PerkId}.png`
+                }],
+                ephemeral: true
+            });
+        } else {
+            await interaction.editReply({
+                embeds: [embed],
+                files: [{
+                    attachment: imageBuffer,
+                    name: `perkImage_${perkData.PerkId}.png`
+                }]
+            });
+        }
     } catch (error) {
         console.error("Error executing perk subcommand:", error);
     }
@@ -80,7 +95,7 @@ export async function handlePerkCommandAutocompleteInteraction(interaction: Auto
 
         const options = choices.slice(0, 25).map(perk => ({
             name: perk.Name,
-            value: perk.Name
+            value: perk.PerkId
         }));
 
         await interaction.respond(options);
