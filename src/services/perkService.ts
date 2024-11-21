@@ -43,19 +43,45 @@ export async function getPerkDataByName(name: string, locale: Locale): Promise<P
 }
 
 /**
+ * Retrieves a single perk by its ID.
+ *
+ * @param id - The ID of the perk to retrieve.
+ * @param locale - The locale to fetch the perk data for.
+ *
+ * @returns {Promise<PerkExtended | undefined>} A promise that resolves to the perk's data if found, or undefined if not.
+ */
+export async function getPerkDataById(id: string, locale: Locale): Promise<PerkExtended | undefined> {
+    const cachedPerks = await getCachedPerks(locale);
+
+    const perk = cachedPerks[id];
+    if (!perk) {
+        return undefined;
+    }
+
+    return {
+        ...perk,
+        PerkId: id
+    };
+}
+
+/**
  * Retrieves a list of perks that match the given query string.
  *
  * @param query - The query string to search for in perk names.
  * @param locale - The locale used to retrieve the perk data.
  *
- * @returns {Promise<Perk[]>} A promise that resolves to an array of perks whose names match the query string.
+ * @returns {Promise<PerkExtended[]>} A promise that resolves to an array of perks whose names match the query string.
  */
-export async function getPerkChoices(query: string, locale: Locale): Promise<Perk[]> {
+export async function getPerkChoices(query: string, locale: Locale): Promise<PerkExtended[]> {
     const cachedPerks = await getCachedPerks(locale);
 
     const lowerCaseQuery = query.toLowerCase();
-    return Object.values(cachedPerks)
-        .filter(perk => perk.Name.toLowerCase().includes(lowerCaseQuery));
+    return Object.entries(cachedPerks)
+        .filter(([_, perk]) => perk.Name.toLowerCase().includes(lowerCaseQuery))
+        .map(([perkId, perk]) => ({
+            ...perk,
+            PerkId: perkId
+        }));
 }
 
 /**
