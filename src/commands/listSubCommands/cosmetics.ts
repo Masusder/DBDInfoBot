@@ -163,12 +163,15 @@ async function autocompleteCharacters(interaction: AutocompleteInteraction) {
 async function autocompleteInclusionVersion(interaction: AutocompleteInteraction) {
     const locale = interaction.locale;
     const inclusionVersions = await getInclusionVersionsForCosmetics(locale);
-    const options = Array.from(inclusionVersions)
-        .slice(0, 25)
+    const focusedValue = interaction.options.getFocused();
+
+    const options = inclusionVersions
         .map(version => ({
             name: formatInclusionVersion(version, locale),
             value: version
-        }));
+        }))
+        .filter(option => option.name.toLowerCase().includes(focusedValue))
+        .slice(0, 25);
 
     await interaction.respond(options);
 }
