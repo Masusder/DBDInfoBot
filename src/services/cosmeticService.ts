@@ -1,7 +1,8 @@
 import {
     getCache,
     getCachedGameData,
-    initializeGameDataCache
+    initializeGameDataCache,
+    setCache
 } from '../cache';
 import { Locale } from 'discord.js';
 import { Cosmetic } from '../types';
@@ -98,7 +99,7 @@ export async function getCosmeticChoicesFromIndex(query: string, locale: Locale)
  * @example
  * const filteredCosmetics = await getFilteredCosmeticsList({
  *     Character: 1,
- *     Rarity: "Epic",
+ *     Rarity: "Rare",
  *     Purchasable: true,
  * }, Locale.EN_US);
  *
@@ -148,16 +149,26 @@ export async function getFilteredCosmeticsList(filters: Partial<Cosmetic> = {}, 
  * console.log(inclusionVersions); // Sorted array of unique inclusion versions for the specified locale.
  */
 export async function getInclusionVersionsForCosmetics(locale: Locale): Promise<string[]> {
-    const cosmetics = await getCachedCosmetics(locale);
+    let inclusionVersions = getCache<string[]>('cosmeticInclusionVersions');
 
-    const inclusionVersions = new Set<string>();
-    Object.values(cosmetics).forEach((cosmetic: Cosmetic) => {
-        if (cosmetic.InclusionVersion) {
-            inclusionVersions.add(cosmetic.InclusionVersion);
-        }
-    });
+    if (!inclusionVersions) {
+        const cosmetics = await getCachedCosmetics(locale);
 
-    return Array.from(inclusionVersions).sort().reverse();
+        let newInclusionVersions = new Set<string>();
+        Object.values(cosmetics).forEach((cosmetic: Cosmetic) => {
+            if (cosmetic.InclusionVersion) {
+                newInclusionVersions.add(cosmetic.InclusionVersion);
+            }
+        });
+
+        const sortedNewInclusionVersions = Array.from(newInclusionVersions).sort().reverse()
+
+        setCache('cosmeticInclusionVersions', sortedNewInclusionVersions);
+
+        return sortedNewInclusionVersions;
+    }
+
+    return inclusionVersions;
 }
 
 /**

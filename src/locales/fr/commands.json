@@ -1,106 +1,106 @@
 {
   "info_command": {
     "name": "info",
-    "description": "Retrieve detailed information about game features.",
+    "description": "Retrouvez les informations présentées dans les fonctionnalités du jeu.",
     "options": {
       "type": {
         "name": "type",
-        "description": "Specify the type of game feature you want information about.",
+        "description": "Spécifiez le type d'élément du jeu sur lequel vous souhaitez obtenir des informations.",
         "choices": {
-          "perk": "Perk",
+          "perk": "Compétence",
           "addon": "Add-on",
-          "item": "Item",
-          "offering": "Offering",
-          "character": "Character",
-          "cosmetic": "Cosmetic",
+          "item": "Objet",
+          "offering": "Offrande",
+          "character": "Personnage",
+          "cosmetic": "Cosmétique",
           "build": "Build",
           "collection": "Collection"
         }
       },
       "name": {
-        "name": "name",
-        "description": "Specify the name of the game feature you want information about."
+        "name": "nom",
+        "description": "Spécifiez le nom de la fonctionnalité du jeu sur laquelle vous souhaitez obtenir des informations."
       }
     }
   },
   "shrine_command": {
-    "name": "shrine",
-    "description": "Check weekly Shrine of Secrets."
+    "name": "temple",
+    "description": "Consultez chaque semaine le Temple des Secrets."
   },
   "list_command": {
-    "name": "list",
-    "description": "Retrieve list of specified game feature items.",
+    "name": "liste",
+    "description": "Récupère la liste des éléments de caractéristiques du jeu spécifiés.",
     "cosmetics_subcommand": {
-      "name": "cosmetics",
-      "description": "Retrieve list of cosmetics.",
+      "name": "cosmétiques",
+      "description": "Récupérer la liste des cosmétiques.",
       "options": {
         "character": {
-          "name": "character",
-          "description": "Name of the character."
+          "name": "personnage",
+          "description": "Nom du Personnage."
         },
         "purchasable": {
-          "name": "purchasable",
-          "description": "Specify whether cosmetic should be available for purchase or not."
+          "name": "achetable",
+          "description": "Spécifiez si les cosmétiques doivent être disponibles à l'achat ou non."
         },
         "linked": {
-          "name": "linked",
-          "description": "Specify whether cosmetic should be a linked set or not."
+          "name": "ensemble",
+          "description": "Spécifiez si le cosmétique doit être un ensemble lié ou non."
         },
         "rarity": {
-          "name": "rarity",
-          "description": "Specify rarity of the cosmetic."
+          "name": "rareté",
+          "description": "Spécifiez la rareté du cosmétique."
         },
         "type": {
           "name": "type",
-          "description": "Specify type of the cosmetic."
+          "description": "Spécifiez le type de cosmétique."
         },
         "inclusion_version": {
-          "name": "inclusion_version",
-          "description": "Specify inclusion version of the cosmetic."
+          "name": "inclusion_de_la_version",
+          "description": "Spécifiez la version d'introduction du cosmétique."
         }
       }
     },
     "builds_subcommand": {
       "name": "builds",
-      "description": "Retrieve list of builds.",
+      "description": "Récupérer la liste des builds.",
       "options": {
         "role": {
-          "name": "role",
-          "description": "Role for the build.",
+          "name": "rôle",
+          "description": "Rôle pour le build.",
           "choices": {
-            "killer": "Killer",
-            "survivor": "Survivor"
+            "killer": "Tueur",
+            "survivor": "Survivant"
           }
         },
         "page": {
           "name": "page",
-          "description": "Page number (default is 1)."
+          "description": "Numéro de page (1 par défaut)."
         },
         "title": {
-          "name": "title",
-          "description": "Title of the build."
+          "name": "titre",
+          "description": "Titre du build."
         },
         "category": {
-          "name": "category",
-          "description": "Category of the build."
+          "name": "catégorie",
+          "description": "Catégorie du build."
         },
         "character": {
-          "name": "character",
-          "description": "Character for the build."
+          "name": "personnage",
+          "description": "Personnage pour le build."
         },
         "version": {
           "name": "version",
-          "description": "Game version for the build."
+          "description": "Version du jeu pour le build."
         },
         "rating": {
-          "name": "rating",
-          "description": "Minimum rating for the build.",
+          "name": "note",
+          "description": "Note minimale pour le build.",
           "choices": {
-            "one_star": "One Star",
-            "two_stars": "Two Stars",
-            "three_stars": "Three Stars",
-            "four_stars": "Four Stars",
-            "five_stars": "Five Stars"
+            "one_star": "Une étoile",
+            "two_stars": "Deux Étoiles",
+            "three_stars": "Trois Étoiles",
+            "four_stars": "Quarte Étoiles",
+            "five_stars": "Cinq Étoiles"
           }
         }
       }
