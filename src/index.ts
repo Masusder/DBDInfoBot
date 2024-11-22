@@ -42,3 +42,5 @@ initI18next().then(() => {
 // Log in to Discord with your client's token
 // noinspection JSIgnoredPromiseFromCall
 client.login(DISCORD_TOKEN);
+
+export default client;

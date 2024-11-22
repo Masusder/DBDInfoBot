@@ -2,7 +2,6 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import {
     ActionRowBuilder,
     APIEmbedField,
-    ApplicationEmojiManager,
     ButtonBuilder,
     ButtonStyle,
     ChatInputCommandInteraction,
@@ -38,6 +37,10 @@ import {
 import { Role } from "@data/Role";
 import { layerIcons } from "@utils/imageUtils";
 import Constants from "../constants";
+import {
+    getApplicationEmoji,
+    getOrCreateApplicationEmoji
+} from "@utils/emojiManager";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -81,6 +84,8 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
                 return acc;
             }, {});
 
+        const shrineCanvasBuffer = await createShrineCanvas(correctlyCasedPerkData, perkData);
+
         let currenciesMessage = "";
         const perksList: APIEmbedField[] = [];
         const buttons: ButtonBuilder[] = [];
@@ -101,8 +106,10 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
                 currenciesMessage = `\n\n**${getTranslation('currencies.shards', locale, 'general')}:** ${correctlyCasedPerkData[perkId].shards.join('/')} \n**${getTranslation('currencies.bloodpoints', locale, 'general')}:** ${formatNumber(correctlyCasedPerkData[perkId].bloodpoints)}`
             }
 
+            const perkEmoji = await getApplicationEmoji(perkId);
+            const perkFieldTitle = perkEmoji ? `<:${perkEmoji.name}:${perkEmoji.id}> ${perkName}` : perkName;
             const perkField = {
-                name: perkName,
+                name: perkFieldTitle,
                 value: `${characterName}`,
                 inline: true
             };
@@ -112,7 +119,11 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
             const perkButton = new ButtonBuilder()
                 .setCustomId(`shrine_perk::${perkId}`)
                 .setLabel(perkName)
-                .setStyle(ButtonStyle.Secondary);
+                .setStyle(ButtonStyle.Secondary)
+
+            if (perkEmoji && perkEmoji.id) {
+                perkButton.setEmoji(perkEmoji.id);
+            }
 
             buttons.push(perkButton);
         }
@@ -126,8 +137,6 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
         const adjustedEndDateUnix = Math.floor(adjustedEndDate / 1000);
 
         const description = `**${getTranslation('shrine_command.time_left', locale, 'messages')}** <t:${adjustedEndDateUnix}:R>\n**${getTranslation('shrine_command.shrine_active.0', locale, 'messages')}** <t:${startDateUnix}> ${getTranslation('shrine_command.shrine_active.1', locale, 'messages')} <t:${adjustedEndDateUnix}>`;
-
-        const shrineCanvasBuffer = await createShrineCanvas(correctlyCasedPerkData, perkData);
 
         const customId = generateCustomId(currentShrine.endDate);
 
@@ -199,6 +208,8 @@ async function createShrineCanvas(correctlyCasedPerkData: CorrectlyCasedPerkData
         const iconUrl = combineBaseUrlWithPath(perkData[perkId].IconFilePathList);
 
         const perkIconBuffer = await layerIcons(perkBackgroundUrl, iconUrl);
+
+        await getOrCreateApplicationEmoji(perkId, perkIconBuffer);
 
         const icon = await loadImage(perkIconBuffer);
 
