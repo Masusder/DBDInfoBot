@@ -56,7 +56,12 @@ export async function loginToTwitter() {
 async function hasUrlBeenPosted(channel: TextChannel, tweetUrl: string): Promise<boolean> {
     try {
         const messages = await channel.messages.fetch({ limit: 10 });
-        const urlsInMessages = messages.map(message => message.content);
+        const urlsInMessages = messages
+            .map(message => {
+                const matches = message.content.match(/https?:\/\/\S+/g);
+                return matches ? matches : [];
+            })
+            .flat();
 
         return urlsInMessages.includes(tweetUrl);
     } catch (error) {
@@ -135,7 +140,8 @@ export async function getLatestTweetLink(client: Client) {
                     const urlAlreadyPosted: boolean = await hasUrlBeenPosted(channel, fxTweetUrl);
 
                     if (!urlAlreadyPosted) {
-                        await channel.send(fxTweetUrl);
+                        const message = `<@&${Constants.DBDLEAKS_NEWS_NOTIFICATION_ROLE}>\n${fxTweetUrl}`;
+                        await channel.send(message);
                     } else {
                         console.log('This Tweet has already been posted.');
                     }
