@@ -2,6 +2,7 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import {
     ActionRowBuilder,
     APIEmbedField,
+    ApplicationEmoji,
     ButtonBuilder,
     ButtonStyle,
     ChatInputCommandInteraction,
@@ -188,7 +189,11 @@ async function createShrineCanvas(correctlyCasedPerkData: CorrectlyCasedPerkData
     const ctx = canvas.getContext('2d');
 
     const backgroundUrl = combineBaseUrlWithPath('/images/Other/shrine-of-secrets-empty.png');
-    const backgroundImage = await loadImage(backgroundUrl);
+    const logoUrl = combineBaseUrlWithPath('/images/Logo/DBDInfoLogo.png');
+    const [backgroundImage, logoIcon] = await Promise.all([
+        loadImage(backgroundUrl),
+        loadImage(logoUrl)
+    ]);
     ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
 
     const iconSize = 256;
@@ -198,27 +203,29 @@ async function createShrineCanvas(correctlyCasedPerkData: CorrectlyCasedPerkData
         { x: 96, y: (canvas.height - iconSize) / 2 },  // Left (Centered vertically)
         { x: (canvas.width - iconSize) / 2 + 25, y: canvas.height - iconSize - 10 }  // Bottom (Centered horizontally)
     ];
+
+    const emojiCreationPromises: Promise<void | ApplicationEmoji | null>[] = [];
     const perkIds = Object.keys(correctlyCasedPerkData);
-
-    for (let i = 0; i < perkIds.length; i++) {
-        const perkId = perkIds[i];
+    const perkPromises = perkIds.map(async (perkId, index) => {
         const role = perkData[perkId].Role;
-
         const perkBackgroundUrl = Role[role].perkBackground;
         const iconUrl = combineBaseUrlWithPath(perkData[perkId].IconFilePathList);
 
         const perkIconBuffer = await layerIcons(perkBackgroundUrl, iconUrl);
 
-        await getOrCreateApplicationEmoji(perkId, perkIconBuffer);
+        emojiCreationPromises.push(
+            getOrCreateApplicationEmoji(perkId, perkIconBuffer).catch(() => {})
+        );
 
         const icon = await loadImage(perkIconBuffer);
 
-        const position = positions[i % positions.length];
+        const position = positions[index % positions.length];
         ctx.drawImage(icon, position.x, position.y, iconSize, iconSize);
-    }
+    });
 
-    const logoUrl = combineBaseUrlWithPath('/images/Logo/DBDInfoLogo.png');
-    const logoIcon = await loadImage(logoUrl);
+    await Promise.all(perkPromises);
+    await Promise.all(emojiCreationPromises);
+
     const bottomRightPosition = { x: canvas.width - 150 - 10, y: canvas.height - 117 - 10 };
     ctx.drawImage(logoIcon, bottomRightPosition.x, bottomRightPosition.y, 150, 117);
 

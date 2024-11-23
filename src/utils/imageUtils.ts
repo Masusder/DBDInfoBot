@@ -25,13 +25,19 @@ export const fetchAndResizeImage = async(imageUrl: string, width: number | null,
     return await sharp(response.data).resize(width, height).toBuffer();
 };
 
+const backgroundCache: Record<string, Promise<Image>> = {};
 export async function layerIcons(background: string | Buffer | Image, icon: string | Buffer | Image, canvasWidth: number = 512, canvasHeight: number = 512): Promise<Buffer> {
     const canvas = createCanvas(canvasWidth, canvasHeight);
     const ctx = canvas.getContext('2d');
 
     const [backgroundImage, iconImage] = await Promise.all([
-        background instanceof Image ? background : loadImage(background),
-        icon instanceof Image ? icon : loadImage(icon),
+        typeof background === 'string'
+            ? backgroundCache[background] ?? (backgroundCache[background] = loadImage(background))
+            : background instanceof Image
+                ? Promise.resolve(background)
+                : loadImage(background),
+
+        icon instanceof Image ? Promise.resolve(icon) : loadImage(icon),
     ]);
 
     ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
@@ -101,106 +107,103 @@ export async function createLoadoutCanvas(
 
     ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
 
-    if (perks && perks.length > 0) {
-        const perkData = await getCachedPerks(locale);
-        const perkBackgroundUrl = Role[role].perkBackground;
-        const perkBackgroundBuffer = await loadImage(perkBackgroundUrl); // Load only once to improve performance
-        for (let index = 0; index < perks.length; index++) {
-            const perkId = perks[index];
+    const [perkData, itemData, offeringData, addonData] = await Promise.all([
+        perks ? getCachedPerks(locale) : null,
+        powerOrItem && powerOrItem !== "None" ? getCachedItems(locale) : null,
+        offering && offering !== "None" ? getCachedOfferings(locale) : null,
+        addons && addons.length > 0 ? getCachedAddons(locale) : null
+    ]);
 
-            const iconUrl = combineBaseUrlWithPath(perkData[perkId].IconFilePathList);
+    const perkBackgroundBuffer = perks && perks.length > 0 ? await loadImage(Role[role].perkBackground) : null;
 
-            const perkIconBuffer = await layerIcons(perkBackgroundBuffer, iconUrl);
-            if (perkIconBuffer) {
-                await drawImage(perkIconBuffer, defaultPositions.perk[index], 175, ctx);
+    await Promise.all([
+        // Perks
+        perks && perks.length > 0 && perkData ? Promise.all(perks.map((perkId, index) => {
+            const perk = perkData[perkId];
+            if (perk && perkBackgroundBuffer) {
+                const iconUrl = combineBaseUrlWithPath(perk.IconFilePathList);
+                return layerIcons(perkBackgroundBuffer, iconUrl).then((perkIconBuffer) => {
+                    if (perkIconBuffer) {
+                        return drawImage(perkIconBuffer, defaultPositions.perk[index], 175, ctx);
+                    }
+                });
             }
-        }
-    }
+        })) : null,
 
-    if (powerOrItem && powerOrItem !== "None") {
-        const itemData = await getCachedItems(locale);
-
-        const rarity = itemData[powerOrItem].Rarity;
-        const powerOrItemBackgroundUrl = rarity === "None" ? Rarities["Common"].itemsAddonsBackgroundPath : Rarities[rarity].itemsAddonsBackgroundPath;
-
-        const itemOrPowerUrl = combineBaseUrlWithPath(itemData[powerOrItem].IconFilePathList);
-        const itemOrPowerIconBuffer = await layerIcons(powerOrItemBackgroundUrl, itemOrPowerUrl);
-
-        if (itemOrPowerIconBuffer) {
-            await drawImage(itemOrPowerIconBuffer, defaultPositions.powerOrItem, 140, ctx);
-        }
-    }
-
-    if (offering && offering !== "None") {
-        const offeringData = await getCachedOfferings(locale);
-
-        const rarity = offeringData[offering].Rarity;
-        const offeringBackgroundUrl = Rarities[rarity].offeringBackgroundPath;
-
-        const offeringUrl = combineBaseUrlWithPath(offeringData[offering].Image);
-        const offeringIconBuffer = await layerIcons(offeringBackgroundUrl, offeringUrl);
-
-        if (offeringIconBuffer) {
-            await drawImage(offeringIconBuffer, defaultPositions.offering, 160, ctx);
-        }
-    }
-
-    if (addons && addons.length > 0) {
-        const addonData = await getCachedAddons(locale);
-        for (let index = 0; index < addons.length; index++) {
-            const addonId = addons[index];
-
-            const rarity = addonData[addonId].Rarity;
-
-            const addonBackgroundUrl = Rarities[rarity].itemsAddonsBackgroundPath;
-            const iconUrl = combineBaseUrlWithPath(addonData[addonId].Image);
-
-            const addonIconBuffer = await layerIcons(addonBackgroundUrl, iconUrl);
-            if (addonIconBuffer) {
-                await drawImage(addonIconBuffer, defaultPositions.addon[index], 120, ctx);
+        // Power or Item
+        powerOrItem && powerOrItem !== "None" && itemData ? (async () => {
+            const rarity = itemData[powerOrItem].Rarity;
+            const powerOrItemBackgroundUrl = rarity === "None" ? Rarities["Common"].itemsAddonsBackgroundPath : Rarities[rarity].itemsAddonsBackgroundPath;
+            const itemOrPowerUrl = combineBaseUrlWithPath(itemData[powerOrItem].IconFilePathList);
+            const itemOrPowerIconBuffer = await layerIcons(powerOrItemBackgroundUrl, itemOrPowerUrl);
+            if (itemOrPowerIconBuffer) {
+                await drawImage(itemOrPowerIconBuffer, defaultPositions.powerOrItem, 140, ctx);
             }
-        }
-    }
+        })() : null,
+
+        // Offering
+        offering && offering !== "None" && offeringData ? (async () => {
+            const rarity = offeringData[offering].Rarity;
+            const offeringBackgroundUrl = Rarities[rarity].offeringBackgroundPath;
+            const offeringUrl = combineBaseUrlWithPath(offeringData[offering].Image);
+            const offeringIconBuffer = await layerIcons(offeringBackgroundUrl, offeringUrl);
+            if (offeringIconBuffer) {
+                await drawImage(offeringIconBuffer, defaultPositions.offering, 160, ctx);
+            }
+        })() : null,
+
+        // Addons
+        addons && addons.length > 0 && addonData ? Promise.all(addons.map((addonId, index) => {
+            const addon = addonData[addonId];
+            if (addon) {
+                const rarity = addon.Rarity;
+                const addonBackgroundUrl = Rarities[rarity].itemsAddonsBackgroundPath;
+                const iconUrl = combineBaseUrlWithPath(addon.Image);
+                return layerIcons(addonBackgroundUrl, iconUrl).then((addonIconBuffer) => {
+                    if (addonIconBuffer) {
+                        return drawImage(addonIconBuffer, defaultPositions.addon[index], 120, ctx);
+                    }
+                });
+            }
+        })) : null
+    ]);
 
     return canvas.toBuffer('image/png');
 }
 
 export async function combineImagesIntoGrid(imageUrls: string[], maxImagesPerRow: number = 3, maxImagesPerColumn: number = 2): Promise<Buffer> {
-    const imageBuffers: Buffer[] = await Promise.all(
-        imageUrls.map(async(url) => {
-            try {
-                const response = await axios.get(url, { responseType: 'arraybuffer' });
-                return Buffer.from(response.data);
-            } catch (error) {
-                console.error(`Error fetching image from ${url}:`, error);
-                throw error;
-            }
-        })
-    );
+    let maxWidth = 0;
+    let maxHeight = 0;
 
-    const images = await Promise.all(imageBuffers.map((buffer) => loadImage(buffer)));
+    const images: Image[] = (
+        await Promise.all(
+            imageUrls.map((url) =>
+                loadImage(url).catch(() => null)
+            )
+        )
+    ).filter((img): img is Image => {
+        if (img) {
+            maxWidth = Math.max(maxWidth, img.width);
+            maxHeight = Math.max(maxHeight, img.height);
+            return true;
+        }
+        return false;
+    });
 
-    const maxWidth = Math.max(...images.map((img) => img.width));
-    const maxHeight = Math.max(...images.map((img) => img.height));
+    const rows = Math.min(Math.ceil(images.length / maxImagesPerRow), maxImagesPerColumn);
+    const cols = Math.min(images.length, maxImagesPerRow);
 
-    const totalWidth = maxWidth * maxImagesPerRow; // Total width for 3 columns
-    const totalHeight = maxHeight * maxImagesPerColumn; // Total height for 2 rows
+    const totalWidth = maxWidth * cols;
+    const totalHeight = maxHeight * rows;
 
     const canvas = createCanvas(totalWidth, totalHeight);
     const ctx = canvas.getContext('2d');
 
-    let currentX = 0;
-    let currentY = 0;
-
+    // Pre-compute positions for each image
     images.forEach((img, index) => {
-        // If we have placed maxImagesPerRow images in a row, move to the next row
-        if (index > 0 && index % maxImagesPerRow === 0) {
-            currentX = 0;
-            currentY += maxHeight;
-        }
-
-        ctx.drawImage(img, currentX, currentY);
-        currentX += maxWidth;
+        const x = (index % maxImagesPerRow) * maxWidth;
+        const y = Math.floor(index / maxImagesPerRow) * maxHeight;
+        ctx.drawImage(img, x, y);
     });
 
     return canvas.toBuffer('image/png');
