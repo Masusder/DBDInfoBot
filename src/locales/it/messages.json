@@ -77,12 +77,12 @@
     },
     "collection_subcommand": {
       "total_of_cosmetics": [
-        "Total of",
-        "cosmetics"
+        "Totale di",
+        "cosmetici"
       ],
-      "collection_inclusion_version": "This collection was introduced in version:",
-      "collection_info": "Collection Information",
-      "collection_last_updated": "The collection was last updated on"
+      "collection_inclusion_version": "Questa collezione è stata introdotta nella versione:",
+      "collection_info": "Informazioni Collezione",
+      "collection_last_updated": "La collezione è stata aggiornata l'ultima volta il"
     }
   },
   "list_command": {

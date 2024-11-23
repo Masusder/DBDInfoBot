@@ -15,7 +15,7 @@
       "error_retrieving_data": "Errore durante il recupero dei dati del personaggio."
     },
     "collection_subcommand": {
-      "error_retrieving_data": "Failed to retrieve collections or cosmetics data."
+      "error_retrieving_data": "Impossibile recuperare i dati delle collezioni o cosmetici."
     }
   },
   "list_command": {
