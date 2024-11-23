@@ -107,66 +107,66 @@ export async function createLoadoutCanvas(
 
     ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
 
-    if (perks && perks.length > 0) {
-        const perkData = await getCachedPerks(locale);
-        const perkBackgroundUrl = Role[role].perkBackground;
-        const perkBackgroundBuffer = await loadImage(perkBackgroundUrl); // Load only once to improve performance
-        for (let index = 0; index < perks.length; index++) {
-            const perkId = perks[index];
+    const [perkData, itemData, offeringData, addonData] = await Promise.all([
+        perks ? getCachedPerks(locale) : null,
+        powerOrItem && powerOrItem !== "None" ? getCachedItems(locale) : null,
+        offering && offering !== "None" ? getCachedOfferings(locale) : null,
+        addons && addons.length > 0 ? getCachedAddons(locale) : null
+    ]);
 
-            const iconUrl = combineBaseUrlWithPath(perkData[perkId].IconFilePathList);
+    const perkBackgroundBuffer = perks && perks.length > 0 ? await loadImage(Role[role].perkBackground) : null;
 
-            const perkIconBuffer = await layerIcons(perkBackgroundBuffer, iconUrl);
-            if (perkIconBuffer) {
-                await drawImage(perkIconBuffer, defaultPositions.perk[index], 175, ctx);
+    await Promise.all([
+        // Perks
+        perks && perks.length > 0 && perkData ? Promise.all(perks.map((perkId, index) => {
+            const perk = perkData[perkId];
+            if (perk && perkBackgroundBuffer) {
+                const iconUrl = combineBaseUrlWithPath(perk.IconFilePathList);
+                return layerIcons(perkBackgroundBuffer, iconUrl).then((perkIconBuffer) => {
+                    if (perkIconBuffer) {
+                        return drawImage(perkIconBuffer, defaultPositions.perk[index], 175, ctx);
+                    }
+                });
             }
-        }
-    }
+        })) : null,
 
-    if (powerOrItem && powerOrItem !== "None") {
-        const itemData = await getCachedItems(locale);
-
-        const rarity = itemData[powerOrItem].Rarity;
-        const powerOrItemBackgroundUrl = rarity === "None" ? Rarities["Common"].itemsAddonsBackgroundPath : Rarities[rarity].itemsAddonsBackgroundPath;
-
-        const itemOrPowerUrl = combineBaseUrlWithPath(itemData[powerOrItem].IconFilePathList);
-        const itemOrPowerIconBuffer = await layerIcons(powerOrItemBackgroundUrl, itemOrPowerUrl);
-
-        if (itemOrPowerIconBuffer) {
-            await drawImage(itemOrPowerIconBuffer, defaultPositions.powerOrItem, 140, ctx);
-        }
-    }
-
-    if (offering && offering !== "None") {
-        const offeringData = await getCachedOfferings(locale);
-
-        const rarity = offeringData[offering].Rarity;
-        const offeringBackgroundUrl = Rarities[rarity].offeringBackgroundPath;
-
-        const offeringUrl = combineBaseUrlWithPath(offeringData[offering].Image);
-        const offeringIconBuffer = await layerIcons(offeringBackgroundUrl, offeringUrl);
-
-        if (offeringIconBuffer) {
-            await drawImage(offeringIconBuffer, defaultPositions.offering, 160, ctx);
-        }
-    }
-
-    if (addons && addons.length > 0) {
-        const addonData = await getCachedAddons(locale);
-        for (let index = 0; index < addons.length; index++) {
-            const addonId = addons[index];
-
-            const rarity = addonData[addonId].Rarity;
-
-            const addonBackgroundUrl = Rarities[rarity].itemsAddonsBackgroundPath;
-            const iconUrl = combineBaseUrlWithPath(addonData[addonId].Image);
-
-            const addonIconBuffer = await layerIcons(addonBackgroundUrl, iconUrl);
-            if (addonIconBuffer) {
-                await drawImage(addonIconBuffer, defaultPositions.addon[index], 120, ctx);
+        // Power or Item
+        powerOrItem && powerOrItem !== "None" && itemData ? (async () => {
+            const rarity = itemData[powerOrItem].Rarity;
+            const powerOrItemBackgroundUrl = rarity === "None" ? Rarities["Common"].itemsAddonsBackgroundPath : Rarities[rarity].itemsAddonsBackgroundPath;
+            const itemOrPowerUrl = combineBaseUrlWithPath(itemData[powerOrItem].IconFilePathList);
+            const itemOrPowerIconBuffer = await layerIcons(powerOrItemBackgroundUrl, itemOrPowerUrl);
+            if (itemOrPowerIconBuffer) {
+                await drawImage(itemOrPowerIconBuffer, defaultPositions.powerOrItem, 140, ctx);
             }
-        }
-    }
+        })() : null,
+
+        // Offering
+        offering && offering !== "None" && offeringData ? (async () => {
+            const rarity = offeringData[offering].Rarity;
+            const offeringBackgroundUrl = Rarities[rarity].offeringBackgroundPath;
+            const offeringUrl = combineBaseUrlWithPath(offeringData[offering].Image);
+            const offeringIconBuffer = await layerIcons(offeringBackgroundUrl, offeringUrl);
+            if (offeringIconBuffer) {
+                await drawImage(offeringIconBuffer, defaultPositions.offering, 160, ctx);
+            }
+        })() : null,
+
+        // Addons
+        addons && addons.length > 0 && addonData ? Promise.all(addons.map((addonId, index) => {
+            const addon = addonData[addonId];
+            if (addon) {
+                const rarity = addon.Rarity;
+                const addonBackgroundUrl = Rarities[rarity].itemsAddonsBackgroundPath;
+                const iconUrl = combineBaseUrlWithPath(addon.Image);
+                return layerIcons(addonBackgroundUrl, iconUrl).then((addonIconBuffer) => {
+                    if (addonIconBuffer) {
+                        return drawImage(addonIconBuffer, defaultPositions.addon[index], 120, ctx);
+                    }
+                });
+            }
+        })) : null
+    ]);
 
     return canvas.toBuffer('image/png');
 }
