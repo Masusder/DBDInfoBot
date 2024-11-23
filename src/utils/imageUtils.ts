@@ -25,13 +25,19 @@ export const fetchAndResizeImage = async(imageUrl: string, width: number | null,
     return await sharp(response.data).resize(width, height).toBuffer();
 };
 
+const backgroundCache: Record<string, Promise<Image>> = {};
 export async function layerIcons(background: string | Buffer | Image, icon: string | Buffer | Image, canvasWidth: number = 512, canvasHeight: number = 512): Promise<Buffer> {
     const canvas = createCanvas(canvasWidth, canvasHeight);
     const ctx = canvas.getContext('2d');
 
     const [backgroundImage, iconImage] = await Promise.all([
-        background instanceof Image ? background : loadImage(background),
-        icon instanceof Image ? icon : loadImage(icon),
+        typeof background === 'string'
+            ? backgroundCache[background] ?? (backgroundCache[background] = loadImage(background))
+            : background instanceof Image
+                ? Promise.resolve(background)
+                : loadImage(background),
+
+        icon instanceof Image ? Promise.resolve(icon) : loadImage(icon),
     ]);
 
     ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
@@ -166,41 +172,38 @@ export async function createLoadoutCanvas(
 }
 
 export async function combineImagesIntoGrid(imageUrls: string[], maxImagesPerRow: number = 3, maxImagesPerColumn: number = 2): Promise<Buffer> {
-    const imageBuffers: Buffer[] = await Promise.all(
-        imageUrls.map(async(url) => {
-            try {
-                const response = await axios.get(url, { responseType: 'arraybuffer' });
-                return Buffer.from(response.data);
-            } catch (error) {
-                console.error(`Error fetching image from ${url}:`, error);
-                throw error;
-            }
-        })
-    );
+    let maxWidth = 0;
+    let maxHeight = 0;
 
-    const images = await Promise.all(imageBuffers.map((buffer) => loadImage(buffer)));
+    const images: Image[] = (
+        await Promise.all(
+            imageUrls.map((url) =>
+                loadImage(url).catch(() => null)
+            )
+        )
+    ).filter((img): img is Image => {
+        if (img) {
+            maxWidth = Math.max(maxWidth, img.width);
+            maxHeight = Math.max(maxHeight, img.height);
+            return true;
+        }
+        return false;
+    });
 
-    const maxWidth = Math.max(...images.map((img) => img.width));
-    const maxHeight = Math.max(...images.map((img) => img.height));
+    const rows = Math.min(Math.ceil(images.length / maxImagesPerRow), maxImagesPerColumn);
+    const cols = Math.min(images.length, maxImagesPerRow);
 
-    const totalWidth = maxWidth * maxImagesPerRow; // Total width for 3 columns
-    const totalHeight = maxHeight * maxImagesPerColumn; // Total height for 2 rows
+    const totalWidth = maxWidth * cols;
+    const totalHeight = maxHeight * rows;
 
     const canvas = createCanvas(totalWidth, totalHeight);
     const ctx = canvas.getContext('2d');
 
-    let currentX = 0;
-    let currentY = 0;
-
+    // Pre-compute positions for each image
     images.forEach((img, index) => {
-        // If we have placed maxImagesPerRow images in a row, move to the next row
-        if (index > 0 && index % maxImagesPerRow === 0) {
-            currentX = 0;
-            currentY += maxHeight;
-        }
-
-        ctx.drawImage(img, currentX, currentY);
-        currentX += maxWidth;
+        const x = (index % maxImagesPerRow) * maxWidth;
+        const y = Math.floor(index / maxImagesPerRow) * maxHeight;
+        ctx.drawImage(img, x, y);
     });
 
     return canvas.toBuffer('image/png');
