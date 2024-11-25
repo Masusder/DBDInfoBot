@@ -5,8 +5,8 @@ import {
     setCache
 } from '../cache';
 import { Locale } from 'discord.js';
-import { Cosmetic } from '../types';
-import { EGameData } from "@utils/dataUtils";
+import { Cosmetic } from '@tps/cosmetic';
+import { EGameData } from "@tps/enums/EGameData";
 import { localizeCacheKey } from "@utils/localizationUtils";
 
 // Holds indexed cosmetics for fast querying by locale

@@ -18,8 +18,8 @@ import {
     determineNewPage,
     generatePaginationButtons,
     TPaginationType
-} from "../../handlers/genericPaginationHandler";
-import { sendUnauthorizedMessage } from "../../handlers/unauthorizedHandler";
+} from "@handlers/genericPaginationHandler";
+import { sendUnauthorizedMessage } from "@handlers/unauthorizedHandler";
 import { combineBaseUrlWithPath } from "@utils/stringUtils";
 import {
     IBuild,

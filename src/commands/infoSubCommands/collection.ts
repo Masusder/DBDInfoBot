@@ -21,7 +21,7 @@ import { getCachedCosmetics } from "@services/cosmeticService";
 import {
     genericPaginationHandler,
     IPaginationOptions
-} from "../../handlers/genericPaginationHandler";
+} from "@handlers/genericPaginationHandler";
 import { combineImagesIntoGrid } from "@utils/imageUtils";
 import { getTranslation } from "@utils/localizationUtils";
 

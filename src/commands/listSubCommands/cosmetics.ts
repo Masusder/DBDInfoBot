@@ -17,7 +17,7 @@ import {
     formatHtmlToDiscordMarkdown,
     formatInclusionVersion
 } from "@utils/stringUtils";
-import { genericPaginationHandler } from "../../handlers/genericPaginationHandler";
+import { genericPaginationHandler } from "@handlers/genericPaginationHandler";
 import { getTranslation } from "@utils/localizationUtils";
 import { Cosmetic } from "../../types";
 import { Rarities } from "@data/Rarities";

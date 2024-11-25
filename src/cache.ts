@@ -1,6 +1,6 @@
 import NodeCache from 'node-cache';
 import axios from "./utils/apiClient";
-import { EGameData } from "@utils/dataUtils";
+import { EGameData } from "@tps/enums/EGameData";
 import { Locale } from "discord.js";
 import {
     localizeCacheKey,

@@ -24,7 +24,7 @@ import {
 import { fetchAndResizeImage } from "@utils/imageUtils";
 import { getCachedCharacters } from "@services/characterService";
 import { getTranslation } from "@utils/localizationUtils";
-import { Cosmetic } from "../../types";
+import { Cosmetic } from "@tps/cosmetic";
 
 export async function handleCosmeticCommandInteraction(interaction: ChatInputCommandInteraction) {
     const cosmeticId = interaction.options.getString('name');
