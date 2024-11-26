@@ -15,15 +15,30 @@ export function getTranslation(key: string, locale: Locale, ns: string = 'comman
     return i18next.t(key, { lng: mapDiscordLocaleToDbdLang(locale), ns });
 }
 
-export function commandLocalizationHelper(key: string) {
+export function commandLocalizationHelper(key: string, ns: string = 'commands') {
     const languages = [
-        'en-US', 'en-GB', 'de', 'es-ES', 'es-419', 'fr', 'it', 'ja', 'ko', 'pl', 'pt-BR', 'ru', 'th', 'tr', 'zh-CN', 'zh-TW'
+        Locale.EnglishUS,
+        Locale.EnglishGB,
+        Locale.German,
+        Locale.SpanishES,
+        Locale.SpanishLATAM,
+        Locale.French,
+        Locale.Italian,
+        Locale.Japanese,
+        Locale.Korean,
+        Locale.Polish,
+        Locale.PortugueseBR,
+        Locale.Russian,
+        Locale.Thai,
+        Locale.Turkish,
+        Locale.ChineseCN,
+        Locale.ChineseTW
     ];
 
     const localizations: { [key: string]: string } = {};
 
     languages.forEach((lang) => {
-        localizations[lang] = i18next.t(key, { lng: lang });
+        localizations[lang] = getTranslation(key, lang, ns);
     });
 
     return localizations;

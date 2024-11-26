@@ -1,46 +1,53 @@
-import {
-    Client,
-    Events,
-    GatewayIntentBits
-} from 'discord.js';
+import { Events } from 'discord.js';
 import {
     startTweetJob,
     startShrineJob
 } from "./jobs/";
 import interactionCreate from "./interactions/interactionCreate";
 import initI18next from "./i18n";
+import client from './client';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Create a new client instance
-const client: Client<boolean> = new Client({ intents: [GatewayIntentBits.Guilds] });
 const DISCORD_TOKEN: string | undefined = process.env.DISCORD_TOKEN;
 
-client.once(Events.ClientReady, async readyClient => {
-    console.log(`Logged in as ${readyClient.user.tag}`);
-
-    // Don't run during development
-    if (process.env.BRANCH !== 'dev') {
-        // Check for new tweets every 60 seconds
-        await startTweetJob(client);
-        // Check for new Shrine
-        await startShrineJob(client);
+async function initializeClient() {
+    // Initialize i18next first to set up the localization system
+    try {
+        await initI18next();
+        console.log('i18next setup complete');
+    } catch (err) {
+        console.error('Error during i18next setup:', err);
+        return; // If i18next fails, don't proceed with client initialization
     }
+
+    client.once(Events.ClientReady, async(readyClient) => {
+        console.log(`Logged in as ${readyClient.user.tag}`);
+
+        // Don't run during development
+        if (process.env.BRANCH !== 'dev') {
+            // Check for new tweets every 60 seconds
+            await startTweetJob(client);
+            // Check for new Shrine
+            await startShrineJob(client);
+        }
+    });
+
+    // Handle interactions
+    client.on(Events.InteractionCreate, async(interaction) => {
+        await interactionCreate(interaction);
+    });
+
+    // Log in to Discord
+    try {
+        await client.login(DISCORD_TOKEN);
+    } catch (err) {
+        console.error('Error during client login:', err);
+    }
+}
+
+// Execute the initialization
+initializeClient().catch((err) => {
+    console.error('Failed to initialize bot:', err);
 });
-
-client.on(Events.InteractionCreate, async interaction => {
-    await interactionCreate(interaction);
-});
-
-initI18next().then(() => {
-    console.log('i18next setup complete');
-}).catch((err) => {
-    console.error('Error during i18next setup:', err);
-});
-
-// Log in to Discord with your client's token
-// noinspection JSIgnoredPromiseFromCall
-client.login(DISCORD_TOKEN);
-
-export default client;

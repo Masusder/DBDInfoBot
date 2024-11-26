@@ -11,7 +11,7 @@ import { IShrine } from "../types";
  *
  * @returns {Promise<IShrine | undefined>} A promise that resolves to the shrine data if the API request is successful, or undefined if an error occurs.
  */
-export async function retrieveShrine(): Promise<IShrine | undefined> {
+async function retrieveShrine(): Promise<IShrine | undefined> {
     try {
         const response = await axios.get(`/api/shrine`);
         if (response.data.success) {
