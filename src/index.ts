@@ -1,7 +1,8 @@
 import { Events } from 'discord.js';
 import {
     startTweetJob,
-    startShrineJob
+    startShrineJob,
+    startNewsJob
 } from "./jobs/";
 import interactionCreate from "./interactions/interactionCreate";
 import initI18next from "./i18n";
@@ -31,6 +32,8 @@ async function initializeClient() {
             await startTweetJob(client);
             // Check for new Shrine
             await startShrineJob(client);
+            // Check for in-game news
+            await startNewsJob();
         }
     });
 

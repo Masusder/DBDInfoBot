@@ -19,11 +19,13 @@ async function deployCommands() {
         const { data: infoCommand } = await import('@commands/infoCommand');
         const { data: shrineCommand } = await import('@commands/shrineCommand');
         const { data: listCommand } = await import('@commands/listCommand');
+        const { data: newsCommand } = await import('@commands/newsCommand');
 
         const commands = [
             infoCommand?.toJSON(),
             shrineCommand?.toJSON(),
-            listCommand?.toJSON()
+            listCommand?.toJSON(),
+            newsCommand?.toJSON()
         ];
 
         const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN!);

@@ -5,5 +5,6 @@ export enum EGameData {
     AddonData = 'addonData',
     OfferingData = 'offeringData',
     ItemData = 'itemData',
-    CollectionData = 'collectionData'
+    CollectionData = 'collectionData',
+    NewsData = 'newsData',
 }

@@ -2,6 +2,7 @@ import Constants from "../constants";
 import * as crypto from 'crypto';
 import { getTranslation } from "@utils/localizationUtils";
 import { Locale } from "discord.js";
+import axios from "axios";
 
 export function extractInteractionId(customId: string): string | null {
     const parts = customId.split('::');
@@ -77,4 +78,59 @@ export function compareCustomId(input1:string, input2:string): boolean {
     const shortId2 = generateCustomId(input2);
 
     return shortId1 === shortId2;
+}
+
+export function transformPackagedPath(packagedPath: string): string {
+    const umgAssetsIndex = packagedPath.indexOf("/UMGAssets/");
+    if (umgAssetsIndex === -1) {
+        throw new Error("Invalid packagedPath format: 'UMGAssets' not found.");
+    }
+
+    const subPath = packagedPath.substring(umgAssetsIndex + 1);
+    const adjustedPath = subPath.replace("UMGAssets/", "UI/");
+    const basePath = adjustedPath.split('.')[0] + ".png";
+
+    return combineBaseUrlWithPath(`/images/${basePath}`);
+}
+
+export async function checkExistingImageUrl(url1: string, url2: string): Promise<string | null> {
+    const checkImageUrl = async (url: string): Promise<boolean> => {
+        try {
+            const response = await axios.head(url);
+            return response.status === 200;
+        } catch (error) {
+            console.error(`Error checking URL ${url}:`, error);
+            return false;
+        }
+    };
+
+    const [url1Valid, url2Valid] = await Promise.all([checkImageUrl(url1), checkImageUrl(url2)]);
+
+    return url1Valid ? url1 : url2Valid ? url2 : null;
+}
+
+// Helper function to split text into chunks of a specified length
+export function splitTextIntoChunksBySentence(text: string, maxLength: number) {
+    const chunks = [];
+    let currentChunk = '';
+    const sentences = text.match(/[^.!?]+[.!?]*/g); // Regex to match sentences ending with a punctuation mark
+
+    if (sentences) {
+        for (const sentence of sentences) {
+            if (currentChunk.length + sentence.length <= maxLength) {
+                currentChunk += sentence;
+            } else {
+                if (currentChunk.length > 0) {
+                    chunks.push(currentChunk);
+                }
+                currentChunk = sentence;
+            }
+        }
+
+        if (currentChunk.length > 0) {
+            chunks.push(currentChunk);
+        }
+    }
+
+    return chunks;
 }

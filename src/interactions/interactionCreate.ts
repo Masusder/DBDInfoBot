@@ -4,15 +4,17 @@ import {
     AutocompleteInteraction
 } from 'discord.js';
 import buttonInteractionCreate from './buttonInteractionCreate';
+import menuInteractionCreate from './menuInteractionCreate';
 import {
     execute as executeInfo,
     autocomplete as autocompleteInfo
 } from "@commands/infoCommand";
-import { execute as executeShrine } from "@commands/shrineCommand";
 import {
     execute as executeList,
     autocomplete as autocompleteList
 } from "@commands/listCommand";
+import { execute as executeShrine } from "@commands/shrineCommand";
+import { execute as executeNews } from "@commands/newsCommand";
 
 interface CommandHandler {
     execute: (interaction: ChatInputCommandInteraction) => Promise<void>;
@@ -39,6 +41,11 @@ const commandHandlers: Record<string, CommandHandler> = {
     shrine: {
         execute: async(interaction: ChatInputCommandInteraction) => {
             await executeShrine(interaction);
+        }
+    },
+    news: {
+        execute: async(interaction: ChatInputCommandInteraction) => {
+            await executeNews(interaction);
         }
     }
 };
@@ -74,8 +81,11 @@ export default async(interaction: Interaction) => {
         return;
     }
 
+    // Handle Menu Interactions
     if (interaction.isStringSelectMenu()) {
-        // do nothing
+        if (!interaction.customId.startsWith('builds-selection')) {
+            await menuInteractionCreate(interaction);
+        }
         return;
     }
 
