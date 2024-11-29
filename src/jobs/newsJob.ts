@@ -34,24 +34,13 @@ export async function resolveNewsArticles() {
             return [];
         }
 
-        // const identifiers = getNewsIdentifiers(newsData);
-
         const ids = await grabDispatchedNewsArticleIdentifiers(channel);
 
-        await batchSendNews(channel, ids);
+        await batchSendNews(channel, ids, newsData);
     } catch (error) {
         console.error('Error checking for News:', error);
     }
 }
-
-// function getNewsIdentifiers(newsData: NewsData): string[] {
-//     let identifiers = [];
-//     for (let i = 0; i < newsData.news.length; i++) {
-//         identifiers.push(newsData.news[i].id);
-//     }
-//
-//     return identifiers;
-// }
 
 async function grabDispatchedNewsArticleIdentifiers(channel: TextChannel | NewsChannel): Promise<string[]> {
     const messages = await channel.messages.fetch({ limit: 100 });

@@ -43,8 +43,15 @@ interface CallToAction {
     text: string;
 }
 
-interface ContentItem {
-    text: string;
+export interface ContentItem {
+    text?: string;
+    showcasedItem?: ShowcasedItem[];
+    type: string;
+}
+
+interface ShowcasedItem {
+    id: string;
+    amount: number;
     type: string;
 }
 

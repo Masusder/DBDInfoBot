@@ -40,7 +40,11 @@ export function formatHtmlToDiscordMarkdown(html: string): string {
     html = html.replace(/<span class="FlavorText">(.*?)<\/span>/g, '*$1*');
 
     // Replace <li> with Discord list markdown (- or *) and add a newline after each item
-    html = html.replace(/<li>(.*?)<\/li>/g, '- $1\n');
+    // html = html.replace(/<li>(.*?)<\/li>/g, '- $1\n');
+
+    // Ensure a newline exists before <li> tags, then replace them with Discord list markdown (- or *)
+    html = html.replace(/(?<!\n)\s*<li>/g, '\n<li>');
+    html = html.replace(/<li>(.*?)<\/li>/g, '- $1');
 
     // Clean up any remaining HTML tags
     html = html.replace(/<\/?[^>]+(>|$)/g, "");

@@ -51,43 +51,48 @@ const commandHandlers: Record<string, CommandHandler> = {
 };
 
 export default async(interaction: Interaction) => {
-    // Chat Input Commands
-    if (interaction.isChatInputCommand()) {
-        const commandName = interaction.commandName;
-        const command = commandHandlers[commandName];
+    try {
+        // Chat Input Commands
+        if (interaction.isChatInputCommand()) {
+            const commandName = interaction.commandName;
+            const command = commandHandlers[commandName];
 
-        if (command) {
-            await command.execute(interaction as ChatInputCommandInteraction);
+            if (command) {
+                await command.execute(interaction as ChatInputCommandInteraction);
+            }
+            return;
         }
-        return;
-    }
 
-    // Autocomplete Interactions
-    if (interaction.isAutocomplete()) {
-        const commandName = interaction.commandName;
-        const command = commandHandlers[commandName];
+        // Autocomplete Interactions
+        if (interaction.isAutocomplete()) {
+            const commandName = interaction.commandName;
+            const command = commandHandlers[commandName];
 
-        if (command) {
-            await command.autocomplete?.(interaction as AutocompleteInteraction);
+            if (command) {
+                await command.autocomplete?.(interaction as AutocompleteInteraction);
+            }
+            return;
         }
-        return;
-    }
 
-    // Handle Button Interactions
-    if (interaction.isButton()) {
-        if (!interaction.customId.startsWith('pagination')) {
-            await buttonInteractionCreate(interaction);
+        // Handle Button Interactions
+        if (interaction.isButton()) {
+            if (!interaction.customId.startsWith('pagination')) {
+                await buttonInteractionCreate(interaction);
+            }
+            return;
         }
-        return;
-    }
 
-    // Handle Menu Interactions
-    if (interaction.isStringSelectMenu()) {
-        if (!interaction.customId.startsWith('builds-selection')) {
-            await menuInteractionCreate(interaction);
+        // Handle Menu Interactions
+        if (interaction.isStringSelectMenu()) {
+            if (!interaction.customId.startsWith('builds-selection')) {
+                await menuInteractionCreate(interaction);
+            }
+            return;
         }
-        return;
-    }
 
-    console.warn('Unhandled interaction type or command:', interaction);
+        console.warn('Unhandled interaction type or command:', interaction);
+    }
+    catch (error: any) {
+        console.error('Unhandled interaction:', error.message);
+    }
 };
