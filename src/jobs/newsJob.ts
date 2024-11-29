@@ -13,6 +13,9 @@ import Constants from "../constants";
 import client from "../client";
 
 export async function startNewsJob() {
+    // No need to check more frequent than 10 minutes
+    // as news are cached for exactly that long
+    // 5 additional minutes just in case
     cron.schedule('*/15 * * * *', async() => {
         await resolveNewsArticles();
     });
