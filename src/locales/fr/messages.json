@@ -130,5 +130,14 @@
     ],
     "next": "Suivante",
     "last": "Dernière"
+  },
+  "news_command": {
+    "select_news_article": "Select a news article.",
+    "news": "News",
+    "published_on": "Published on:",
+    "untitled_news": "Untitled News",
+    "click_here": "Click here",
+    "showcased_items": "Showcased Items",
+    "items_featured_in_article": "These items are featured in the associated news article:"
   }
 }
