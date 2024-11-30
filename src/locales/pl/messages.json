@@ -130,5 +130,14 @@
     ],
     "next": "Następna",
     "last": "Ostatnia"
+  },
+  "news_command": {
+    "select_news_article": "Wybierz artykuł informacyjny.",
+    "news": "Artykuł",
+    "published_on": "Opublikowano:",
+    "untitled_news": "Artykuł bez tytułu",
+    "click_here": "Kliknij tutaj",
+    "showcased_items": "Wyróżnione elementy",
+    "items_featured_in_article": "Poniższe elementy zostały wyróżnione w powiązanym artykule informacyjnym:"
   }
 }
