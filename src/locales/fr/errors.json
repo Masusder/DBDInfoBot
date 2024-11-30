@@ -31,5 +31,9 @@
   },
   "general": {
     "unauthorized": "Seule la personne qui a utilisé la commande peut faire cela."
+  },
+  "news_command": {
+    "error_retrieving_data": "Failed to retrieve latest news.",
+    "failed_retrieving_article": "Failed to retrieve the selected news article."
   }
 }

@@ -105,5 +105,9 @@
         }
       }
     }
+  },
+  "news_command": {
+    "name": "aktualności",
+    "description": "Sprawdź najnowsze informacje o grze."
   }
 }
