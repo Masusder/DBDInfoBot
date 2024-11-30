@@ -2,6 +2,7 @@
 import {
     AttachmentBuilder,
     Client,
+    ColorResolvable,
     EmbedBuilder,
     GatewayIntentBits,
     TextChannel
@@ -14,28 +15,23 @@ dotenv.config();
 
 const DISCORD_TOKEN: string | undefined = process.env.DISCORD_TOKEN;
 const GUILD_ID: string | undefined = '743890446450688040';
-const CHANNEL_ID = '';
+const CHANNEL_ID = '1294865737479098429';
 const ROLE_ID = '1160277775383548044';
 
 const changelog = {
-    version: 'v1.0.0 (Discord Bot)',
-    description: `Welcome to the first release of the DBDInfo Discord bot! It's hosted on <@1296552447208063139> (thanks to <@448940727188324367> for assisting with hosting).\n\nBot supports localization up to 15 languages, language is determined by language configured in your Discord settings. If you want to help with translation please read <#1294865688636166224>.\n\n**Notice:** Please refrain from using **DBDInfo (Dev)** this bot is only for development purposes and won't be active for most of the time.`,
+    version: 'v1.1.0 (Discord Bot)',
+    description: `Hello! With this release, I'm introducing in-game news command, bringing the recently revamped in-game News section directly to your Discord server.`,
     fields: [
         {
-            name: 'Commands:',
-            value: ' - /shrine \n  - Provides information about currently active Shrine of Secrets. \n - /list \n  - Provides list of items for selected feature, right now only Cosmetics or Builds are available.\n- /info \n  - Provides information about specified game feature (e.x. Cosmetic, Collection, Perk etc.)',
+            name: 'New command:',
+            value: ' - /news \n  - Retrieves latest in-game news, you can then select news article using a menu selection. Selected articles will be sent as ephemeral messages to the user making the selection. \n\nThis command is integrated with game data, showcasing cosmetics, redirecting to external links, and more. Articles are localized into 15 supported languages (if you spot missing translations, blame the devs, not me please :pleading_face:).',
             inline: false
         },
         {
-            name: 'Bot Features:',
-            value: '- Multi-language support\n- Regular updates with new game features\n- Access to detailed game data (cosmetics, characters, perks, etc.)\n- More commands in the future',
+            name: 'Automated news:',
+            value: ' - Stay up-to-date by following <#1312117100428660736>, where in-game news will be posted automatically.',
             inline: false
-        },
-        {
-            name: 'Installation:',
-            value: '- [Click here to install bot on your server.](https://discord.com/oauth2/authorize?client_id=1296552447208063139)',
-            inline: false
-        },
+        }
     ],
     releaseDate: new Date().toLocaleDateString(),
     images: []
@@ -58,14 +54,15 @@ client.once('ready', async() => {
         const embed = new EmbedBuilder()
             .setTitle(`Changelog ${changelog.version}`)
             .setDescription(changelog.description)
-            .setColor(0x00AE86)
+            .setColor(getRandomBrightColor() as ColorResolvable)
             .setAuthor({
                 name: 'DBDInfo',
                 iconURL: "https://i.imgur.com/M0xf9lr.png",
                 url: 'https://dbd-info.com'
             })
+            .setTimestamp()
             .setFooter({
-                text: `Changelog released on ${changelog.releaseDate}`,
+                text: `Version - ${changelog.version.replace(" (Discord Bot)", '')}`,
                 iconURL: 'https://cdn.discordapp.com/avatars/377493906063097866/c50109b2b1d2c486b4b0aecf43ab7487?size=1024'
             });
 
@@ -85,22 +82,18 @@ client.once('ready', async() => {
             imageAttachments.push(attachment);
         }
 
-        // const imagesBuffer = fs.readFileSync(path.resolve(changelog.images[0]));
-        // if (imagesBuffer) {
-        //     embed.setImage(`attachment://changelog_image.png`)
-        // }
+        const imagesBuffer = fs.readFileSync(path.resolve(changelog.images[0]));
+        if (imagesBuffer) {
+            embed.setImage(`attachment://changelog_image.png`)
+        }
 
         await channel.send({
             content: `<@&${ROLE_ID}>`,
             embeds: [embed],
-            // files: [{
-            //     attachment: imagesBuffer,
-            //     name: 'changelog_image.png'
-            // }]
-        });
-
-        await channel.send({
-            content: "https://discord.com/oauth2/authorize?client_id=1296552447208063139"
+            files: [{
+                attachment: imagesBuffer,
+                name: 'changelog_image.png'
+            }]
         });
 
         console.log('Changelog embed sent successfully!');
@@ -110,6 +103,16 @@ client.once('ready', async() => {
         await client.destroy();
     }
 });
+
+function getRandomBrightColor() {
+    const getBrightComponent = () => Math.floor(Math.random() * 156) + 100;
+
+    const r = getBrightComponent();
+    const g = getBrightComponent();
+    const b = getBrightComponent();
+
+    return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+}
 
 // noinspection JSIgnoredPromiseFromCall
 client.login(DISCORD_TOKEN);
