@@ -6,7 +6,7 @@ import {
     Perk,
     PerkExtended
 } from "../types";
-import { EGameData } from "@utils/dataUtils";
+import { EGameData } from "@tps/enums/EGameData";
 import { Locale } from "discord.js";
 
 /**
@@ -30,17 +30,17 @@ export async function initializePerksCache(locale: Locale): Promise<void> {
  *
  * @returns {Promise<PerkExtended | undefined>} A promise that resolves to a PerkExtended object if found, or undefined if not.
  */
-export async function getPerkDataByName(name: string, locale: Locale): Promise<PerkExtended | undefined> {
-    const cachedPerks = await getCachedPerks(locale);
-
-    const perkId = Object.keys(cachedPerks).find(key => cachedPerks[key].Name.toLowerCase() === name.toLowerCase());
-
-    if (perkId) {
-        return { PerkId: perkId, ...cachedPerks[perkId] };
-    }
-
-    return undefined;
-}
+// export async function getPerkDataByName(name: string, locale: Locale): Promise<PerkExtended | undefined> {
+//     const cachedPerks = await getCachedPerks(locale);
+//
+//     const perkId = Object.keys(cachedPerks).find(key => cachedPerks[key].Name.toLowerCase() === name.toLowerCase());
+//
+//     if (perkId) {
+//         return { PerkId: perkId, ...cachedPerks[perkId] };
+//     }
+//
+//     return undefined;
+// }
 
 /**
  * Retrieves a single perk by its ID.

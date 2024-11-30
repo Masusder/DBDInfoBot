@@ -14,19 +14,20 @@ import {
     loadImage
 } from "canvas";
 import { getTranslation } from "@utils/localizationUtils";
+import { ELocaleNamespace } from '@tps/enums/ELocaleNamespace';
 
 export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
     const cosmeticId = extractInteractionId(interaction.customId);
     const locale = interaction.locale;
 
     if (!cosmeticId) {
-        await interaction.followUp({ content: getTranslation('info_command.cosmetic_subcommand.button_interaction.invalid_id', locale, 'errors'), ephemeral: true });
+        await interaction.followUp({ content: getTranslation('info_command.cosmetic_subcommand.button_interaction.invalid_id', locale, ELocaleNamespace.Errors), ephemeral: true });
         return;
     }
 
     const cosmeticData = await getCosmeticDataById(cosmeticId, locale);
     if (!cosmeticData) {
-        await interaction.followUp({ content: getTranslation('info_command.cosmetic_subcommand.button_interaction.error_retrieving_data', locale, 'errors'), ephemeral: true });
+        await interaction.followUp({ content: getTranslation('info_command.cosmetic_subcommand.button_interaction.error_retrieving_data', locale, ELocaleNamespace.Errors), ephemeral: true });
         return;
     }
 
@@ -34,7 +35,7 @@ export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
     const combinedImageBuffer = await combineImages(outfitPieces);
 
     const embed = new EmbedBuilder()
-        .setTitle(`${getTranslation('info_command.cosmetic_subcommand.button_interaction.outfit_pieces', locale, 'messages')} ${cosmeticData.CosmeticName}`)
+        .setTitle(`${getTranslation('info_command.cosmetic_subcommand.button_interaction.outfit_pieces', locale, ELocaleNamespace.Messages)} ${cosmeticData.CosmeticName}`)
         .setColor(interaction.message.embeds[0].color)
         .setImage('attachment://combined-outfit-pieces.png');
 

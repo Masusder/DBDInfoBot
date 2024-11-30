@@ -14,18 +14,19 @@ import {
 } from "./genericPaginationHandler";
 import { getTranslation } from "@utils/localizationUtils";
 import { sendUnauthorizedMessage } from "./unauthorizedHandler";
+import { ELocaleNamespace } from '@tps/enums/ELocaleNamespace';
 
 const MAX_DESCRIPTION_LENGTH = 3000;
 
 function createEmbed(description: string, characterName: string, color: number | null, locale: Locale) {
     return new EmbedBuilder()
-        .setTitle(`${getTranslation('info_command.character_subcommand.backstory', locale, 'messages')} ${characterName}`)
+        .setTitle(`${getTranslation('info_command.character_subcommand.backstory', locale, ELocaleNamespace.Messages)} ${characterName}`)
         .setDescription(description)
         .setColor(color as ColorResolvable)
         .setTimestamp()
         .setFooter(
             {
-                text: `${getTranslation('info_command.character_subcommand.character_backstory', locale, 'messages')}`
+                text: `${getTranslation('info_command.character_subcommand.character_backstory', locale, ELocaleNamespace.Messages)}`
             }
         );
 }
@@ -72,7 +73,7 @@ export async function showCharacterBackstoryHandler(interaction: ButtonInteracti
 
     if (!characterIndex) {
         await interaction.followUp({
-            content: getTranslation('info_command.character_subcommand.invalid_index', locale, 'errors'),
+            content: getTranslation('info_command.character_subcommand.invalid_index', locale, ELocaleNamespace.Errors),
             ephemeral: true
         });
         return;
@@ -81,7 +82,7 @@ export async function showCharacterBackstoryHandler(interaction: ButtonInteracti
     const characterData = await getCharacterDataByIndex(characterIndex, locale);
     if (!characterData) {
         await interaction.followUp({
-            content: getTranslation('info_command.character_subcommand.error_retrieving_data', locale, 'errors'),
+            content: getTranslation('info_command.character_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors),
             ephemeral: true
         });
         return;

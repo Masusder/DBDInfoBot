@@ -17,6 +17,7 @@ import {
     getOfferingDataByName
 } from "@services/offeringService";
 import { Rarities } from "@data/Rarities";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 
 export async function handleOfferingCommandInteraction(interaction: ChatInputCommandInteraction) {
     const offeringName = interaction.options.getString('name');
@@ -43,22 +44,22 @@ export async function handleOfferingCommandInteraction(interaction: ChatInputCom
 
         const markdownDescription = formatHtmlToDiscordMarkdown(offeringData.Description);
         const description = offeringData.Available === "Retired" ?
-            `${markdownDescription}\n\n**${getTranslation('info_command.offering_subcommand.retired', locale, 'messages')}**`
+            `${markdownDescription}\n\n**${getTranslation('info_command.offering_subcommand.retired', locale, ELocaleNamespace.Messages)}**`
             : markdownDescription;
 
         const fields: APIEmbedField[] = [
             {
-                name: getTranslation('info_command.offering_subcommand.role', locale, 'messages'),
-                value: getTranslation(roleData.localizedName, locale, 'general'),
+                name: getTranslation('info_command.offering_subcommand.role', locale, ELocaleNamespace.Messages),
+                value: getTranslation(roleData.localizedName, locale, ELocaleNamespace.General),
                 inline: true
             },
             {
-                name: getTranslation('info_command.offering_subcommand.rarity', locale, 'messages'),
-                value: getTranslation(rarityData.localizedName, locale, 'general'),
+                name: getTranslation('info_command.offering_subcommand.rarity', locale, ELocaleNamespace.Messages),
+                value: getTranslation(rarityData.localizedName, locale, ELocaleNamespace.General),
                 inline: true
             },
             {
-                name: getTranslation('info_command.offering_subcommand.description', locale, 'messages'),
+                name: getTranslation('info_command.offering_subcommand.description', locale, ELocaleNamespace.Messages),
                 value: description,
                 inline: false
             }];
@@ -70,7 +71,7 @@ export async function handleOfferingCommandInteraction(interaction: ChatInputCom
             .setTimestamp()
             .setThumbnail(`attachment://offeringImage_${offeringData.OfferingId}.png`)
             .setAuthor({
-                name: getTranslation('info_command.offering_subcommand.offering_information', locale, 'messages'),
+                name: getTranslation('info_command.offering_subcommand.offering_information', locale, ELocaleNamespace.Messages),
                 iconURL: combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_offerings.png')
             });
 

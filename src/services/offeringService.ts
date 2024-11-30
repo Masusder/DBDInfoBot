@@ -6,7 +6,7 @@ import {
     Offering,
     OfferingExtended
 } from "../types";
-import { EGameData } from "@utils/dataUtils";
+import { EGameData } from "@tps/enums/EGameData";
 import { Locale } from "discord.js";
 
 /**

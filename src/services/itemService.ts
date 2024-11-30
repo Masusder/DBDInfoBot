@@ -2,7 +2,7 @@ import {
     getCachedGameData,
     initializeGameDataCache
 } from "../cache";
-import { EGameData } from "@utils/dataUtils";
+import { EGameData } from "@tps/enums/EGameData";
 import { Locale } from "discord.js";
 import {
     Item,

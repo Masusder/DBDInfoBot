@@ -2,7 +2,7 @@ import {
     ApplicationEmoji,
     Collection
 } from "discord.js";
-import client from "../index";
+import client from "client";
 
 async function fetchAndCacheEmojis(): Promise<Collection<string, ApplicationEmoji>> {
     if (!client.application) return new Collection();

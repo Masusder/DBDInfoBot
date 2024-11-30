@@ -1,6 +1,6 @@
 import NodeCache from 'node-cache';
 import axios from "./utils/apiClient";
-import { EGameData } from "@utils/dataUtils";
+import { EGameData } from "@tps/enums/EGameData";
 import { Locale } from "discord.js";
 import {
     localizeCacheKey,
@@ -23,7 +23,7 @@ export function getCache<T>(key: string): T | undefined {
     return cachedData;
 }
 
-export async function initializeGameDataCache<T>(endpoint: string, cacheKey: EGameData, locale: Locale): Promise<void> {
+export async function initializeGameDataCache<T>(endpoint: string, cacheKey: EGameData, locale: Locale, ttl: number = 3600): Promise<void> {
     if (!Object.values(EGameData).includes(cacheKey)) {
         throw new Error(`Caching is not allowed for the key: ${cacheKey}.`);
     }
@@ -42,8 +42,11 @@ export async function initializeGameDataCache<T>(endpoint: string, cacheKey: EGa
         });
         if (response.data.success) {
             const data: { [key: string]: T } = response.data.data;
-            setCache(localizedCacheKey, data);
-            console.log(`Fetched and cached ${Object.keys(data).length} items for ${localizedCacheKey}.`);
+            setCache(localizedCacheKey, data, ttl);
+
+            if (cacheKey !== EGameData.NewsData) {
+                console.log(`Fetched and cached ${Object.keys(data).length} items for ${localizedCacheKey}.`);
+            }
         } else {
             console.error(`Failed to fetch ${localizedCacheKey}: API responded with success = false`);
         }

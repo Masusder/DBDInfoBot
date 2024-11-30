@@ -2,6 +2,8 @@ import Constants from "../constants";
 import * as crypto from 'crypto';
 import { getTranslation } from "@utils/localizationUtils";
 import { Locale } from "discord.js";
+import axios from "axios";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 
 export function extractInteractionId(customId: string): string | null {
     const parts = customId.split('::');
@@ -17,7 +19,7 @@ export function combineBaseUrlWithPath(relativePath: string): string {
 }
 
 export function formatInclusionVersion(inclusionVersion: string, locale: Locale): string {
-    return inclusionVersion === "Legacy" ? getTranslation('legacy', locale, 'general') : inclusionVersion;
+    return inclusionVersion === "Legacy" ? getTranslation('legacy', locale, ELocaleNamespace.General) : inclusionVersion;
 }
 
 export function formatHtmlToDiscordMarkdown(html: string): string {
@@ -39,7 +41,11 @@ export function formatHtmlToDiscordMarkdown(html: string): string {
     html = html.replace(/<span class="FlavorText">(.*?)<\/span>/g, '*$1*');
 
     // Replace <li> with Discord list markdown (- or *) and add a newline after each item
-    html = html.replace(/<li>(.*?)<\/li>/g, '- $1\n');
+    // html = html.replace(/<li>(.*?)<\/li>/g, '- $1\n');
+
+    // Ensure a newline exists before <li> tags, then replace them with Discord list markdown (- or *)
+    html = html.replace(/(?<!\n)\s*<li>/g, '\n<li>');
+    html = html.replace(/<li>(.*?)<\/li>/g, '- $1');
 
     // Clean up any remaining HTML tags
     html = html.replace(/<\/?[^>]+(>|$)/g, "");
@@ -67,14 +73,69 @@ export function adjustForTimezone(dateString: string | Date): number {
 }
 
 export function generateCustomId(input: string) {
-    const hash =  crypto.createHash('sha256').update(input).digest('base64');
+    const hash = crypto.createHash('sha256').update(input).digest('base64');
 
     return hash.slice(0, 8);
 }
 
-export function compareCustomId(input1:string, input2:string): boolean {
+export function compareCustomId(input1: string, input2: string): boolean {
     const shortId1 = generateCustomId(input1);
     const shortId2 = generateCustomId(input2);
 
     return shortId1 === shortId2;
+}
+
+export function transformPackagedPath(packagedPath: string): string {
+    const umgAssetsIndex = packagedPath.indexOf("/UMGAssets/");
+    if (umgAssetsIndex === -1) {
+        throw new Error("Invalid packagedPath format: 'UMGAssets' not found.");
+    }
+
+    const subPath = packagedPath.substring(umgAssetsIndex + 1);
+    const adjustedPath = subPath.replace("UMGAssets/", "UI/");
+    const basePath = adjustedPath.split('.')[0] + ".png";
+
+    return combineBaseUrlWithPath(`/images/${basePath}`);
+}
+
+export async function checkExistingImageUrl(url1: string, url2: string): Promise<string | null> {
+    const checkImageUrl = async(url: string): Promise<boolean> => {
+        try {
+            const response = await axios.head(url);
+            return response.status === 200;
+        } catch (error) {
+            console.error(`Error checking URL ${url}:`, error);
+            return false;
+        }
+    };
+
+    const [url1Valid, url2Valid] = await Promise.all([checkImageUrl(url1), checkImageUrl(url2)]);
+
+    return url1Valid ? url1 : url2Valid ? url2 : null;
+}
+
+// Helper function to split text into chunks of a specified length
+export function splitTextIntoChunksBySentence(text: string, maxLength: number) {
+    const chunks = [];
+    let currentChunk = '';
+    const sentences = text.match(/[^.!?]+[.!?]*/g); // Regex to match sentences ending with a punctuation mark
+
+    if (sentences) {
+        for (const sentence of sentences) {
+            if (currentChunk.length + sentence.length <= maxLength) {
+                currentChunk += sentence;
+            } else {
+                if (currentChunk.length > 0) {
+                    chunks.push(currentChunk);
+                }
+                currentChunk = sentence;
+            }
+        }
+
+        if (currentChunk.length > 0) {
+            chunks.push(currentChunk);
+        }
+    }
+
+    return chunks;
 }

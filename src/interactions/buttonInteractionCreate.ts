@@ -1,6 +1,6 @@
 import { ButtonInteraction } from 'discord.js';
-import { viewOutfitPiecesHandler } from '../handlers/viewOutfitPiecesHandler';
-import { showCharacterBackstoryHandler } from "../handlers/showCharacterBackstoryHandler";
+import { viewOutfitPiecesHandler } from '@handlers/viewOutfitPiecesHandler';
+import { showCharacterBackstoryHandler } from "@handlers/showCharacterBackstoryHandler";
 import { handlePerkCommandInteraction } from "@commands/infoSubCommands/perk";
 
 export default async(interaction: ButtonInteraction) => {

@@ -4,15 +4,17 @@ import {
     AutocompleteInteraction
 } from 'discord.js';
 import buttonInteractionCreate from './buttonInteractionCreate';
+import menuInteractionCreate from './menuInteractionCreate';
 import {
     execute as executeInfo,
     autocomplete as autocompleteInfo
 } from "@commands/infoCommand";
-import { execute as executeShrine } from "@commands/shrineCommand";
 import {
     execute as executeList,
     autocomplete as autocompleteList
 } from "@commands/listCommand";
+import { execute as executeShrine } from "@commands/shrineCommand";
+import { execute as executeNews } from "@commands/newsCommand";
 
 interface CommandHandler {
     execute: (interaction: ChatInputCommandInteraction) => Promise<void>;
@@ -40,44 +42,57 @@ const commandHandlers: Record<string, CommandHandler> = {
         execute: async(interaction: ChatInputCommandInteraction) => {
             await executeShrine(interaction);
         }
+    },
+    news: {
+        execute: async(interaction: ChatInputCommandInteraction) => {
+            await executeNews(interaction);
+        }
     }
 };
 
 export default async(interaction: Interaction) => {
-    // Chat Input Commands
-    if (interaction.isChatInputCommand()) {
-        const commandName = interaction.commandName;
-        const command = commandHandlers[commandName];
+    try {
+        // Chat Input Commands
+        if (interaction.isChatInputCommand()) {
+            const commandName = interaction.commandName;
+            const command = commandHandlers[commandName];
 
-        if (command) {
-            await command.execute(interaction as ChatInputCommandInteraction);
+            if (command) {
+                await command.execute(interaction as ChatInputCommandInteraction);
+            }
+            return;
         }
-        return;
-    }
 
-    // Autocomplete Interactions
-    if (interaction.isAutocomplete()) {
-        const commandName = interaction.commandName;
-        const command = commandHandlers[commandName];
+        // Autocomplete Interactions
+        if (interaction.isAutocomplete()) {
+            const commandName = interaction.commandName;
+            const command = commandHandlers[commandName];
 
-        if (command) {
-            await command.autocomplete?.(interaction as AutocompleteInteraction);
+            if (command) {
+                await command.autocomplete?.(interaction as AutocompleteInteraction);
+            }
+            return;
         }
-        return;
-    }
 
-    // Handle Button Interactions
-    if (interaction.isButton()) {
-        if (!interaction.customId.startsWith('pagination')) {
-            await buttonInteractionCreate(interaction);
+        // Handle Button Interactions
+        if (interaction.isButton()) {
+            if (!interaction.customId.startsWith('pagination')) {
+                await buttonInteractionCreate(interaction);
+            }
+            return;
         }
-        return;
-    }
 
-    if (interaction.isStringSelectMenu()) {
-        // do nothing
-        return;
-    }
+        // Handle Menu Interactions
+        if (interaction.isStringSelectMenu()) {
+            if (!interaction.customId.startsWith('builds-selection')) {
+                await menuInteractionCreate(interaction);
+            }
+            return;
+        }
 
-    console.warn('Unhandled interaction type or command:', interaction);
+        console.warn('Unhandled interaction type or command:', interaction);
+    }
+    catch (error: any) {
+        console.error('Unhandled interaction:', error.message);
+    }
 };

@@ -3,8 +3,8 @@ import {
     getCachedGameData,
     initializeGameDataCache
 } from "../cache";
-import { Collection } from "../types";
-import { EGameData } from "@utils/dataUtils";
+import { Collection } from "@tps/collection";
+import { EGameData } from "@tps/enums/EGameData";
 
 /**
  * Initializes the cache for collections using the provided locale.

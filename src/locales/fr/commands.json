@@ -105,5 +105,9 @@
         }
       }
     }
+  },
+  "news_command": {
+    "name": "news",
+    "description": "Retrieve latest in-game news."
   }
 }

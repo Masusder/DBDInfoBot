@@ -9,6 +9,7 @@ import {
 } from "discord.js";
 import { getTranslation } from "@utils/localizationUtils";
 import { sendUnauthorizedMessage } from "./unauthorizedHandler";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 
 export interface IPaginationOptions {
     items: any[];
@@ -30,27 +31,27 @@ export const generatePaginationButtons = (page: number, totalPages: number, loca
     actionRow1.addComponents(
         new ButtonBuilder()
             .setCustomId('pagination::first')
-            .setLabel(getTranslation('generic_pagination.first', locale, 'messages'))
+            .setLabel(getTranslation('generic_pagination.first', locale, ELocaleNamespace.Messages))
             .setStyle(ButtonStyle.Primary)
             .setDisabled(page === 1),
         new ButtonBuilder()
             .setCustomId('pagination::previous')
-            .setLabel(getTranslation('generic_pagination.previous', locale, 'messages'))
+            .setLabel(getTranslation('generic_pagination.previous', locale, ELocaleNamespace.Messages))
             .setStyle(ButtonStyle.Secondary)
             .setDisabled(page === 1),
         new ButtonBuilder()
             .setCustomId(`pagination::current::${page}::${totalPages}`)
-            .setLabel(`${getTranslation('generic_pagination.page_number.0', locale, 'messages')} ${page} ${getTranslation('generic_pagination.page_number.1', locale, 'messages')} ${totalPages}`)
+            .setLabel(`${getTranslation('generic_pagination.page_number.0', locale, ELocaleNamespace.Messages)} ${page} ${getTranslation('generic_pagination.page_number.1', locale, ELocaleNamespace.Messages)} ${totalPages}`)
             .setStyle(ButtonStyle.Secondary)
             .setDisabled(true),
         new ButtonBuilder()
             .setCustomId('pagination::next')
-            .setLabel(getTranslation('generic_pagination.next', locale, 'messages'))
+            .setLabel(getTranslation('generic_pagination.next', locale, ELocaleNamespace.Messages))
             .setStyle(ButtonStyle.Secondary)
             .setDisabled(page === totalPages),
         new ButtonBuilder()
             .setCustomId('pagination::last')
-            .setLabel(getTranslation('generic_pagination.last', locale, 'messages'))
+            .setLabel(getTranslation('generic_pagination.last', locale, ELocaleNamespace.Messages))
             .setStyle(ButtonStyle.Primary)
             .setDisabled(page === totalPages)
     );
