@@ -17,6 +17,7 @@ import {
 } from "@utils/stringUtils";
 import { getTranslation } from "@utils/localizationUtils";
 import { layerIcons } from "@utils/imageUtils";
+import { ELocaleNamespace } from '@tps/enums/ELocaleNamespace';
 
 export async function handlePerkCommandInteraction(interaction: ChatInputCommandInteraction | ButtonInteraction) {
     const perkId = interaction instanceof ButtonInteraction ? interaction.customId.split("::")[1] : interaction.options.getString('name');
@@ -46,10 +47,10 @@ export async function handlePerkCommandInteraction(interaction: ChatInputCommand
         if (characterData) characterName = characterData.Name;
 
         const perkName = perkData.Name;
-        const title = characterName ? `${perkName} (${characterName})` : `${perkName} (${getTranslation('info_command.perk_subcommand.generic_perk', locale, 'messages')})`;
+        const title = characterName ? `${perkName} (${characterName})` : `${perkName} (${getTranslation('info_command.perk_subcommand.generic_perk', locale, ELocaleNamespace.Messages)})`;
 
         const field: APIEmbedField = {
-            name: getTranslation('info_command.perk_subcommand.description', locale, 'messages'),
+            name: getTranslation('info_command.perk_subcommand.description', locale, ELocaleNamespace.Messages),
             value: formatHtmlToDiscordMarkdown(perkData.Description)
         };
 
@@ -60,7 +61,7 @@ export async function handlePerkCommandInteraction(interaction: ChatInputCommand
             .setTimestamp()
             .setThumbnail(`attachment://perkImage_${perkData.PerkId}.png`)
             .setAuthor({
-                name: getTranslation('info_command.perk_subcommand.perk_information', locale, 'messages'),
+                name: getTranslation('info_command.perk_subcommand.perk_information', locale, ELocaleNamespace.Messages),
                 iconURL: combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_perks.png')
             });
 

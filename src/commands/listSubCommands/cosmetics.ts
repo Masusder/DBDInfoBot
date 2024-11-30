@@ -22,6 +22,7 @@ import { getTranslation } from "@utils/localizationUtils";
 import { Cosmetic } from "../../types";
 import { Rarities } from "@data/Rarities";
 import { combineImagesIntoGrid } from "@utils/imageUtils";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 
 const COSMETICS_PER_PAGE = 6;
 
@@ -40,25 +41,25 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
 
         if (cosmetics.length === 0) {
             const message = filterCount > 0
-                ? getTranslation('list_command.cosmetics_subcommand.cosmetics_not_found_filters', locale, 'errors')
-                : getTranslation('list_command.cosmetics_subcommand.cosmetics_not_found', locale, 'errors');
+                ? getTranslation('list_command.cosmetics_subcommand.cosmetics_not_found_filters', locale, ELocaleNamespace.Errors)
+                : getTranslation('list_command.cosmetics_subcommand.cosmetics_not_found', locale, ELocaleNamespace.Errors);
             await interaction.editReply({ content: message });
             return;
         }
 
         const generateEmbed = async(pageItems: Cosmetic[]) => {
-            let title = `${getTranslation('list_command.cosmetics_subcommand.found_total.0', locale, 'messages')} ${cosmetics.length} ${getTranslation('list_command.cosmetics_subcommand.found_total.1', locale, 'messages')}`;
+            let title = `${getTranslation('list_command.cosmetics_subcommand.found_total.0', locale, ELocaleNamespace.Messages)} ${cosmetics.length} ${getTranslation('list_command.cosmetics_subcommand.found_total.1', locale, ELocaleNamespace.Messages)}`;
 
             // Let user know that filters were applied
-            if (filterCount > 0) title += ` (${getTranslation('list_command.cosmetics_subcommand.filters_applied', locale, 'messages')}: ${filterCount})`;
+            if (filterCount > 0) title += ` (${getTranslation('list_command.cosmetics_subcommand.filters_applied', locale, ELocaleNamespace.Messages)}: ${filterCount})`;
 
             const embedColor = Rarity ? Rarities[Rarity].color : '#5865f2';
 
             const embed = new EmbedBuilder()
                 .setTitle(title)
-                .setDescription(`${getTranslation('list_command.cosmetics_subcommand.more_info.0', locale, 'messages')}: \`/${getTranslation('list_command.cosmetics_subcommand.more_info.1', locale, 'messages')}\``)
+                .setDescription(`${getTranslation('list_command.cosmetics_subcommand.more_info.0', locale, ELocaleNamespace.Messages)}: \`/${getTranslation('list_command.cosmetics_subcommand.more_info.1', locale, ELocaleNamespace.Messages)}\``)
                 .setColor(embedColor as ColorResolvable)
-                .setFooter({ text: getTranslation('list_command.cosmetics_subcommand.cosmetics_list', locale, 'messages') })
+                .setFooter({ text: getTranslation('list_command.cosmetics_subcommand.cosmetics_list', locale, ELocaleNamespace.Messages) })
                 .setTimestamp();
 
             if (Character !== -1) {

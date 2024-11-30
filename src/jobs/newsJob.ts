@@ -11,6 +11,9 @@ import {
 } from "@commands/newsCommand";
 import Constants from "../constants";
 import client from "../client";
+import { NewsData } from "@tps/news";
+
+let cachedNewsIds: Set<string> = new Set();
 
 export async function startNewsJob() {
     // No need to check more frequent than 10 minutes
@@ -24,10 +27,18 @@ export async function startNewsJob() {
 export async function resolveNewsArticles() {
     try {
         console.log('Checking News...');
-        const newsData = await getCachedNews(Locale.EnglishUS)
+        const newsData: NewsData = await getCachedNews(Locale.EnglishUS)
 
         if (!newsData || isEmptyObject(newsData)) {
             console.log("Not found News data.");
+            return;
+        }
+
+        const articleIds = newsData.news.map((article) => article.id);
+        const newArticleIds = articleIds.filter(id => !cachedNewsIds.has(id));
+
+        if (newArticleIds.length === 0) {
+            console.log("No new articles to dispatch.");
             return;
         }
 
@@ -56,7 +67,9 @@ async function grabDispatchedNewsArticleIdentifiers(channel: TextChannel | NewsC
                 const idMatch = footerText.match(/ID: (\S+)/);
 
                 if (idMatch) {
-                    extractedIds.push(idMatch[1]);
+                    const id = idMatch[1];
+                    extractedIds.push(id);
+                    cachedNewsIds.add(id);
                 }
             }
         });

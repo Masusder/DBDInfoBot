@@ -17,6 +17,7 @@ import {
     getAddonDataByName
 } from "@services/addonService";
 import { Rarities } from "@data/Rarities";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 
 export async function handleAddonCommandInteraction(interaction: ChatInputCommandInteraction) {
     const addonName = interaction.options.getString('name');
@@ -43,17 +44,17 @@ export async function handleAddonCommandInteraction(interaction: ChatInputComman
 
         const fields: APIEmbedField[] = [
             {
-                name: getTranslation('info_command.addon_subcommand.role', locale, 'messages'),
-                value: getTranslation(roleData.localizedName, locale, 'general'),
+                name: getTranslation('info_command.addon_subcommand.role', locale, ELocaleNamespace.Messages),
+                value: getTranslation(roleData.localizedName, locale, ELocaleNamespace.General),
                 inline: true
             },
             {
-                name: getTranslation('info_command.addon_subcommand.rarity', locale, 'messages'),
-                value: getTranslation(rarityData.localizedName, locale, 'general'),
+                name: getTranslation('info_command.addon_subcommand.rarity', locale, ELocaleNamespace.Messages),
+                value: getTranslation(rarityData.localizedName, locale, ELocaleNamespace.General),
                 inline: true
             },
             {
-                name: getTranslation('info_command.addon_subcommand.description', locale, 'messages'),
+                name: getTranslation('info_command.addon_subcommand.description', locale, ELocaleNamespace.Messages),
                 value: formatHtmlToDiscordMarkdown(addonData.Description),
                 inline: false
             }];
@@ -65,7 +66,7 @@ export async function handleAddonCommandInteraction(interaction: ChatInputComman
             .setTimestamp()
             .setThumbnail(`attachment://addonImage_${addonData.AddonId}.png`)
             .setAuthor({
-                name: getTranslation('info_command.addon_subcommand.addon_information', locale, 'messages'),
+                name: getTranslation('info_command.addon_subcommand.addon_information', locale, ELocaleNamespace.Messages),
                 iconURL: combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_addons.png')
             });
 

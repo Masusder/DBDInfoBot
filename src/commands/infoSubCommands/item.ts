@@ -20,6 +20,7 @@ import { Rarities } from "@data/Rarities";
 import {
     getCharacterByParentItem
 } from "@services/characterService";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 
 export async function handleItemCommandInteraction(interaction: ChatInputCommandInteraction) {
     const itemName = interaction.options.getString('name');
@@ -50,7 +51,7 @@ export async function handleItemCommandInteraction(interaction: ChatInputCommand
 
         if (characterData) {
             fields.push({
-                name: getTranslation('info_command.item_subcommand.character', locale, 'messages'),
+                name: getTranslation('info_command.item_subcommand.character', locale, ELocaleNamespace.Messages),
                 value: characterData.Name,
                 inline: true
             });
@@ -58,13 +59,13 @@ export async function handleItemCommandInteraction(interaction: ChatInputCommand
 
         fields.push(
             {
-                name: getTranslation('info_command.item_subcommand.role', locale, 'messages'),
-                value: getTranslation(roleData.localizedName, locale, 'general'),
+                name: getTranslation('info_command.item_subcommand.role', locale, ELocaleNamespace.Messages),
+                value: getTranslation(roleData.localizedName, locale, ELocaleNamespace.General),
                 inline: true
             },
             {
-                name: getTranslation('info_command.item_subcommand.rarity', locale, 'messages'),
-                value: getTranslation(rarityData.localizedName, locale, 'general'),
+                name: getTranslation('info_command.item_subcommand.rarity', locale, ELocaleNamespace.Messages),
+                value: getTranslation(rarityData.localizedName, locale, ELocaleNamespace.General),
                 inline: true
             },
         );
@@ -77,7 +78,7 @@ export async function handleItemCommandInteraction(interaction: ChatInputCommand
             .setDescription(formatHtmlToDiscordMarkdown(itemData.Description)) // Field would be preferred but there's 1024 characters limit
             .setThumbnail(`attachment://itemImage_${itemData.ItemId}.png`)
             .setAuthor({
-                name: getTranslation('info_command.item_subcommand.item_information', locale, 'messages'),
+                name: getTranslation('info_command.item_subcommand.item_information', locale, ELocaleNamespace.Messages),
                 iconURL: combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_items.png')
             });
 

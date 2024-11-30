@@ -1,13 +1,15 @@
 import {
     ChatInputCommandInteraction,
-    EmbedBuilder
+    EmbedBuilder,
+    StringSelectMenuInteraction
 } from "discord.js";
 import { getTranslation } from "@utils/localizationUtils";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 
-export async function sendErrorMessage(interaction: ChatInputCommandInteraction, inputMessage: string, isLocalized: boolean = true): Promise<void> {
+export async function sendErrorMessage(interaction: ChatInputCommandInteraction | StringSelectMenuInteraction, inputMessage: string, isLocalized: boolean = true): Promise<void> {
     const locale = interaction.locale;
 
-    const outputMessage = isLocalized ? getTranslation(inputMessage, locale, 'errors') : inputMessage;
+    const outputMessage = isLocalized ? getTranslation(inputMessage, locale, ELocaleNamespace.Errors) : inputMessage;
     const embed = new EmbedBuilder()
         .setColor('Red')
         .setDescription(`:x: ${outputMessage}`);

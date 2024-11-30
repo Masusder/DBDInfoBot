@@ -42,6 +42,7 @@ import {
     getApplicationEmoji,
     getOrCreateApplicationEmoji
 } from "@utils/emojiManager";
+import { ELocaleNamespace } from '@tps/enums/ELocaleNamespace';
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -100,11 +101,11 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
 
             if (perkInfo.Character !== -1) {
                 const characterData = await getCharacterDataByIndex(perkInfo.Character, locale);
-                characterName = characterData ? `${getTranslation('shrine_command.character', locale, 'messages')}: ${characterData.Name}` : '';
+                characterName = characterData ? `${getTranslation('shrine_command.character', locale, ELocaleNamespace.Messages)}: ${characterData.Name}` : '';
             }
 
             if (!currenciesMessage) {
-                currenciesMessage = `\n\n**${getTranslation('currencies.shards', locale, 'general')}:** ${correctlyCasedPerkData[perkId].shards.join('/')} \n**${getTranslation('currencies.bloodpoints', locale, 'general')}:** ${formatNumber(correctlyCasedPerkData[perkId].bloodpoints)}`
+                currenciesMessage = `\n\n**${getTranslation('currencies.shards', locale, ELocaleNamespace.General)}:** ${correctlyCasedPerkData[perkId].shards.join('/')} \n**${getTranslation('currencies.bloodpoints', locale, ELocaleNamespace.General)}:** ${formatNumber(correctlyCasedPerkData[perkId].bloodpoints)}`
             }
 
             const perkEmoji = await getApplicationEmoji(perkId);
@@ -137,7 +138,7 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
         const startDateUnix = Math.floor(adjustedStartDate / 1000);
         const adjustedEndDateUnix = Math.floor(adjustedEndDate / 1000);
 
-        const description = `**${getTranslation('shrine_command.time_left', locale, 'messages')}** <t:${adjustedEndDateUnix}:R>\n**${getTranslation('shrine_command.shrine_active.0', locale, 'messages')}** <t:${startDateUnix}> ${getTranslation('shrine_command.shrine_active.1', locale, 'messages')} <t:${adjustedEndDateUnix}>`;
+        const description = `**${getTranslation('shrine_command.time_left', locale, ELocaleNamespace.Messages)}** <t:${adjustedEndDateUnix}:R>\n**${getTranslation('shrine_command.shrine_active.0', locale, ELocaleNamespace.Messages)}** <t:${startDateUnix}> ${getTranslation('shrine_command.shrine_active.1', locale, ELocaleNamespace.Messages)} <t:${adjustedEndDateUnix}>`;
 
         const customId = generateCustomId(currentShrine.endDate);
 
@@ -148,7 +149,7 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
             .setImage('attachment://shrine-of-secrets.png')
             .setTimestamp()
             .setAuthor({
-                name: getTranslation('shrine_command.author_title', locale, 'messages'),
+                name: getTranslation('shrine_command.author_title', locale, ELocaleNamespace.Messages),
                 iconURL: combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_shrineOfSecrets.png')
             })
             .setFooter({

@@ -28,6 +28,7 @@ import {
 } from "../../types";
 import { handleBuildCommandInteraction } from "@commands/infoSubCommands/build";
 import { getTranslation } from "@utils/localizationUtils";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 
 export async function handleBuildsListCommandInteraction(interaction: ChatInputCommandInteraction) {
     let currentPage = interaction.options.getNumber('page') || 1;
@@ -48,13 +49,13 @@ export async function handleBuildsListCommandInteraction(interaction: ChatInputC
 
         const buildsList = await retrieveBuilds(filters);
         if (!buildsList) {
-            return await interaction.editReply({ content: getTranslation('list_command.builds_subcommand.error_retrieving_data', locale, 'errors') });
+            return await interaction.editReply({ content: getTranslation('list_command.builds_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors) });
         }
 
         const { builds, totalPages } = buildsList;
 
         if (!builds || builds.length === 0) {
-            return await interaction.editReply({ content: getTranslation('list_command.builds_subcommand.builds_not_found_filters', locale, 'errors') });
+            return await interaction.editReply({ content: getTranslation('list_command.builds_subcommand.builds_not_found_filters', locale, ELocaleNamespace.Errors) });
         }
 
         const perkData = await getCachedPerks(locale);
@@ -88,13 +89,13 @@ export async function handleBuildsListCommandInteraction(interaction: ChatInputC
                     const newFilters: IBuildFilters = { ...filters, page: currentPage - 1 };
 
                     const buildsList = await retrieveBuilds(newFilters);
-                    if (!buildsList) return await i.update({ content: getTranslation('list_command.builds_subcommand.error_retrieving_data', locale, 'errors'), components: [] });
+                    if (!buildsList) return await i.update({ content: getTranslation('list_command.builds_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors), components: [] });
 
                     const { builds: newBuilds, totalPages: newTotalPages } = buildsList;
 
                     if (!newBuilds || newBuilds.length === 0) {
                         return await i.update({
-                            content: getTranslation('list_command.builds_subcommand.builds_not_found_filters', locale, 'errors'),
+                            content: getTranslation('list_command.builds_subcommand.builds_not_found_filters', locale, ELocaleNamespace.Errors),
                             components: []
                         });
                     }
@@ -137,21 +138,21 @@ async function createEmbed(
     perkData: { [key: string]: Perk },
     locale: Locale) {
     const embed = new EmbedBuilder()
-        .setTitle(`${getTranslation('list_command.builds_subcommand.builds_list', locale, 'messages')} - ${getTranslation('list_command.builds_subcommand.builds_list_page.0', locale, 'messages')} ${currentPage} ${getTranslation('list_command.builds_subcommand.builds_list_page.1', locale, 'messages')} ${totalPages + 1}`)
+        .setTitle(`${getTranslation('list_command.builds_subcommand.builds_list', locale, ELocaleNamespace.Messages)} - ${getTranslation('list_command.builds_subcommand.builds_list_page.0', locale, ELocaleNamespace.Messages)} ${currentPage} ${getTranslation('list_command.builds_subcommand.builds_list_page.1', locale, ELocaleNamespace.Messages)} ${totalPages + 1}`)
         .setColor(role === 'Survivor' ? "#1e90ff" : "Red")
-        .setDescription(`[${getTranslation('list_command.builds_subcommand.create_your_own_build', locale, 'messages')}](${combineBaseUrlWithPath('/builds/create')})\n${getTranslation('list_command.builds_subcommand.builds_matching_filters', locale, 'messages')}`)
+        .setDescription(`[${getTranslation('list_command.builds_subcommand.create_your_own_build', locale, ELocaleNamespace.Messages)}](${combineBaseUrlWithPath('/builds/create')})\n${getTranslation('list_command.builds_subcommand.builds_matching_filters', locale, ELocaleNamespace.Messages)}`)
         .setTimestamp()
-        .setFooter({ text: getTranslation('list_command.builds_subcommand.builds_list', locale, 'messages') })
+        .setFooter({ text: getTranslation('list_command.builds_subcommand.builds_list', locale, ELocaleNamespace.Messages) })
         .setThumbnail(combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_loadout.png'));
 
     builds.forEach((build: IBuild, index: number) => {
-        const buildTitle = `${index + 1}. ${build.title} | ${getTranslation('list_command.builds_subcommand.created_by', locale, 'messages')} ${build.username}`;
+        const buildTitle = `${index + 1}. ${build.title} | ${getTranslation('list_command.builds_subcommand.created_by', locale, ELocaleNamespace.Messages)} ${build.username}`;
 
         const perksList = [build.perk1, build.perk2, build.perk3, build.perk4]
             .filter(Boolean)
             .filter(perk => perk !== "None")
-            .map(perk => `${perkData[perk]?.Name ?? getTranslation('list_command.builds_subcommand.unknown_perk', locale, 'messages')}`)
-            .join(', ') || getTranslation('list_command.builds_subcommand.any_perks', locale, 'messages');
+            .map(perk => `${perkData[perk]?.Name ?? getTranslation('list_command.builds_subcommand.unknown_perk', locale, ELocaleNamespace.Messages)}`)
+            .join(', ') || getTranslation('list_command.builds_subcommand.any_perks', locale, ELocaleNamespace.Messages);
 
         embed.addFields({
             name: buildTitle,
@@ -166,11 +167,11 @@ async function createEmbed(
 function createStringMenu(builds: IBuild[], locale: Locale) {
     const selectMenu = new StringSelectMenuBuilder()
         .setCustomId('builds-selection')
-        .setPlaceholder(getTranslation('list_command.builds_subcommand.select_for_details', locale, 'messages'))
+        .setPlaceholder(getTranslation('list_command.builds_subcommand.select_for_details', locale, ELocaleNamespace.Messages))
         .addOptions(
             builds.map((build: IBuild, index: number) => ({
                 label: `${index + 1}. ${build.title}`,
-                description: `${getTranslation('list_command.builds_subcommand.created_by', locale, 'messages')} ${build.username}`,
+                description: `${getTranslation('list_command.builds_subcommand.created_by', locale, ELocaleNamespace.Messages)} ${build.username}`,
                 value: build.buildId
             }))
         );

@@ -36,7 +36,7 @@ interface NewsContent {
     title: string;
 }
 
-interface CallToAction {
+export interface CallToAction {
     link: string;
     qrCodeIsApprovedOnSwitch: boolean;
     shouldPresentAsQrCode: boolean;

@@ -24,6 +24,7 @@ import {
 } from "@handlers/genericPaginationHandler";
 import { combineImagesIntoGrid } from "@utils/imageUtils";
 import { getTranslation } from "@utils/localizationUtils";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 
 export async function handleCollectionCommandInteraction(interaction: ChatInputCommandInteraction) {
     const collectionId = interaction.options.getString('name');
@@ -38,12 +39,12 @@ export async function handleCollectionCommandInteraction(interaction: ChatInputC
         const cosmeticData = await getCachedCosmetics(locale);
 
         if (!collectionData || !cosmeticData) {
-            const message = getTranslation('info_command.collection_subcommand.error_retrieving_data', locale, 'errors')
+            const message = getTranslation('info_command.collection_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors);
             await interaction.editReply({ content: message });
             return;
         }
 
-        const title = `${collectionData.CollectionTitle} (${getTranslation('info_command.collection_subcommand.total_of_cosmetics.0', locale, 'messages')} ${collectionData.Items.length} ${getTranslation('info_command.collection_subcommand.total_of_cosmetics.1', locale, 'messages')})`
+        const title = `${collectionData.CollectionTitle} (${getTranslation('info_command.collection_subcommand.total_of_cosmetics.0', locale, ELocaleNamespace.Messages)} ${collectionData.Items.length} ${getTranslation('info_command.collection_subcommand.total_of_cosmetics.1', locale, ELocaleNamespace.Messages)})`;
         const dominantRarity = determineDominantRarity(collectionData.Items, cosmeticData);
 
         const generateEmbed = async(
@@ -59,9 +60,9 @@ export async function handleCollectionCommandInteraction(interaction: ChatInputC
                 return {
                     name: cosmetic.CosmeticName,
                     value: formattedAndTruncatedDescription,
-                    inline: true,
+                    inline: true
                 };
-            }).filter(field => field !== null)
+            }).filter(field => field !== null);
 
             const updateDatePretty = new Date(adjustForTimezone(collectionData.UpdatedDate)).toLocaleDateString(locale, {
                 weekday: "long",
@@ -70,7 +71,7 @@ export async function handleCollectionCommandInteraction(interaction: ChatInputC
                 day: "numeric"
             });
 
-            const description = `${getTranslation('list_command.cosmetics_subcommand.more_info.0', locale, 'messages')}: \`/${getTranslation('list_command.cosmetics_subcommand.more_info.1', locale, 'messages')}\`\n\n${getTranslation('info_command.collection_subcommand.collection_inclusion_version', locale, 'messages')} ${formatInclusionVersion(collectionData.InclusionVersion, locale)}`;
+            const description = `${getTranslation('list_command.cosmetics_subcommand.more_info.0', locale, ELocaleNamespace.Messages)}: \`/${getTranslation('list_command.cosmetics_subcommand.more_info.1', locale, ELocaleNamespace.Messages)}\`\n\n${getTranslation('info_command.collection_subcommand.collection_inclusion_version', locale, ELocaleNamespace.Messages)} ${formatInclusionVersion(collectionData.InclusionVersion, locale)}`;
 
             return new EmbedBuilder()
                 .setColor(Rarities[dominantRarity].color as ColorResolvable)
@@ -78,12 +79,12 @@ export async function handleCollectionCommandInteraction(interaction: ChatInputC
                 .setDescription(description)
                 .setThumbnail(combineBaseUrlWithPath(collectionData.HeroImage))
                 .setAuthor({
-                    name: getTranslation('info_command.collection_subcommand.collection_info', locale, 'messages'),
-                    iconURL: combineBaseUrlWithPath('/images/UI/Icons/HelpLoading/iconHelpLoading_info.png'),
+                    name: getTranslation('info_command.collection_subcommand.collection_info', locale, ELocaleNamespace.Messages),
+                    iconURL: combineBaseUrlWithPath('/images/UI/Icons/HelpLoading/iconHelpLoading_info.png')
                 })
                 .addFields(cosmeticFields)
-                .setFooter({ text: `${getTranslation('info_command.collection_subcommand.collection_last_updated', locale, 'messages')} ${updateDatePretty}` });
-        }
+                .setFooter({ text: `${getTranslation('info_command.collection_subcommand.collection_last_updated', locale, ELocaleNamespace.Messages)} ${updateDatePretty}` });
+        };
 
         const generateImage = async(pageItems: string[]) => {
             const imageUrls: string[] = [];
@@ -113,7 +114,9 @@ export async function handleCollectionCommandInteraction(interaction: ChatInputC
 }
 
 // region Utils
-function determineDominantRarity(collectionCosmetics: string[], cosmeticData: {[key:string]: Cosmetic}): keyof typeof Rarities {
+function determineDominantRarity(collectionCosmetics: string[], cosmeticData: {
+    [key: string]: Cosmetic
+}): keyof typeof Rarities {
     const rarityCounts: Record<keyof typeof Rarities, number> = Object.keys(Rarities).reduce(
         (acc, rarity) => ({ ...acc, [rarity]: 0 }),
         {} as Record<keyof typeof Rarities, number>
@@ -130,6 +133,7 @@ function determineDominantRarity(collectionCosmetics: string[], cosmeticData: {[
         return count > rarityCounts[dominant] ? (rarity as keyof typeof Rarities) : dominant;
     }, "Common" as keyof typeof Rarities);
 }
+
 // endregion
 
 export async function handleCollectionCommandAutocompleteInteraction(interaction: AutocompleteInteraction) {

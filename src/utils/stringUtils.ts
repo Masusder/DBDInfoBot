@@ -3,6 +3,7 @@ import * as crypto from 'crypto';
 import { getTranslation } from "@utils/localizationUtils";
 import { Locale } from "discord.js";
 import axios from "axios";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 
 export function extractInteractionId(customId: string): string | null {
     const parts = customId.split('::');
@@ -18,7 +19,7 @@ export function combineBaseUrlWithPath(relativePath: string): string {
 }
 
 export function formatInclusionVersion(inclusionVersion: string, locale: Locale): string {
-    return inclusionVersion === "Legacy" ? getTranslation('legacy', locale, 'general') : inclusionVersion;
+    return inclusionVersion === "Legacy" ? getTranslation('legacy', locale, ELocaleNamespace.General) : inclusionVersion;
 }
 
 export function formatHtmlToDiscordMarkdown(html: string): string {
@@ -72,12 +73,12 @@ export function adjustForTimezone(dateString: string | Date): number {
 }
 
 export function generateCustomId(input: string) {
-    const hash =  crypto.createHash('sha256').update(input).digest('base64');
+    const hash = crypto.createHash('sha256').update(input).digest('base64');
 
     return hash.slice(0, 8);
 }
 
-export function compareCustomId(input1:string, input2:string): boolean {
+export function compareCustomId(input1: string, input2: string): boolean {
     const shortId1 = generateCustomId(input1);
     const shortId2 = generateCustomId(input2);
 
@@ -98,7 +99,7 @@ export function transformPackagedPath(packagedPath: string): string {
 }
 
 export async function checkExistingImageUrl(url1: string, url2: string): Promise<string | null> {
-    const checkImageUrl = async (url: string): Promise<boolean> => {
+    const checkImageUrl = async(url: string): Promise<boolean> => {
         try {
             const response = await axios.head(url);
             return response.status === 200;

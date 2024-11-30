@@ -21,6 +21,7 @@ import {
     handleBuildsListCommandAutocompleteInteraction,
     handleBuildsListCommandInteraction
 } from "@commands/listSubCommands/builds";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 
 const rarityChoices = Object.keys(Rarities)
     .filter(rarity => rarity !== "N/A")
@@ -264,7 +265,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             await handleBuildsListCommandInteraction(interaction);
             break;
         default:
-            await interaction.reply(getTranslation('list_command.unknown_subcommand', locale, 'errors'));
+            await interaction.reply(getTranslation('list_command.unknown_subcommand', locale, ELocaleNamespace.Errors));
     }
 }
 

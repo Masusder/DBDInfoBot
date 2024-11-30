@@ -24,6 +24,7 @@ import {
     transformPackagedPath
 } from "@utils/stringUtils";
 import {
+    CallToAction,
     ContentItem,
     NewsData,
     NewsItem
@@ -32,11 +33,18 @@ import Constants from "../constants";
 import { CosmeticTypes } from "@data/CosmeticTypes";
 import { combineImagesIntoGrid } from "@utils/imageUtils";
 import { getCachedCosmetics } from "@services/cosmeticService";
+import {
+    commandLocalizationHelper,
+    getTranslation
+} from "@utils/localizationUtils";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
-        .setName('news') // TODO: localize
-        .setDescription("Retrieve latest in-game news.") // TODO: localize
+        .setName('news')
+        .setNameLocalizations(commandLocalizationHelper('news_command.name'))
+        .setDescription(i18next.t('news_command.description', { lng: 'en' }))
+        .setDescriptionLocalizations(commandLocalizationHelper('news_command.description'))
     : undefined;
 
 export async function execute(interaction: ChatInputCommandInteraction) {
@@ -48,8 +56,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         const newsData: NewsData = await getCachedNews(locale);
 
         if (!newsData || isEmptyObject(newsData)) {
-            const message = "Failed to retrieve latest news."; // TODO: localize
-            await sendErrorMessage(interaction, message);
+            const message = getTranslation('news_command.error_retrieving_data', locale, ELocaleNamespace.Errors);
+            await sendErrorMessage(interaction, message, false);
             return;
         }
 
@@ -58,13 +66,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
         const selectMenu = new StringSelectMenuBuilder()
             .setCustomId('select_news_article')
-            .setPlaceholder('Select a news article') // TODO: localize
+            .setPlaceholder(getTranslation('news_command.select_news_article', locale, ELocaleNamespace.Messages))
             .setMinValues(1)
             .setMaxValues(1);
 
         newsList.forEach((newsItem, index) => {
             const option = new StringSelectMenuOptionBuilder()
-                .setLabel(newsItem.title || `News ${index + 1}`) // TODO: localize
+                .setLabel(newsItem.title || `${getTranslation('news_command.news', locale, ELocaleNamespace.Messages)} ${index + 1}`)
                 .setValue(newsItem.id.toString());
             selectMenu.addOptions(option);
         });
@@ -76,7 +84,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             if (newsItem.title) {
                 embed.addFields({
                     name: `${index + 1}. ${newsItem.title}`,
-                    value: `Published on: ${new Date(adjustForTimezone(newsItem.startDate)).toLocaleDateString()}`, // TODO: localize
+                    value: `${getTranslation('news_command.published_on', locale, ELocaleNamespace.Messages)} ${new Date(adjustForTimezone(newsItem.startDate)).toLocaleDateString()}`,
                     inline: true
                 });
             }
@@ -102,24 +110,29 @@ export async function handleSelectMenu(interaction: StringSelectMenuInteraction)
     if (selectedNewsItem) {
         await sendNewsContent(selectedNewsItem, interaction, locale);
     } else {
-        await interaction.reply({
-            content: "Failed to retrieve the selected news article.", // TODO: localize
-            ephemeral: true
-        });
+        const message = getTranslation('news_command.failed_retrieving_article', locale, ELocaleNamespace.Errors);
+        await sendErrorMessage(interaction, message, false);
     }
 }
 
 // endregion
 
 // region Helpers/Utils
-async function createNewsEmbed(newsItem: NewsItem, textContent: string, imageUrl: string | null, isIdNeeded: boolean, isFirstEmbed: boolean = false, isLastChunk: boolean = false) {
+async function createNewsEmbed(
+    newsItem: NewsItem,
+    textContent: string,
+    imageUrl: string | null,
+    isIdNeeded: boolean,
+    isFirstEmbed: boolean = false,
+    isLastChunk: boolean = false,
+    locale: Locale) {
     const embed = new EmbedBuilder()
         .setDescription(textContent)
         .setColor(Constants.DEFAULT_DISCORD_COLOR)
         .setTimestamp(new Date(adjustForTimezone(newsItem.startDate)));
 
     if (isFirstEmbed) {
-        embed.setTitle(newsItem.title || "Untitled News").setThumbnail(combineBaseUrlWithPath('/images/UI/Icons/ItemAddons/Kepler/iconAddon_OldNewspaper.png')); // TODO: localize
+        embed.setTitle(newsItem.title || getTranslation('news_command.untitled_news', locale, ELocaleNamespace.Messages)).setThumbnail(combineBaseUrlWithPath('/images/UI/Icons/ItemAddons/Kepler/iconAddon_OldNewspaper.png'));
     }
 
     if (isIdNeeded && isLastChunk) {
@@ -135,14 +148,14 @@ async function createNewsEmbed(newsItem: NewsItem, textContent: string, imageUrl
     return embed;
 }
 
-function createNewsButton(callToAction: { text: string; link: string }): ActionRowBuilder<ButtonBuilder> | null {
+function createNewsButton(callToAction: CallToAction, locale: Locale): ActionRowBuilder<ButtonBuilder> | null {
     let link = callToAction.link;
     link = formatNewsLink(link);
 
     if (!link || !link.startsWith('https')) return null;
 
     const button = new ButtonBuilder()
-        .setLabel(callToAction.text || 'Click here') // TODO: localize
+        .setLabel(callToAction.text || getTranslation('news_command.click_here', locale, ELocaleNamespace.Messages))
         .setStyle(ButtonStyle.Link)
         .setURL(link);
 
@@ -164,8 +177,13 @@ async function sendNewsContent(newsItem: NewsItem, interactionOrChannel: ChatInp
         const isIdNeeded = interactionOrChannel instanceof TextChannel || interactionOrChannel instanceof NewsChannel;
         const callToAction = newsItem.newsContent?.callToAction;
 
-        const firstEmbed = await createNewsEmbed(newsItem, textChunks[0], textChunks.length === 1 ? existingImage : null, isIdNeeded, true, textChunks.length === 1);
-        const actionRow = callToAction ? createNewsButton(callToAction) : null;
+        const firstEmbed = await createNewsEmbed(
+            newsItem,
+            textChunks[0],
+            textChunks.length === 1 ? existingImage : null,
+            isIdNeeded, true, textChunks.length === 1, locale
+        );
+        const actionRow = callToAction ? createNewsButton(callToAction, locale) : null;
 
         // Check if interactionOrChannel is an interaction or a channel
         if (interactionOrChannel instanceof TextChannel || interactionOrChannel instanceof NewsChannel) {
@@ -183,7 +201,14 @@ async function sendNewsContent(newsItem: NewsItem, interactionOrChannel: ChatInp
 
         for (let i = 1; i < textChunks.length; i++) {
             const isLastChunk = i === textChunks.length - 1;
-            const followUpEmbed = await createNewsEmbed(newsItem, textChunks[i], isLastChunk ? existingImage : null, isIdNeeded, false, isLastChunk);
+            const followUpEmbed = await createNewsEmbed(
+                newsItem,
+                textChunks[i],
+                isLastChunk ? existingImage : null,
+                isIdNeeded, false,
+                isLastChunk,
+                locale
+            );
 
             if (interactionOrChannel instanceof TextChannel || interactionOrChannel instanceof NewsChannel) {
                 await interactionOrChannel.send({
@@ -203,8 +228,8 @@ async function sendNewsContent(newsItem: NewsItem, interactionOrChannel: ChatInp
 
         if (itemShowcaseImage) {
             const embed = new EmbedBuilder()
-                .setTitle(`${newsItem.title} - Showcased Items`) // TODO: localize
-                .setDescription("These items are featured in the associated news article:") // TODO: localize
+                .setTitle(`${newsItem.title} - ${getTranslation('news_command.showcased_items', locale, ELocaleNamespace.Messages)}`)
+                .setDescription(getTranslation('news_command.items_featured_in_article', locale, ELocaleNamespace.Messages))
                 .setColor(0x1e90ff)
                 .setImage('attachment://news_showcase_items.png')
 
