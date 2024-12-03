@@ -98,7 +98,7 @@ export function transformPackagedPath(packagedPath: string): string {
     return combineBaseUrlWithPath(`/images/${basePath}`);
 }
 
-export async function checkExistingImageUrl(url1: string, url2: string): Promise<string | null> {
+export async function checkExistingImageUrl(url1: string | null, url2: string | null): Promise<string | null> {
     const checkImageUrl = async(url: string): Promise<boolean> => {
         try {
             const response = await axios.head(url);
@@ -109,7 +109,12 @@ export async function checkExistingImageUrl(url1: string, url2: string): Promise
         }
     };
 
-    const [url1Valid, url2Valid] = await Promise.all([checkImageUrl(url1), checkImageUrl(url2)]);
+    if (!url1 && !url2) return null; // Both URLs are null, return null
+
+    const [url1Valid, url2Valid] = await Promise.all([
+        url1 ? checkImageUrl(url1) : Promise.resolve(false),
+        url2 ? checkImageUrl(url2) : Promise.resolve(false)
+    ]);
 
     return url1Valid ? url1 : url2Valid ? url2 : null;
 }
