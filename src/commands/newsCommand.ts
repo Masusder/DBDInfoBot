@@ -171,8 +171,8 @@ async function sendNewsContent(newsItem: NewsItem, interactionOrChannel: ChatInp
 
     if (textChunks.length > 0) {
         const dynamicImage = newsItem.newsContent?.image?.uri;
-        const packagedImage = newsItem.newsContent?.image?.packagedPath;
-        const transformedPackagedImage = transformPackagedPath(packagedImage);
+        const packagedImage: string | null = newsItem.newsContent?.image?.packagedPath;
+        const transformedPackagedImage = packagedImage ? transformPackagedPath(packagedImage) : null;
         const existingImage = await checkExistingImageUrl(dynamicImage, transformedPackagedImage);
         const isIdNeeded = interactionOrChannel instanceof TextChannel || interactionOrChannel instanceof NewsChannel;
         const callToAction = newsItem.newsContent?.callToAction;
