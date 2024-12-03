@@ -1,5 +1,5 @@
 # DBDInfoBot
-![Version](https://img.shields.io/badge/version-1.0.1-blue)
+![Version](https://img.shields.io/badge/version-1.1.0-blue)
 [![License](https://img.shields.io/badge/license-MIT-green)](https://opensource.org/license/mit)
 [![Crowdin](https://badges.crowdin.net/dbdinfo-discord-bot/localized.svg)](https://crowdin.com/project/dbdinfo-discord-bot)
 <a href="https://www.dbd-info.com/" target="_blank">

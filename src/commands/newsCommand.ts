@@ -295,11 +295,14 @@ function formatNewsLink(link: string): string {
 }
 
 async function createItemShowcaseImage(content: ContentItem[], locale: Locale): Promise<Buffer | null> {
+    const cosmeticData = await getCachedCosmetics(locale);
+
     let cosmeticIds: string[] = [];
     for (const item of content) {
         if (item.type === 'ItemShowcase' && item.showcasedItem) {
             for (const showcasedItem of item.showcasedItem) {
-                if (CosmeticTypes[showcasedItem.type]) { // Make sure we have valid type
+                const cosmetic = cosmeticData[showcasedItem.id];
+                if (cosmetic && CosmeticTypes[cosmetic.Type]) { // Make sure we have valid type
                     cosmeticIds.push(showcasedItem.id);
                 }
             }
@@ -307,8 +310,6 @@ async function createItemShowcaseImage(content: ContentItem[], locale: Locale): 
     }
 
     if (cosmeticIds.length === 0) return null;
-
-    const cosmeticData = await getCachedCosmetics(locale);
 
     const imageUrls: string[] = [];
     for (const id of cosmeticIds) {
