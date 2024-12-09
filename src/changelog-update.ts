@@ -15,7 +15,7 @@ dotenv.config();
 
 const DISCORD_TOKEN: string | undefined = process.env.DISCORD_TOKEN;
 const GUILD_ID: string | undefined = '743890446450688040';
-const CHANNEL_ID = '1294865737479098429';
+const CHANNEL_ID = '';
 const ROLE_ID = '1160277775383548044';
 
 const changelog = {

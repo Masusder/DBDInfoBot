@@ -5,6 +5,7 @@ import {
     ButtonBuilder,
     ButtonStyle,
     ChatInputCommandInteraction,
+    ColorResolvable,
     EmbedBuilder,
     Locale,
     NewsChannel,
@@ -29,7 +30,6 @@ import {
     NewsData,
     NewsItem
 } from "@tps/news";
-import Constants from "../constants";
 import { CosmeticTypes } from "@data/CosmeticTypes";
 import { combineImagesIntoGrid } from "@utils/imageUtils";
 import { getCachedCosmetics } from "@services/cosmeticService";
@@ -46,6 +46,40 @@ export const data = i18next.isInitialized
         .setDescription(i18next.t('news_command.description', { lng: 'en' }))
         .setDescriptionLocalizations(commandLocalizationHelper('news_command.description'))
     : undefined;
+
+interface INewsDataTable {
+    icon: string;
+    primaryColor: ColorResolvable;
+    secondaryColor: ColorResolvable;
+}
+
+const NewsDataTable: Record<string, INewsDataTable> = {
+    News: {
+        icon: combineBaseUrlWithPath("/images/News/icon_News.png"),
+        primaryColor: "#466571",
+        secondaryColor: "#3C4C56"
+    },
+    Halloween: {
+        icon: combineBaseUrlWithPath("/images/News/icon_Event_Halloween.png"),
+        primaryColor: "#19bfb8",
+        secondaryColor: "#B32100"
+    },
+    Winter: {
+        icon: combineBaseUrlWithPath("/images/News/icon_Event_Winter.png"),
+        primaryColor: "#1684d1",
+        secondaryColor: "#2149B3"
+    },
+    Spring: {
+        icon: combineBaseUrlWithPath("/images/News/icon_Event_Spring.png"),
+        primaryColor: "#c31a2e",
+        secondaryColor: "#EEA8E8"
+    },
+    Anniversary: {
+        icon: combineBaseUrlWithPath("/images/News/icon_Event_Anniversary.png"),
+        primaryColor: "#dda018",
+        secondaryColor: "#BB953B"
+    }
+};
 
 export async function execute(interaction: ChatInputCommandInteraction) {
     const locale = interaction.locale;
@@ -125,14 +159,25 @@ async function createNewsEmbed(
     isIdNeeded: boolean,
     isFirstEmbed: boolean = false,
     isLastChunk: boolean = false,
-    locale: Locale) {
+    locale: Locale,
+    newsDataTable: INewsDataTable,
+    isSticky: boolean) {
+
     const embed = new EmbedBuilder()
         .setDescription(textContent)
-        .setColor(Constants.DEFAULT_DISCORD_COLOR)
+        .setColor(newsDataTable.primaryColor)
         .setTimestamp(new Date(adjustForTimezone(newsItem.startDate)));
 
+    if (isSticky) {
+        embed.setAuthor({
+            name: "This news article is pinned", // TODO: localize
+            iconURL: combineBaseUrlWithPath('/images/News/icon_PinnedMessage.png')
+        })
+    }
+
     if (isFirstEmbed) {
-        embed.setTitle(newsItem.title || getTranslation('news_command.untitled_news', locale, ELocaleNamespace.Messages)).setThumbnail(combineBaseUrlWithPath('/images/UI/Icons/ItemAddons/Kepler/iconAddon_OldNewspaper.png'));
+        embed.setTitle(newsItem.title || getTranslation('news_command.untitled_news', locale, ELocaleNamespace.Messages))
+            .setThumbnail(newsDataTable.icon);
     }
 
     if (isIdNeeded && isLastChunk) {
@@ -176,21 +221,45 @@ async function sendNewsContent(newsItem: NewsItem, interactionOrChannel: ChatInp
         const existingImage = await checkExistingImageUrl(dynamicImage, transformedPackagedImage);
         const isIdNeeded = interactionOrChannel instanceof TextChannel || interactionOrChannel instanceof NewsChannel;
         const callToAction = newsItem.newsContent?.callToAction;
+        const eventId: string | null = newsItem?.metaData?.eventID || null;
+        const isSticky = newsItem.metaData?.isSticky || false;
+
+        const newsDataTable = matchToEvent(eventId);
 
         const firstEmbed = await createNewsEmbed(
             newsItem,
             textChunks[0],
             textChunks.length === 1 ? existingImage : null,
-            isIdNeeded, true, textChunks.length === 1, locale
+            isIdNeeded, true, textChunks.length === 1,
+            locale,
+            newsDataTable,
+            isSticky
         );
         const actionRow = callToAction ? createNewsButton(callToAction, locale) : null;
 
         // Check if interactionOrChannel is an interaction or a channel
         if (interactionOrChannel instanceof TextChannel || interactionOrChannel instanceof NewsChannel) {
-            await interactionOrChannel.send({
+            const message = await interactionOrChannel.send({
                 embeds: [firstEmbed],
                 components: actionRow && textChunks.length === 1 ? [actionRow] : []
             });
+
+            // If pinning or publish fails that doesn't really matter
+            if (isSticky) {
+                try {
+                    await message.pin();
+                } catch (error) {
+                    console.error("Failed to pin the message:", error);
+                }
+            }
+
+            if (interactionOrChannel instanceof NewsChannel) {
+                try {
+                    await message.crosspost();
+                } catch (error) {
+                    console.error("Failed to publish the message:", error);
+                }
+            }
         } else {
             await interactionOrChannel.followUp({
                 embeds: [firstEmbed],
@@ -207,14 +276,24 @@ async function sendNewsContent(newsItem: NewsItem, interactionOrChannel: ChatInp
                 isLastChunk ? existingImage : null,
                 isIdNeeded, false,
                 isLastChunk,
-                locale
+                locale,
+                newsDataTable,
+                false
             );
 
             if (interactionOrChannel instanceof TextChannel || interactionOrChannel instanceof NewsChannel) {
-                await interactionOrChannel.send({
+                const message = await interactionOrChannel.send({
                     embeds: [followUpEmbed],
                     components: actionRow && isLastChunk ? [actionRow] : []
                 });
+
+                if (interactionOrChannel instanceof NewsChannel) {
+                    try {
+                        await message.crosspost();
+                    } catch (error) {
+                        console.error("Failed to publish the message:", error);
+                    }
+                }
             } else {
                 await interactionOrChannel.followUp({
                     embeds: [followUpEmbed],
@@ -230,19 +309,27 @@ async function sendNewsContent(newsItem: NewsItem, interactionOrChannel: ChatInp
             const embed = new EmbedBuilder()
                 .setTitle(`${newsItem.title} - ${getTranslation('news_command.showcased_items', locale, ELocaleNamespace.Messages)}`)
                 .setDescription(getTranslation('news_command.items_featured_in_article', locale, ELocaleNamespace.Messages))
-                .setColor(0x1e90ff)
-                .setImage('attachment://news_showcase_items.png')
+                .setColor(newsDataTable.secondaryColor)
+                .setImage('attachment://news_showcase_items.png');
 
             if (interactionOrChannel instanceof TextChannel || interactionOrChannel instanceof NewsChannel) {
-                await interactionOrChannel.send({
+                const message = await interactionOrChannel.send({
                     embeds: [embed],
                     files: [
                         {
                             attachment: itemShowcaseImage,
                             name: 'news_showcase_items.png'
                         }
-                    ],
+                    ]
                 });
+
+                if (interactionOrChannel instanceof NewsChannel) {
+                    try {
+                        await message.crosspost();
+                    } catch (error) {
+                        console.error("Failed to publish the message:", error);
+                    }
+                }
             } else {
                 await interactionOrChannel.followUp({
                     embeds: [embed],
@@ -325,6 +412,25 @@ async function createItemShowcaseImage(content: ContentItem[], locale: Locale): 
     }
 
     return null;
+}
+
+function matchToEvent(eventId: string | null): INewsDataTable {
+    if (!eventId) {
+        return NewsDataTable.News;
+    }
+
+    switch (true) {
+        case eventId.startsWith("Halloween"):
+            return NewsDataTable.Halloween;
+        case eventId.startsWith("Winter"):
+            return NewsDataTable.Winter;
+        case eventId.startsWith("Spring"):
+            return NewsDataTable.Spring;
+        case eventId.startsWith("Anniversary"):
+            return NewsDataTable.Anniversary;
+        default:
+            return NewsDataTable.News;
+    }
 }
 
 export function isEmptyObject(obj: any): boolean {
