@@ -35,5 +35,10 @@
   "news_command": {
     "error_retrieving_data": "Nie udało się pobrać najnowszych wiadomości.",
     "failed_retrieving_article": "Nie udało się pobrać wybranego artykułu."
+  },
+  "stats_command": {
+    "missing_steam_id": "Steam ID field is required to view player stats.",
+    "not_found_player_data": "Unable to fetch player data. Ensure your Steam profile and game details are public.",
+    "failed_generating_summary_card": "Unable to generate summary card."
   }
 }
