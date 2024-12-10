@@ -26,66 +26,66 @@ const gradeMappings: Record<string, GradeInfo> = {
         grades: {
             ash: {
                 image: combineBaseUrlWithPath('/images/Grades/IconGrade_survivorAsh.png'),
-                name: "Ash",
+                name: "Ash"
             },
             bronze: {
                 image: combineBaseUrlWithPath('/images/Grades/IconGrade_survivorBronze.png'),
-                name: "Bronze",
+                name: "Bronze"
             },
             silver: {
                 image: combineBaseUrlWithPath('/images/Grades/IconGrade_survivorSilver.png'),
-                name: "Silver",
+                name: "Silver"
             },
             gold: {
                 image: combineBaseUrlWithPath('/images/Grades/IconGrade_survivorGold.png'),
-                name: "Gold",
+                name: "Gold"
             },
             iridescent: {
                 image: combineBaseUrlWithPath('/images/Grades/IconGrade_survivorIridescent.png'),
-                name: "Iridescent",
+                name: "Iridescent"
             },
             iridescent1: {
                 image: combineBaseUrlWithPath('/images/Grades/IconGrade_survivorIridescent_I.png'),
-                name: "Iridescent I",
-            },
-        },
+                name: "Iridescent"
+            }
+        }
     },
     Killer: {
         color: "#958e70",
         grades: {
             ash: {
                 image: combineBaseUrlWithPath('/images/Grades/IconGrade_killerAsh.png'),
-                name: "Ash",
+                name: "Ash"
             },
             bronze: {
                 image: combineBaseUrlWithPath('/images/Grades/IconGrade_killerBronze.png'),
-                name: "Bronze",
+                name: "Bronze"
             },
             silver: {
                 image: combineBaseUrlWithPath('/images/Grades/IconGrade_killerSilver.png'),
-                name: "Silver",
+                name: "Silver"
             },
             gold: {
                 image: combineBaseUrlWithPath('/images/Grades/IconGrade_killerGold.png'),
-                name: "Gold",
+                name: "Gold"
             },
             iridescent: {
                 image: combineBaseUrlWithPath('/images/Grades/IconGrade_killerIridescent.png'),
-                name: "Iridescent",
+                name: "Iridescent"
             },
             iridescent1: {
                 image: combineBaseUrlWithPath('/images/Grades/IconGrade_killerIridescent_I.png'),
-                name: "Iridescent",
-            },
-        },
-    },
+                name: "Iridescent"
+            }
+        }
+    }
 };
 
 const pipsToDetails = [
     // Ash Grade
     { level: "IV", range: [0, 2], grade: "ash", color: "#958e70", pips: 3 },
     { level: "III", range: [3, 5], grade: "ash", color: "#958e70", pips: 3 },
-    { level: "II", range: [6, 9], grade: "ash", color: "#958e70", pips: 4},
+    { level: "II", range: [6, 9], grade: "ash", color: "#958e70", pips: 4 },
     { level: "I", range: [10, 13], grade: "ash", color: "#958e70", pips: 4 },
 
     // Bronze Grade
@@ -112,7 +112,7 @@ const pipsToDetails = [
     { level: "II", range: [80, 84], grade: "iridescent", color: "#ff0000", pips: 5 },
 
     // Iridescent 1 (Highest Grade)
-    { level: "I", range: [85, Infinity], grade: "iridescent1", color: "#ff0000", pips: 0 },
+    { level: "I", range: [85, Infinity], grade: "iridescent1", color: "#ff0000", pips: 0 }
 ];
 
 function getGradeInfo(role: string): GradeInfo {
@@ -155,6 +155,6 @@ export function formatGrades(pips: number, role: string): GradeDetails {
         gradeImage,
         level,
         gradeName,
-        color,
+        color
     };
 }

@@ -24,7 +24,7 @@ function BestStat({ playerData }: BestStatProps) {
                 <i className="fa-solid fa-crown fa-2x fontawesomeIcon" style={{ marginTop: '4px', color: 'gold' }}/>
                 <div className="bestStat-bestStatTitle">Best Stat</div>
             </div>
-            <BestStatBox playerData={playerData} bestStat={bestStat} />
+            <BestStatBox playerData={playerData} bestStat={bestStat}/>
         </div>
     );
 }
@@ -33,7 +33,7 @@ type BestStatsBoxProps = {
     playerData: IPlayerData;
     bestStat: IStatSchema;
 }
-const BestStatBox: React.FC<BestStatsBoxProps> = ({ playerData, bestStat }: BestStatsBoxProps)=> {
+const BestStatBox: React.FC<BestStatsBoxProps> = ({ playerData, bestStat }: BestStatsBoxProps) => {
     if (!bestStat.statId) return null;
 
     const value = returnStatValue(playerData.stats, bestStat.statId);

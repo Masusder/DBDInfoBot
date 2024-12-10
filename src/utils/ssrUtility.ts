@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import puppeteer from 'puppeteer';
 import PlayerStats from "@ui/components/StatsSummaryCard/PlayerStats.tsx";
-import { getCachedPlayerStats } from "@services/statsService.ts";
 import { getCachedCharacters } from "@services/characterService.ts";
 import { getCachedMaps } from "@services/mapService.ts";
 import { Locale } from "discord.js";

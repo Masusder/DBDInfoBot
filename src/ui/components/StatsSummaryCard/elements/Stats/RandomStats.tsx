@@ -17,25 +17,25 @@ export function RandomStats({ playerData }: { playerData: IPlayerData }) {
     return (
         <div className="randomStats__mainContainer">
             <div className="randomStats__titleContainer">
-                <i className="fa-solid fa-shuffle fa-2x fontawesomeIcon" style={{ marginTop: '4px' }} />
+                <i className="fa-solid fa-shuffle fa-2x fontawesomeIcon" style={{ marginTop: '4px' }}/>
                 <div className="randomStats__title">
                     Randomly Selected Stats
                 </div>
             </div>
             <div className="randomStats__container">
                 <div className="randomStats__comboBox">
-                    <StatsBox playerData={playerData} statSchemaData={randomStats[0]} />
-                    <StatsBox playerData={playerData} statSchemaData={randomStats[1]} />
+                    <StatsBox playerData={playerData} statSchemaData={randomStats[0]}/>
+                    <StatsBox playerData={playerData} statSchemaData={randomStats[1]}/>
                 </div>
-                <FadingDivider />
+                <FadingDivider/>
                 <div className="randomStats__comboBox">
-                    <StatsBox playerData={playerData} statSchemaData={randomStats[2]} />
-                    <StatsBox playerData={playerData} statSchemaData={randomStats[3]} />
+                    <StatsBox playerData={playerData} statSchemaData={randomStats[2]}/>
+                    <StatsBox playerData={playerData} statSchemaData={randomStats[3]}/>
                 </div>
-                <FadingDivider />
+                <FadingDivider/>
                 <div className="randomStats__comboBox">
-                    <StatsBox playerData={playerData} statSchemaData={randomStats[4]} />
-                    <StatsBox playerData={playerData} statSchemaData={randomStats[5]} />
+                    <StatsBox playerData={playerData} statSchemaData={randomStats[4]}/>
+                    <StatsBox playerData={playerData} statSchemaData={randomStats[5]}/>
                 </div>
             </div>
         </div>
@@ -67,7 +67,7 @@ const StatsBox: React.FC<StatsBoxProps> = ({ playerData, statSchemaData }) => {
 
     return (
         <div className="randomStats__box" style={{ background: linearGradient }}>
-            <img className="randomStats__icon" src={combineBaseUrlWithPath(statSchemaData.iconPath)} alt="" />
+            <img className="randomStats__icon" src={combineBaseUrlWithPath(statSchemaData.iconPath)} alt=""/>
             <div className="randomStats__boxContent">
                 <div className="randomStats__value">{formatNumber(Math.trunc(value))}</div>
                 <div className="randomStats__description">{statSchemaData.description}</div>

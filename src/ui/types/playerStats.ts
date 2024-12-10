@@ -5,6 +5,7 @@ export interface IPlayerData {
         steamId: string;
         playtime: number;
         playtimeLastTwoWeeks: number;
+        profileUrl: string;
     },
     stats: IStat[],
     achievements: IAchievement[],

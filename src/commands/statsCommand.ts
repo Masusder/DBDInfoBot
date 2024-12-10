@@ -5,26 +5,35 @@ import {
 } from "discord.js";
 import i18next from "i18next";
 import { handlePersonalStatsCommandInteraction } from "@commands/statsSubCommands/personalStats.ts";
+import { commandLocalizationHelper } from "@utils/localizationUtils.ts";
 // import { handleGlobalStatsCommandInteraction } from "@commands/statsSubCommands/globalStats";
 
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
         .setName('stats')
-        .setDescription('View Steam statistics (global or personal).')
+        .setNameLocalizations(commandLocalizationHelper('stats_command.name'))
+        .setDescription(i18next.t('stats_command.description', { lng: 'en' }))
+        .setDescriptionLocalizations(commandLocalizationHelper('stats_command.description'))
         .addSubcommand((subcommand) =>
             subcommand
                 .setName('global')
-                .setDescription('View global statistics.')
+                .setNameLocalizations(commandLocalizationHelper('stats_command.global_subcommand.name'))
+                .setDescription(i18next.t('stats_command.global_subcommand.description', { lng: 'en' }))
+                .setDescriptionLocalizations(commandLocalizationHelper('stats_command.global_subcommand.description'))
         )
         .addSubcommand((subcommand) =>
             subcommand
                 .setName('personal')
-                .setDescription('View a summarized infographic of player statistics.')
+                .setNameLocalizations(commandLocalizationHelper('stats_command.personal_subcommand.name'))
+                .setDescription(i18next.t('stats_command.personal_subcommand.description', { lng: 'en' }))
+                .setDescriptionLocalizations(commandLocalizationHelper('stats_command.personal_subcommand.description'))
                 .addStringOption((option) =>
                     option
                         .setName('steam_id')
-                        .setDescription('The Steam ID, username, or profile URL of the player whose statistics you want to view.')
+                        .setNameLocalizations(commandLocalizationHelper('stats_command.personal_subcommand.options.steam_id.name'))
+                        .setDescription(i18next.t('stats_command.personal_subcommand.options.steam_id.description', { lng: 'en' }))
+                        .setDescriptionLocalizations(commandLocalizationHelper('stats_command.personal_subcommand.options.steam_id.description'))
                         .setRequired(true)
                 )
         ) : undefined;
@@ -41,7 +50,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             await handlePersonalStatsCommandInteraction(interaction);
             break;
         default:
-            //await interaction.reply(getTranslation('list_command.unknown_subcommand', locale, 'errors'));
             break;
     }
 }

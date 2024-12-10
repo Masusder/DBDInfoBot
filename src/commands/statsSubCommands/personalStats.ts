@@ -13,6 +13,7 @@ import { IPlayerData } from "@ui/types/playerStats.ts";
 import { getTranslation } from "@utils/localizationUtils.ts";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace.ts";
 import { combineBaseUrlWithPath } from "@utils/stringUtils.ts";
+import { sendErrorMessage } from "@handlers/errorResponseHandler.ts";
 
 export async function handlePersonalStatsCommandInteraction(interaction: ChatInputCommandInteraction) {
     const steamId = interaction.options.getString('steam_id');
@@ -21,26 +22,41 @@ export async function handlePersonalStatsCommandInteraction(interaction: ChatInp
     try {
         await interaction.deferReply();
 
-        if (!steamId) return; // TODO: reply with message
+        if (!steamId) {
+            const message = getTranslation('stats_command.missing_steam_id', locale, ELocaleNamespace.Errors);
+            await sendErrorMessage(interaction, message);
+            return;
+        }
 
         const playerDataCached: any = await getCachedPlayerStats(steamId);
         const playerData = deconstructPlayerStatsData(playerDataCached);
 
-        if (!playerData) return; // TODO: reply with message
+        if (!playerData) {
+            const message = getTranslation('stats_command.not_found_player_data', locale, ELocaleNamespace.Errors);
+            await sendErrorMessage(interaction, message);
+            return;
+        }
 
         const summaryCardBuffer = await generatePlayerStatsSummary(playerData);
 
-        if (!summaryCardBuffer) return; // TODO: reply with message
+        if (!summaryCardBuffer) {
+            const message = getTranslation('stats_command.failed_generating_summary_card', locale, ELocaleNamespace.Errors);
+            await sendErrorMessage(interaction, message);
+            return;
+        }
 
+        // noinspection SpellCheckingInspection
         const embed = new EmbedBuilder()
             .setColor(Constants.DEFAULT_DISCORD_COLOR)
-            .setTitle("Player Statistics Overview") // TODO: localize
-            .setDescription("A quick infographic summary of the player's stats.") // TODO: localize
+            .setTitle(getTranslation('stats_command.player_stats_overview', locale, ELocaleNamespace.Messages))
+            .setDescription(getTranslation('stats_command.summary_desc', locale, ELocaleNamespace.Messages))
             .setTimestamp()
-            .setImage('attachment://playerStatsSummary.png')
+            .setImage(`attachment://playerStatsSummary_${playerData.steam.steamId}.png`)
+            .setThumbnail(combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_DBDlogo.png'))
             .setAuthor({
                 name: playerData.steam.playerName,
-                iconURL: playerData.steam.avatarIcon
+                iconURL: playerData.steam.avatarIcon,
+                url: playerData.steam.profileUrl
             });
 
         const actionRow = createRedirectButton(steamId, locale);
@@ -50,7 +66,7 @@ export async function handlePersonalStatsCommandInteraction(interaction: ChatInp
             components: [actionRow],
             files: [{
                 attachment: summaryCardBuffer,
-                name: 'playerStatsSummary.png'
+                name: `playerStatsSummary_${playerData.steam.steamId}.png`
             }]
         });
     } catch (error) {
@@ -60,13 +76,13 @@ export async function handlePersonalStatsCommandInteraction(interaction: ChatInp
 
 // region Utils
 function deconstructPlayerStatsData(playerData: any): IPlayerData | null {
-    if (!playerData?.playerSummary?.response?.players?.length || !playerData?.playerStats?.playerstats?.stats) {
+    if (!playerData?.playerSummary?.response?.players?.length || !playerData?.playerStats?.playerstats?.stats || !playerData?.playerAchievements?.playerstats?.achievements.length) {
         return null;
     }
 
     const steam = playerData.playerSummary.response.players[0];
     const stats = playerData.playerStats.playerstats.stats;
-    const achievements = playerData?.playerAchievements?.playerstats?.achievements || [];
+    const achievements = playerData?.playerAchievements?.playerstats?.achievements;
     const achievementSchema = playerData?.achievementsSchema || [];
     const statsSchema = playerData?.statsSchema || {};
     const playtime = playerData?.ownedGames?.appId?.playtime_forever || null;
@@ -78,7 +94,8 @@ function deconstructPlayerStatsData(playerData: any): IPlayerData | null {
             playerName: steam.personaname,
             steamId: steam.steamid,
             playtime: playtime,
-            playtimeLastTwoWeeks: playtimeLastTwoWeeks
+            playtimeLastTwoWeeks: playtimeLastTwoWeeks,
+            profileUrl: steam.profileurl
         },
         stats: stats,
         achievements: achievements,
@@ -88,10 +105,10 @@ function deconstructPlayerStatsData(playerData: any): IPlayerData | null {
 }
 
 function createRedirectButton(steamId: string, locale: Locale): ActionRowBuilder<ButtonBuilder> {
-    const redirectUrl = combineBaseUrlWithPath(`/player-profile/${encodeURIComponent(steamId)}/overview`)
+    const redirectUrl = combineBaseUrlWithPath(`/player-profile/${encodeURIComponent(steamId)}/overview`);
 
     const button = new ButtonBuilder()
-        .setLabel('Full Stats') // TODO: localize
+        .setLabel(getTranslation('stats_command.full_stats', locale, ELocaleNamespace.Messages))
         .setStyle(ButtonStyle.Link)
         .setURL(redirectUrl);
 

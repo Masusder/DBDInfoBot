@@ -30,7 +30,8 @@ function UserInfo({ playerData }: { playerData: IPlayerData }) {
                 <div className="user-info-text-player-id">{playerData.steam.steamId}</div>
                 <div className="user-info-main-progressbar-container">
                     <GradeProgressbar role="Killer" value={Math.min(85, Math.max(0, pipsKiller))} countPosition="top"/>
-                    <GradeProgressbar role="Survivor" value={Math.min(85, Math.max(0, pipsSurvivor))} countPosition="bottom"/>
+                    <GradeProgressbar role="Survivor" value={Math.min(85, Math.max(0, pipsSurvivor))}
+                                      countPosition="bottom"/>
                     <div className="user-info-grade-progress-text">Grade progress (by pips amount)</div>
                 </div>
             </div>
@@ -104,7 +105,8 @@ const GradeProgressbar: React.FC<GradeProgressbarProps> = ({ role, value, countP
                 <div className="user-info-progress-bar-fill" style={progressBarStyle}></div>
                 <span className="user-info-progress-label">{scaledValue.toFixed(1)}%</span>
             </div>
-            <div className="user-info-progress-bar-grade-count" style={{ color, [countPosition]: "-15px" }}>{value}/85</div>
+            <div className="user-info-progress-bar-grade-count" style={{ color, [countPosition]: "-15px" }}>{value}/85
+            </div>
         </div>
     );
 };

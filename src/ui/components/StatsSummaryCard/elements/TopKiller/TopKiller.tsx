@@ -25,7 +25,7 @@ function TopKiller({ playerData, characterData }: TopKillerProps) {
             <div className="topKiller-split-container">
                 <div className="topKiller-content-container">
                     <div className="topKiller-title-container">
-                        <i className="fa-solid fa-award fa-2x fontawesomeIcon" style={{ marginTop: '4px' }} />
+                        <i className="fa-solid fa-award fa-2x fontawesomeIcon" style={{ marginTop: '4px' }}/>
                         <div className="topKiller-title">Top Killer</div>
                     </div>
                     <div className="topKiller-outperformed-text">Outperformed other players in:</div>
@@ -42,7 +42,7 @@ function TopKiller({ playerData, characterData }: TopKillerProps) {
                     </div>
                 </div>
             </div>
-            <img className="topKiller-bg" src={charBg} alt="" />
+            <img className="topKiller-bg" src={charBg} alt=""/>
         </div>
     );
 }

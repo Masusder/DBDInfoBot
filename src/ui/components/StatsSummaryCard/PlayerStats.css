@@ -22,6 +22,7 @@ a {
     color: #646cff;
     text-decoration: inherit;
 }
+
 a:hover {
     color: #535bf2;
 }
@@ -51,9 +52,11 @@ button {
     cursor: pointer;
     transition: border-color 0.25s;
 }
+
 button:hover {
     border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
@@ -64,9 +67,11 @@ button:focus-visible {
         color: #213547;
         background-color: #ffffff;
     }
+
     a:hover {
         color: #747bff;
     }
+
     button {
         background-color: #f9f9f9;
     }
@@ -167,26 +172,31 @@ button:focus-visible {
     width: 150px;
     margin: 15px;
 }
+
 .user-info-avatar {
     outline: 5px solid rgba(255, 255, 255, 0.1);
     border-radius: 28px;
 }
+
 .user-info-container {
     display: flex;
     flex-direction: row;
     gap: 40px;
     margin-top: 15px;
 }
+
 .user-info-text-container {
     display: flex;
     margin-top: 15px;
     flex-direction: column;
 }
+
 .user-info-text-player-name {
     font-size: 32px;
     font-weight: 900;
     color: rgba(255, 255, 255, 1);
 }
+
 .user-info-text-player-id {
     margin-top: -10px;
     margin-bottom: 10px;
@@ -194,15 +204,18 @@ button:focus-visible {
     font-weight: 900;
     color: #808080;
 }
+
 .user-info-main-progressbar-container {
     display: flex;
     flex-direction: column;
 }
+
 .user-info-grade-progress-text {
     color: #97979F;
     font-weight: 600;
     font-size: 12px;
 }
+
 .user-info-progress-bar-container {
     display: flex;
     flex-direction: row;
@@ -211,16 +224,19 @@ button:focus-visible {
     justify-content: center;
     align-items: center;
 }
+
 .user-info-progress-bar-grade-count {
     position: absolute;
     font-size: 12px;
     font-weight: bold;
     right: 5px;
 }
+
 .user-info-progress-bar-icon {
     width: 25px;
     height: auto;
 }
+
 .user-info-horizontal-progress-bar {
     height: 10px;
     width: 500px;
@@ -229,12 +245,14 @@ button:focus-visible {
     overflow: hidden;
     position: relative;
 }
+
 .user-info-progress-bar-fill {
     height: 100%;
     background: lightblue;
     border-radius: 10px;
     transition: width 0.3s ease;
 }
+
 .user-info-progress-label {
     position: absolute;
     top: 50%;
@@ -244,11 +262,13 @@ button:focus-visible {
     font-size: 8px;
     font-weight: bold;
 }
+
 .user-info-grade-prestige-container {
     display: flex;
     gap: 12px;
     margin-top: 12px;
 }
+
 .user-info-grade-text {
     max-width: 100px;
     text-align: center;
@@ -256,19 +276,23 @@ button:focus-visible {
     font-size: 0.75rem;
     color: #97979f;
 }
+
 .user-info-grade-container {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+
 .user-info-grade-rank-container {
     position: relative;
 }
+
 .user-info-grade-image {
     width: 100px;
     height: auto;
 }
+
 .user-info-grade-number {
     font-weight: 700;
     font-size: 2rem;
@@ -408,10 +432,12 @@ button:focus-visible {
     border-bottom-right-radius: 10000px;
     margin-top: 60px;
 }
+
 .dividers-delimiter-left {
     position: absolute;
     left: 0;
 }
+
 .dividers-delimiter-right {
     position: absolute;
     right: 0;
@@ -423,20 +449,18 @@ button:focus-visible {
     background-size: 100% 100%;
     width: 100%;
 }
+
 .dividers-fading-divider-horizontal {
     background: linear-gradient(
             to right,
-            rgba(39, 45, 52, 0) 0%,  /* Solid color at the start */
-            rgba(39, 45, 52, 1) 50%,  /* Solid color at the start */
-            rgba(39, 45, 52, 0) 100% /* Solid color at the end */
+            rgba(39, 45, 52, 0) 0%, /* Solid color at the start */ rgba(39, 45, 52, 1) 50%, /* Solid color at the start */ rgba(39, 45, 52, 0) 100% /* Solid color at the end */
     );
 }
+
 .dividers-fading-divider-vertical {
     background: linear-gradient(
             to bottom,
-            rgba(39, 45, 52, 0) 0%,  /* Transparent at the top */
-            rgba(39, 45, 52, 1) 50%, /* Solid color */
-            rgba(39, 45, 52, 0) 100% /* Transparent at the bottom */
+            rgba(39, 45, 52, 0) 0%, /* Transparent at the top */ rgba(39, 45, 52, 1) 50%, /* Solid color */ rgba(39, 45, 52, 0) 100% /* Transparent at the bottom */
     );
 }
 
@@ -456,6 +480,7 @@ button:focus-visible {
     align-items: center;
     gap: 10px;
 }
+
 .maps-title {
     font-size: 32px;
     font-weight: 900;
@@ -476,6 +501,7 @@ button:focus-visible {
     border-radius: 16px;
     background-color: #282C39;
 }
+
 .maps-icon {
     position: absolute;
     border-radius: 16px 0 0 16px;
@@ -487,6 +513,7 @@ button:focus-visible {
     width: 158px;
     mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0));
 }
+
 .maps-fields-container {
     display: flex;
     flex-direction: row;
@@ -495,27 +522,32 @@ button:focus-visible {
     margin-left: 200px;
     margin-right: 35px;
 }
+
 .maps-field {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
+
 .maps-field-title {
     font-size: 16px;
     font-weight: 500;
     color: #808199;
     margin-bottom: -14px;
 }
+
 .maps-field-value {
     font-size: 32px;
     font-weight: 900;
 }
+
 .maps-name {
     text-align: center;
     font-size: 18px;
     font-weight: 900;
 }
+
 .maps-importance {
     position: absolute;
     right: 15px;
@@ -525,12 +557,15 @@ button:focus-visible {
     top: 50%;
     border-radius: 1000px;
 }
+
 .maps-importance-great {
     background-color: #4FE871;
 }
+
 .maps-importance-medium {
     background-color: #FFEB3B;
 }
+
 .maps-importance-low {
     background-color: #FF8307;
 }
@@ -543,6 +578,7 @@ button:focus-visible {
     gap: 10px;
     height: 475px;
 }
+
 .randomStats__container {
     display: flex;
     flex-direction: column;
@@ -557,6 +593,7 @@ button:focus-visible {
     align-items: center;
     gap: 10px;
 }
+
 .randomStats__title {
     font-size: 32px;
     font-weight: 900;
@@ -568,6 +605,7 @@ button:focus-visible {
     flex-direction: row;
     gap: 15px;
 }
+
 .randomStats__box {
     display: flex;
     flex-direction: row;
@@ -580,19 +618,23 @@ button:focus-visible {
     max-width: 300px;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
+
 .randomStats__icon {
     width: 75px;
     height: auto;
 }
+
 .randomStats__boxContent {
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
+
 .randomStats__value {
     font-size: 16px;
     font-weight: bold;
 }
+
 .randomStats__description {
     font-size: 12px;
     font-weight: bold;
@@ -614,6 +656,7 @@ button:focus-visible {
     align-items: center;
     gap: 10px;
 }
+
 .bestStat-bestStatTitle {
     font-size: 32px;
     font-weight: 900;
@@ -630,25 +673,30 @@ button:focus-visible {
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: #1B1F26;
 }
+
 .bestStat-statIcon {
     width: 75px;
     height: auto;
 }
+
 .bestStat-statsBoxContent {
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
+
 .bestStat-statValue {
     font-size: 16px;
     font-weight: bold;
     filter: drop-shadow(0px 0px 1px gold);
 }
+
 .bestStat-statDescription {
     font-size: 12px;
     font-weight: bold;
     color: rgba(161, 161, 170, 0.9);
 }
+
 .bestStat-bestDescription {
     display: flex;
     align-items: center;
