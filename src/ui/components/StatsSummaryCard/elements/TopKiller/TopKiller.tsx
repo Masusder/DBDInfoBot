@@ -1,8 +1,10 @@
 import React from 'react';
-import { combineBaseUrlWithPath } from "@utils/stringUtils.ts";
+import {
+    combineBaseUrlWithPath,
+    formatNumber
+} from "@utils/stringUtils.ts";
 import {
     findTopKillerStat,
-    formatNumber,
     returnStatValue
 } from "@ui/utils/statUtils.ts";
 import { IPlayerData } from "@ui/types/playerStats.ts";

@@ -13,16 +13,6 @@ export function returnStatValue(statsData: IStat[], statId: string): number {
     return 0;
 }
 
-export function formatNumber(number: number | undefined = 0): string {
-    if (number === undefined || number === null) {
-        return "0";
-    }
-
-    return number
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, " "); // Format number with spaces as thousands separator
-}
-
 export function rollRandomStats(statsSchema: IStatsSchema, count = 6): IStatSchema[] {
     const excludedCategories = ['AdeptsSurvivor', 'AdeptsKiller', 'EscapesSpecific', 'Rank'];
 

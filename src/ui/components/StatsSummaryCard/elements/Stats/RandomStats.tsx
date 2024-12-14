@@ -1,6 +1,5 @@
 import React from "react";
 import {
-    formatNumber,
     returnStatValue,
     rollRandomStats
 } from "@ui/utils/statUtils.ts";
@@ -9,7 +8,10 @@ import {
     IPlayerData,
     IStatSchema
 } from "@ui/types/playerStats.ts";
-import { combineBaseUrlWithPath } from "@utils/stringUtils.ts";
+import {
+    combineBaseUrlWithPath,
+    formatNumber
+} from "@utils/stringUtils.ts";
 
 export function RandomStats({ playerData }: { playerData: IPlayerData }) {
     const randomStats = rollRandomStats(playerData.statsSchema);

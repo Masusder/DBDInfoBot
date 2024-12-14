@@ -1,13 +1,9 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import {
-    AutocompleteInteraction,
-    ChatInputCommandInteraction
-} from "discord.js";
+import { ChatInputCommandInteraction } from "discord.js";
 import i18next from "i18next";
 import { handlePersonalStatsCommandInteraction } from "@commands/statsSubCommands/personalStats.ts";
 import { commandLocalizationHelper } from "@utils/localizationUtils.ts";
-// import { handleGlobalStatsCommandInteraction } from "@commands/statsSubCommands/globalStats";
-
+import { handleGlobalStatsCommandInteraction } from "@commands/statsSubCommands/globalStats.ts";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -40,12 +36,11 @@ export const data = i18next.isInitialized
 
 export async function execute(interaction: ChatInputCommandInteraction) {
     const subcommand = interaction.options.getSubcommand();
-    const locale = interaction.locale;
 
     switch (subcommand) {
-        // case 'global':
-        //     await handleGlobalStatsCommandInteraction(interaction);
-        //     break;
+        case 'global':
+            await handleGlobalStatsCommandInteraction(interaction);
+            break;
         case 'personal':
             await handlePersonalStatsCommandInteraction(interaction);
             break;

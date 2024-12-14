@@ -38,6 +38,7 @@ import {
     getTranslation
 } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import { genericPaginationHandler } from "@handlers/genericPaginationHandler.ts";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -95,38 +96,58 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             return;
         }
 
-        const newsList = newsData.news;
-        const components: ActionRowBuilder<StringSelectMenuBuilder>[] = [];
-
-        const selectMenu = new StringSelectMenuBuilder()
-            .setCustomId('select_news_article')
-            .setPlaceholder(getTranslation('news_command.select_news_article', locale, ELocaleNamespace.Messages))
-            .setMinValues(1)
-            .setMaxValues(1);
-
-        newsList.forEach((newsItem, index) => {
-            const option = new StringSelectMenuOptionBuilder()
-                .setLabel(newsItem.title || `${getTranslation('news_command.news', locale, ELocaleNamespace.Messages)} ${index + 1}`)
-                .setValue(newsItem.id.toString());
-            selectMenu.addOptions(option);
+        let newsList = newsData.news;
+        newsList = newsList.sort((a: any, b: any) => {
+            const dateA = new Date(adjustForTimezone(a.startDate));
+            const dateB = new Date(adjustForTimezone(b.startDate));
+            return dateB.getTime() - dateA.getTime(); // Newest first
         });
 
-        components.push(new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectMenu));
+        const generateSelectMenu = (pageItems: NewsItem[]): StringSelectMenuBuilder => {
+            const selectMenu = new StringSelectMenuBuilder()
+                .setCustomId('select_news_article')
+                .setPlaceholder(getTranslation('news_command.select_news_article', locale, ELocaleNamespace.Messages))
+                .setMinValues(1)
+                .setMaxValues(1);
 
-        const embed = new EmbedBuilder();
-        newsList.forEach((newsItem, index) => {
-            if (newsItem.title) {
+            pageItems.forEach((newsItem, index: number) => {
+                const option = new StringSelectMenuOptionBuilder()
+                    .setLabel(newsItem.title || `${getTranslation('news_command.news', locale, ELocaleNamespace.Messages)} ${index + 1}`)
+                    .setValue(newsItem.id.toString());
+                selectMenu.addOptions(option);
+            });
+
+            return selectMenu;
+        }
+
+        const generateNewsListEmbed = (
+            pageItems: any[],
+            currentPage: number,
+            totalPages: number
+        ): EmbedBuilder => {
+            const embed = new EmbedBuilder()
+                .setFooter({ text: `${getTranslation('generic_pagination.page_number.0', locale, ELocaleNamespace.Messages)} ${currentPage} / ${totalPages}` });
+
+            pageItems.forEach((newsItem, index) => {
+                const formattedDate = new Date(adjustForTimezone(newsItem.startDate)).toLocaleDateString();
                 embed.addFields({
                     name: `${index + 1}. ${newsItem.title}`,
-                    value: `${getTranslation('news_command.published_on', locale, ELocaleNamespace.Messages)} ${new Date(adjustForTimezone(newsItem.startDate)).toLocaleDateString()}`,
-                    inline: true
+                    value: `${getTranslation('news_command.published_on', locale, ELocaleNamespace.Messages)} ${formattedDate}`,
+                    inline: true,
                 });
-            }
-        });
+            });
 
-        await interaction.editReply({
-            embeds: [embed],
-            components: components
+            return embed;
+        }
+
+        await genericPaginationHandler({
+            items: newsList,
+            itemsPerPage: 25,
+            generateEmbed: generateNewsListEmbed,
+            interactionUserId: interaction.user.id,
+            interactionReply: interaction,
+            locale: locale,
+            generateSelectMenu
         });
     } catch (error) {
         console.error("Error executing news command:", error);
@@ -170,7 +191,7 @@ async function createNewsEmbed(
 
     if (isSticky) {
         embed.setAuthor({
-            name: "This news article is pinned", // TODO: localize
+            name: getTranslation('news_command.pinned_article', locale, ELocaleNamespace.Messages),
             iconURL: combineBaseUrlWithPath('/images/News/icon_PinnedMessage.png')
         })
     }
@@ -237,7 +258,6 @@ async function sendNewsContent(newsItem: NewsItem, interactionOrChannel: ChatInp
         );
         const actionRow = callToAction ? createNewsButton(callToAction, locale) : null;
 
-        // Check if interactionOrChannel is an interaction or a channel
         if (interactionOrChannel instanceof TextChannel || interactionOrChannel instanceof NewsChannel) {
             const message = await interactionOrChannel.send({
                 embeds: [firstEmbed],

@@ -1,4 +1,5 @@
 import {
+    ButtonInteraction,
     ChatInputCommandInteraction,
     EmbedBuilder,
     StringSelectMenuInteraction
@@ -6,12 +7,13 @@ import {
 import { getTranslation } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 
-export async function sendErrorMessage(interaction: ChatInputCommandInteraction | StringSelectMenuInteraction, inputMessage: string, isLocalized: boolean = true): Promise<void> {
+export async function sendErrorMessage(interaction: ChatInputCommandInteraction | StringSelectMenuInteraction | ButtonInteraction, inputMessage: string, isLocalized: boolean = true): Promise<void> {
     const locale = interaction.locale;
 
     const outputMessage = isLocalized ? getTranslation(inputMessage, locale, ELocaleNamespace.Errors) : inputMessage;
     const embed = new EmbedBuilder()
         .setColor('Red')
+        .setTitle(getTranslation('general.error_occurred', locale, ELocaleNamespace.Errors))
         .setDescription(`:x: ${outputMessage}`);
 
     try {
