@@ -50,6 +50,7 @@ export const generatePlayerStatsSummary = async(playerData: IPlayerData): Promis
 
         return imageBuffer;
     } catch (error) {
+        console.log(error)
         console.error("Failed generating player stats summary card.");
         return null;
     }

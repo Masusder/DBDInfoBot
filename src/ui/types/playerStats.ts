@@ -44,6 +44,6 @@ export interface IStatSchema {
     role?: 'Killer' | 'Survivor' | 'None';
     character?: string;
     statId?: string;
-    percentage?: string;
+    percentage?: number | string;
     mapId?: string;
 }
