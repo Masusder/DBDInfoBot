@@ -138,11 +138,36 @@
     "untitled_news": "Untitled News",
     "click_here": "Click here",
     "showcased_items": "Showcased Items",
-    "items_featured_in_article": "These items are featured in the associated news article:"
+    "items_featured_in_article": "These items are featured in the associated news article:",
+    "pinned_article": "This news article is pinned"
   },
   "stats_command": {
     "player_stats_overview": "Player Statistics Overview",
     "summary_desc": "A quick infographic summary of the player's stats.",
-    "full_stats": "Full Stats"
+    "full_stats": "Full Stats",
+    "global_stats_title": [
+      "Global Steam Statistics in",
+      "category"
+    ],
+    "data_collected_from": [
+      "Data collected from over",
+      "players"
+    ],
+    "global_stat_tabs": {
+      "other": "Other",
+      "bloodweb": "Bloodweb",
+      "wins": "Wins",
+      "loadout": "Loadout",
+      "trial_survivor": "Survivor Trial Actions",
+      "healing": "Healing",
+      "chase": "Chases",
+      "escapes": "Escapes",
+      "kills": "Kills",
+      "hooks": "Hooks",
+      "trial_killer": "Killer Trial Actions",
+      "downs": "Downs",
+      "killer_downs": "Killer Downs",
+      "killer_specific": "Killer Ability"
+    }
   }
 }
