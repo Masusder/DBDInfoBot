@@ -5,7 +5,8 @@ import {
     ButtonStyle,
     ChatInputCommandInteraction,
     EmbedBuilder,
-    Locale
+    Locale,
+    StringSelectMenuBuilder
 } from "discord.js";
 import { getTranslation } from "@utils/localizationUtils";
 import { sendUnauthorizedMessage } from "./unauthorizedHandler";
@@ -21,9 +22,12 @@ export interface IPaginationOptions {
     timeout?: number;
     locale: Locale;
     showPageNumbers?: boolean;
+    generateSelectMenu?: (pageItems: any[]) => StringSelectMenuBuilder;
 }
 
 export const generatePaginationButtons = (page: number, totalPages: number, locale: Locale, showPageNumbers: boolean = true) => {
+    if (totalPages <= 1) return [];
+
     const actionRow1 = new ActionRowBuilder<ButtonBuilder>();
     const actionRow2 = new ActionRowBuilder<ButtonBuilder>();
     const actionRow3 = new ActionRowBuilder<ButtonBuilder>();
@@ -56,7 +60,7 @@ export const generatePaginationButtons = (page: number, totalPages: number, loca
             .setDisabled(page === totalPages)
     );
 
-    if (showPageNumbers && totalPages > 1) {
+    if (showPageNumbers) {
         const pagesToShow = 10;
         const startPage = Math.max(1, page - Math.floor(pagesToShow / 2));
         const endPage = Math.min(totalPages, startPage + pagesToShow - 1);
@@ -108,7 +112,7 @@ export function determineNewPage(currentPage: number, paginationType: TPaginatio
 }
 
 export async function genericPaginationHandler(options: IPaginationOptions) {
-    const { items, itemsPerPage, generateEmbed, generateImage, interactionUserId, interactionReply } = options;
+    const { items, itemsPerPage, generateEmbed, generateImage, interactionUserId, interactionReply, generateSelectMenu } = options;
 
     let currentPage = 1;
     const totalPages = Math.ceil(items.length / itemsPerPage);
@@ -122,9 +126,17 @@ export async function genericPaginationHandler(options: IPaginationOptions) {
         const itemsForPage = getItemsForPage(currentPage);
         const embed = await generateEmbed(itemsForPage, currentPage, totalPages);
 
+        let selectMenuRow = null;
+        if (generateSelectMenu) {
+            const selectMenu = generateSelectMenu(itemsForPage);
+            if (selectMenu) {
+               selectMenuRow = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectMenu);
+            }
+        }
+
         const response = await interactionReply.editReply({
             embeds: [embed],
-            components: generatePaginationButtons(currentPage, totalPages, locale, options?.showPageNumbers),
+            components: [...(selectMenuRow ? [selectMenuRow] : []), ...generatePaginationButtons(currentPage, totalPages, locale, options?.showPageNumbers)],
             files: []
         });
 

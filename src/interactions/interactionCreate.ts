@@ -15,6 +15,7 @@ import {
 } from "@commands/listCommand";
 import { execute as executeShrine } from "@commands/shrineCommand";
 import { execute as executeNews } from "@commands/newsCommand";
+import { execute as executeStats } from "@commands/statsCommand";
 
 interface CommandHandler {
     execute: (interaction: ChatInputCommandInteraction) => Promise<void>;
@@ -46,6 +47,11 @@ const commandHandlers: Record<string, CommandHandler> = {
     news: {
         execute: async(interaction: ChatInputCommandInteraction) => {
             await executeNews(interaction);
+        }
+    },
+    stats: {
+        execute: async(interaction: ChatInputCommandInteraction) => {
+            await executeStats(interaction);
         }
     }
 };

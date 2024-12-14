@@ -23,6 +23,7 @@ interface Image {
 }
 
 interface MetaData {
+    eventID?: string;
     isPopup: boolean;
     isSticky: boolean;
     segmentationTags: string[];

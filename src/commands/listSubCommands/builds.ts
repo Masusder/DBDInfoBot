@@ -1,7 +1,9 @@
 import {
     ActionRowBuilder,
     AutocompleteInteraction,
+    ButtonBuilder,
     ButtonInteraction,
+    ButtonStyle,
     ChatInputCommandInteraction,
     EmbedBuilder,
     Locale,
@@ -29,6 +31,12 @@ import {
 import { handleBuildCommandInteraction } from "@commands/infoSubCommands/build";
 import { getTranslation } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import {
+    getApplicationEmoji,
+    getOrCreateApplicationEmoji
+} from "@utils/emojiManager";
+import { layerIcons } from "@utils/imageUtils";
+import { Role } from "@data/Role";
 
 export async function handleBuildsListCommandInteraction(interaction: ChatInputCommandInteraction) {
     let currentPage = interaction.options.getNumber('page') || 1;
@@ -63,10 +71,11 @@ export async function handleBuildsListCommandInteraction(interaction: ChatInputC
         const embed = await createEmbed(filters.role, builds, currentPage, totalPages, perkData, locale);
 
         const stringMenu = createStringMenu(builds, locale);
+        const linkButton = createLinkButton(locale);
 
         const replyMessage = await interaction.editReply({
             embeds: [embed],
-            components: [stringMenu, ...generatePaginationButtons(currentPage, totalPages + 1, locale)]
+            components: [stringMenu, ...generatePaginationButtons(currentPage, totalPages + 1, locale), linkButton]
         });
 
         const collector = replyMessage.createMessageComponentCollector({
@@ -76,6 +85,7 @@ export async function handleBuildsListCommandInteraction(interaction: ChatInputC
 
         collector.on('collect', async(i: ButtonInteraction | StringSelectMenuInteraction) => {
             try {
+                await i.deferUpdate();
                 if (i.user.id !== interaction.user.id) {
                     await sendUnauthorizedMessage(i);
                     return;
@@ -89,12 +99,15 @@ export async function handleBuildsListCommandInteraction(interaction: ChatInputC
                     const newFilters: IBuildFilters = { ...filters, page: currentPage - 1 };
 
                     const buildsList = await retrieveBuilds(newFilters);
-                    if (!buildsList) return await i.update({ content: getTranslation('list_command.builds_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors), components: [] });
+                    if (!buildsList) return await i.update({
+                        content: getTranslation('list_command.builds_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors),
+                        components: []
+                    });
 
                     const { builds: newBuilds, totalPages: newTotalPages } = buildsList;
 
                     if (!newBuilds || newBuilds.length === 0) {
-                        return await i.update({
+                        return await i.editReply({
                             content: getTranslation('list_command.builds_subcommand.builds_not_found_filters', locale, ELocaleNamespace.Errors),
                             components: []
                         });
@@ -102,9 +115,9 @@ export async function handleBuildsListCommandInteraction(interaction: ChatInputC
 
                     const newEmbed = await createEmbed(filters.role, newBuilds, currentPage, newTotalPages, perkData, locale);
 
-                    await i.update({
+                    await i.editReply({
                         embeds: [newEmbed],
-                        components: [createStringMenu(newBuilds, locale), ...generatePaginationButtons(currentPage, totalPages + 1, locale)]
+                        components: [createStringMenu(newBuilds, locale), ...generatePaginationButtons(currentPage, totalPages + 1, locale), linkButton]
                     });
                 }
 
@@ -119,7 +132,7 @@ export async function handleBuildsListCommandInteraction(interaction: ChatInputC
 
         collector.on('end', async() => {
             try {
-                await replyMessage.edit({ components: [] });
+                await replyMessage.edit({ components: [linkButton] });
             } catch (error) {
                 console.error("Error handling pagination ('end' event):", error);
             }
@@ -140,26 +153,62 @@ async function createEmbed(
     const embed = new EmbedBuilder()
         .setTitle(`${getTranslation('list_command.builds_subcommand.builds_list', locale, ELocaleNamespace.Messages)} - ${getTranslation('list_command.builds_subcommand.builds_list_page.0', locale, ELocaleNamespace.Messages)} ${currentPage} ${getTranslation('list_command.builds_subcommand.builds_list_page.1', locale, ELocaleNamespace.Messages)} ${totalPages + 1}`)
         .setColor(role === 'Survivor' ? "#1e90ff" : "Red")
-        .setDescription(`[${getTranslation('list_command.builds_subcommand.create_your_own_build', locale, ELocaleNamespace.Messages)}](${combineBaseUrlWithPath('/builds/create')})\n${getTranslation('list_command.builds_subcommand.builds_matching_filters', locale, ELocaleNamespace.Messages)}`)
+        .setDescription(getTranslation('list_command.builds_subcommand.builds_matching_filters', locale, ELocaleNamespace.Messages))
         .setTimestamp()
         .setFooter({ text: getTranslation('list_command.builds_subcommand.builds_list', locale, ELocaleNamespace.Messages) })
         .setThumbnail(combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_loadout.png'));
 
-    builds.forEach((build: IBuild, index: number) => {
-        const buildTitle = `${index + 1}. ${build.title} | ${getTranslation('list_command.builds_subcommand.created_by', locale, ELocaleNamespace.Messages)} ${build.username}`;
+    for (const build of builds) {
+        const index: number = builds.indexOf(build);
+        const buildTitle = `${index + 1}. ${build.title} • ${getTranslation('list_command.builds_subcommand.created_by', locale, ELocaleNamespace.Messages)} ${build.username}`;
 
-        const perksList = [build.perk1, build.perk2, build.perk3, build.perk4]
-            .filter(Boolean)
-            .filter(perk => perk !== "None")
-            .map(perk => `${perkData[perk]?.Name ?? getTranslation('list_command.builds_subcommand.unknown_perk', locale, ELocaleNamespace.Messages)}`)
-            .join(', ') || getTranslation('list_command.builds_subcommand.any_perks', locale, ELocaleNamespace.Messages);
+        const validPerks = [build.perk1, build.perk2, build.perk3, build.perk4]
+            .filter(perk => perk && perk !== "None");
+
+        const perkEmojiAndListPromises = validPerks.map(async(perkId) => {
+            const perkDataEntry = perkData[perkId];
+            if (!perkDataEntry) {
+                return {
+                    id: perkId,
+                    listEntry: getTranslation(
+                        'list_command.builds_subcommand.unknown_perk',
+                        locale,
+                        ELocaleNamespace.Messages
+                    )
+                };
+            }
+
+            const perkEmoji = await getApplicationEmoji(perkId);
+
+            let listEntryWithEmoji;
+            if (perkEmoji) {
+                listEntryWithEmoji = perkEmoji;
+            } else {
+                const perkBuffer = await layerIcons(
+                    Role[perkDataEntry.Role].perkBackground,
+                    combineBaseUrlWithPath(perkDataEntry.IconFilePathList)
+                );
+                listEntryWithEmoji = await getOrCreateApplicationEmoji(perkId, perkBuffer);
+            }
+
+            return {
+                id: perkId,
+                listEntry: listEntryWithEmoji
+            };
+        });
+
+        const resolvedPerkData = await Promise.all(perkEmojiAndListPromises);
+
+        const perksList = resolvedPerkData
+            .map(({ listEntry }) => listEntry)
+            .join(' ') || getTranslation('list_command.builds_subcommand.any_perks', locale, ELocaleNamespace.Messages);
 
         embed.addFields({
             name: buildTitle,
             value: perksList,
             inline: false
         });
-    });
+    }
 
     return embed;
 }
@@ -177,6 +226,15 @@ function createStringMenu(builds: IBuild[], locale: Locale) {
         );
 
     return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectMenu);
+}
+
+function createLinkButton(locale: Locale) {
+    const button = new ButtonBuilder()
+        .setLabel(getTranslation('list_command.builds_subcommand.create_your_own_build', locale, ELocaleNamespace.Messages))
+        .setStyle(ButtonStyle.Link)
+        .setURL(combineBaseUrlWithPath('/builds/create'));
+
+    return new ActionRowBuilder<ButtonBuilder>().addComponents(button);
 }
 
 // endregion

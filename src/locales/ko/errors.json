@@ -30,10 +30,18 @@
     }
   },
   "general": {
-    "unauthorized": "Only the person who used the command can do that."
+    "unauthorized": "Only the person who used the command can do that.",
+    "error_occurred": "An error has occurred"
   },
   "news_command": {
     "error_retrieving_data": "Failed to retrieve latest news.",
     "failed_retrieving_article": "Failed to retrieve the selected news article."
+  },
+  "stats_command": {
+    "missing_steam_id": "Steam ID field is required to view player stats.",
+    "not_found_player_data": "Unable to fetch player data. Ensure your Steam profile and game details are public.",
+    "failed_generating_summary_card": "Unable to generate summary card.",
+    "failed_to_fetch_global_stats": "Failed to fetch global statistics data.",
+    "invalid_tab_id": "Invalid tab ID."
   }
 }

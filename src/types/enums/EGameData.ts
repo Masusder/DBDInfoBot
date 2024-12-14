@@ -7,4 +7,5 @@ export enum EGameData {
     ItemData = 'itemData',
     CollectionData = 'collectionData',
     NewsData = 'newsData',
+    MapsData = 'mapsData',
 }

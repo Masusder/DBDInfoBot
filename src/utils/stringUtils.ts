@@ -53,17 +53,14 @@ export function formatHtmlToDiscordMarkdown(html: string): string {
     return html;
 }
 
-export function formatNumber(number: number | undefined | null): string {
-    if (number === undefined || number === null || isNaN(number)) {
+export function formatNumber(number: number | string | undefined = 0): string {
+    if (number === undefined || number === null) {
         return "0";
     }
 
-    try {
-        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-    } catch (error) {
-        console.error("Error formatting number:", error);
-        return "0";
-    }
+    return number
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, " "); // Format number with spaces as thousands separator
 }
 
 export function adjustForTimezone(dateString: string | Date): number {
@@ -104,7 +101,7 @@ export async function checkExistingImageUrl(url1: string | null, url2: string | 
             const response = await axios.head(url);
             return response.status === 200;
         } catch (error) {
-            console.error(`Error checking URL ${url}:`, error);
+            //console.error(`Error checking URL ${url}:`, error);
             return false;
         }
     };

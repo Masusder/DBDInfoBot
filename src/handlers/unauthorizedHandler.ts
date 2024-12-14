@@ -10,7 +10,7 @@ export async function sendUnauthorizedMessage(interaction: ButtonInteraction | S
     const locale = interaction.locale;
 
     const embed = new EmbedBuilder()
-        .setColor('Red')
+        .setColor('Yellow')
         .setDescription(`:x: ${getTranslation('general.unauthorized', locale, ELocaleNamespace.Errors)}`);
 
     try {

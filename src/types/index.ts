@@ -30,6 +30,7 @@ import {
     IShrinePerkItem
 } from "./shrine";
 import { Collection } from "./collection";
+import { Map } from './map.ts';
 
 export {
     Addon,
@@ -49,5 +50,6 @@ export {
     IShrine,
     IShrineItem,
     IShrinePerkItem,
-    Collection
+    Collection,
+    Map
 };

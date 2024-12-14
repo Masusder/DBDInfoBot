@@ -17,7 +17,10 @@ import { BuildCategories } from "@data/BuildCategories";
 import { getCachedPerks } from "@services/perkService";
 import { getCachedItems } from "@services/itemService";
 import { getCachedAddons } from "@services/addonService";
-import { createLoadoutCanvas } from "@utils/imageUtils";
+import {
+    createLoadoutCanvas,
+    layerIcons
+} from "@utils/imageUtils";
 import { getCachedOfferings } from "@services/offeringService";
 import { getCachedCharacters } from "@services/characterService";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
@@ -34,7 +37,7 @@ export async function handleBuildCommandInteraction(interaction: ChatInputComman
         if (interaction.isChatInputCommand()) {
             await interaction.deferReply();
         } else if (interaction.isStringSelectMenu()) {
-            await interaction.deferUpdate();
+           if (!interaction.deferred) await interaction.deferUpdate();
         }
 
         const [buildData, perkData, itemData, addonData, offeringData, characterData] = await Promise.all([
@@ -131,7 +134,7 @@ export async function handleBuildCommandInteraction(interaction: ChatInputComman
             });
         }
 
-        const voteText = ratingCount && ratingCount > 1
+        const voteText = ratingCount !== 1
             ? getTranslation('info_command.build_subcommand.votes', locale, ELocaleNamespace.Messages)
             : getTranslation('info_command.build_subcommand.vote', locale, ELocaleNamespace.Messages);
 
@@ -167,40 +170,78 @@ export async function handleBuildCommandInteraction(interaction: ChatInputComman
                 text: `${getTranslation('info_command.build_subcommand.created_by.0', locale, ELocaleNamespace.Messages)} ${username} ${getTranslation('info_command.build_subcommand.created_by.1', locale, ELocaleNamespace.Messages)} ${creationDatePretty} | ID: ${buildId}`
             });
 
+        let charPortraitBuffer: Buffer | null = null;
         if (characterIndex !== -1) {
-            embed.setThumbnail(combineBaseUrlWithPath(characterData[characterIndex].IconFilePath));
+            const characterBackgroundUrl = Role[role].charPortrait;
+            charPortraitBuffer = await layerIcons(characterBackgroundUrl, combineBaseUrlWithPath(characterData[characterIndex].IconFilePath))
+            embed.setThumbnail(`attachment://characterImage_${characterIndex}.png`);
         }
 
         // Send reply early without image, so user doesn't have to wait
         let followUpMsg = null as Message | null;
         if (interaction.isChatInputCommand()) {
-            await interaction.editReply({ embeds: [embed] });
+            await interaction.editReply({
+                embeds: [embed],
+                files: charPortraitBuffer ? [
+                    {
+                        attachment: charPortraitBuffer,
+                        name: `characterImage_${characterIndex}.png`
+                    }
+                ] : []
+            });
         } else {
-            followUpMsg = await interaction.followUp({ embeds: [embed] });
+            followUpMsg = await interaction.followUp({
+                embeds: [embed],
+                files: charPortraitBuffer ? [
+                    {
+                        attachment: charPortraitBuffer,
+                        name: `characterImage_${characterIndex}.png`
+                    }
+                ] : []
+            });
         }
 
         const loadoutBuffer = await createLoadoutCanvas(role, locale, perks, itemPower, offering, addons);
 
+        const attachments = createAttachments(charPortraitBuffer, loadoutBuffer, characterIndex);
+
         // Attach the processed image
         if (interaction.isChatInputCommand()) {
             await interaction.editReply({
-                files: [{
-                    attachment: loadoutBuffer,
-                    name: 'loadout.png'
-                }]
+                files: attachments
             });
         } else if (interaction.isStringSelectMenu()) {
             await followUpMsg?.edit({
-                files: [{
-                    attachment: loadoutBuffer,
-                    name: 'loadout.png'
-                }]
+                files: attachments
             });
         }
     } catch (error) {
         console.error("Error executing build subcommand:", error);
     }
 }
+
+// region Utils
+const createAttachments = (charPortraitBuffer: Buffer | null, loadoutBuffer: Buffer | null, characterIndex: number) => {
+    const attachments: { attachment: Buffer, name: string }[] = [];
+
+    if (charPortraitBuffer) {
+        attachments.push({
+            attachment: charPortraitBuffer,
+            name: `characterImage_${characterIndex}.png`
+        });
+    }
+
+    if (loadoutBuffer) {
+        attachments.push({
+            attachment: loadoutBuffer,
+            name: 'loadout.png'
+        });
+    }
+
+    return attachments;
+};
+
+// endregion
 
 export async function handleBuildCommandAutocompleteInteraction(interaction: AutocompleteInteraction) {
     try {
