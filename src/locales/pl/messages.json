@@ -141,8 +141,8 @@
     "items_featured_in_article": "Poniższe elementy zostały wyróżnione w powiązanym artykule informacyjnym:"
   },
   "stats_command": {
-    "player_stats_overview": "Player Statistics Overview",
-    "summary_desc": "A quick infographic summary of the player's stats.",
-    "full_stats": "Full Stats"
+    "player_stats_overview": "Statystyki gracza",
+    "summary_desc": "Infografika podsumowująca statystyki gracza.",
+    "full_stats": "Pełne statystyki"
   }
 }
