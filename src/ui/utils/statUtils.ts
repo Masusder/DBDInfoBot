@@ -54,12 +54,12 @@ export function findTopKillerStat(statsSchema: IStatsSchema): IStatSchema {
         );
 
     const topStat = allEntries.reduce((prev, current) =>
-        parseFloat(current.percentage.replace('%', '')) > parseFloat(prev.percentage.replace('%', ''))
+        parsePercentage(current.percentage) > parsePercentage(prev.percentage)
             ? current
             : prev
     );
 
-    const formattedPercentage = `${parseFloat(topStat.percentage.replace('%', '')).toFixed(1)}%`;
+    const formattedPercentage = `${parsePercentage(topStat.percentage).toFixed(1)}%`;
 
     return {
         description: topStat.description,
@@ -71,10 +71,15 @@ export function findTopKillerStat(statsSchema: IStatsSchema): IStatSchema {
     };
 }
 
-export function findBestStat(statsSchema: IStatsSchema): IStatSchema | null {
-    const parsePercentage = (percentage: string | undefined): number =>
-        percentage ? parseFloat(percentage.replace('%', '')) || 0 : 0;
+const parsePercentage = (percentage: string | number | undefined): number => {
+    return percentage !== undefined
+        ? typeof percentage === 'number'
+            ? percentage
+            : parseInt(percentage, 10) || 0
+        : 0;
+}
 
+export function findBestStat(statsSchema: IStatsSchema): IStatSchema | null {
     let bestStat: IStatSchema | null = null;
     let highestPercentage = 0;
 
