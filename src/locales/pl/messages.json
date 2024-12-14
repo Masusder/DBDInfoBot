@@ -138,11 +138,36 @@
     "untitled_news": "Artykuł bez tytułu",
     "click_here": "Kliknij tutaj",
     "showcased_items": "Wyróżnione elementy",
-    "items_featured_in_article": "Poniższe elementy zostały wyróżnione w powiązanym artykule informacyjnym:"
+    "items_featured_in_article": "Poniższe elementy zostały wyróżnione w powiązanym artykule informacyjnym:",
+    "pinned_article": "Ten artykuł został przypięty"
   },
   "stats_command": {
     "player_stats_overview": "Statystyki gracza",
     "summary_desc": "Infografika podsumowująca statystyki gracza.",
-    "full_stats": "Pełne statystyki"
+    "full_stats": "Pełne statystyki",
+    "global_stats_title": [
+      "Globalne statystyki Steam dla kategorii",
+      " "
+    ],
+    "data_collected_from": [
+      "Dane zgromadzone od ponad",
+      "graczy"
+    ],
+    "global_stat_tabs": {
+      "other": "Inne",
+      "bloodweb": "Krwista sieć",
+      "wins": "Wygrane",
+      "loadout": "Ekwipunek",
+      "trial_survivor": "Akcje w próbie ocalałych",
+      "healing": "Leczenie",
+      "chase": "Pościgi",
+      "escapes": "Ucieczki",
+      "kills": "Zabójstwa",
+      "hooks": "Haki",
+      "trial_killer": "Akcje w próbie zabójców",
+      "downs": "Powalenia",
+      "killer_downs": "Powalenia zabójców",
+      "killer_specific": "Umiejętność zabójców"
+    }
   }
 }
