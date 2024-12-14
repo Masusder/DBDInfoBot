@@ -37,8 +37,8 @@
     "failed_retrieving_article": "Nie udało się pobrać wybranego artykułu."
   },
   "stats_command": {
-    "missing_steam_id": "Steam ID field is required to view player stats.",
-    "not_found_player_data": "Unable to fetch player data. Ensure your Steam profile and game details are public.",
-    "failed_generating_summary_card": "Unable to generate summary card."
+    "missing_steam_id": "Pole Steam ID jest wymagane, aby wyświetlić statystyki gracza.",
+    "not_found_player_data": "Nie można pobrać danych gracza. Upewnij się, że Twój profil Steam i szczegóły gry są publiczne.",
+    "failed_generating_summary_card": "Nie udało się wygenerować karty podsumowującej statystki."
   }
 }
