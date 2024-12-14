@@ -123,7 +123,7 @@
       "options": {
         "steam_id": {
           "name": "steam_id",
-          "description": "Identyfikator Steam, nazwa użytkownika lub adres URL profilu gracza, którego statystyki chcesz wyświetlić."
+          "description": "Steam ID, nazwa użytkownika lub adres URL profilu gracza, którego statystyki chcesz wyświetlić."
         }
       }
     }
