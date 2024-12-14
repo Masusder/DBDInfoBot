@@ -109,5 +109,23 @@
   "news_command": {
     "name": "aktualności",
     "description": "Sprawdź najnowsze informacje o grze."
+  },
+  "stats_command": {
+    "name": "statystyki",
+    "description": "Sprawdź statystyki Steam (globalne lub osobiste).",
+    "global_subcommand": {
+      "name": "globalne",
+      "description": "Sprawdź statystyki globalne."
+    },
+    "personal_subcommand": {
+      "name": "personalne",
+      "description": "Obejrzyj infografikę podsumowującą statystyki gracza.",
+      "options": {
+        "steam_id": {
+          "name": "steam_id",
+          "description": "Identyfikator Steam, nazwa użytkownika lub adres URL profilu gracza, którego statystyki chcesz wyświetlić."
+        }
+      }
+    }
   }
 }
