@@ -6,14 +6,14 @@ import {
     EmbedBuilder,
     Locale
 } from "discord.js";
-import Constants from "../../constants.ts";
-import { generatePlayerStatsSummary } from "@utils/ssrUtility.ts";
-import { getCachedPlayerStats } from "@services/statsService.ts";
-import { IPlayerData } from "@ui/types/playerStats.ts";
-import { getTranslation } from "@utils/localizationUtils.ts";
-import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace.ts";
-import { combineBaseUrlWithPath } from "@utils/stringUtils.ts";
-import { sendErrorMessage } from "@handlers/errorResponseHandler.ts";
+import Constants from "../../constants";
+import { generatePlayerStatsSummary } from "@utils/ssrUtility";
+import { getCachedPlayerStats } from "@services/statsService";
+import { IPlayerData } from "@ui/types/playerStats";
+import { getTranslation } from "@utils/localizationUtils";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import { combineBaseUrlWithPath } from "@utils/stringUtils";
+import { sendErrorMessage } from "@handlers/errorResponseHandler";
 
 export async function handlePersonalStatsCommandInteraction(interaction: ChatInputCommandInteraction) {
     const steamId = interaction.options.getString('steam_id');

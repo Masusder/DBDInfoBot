@@ -38,7 +38,7 @@ import {
     getTranslation
 } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
-import { genericPaginationHandler } from "@handlers/genericPaginationHandler.ts";
+import { genericPaginationHandler } from "@handlers/genericPaginationHandler";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()

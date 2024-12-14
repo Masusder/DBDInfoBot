@@ -16,10 +16,10 @@ import {
     GlobalStatTabs,
     IGlobalStatTab
 } from "@data/GlobalStatTabs";
-import { IStatsSchema } from "@ui/types/playerStats.ts";
-import Constants from "../../constants.ts";
-import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace.ts";
-import { sendErrorMessage } from "@handlers/errorResponseHandler.ts";
+import { IStatsSchema } from "@ui/types/playerStats";
+import Constants from "../../constants";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import { sendErrorMessage } from "@handlers/errorResponseHandler";
 
 export async function handleGlobalStatsCommandInteraction(interaction: ChatInputCommandInteraction) {
     const locale = interaction.locale;

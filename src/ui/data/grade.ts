@@ -1,4 +1,4 @@
-import { combineBaseUrlWithPath } from "@utils/stringUtils.ts";
+import { combineBaseUrlWithPath } from "@utils/stringUtils";
 
 type GradeInfo = {
     color: string;

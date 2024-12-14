@@ -2,7 +2,7 @@ import { ButtonInteraction } from 'discord.js';
 import { viewOutfitPiecesHandler } from '@handlers/viewOutfitPiecesHandler';
 import { showCharacterBackstoryHandler } from "@handlers/showCharacterBackstoryHandler";
 import { handlePerkCommandInteraction } from "@commands/infoSubCommands/perk";
-import { globalStatsTabHandler } from "@handlers/globalStatsTabHandler.ts";
+import { globalStatsTabHandler } from "@handlers/globalStatsTabHandler";
 
 export default async(interaction: ButtonInteraction) => {
     if (!interaction.deferred) await interaction.deferUpdate();

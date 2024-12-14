@@ -1,9 +1,9 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { ChatInputCommandInteraction } from "discord.js";
 import i18next from "i18next";
-import { handlePersonalStatsCommandInteraction } from "@commands/statsSubCommands/personalStats.ts";
-import { commandLocalizationHelper } from "@utils/localizationUtils.ts";
-import { handleGlobalStatsCommandInteraction } from "@commands/statsSubCommands/globalStats.ts";
+import { handlePersonalStatsCommandInteraction } from "@commands/statsSubCommands/personalStats";
+import { commandLocalizationHelper } from "@utils/localizationUtils";
+import { handleGlobalStatsCommandInteraction } from "@commands/statsSubCommands/globalStats";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()

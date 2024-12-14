@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import puppeteer from 'puppeteer';
-import PlayerStats from "@ui/components/StatsSummaryCard/PlayerStats.tsx";
-import { getCachedCharacters } from "@services/characterService.ts";
-import { getCachedMaps } from "@services/mapService.ts";
+import PlayerStats from "@ui/components/StatsSummaryCard/PlayerStats";
+import { getCachedCharacters } from "@services/characterService";
+import { getCachedMaps } from "@services/mapService";
 import { Locale } from "discord.js";
-import { IPlayerData } from "@ui/types/playerStats.ts";
+import { IPlayerData } from "@ui/types/playerStats";
 import * as fs from "node:fs";
 import * as path from "node:path";
 

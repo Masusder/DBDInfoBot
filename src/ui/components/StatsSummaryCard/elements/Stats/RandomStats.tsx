@@ -2,16 +2,16 @@ import React from "react";
 import {
     returnStatValue,
     rollRandomStats
-} from "@ui/utils/statUtils.ts";
-import { FadingDivider } from "../Dividers/Dividers.tsx";
+} from "@ui/utils/statUtils";
+import { FadingDivider } from "../Dividers/Dividers";
 import {
     IPlayerData,
     IStatSchema
-} from "@ui/types/playerStats.ts";
+} from "@ui/types/playerStats";
 import {
     combineBaseUrlWithPath,
     formatNumber
-} from "@utils/stringUtils.ts";
+} from "@utils/stringUtils";
 
 export function RandomStats({ playerData }: { playerData: IPlayerData }) {
     const randomStats = rollRandomStats(playerData.statsSchema);

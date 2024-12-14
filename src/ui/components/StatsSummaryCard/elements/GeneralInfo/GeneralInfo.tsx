@@ -1,10 +1,10 @@
 import React from "react";
-import { returnAdepts } from "@ui/data/adepts.ts";
+import { returnAdepts } from "@ui/data/adepts";
 import {
     calculateAch,
     getPlaytime
-} from "./generalUtils.ts";
-import { IPlayerData } from "@ui/types/playerStats.ts";
+} from "./generalUtils";
+import { IPlayerData } from "@ui/types/playerStats";
 
 function GeneralInfo({ playerData }: { playerData: IPlayerData }) {
     const adeptDetailsKiller = returnAdepts('Killer', playerData);

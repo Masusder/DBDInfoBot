@@ -2,16 +2,16 @@ import React from "react";
 import {
     formatGrades,
     GradeDetails
-} from "@ui/data/grade.ts";
+} from "@ui/data/grade";
 import {
     returnStatValue
-} from "@ui/utils/statUtils.ts";
-import { FadingDivider } from "../Dividers/Dividers.tsx";
+} from "@ui/utils/statUtils";
+import { FadingDivider } from "../Dividers/Dividers";
 import {
     IPlayerData,
     IStat
-} from "@ui/types/playerStats.ts";
-import { combineBaseUrlWithPath } from "@utils/stringUtils.ts";
+} from "@ui/types/playerStats";
+import { combineBaseUrlWithPath } from "@utils/stringUtils";
 
 function UserInfo({ playerData }: { playerData: IPlayerData }) {
     const pipsKiller = returnStatValue(playerData.stats, 'DBD_KillerSkulls');

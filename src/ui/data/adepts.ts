@@ -1,4 +1,4 @@
-import { IPlayerData } from "@ui/types/playerStats.ts";
+import { IPlayerData } from "@ui/types/playerStats";
 
 export interface IAdeptDetails {
     maxAdepts: number;

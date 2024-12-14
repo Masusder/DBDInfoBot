@@ -10,9 +10,9 @@ import {
     createGlobalStatsEmbed,
     createTabButtons
 } from "@commands/statsSubCommands/globalStats";
-import { getCachedGlobalStats } from "@services/statsService.ts";
-import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace.ts";
-import { sendErrorMessage } from "@handlers/errorResponseHandler.ts";
+import { getCachedGlobalStats } from "@services/statsService";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import { sendErrorMessage } from "@handlers/errorResponseHandler";
 
 export async function globalStatsTabHandler(interaction: ButtonInteraction) {
     const tabId = extractInteractionId(interaction.customId);

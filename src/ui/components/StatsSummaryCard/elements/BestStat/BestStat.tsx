@@ -1,13 +1,13 @@
 import {
     findBestStat,
     returnStatValue
-} from "@ui/utils/statUtils.ts";
+} from "@ui/utils/statUtils";
 import React from "react";
 import {
     IPlayerData,
     IStatSchema
-} from "@ui/types/playerStats.ts";
-import { formatNumber } from "@utils/stringUtils.ts";
+} from "@ui/types/playerStats";
+import { formatNumber } from "@utils/stringUtils";
 
 type BestStatProps = {
     playerData: IPlayerData;

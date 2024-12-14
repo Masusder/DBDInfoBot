@@ -2,13 +2,13 @@ import React from 'react';
 import {
     combineBaseUrlWithPath,
     formatNumber
-} from "@utils/stringUtils.ts";
+} from "@utils/stringUtils";
 import {
     findTopKillerStat,
     returnStatValue
-} from "@ui/utils/statUtils.ts";
-import { IPlayerData } from "@ui/types/playerStats.ts";
-import { Character } from "@tps/character.ts";
+} from "@ui/utils/statUtils";
+import { IPlayerData } from "@ui/types/playerStats";
+import { Character } from "@tps/character";
 
 type TopKillerProps = {
     playerData: IPlayerData;

@@ -1,13 +1,13 @@
-import UserInfo from "./elements/UserInfo/UserInfo.tsx";
+import UserInfo from "./elements/UserInfo/UserInfo";
 import {
     Delimiter,
     FadingDivider
-} from "./elements/Dividers/Dividers.tsx";
-import GeneralInfo from "./elements/GeneralInfo/GeneralInfo.tsx";
-import Maps from "./elements/Maps/ Maps.tsx";
-import { RandomStats } from "./elements/Stats/RandomStats.tsx";
-import TopKiller from "./elements/TopKiller/TopKiller.tsx";
-import BestStat from "./elements/BestStat/BestStat.tsx";
+} from "./elements/Dividers/Dividers";
+import GeneralInfo from "./elements/GeneralInfo/GeneralInfo";
+import Maps from "./elements/Maps/ Maps";
+import { RandomStats } from "./elements/Stats/RandomStats";
+import TopKiller from "./elements/TopKiller/TopKiller";
+import BestStat from "./elements/BestStat/BestStat";
 import React from "react";
 
 function PlayerStats({ characterData, mapsData, playerData }: any) {

@@ -1,12 +1,12 @@
 import React from "react";
-import { FadingDivider } from "../Dividers/Dividers.tsx";
+import { FadingDivider } from "../Dividers/Dividers";
 import {
     collectMapDetails,
     IMapDetails
-} from "@ui/data/maps.ts";
-import { IPlayerData } from "@ui/types/playerStats.ts";
-import { Map } from '@tps/map.ts';
-import { combineBaseUrlWithPath } from "@utils/stringUtils.ts";
+} from "@ui/data/maps";
+import { IPlayerData } from "@ui/types/playerStats";
+import { Map } from '@tps/map';
+import { combineBaseUrlWithPath } from "@utils/stringUtils";
 
 type MapsProps = {
     playerData: IPlayerData;

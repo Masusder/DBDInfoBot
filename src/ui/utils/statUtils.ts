@@ -2,7 +2,7 @@ import {
     IStat,
     IStatSchema,
     IStatsSchema
-} from "@ui/types/playerStats.ts";
+} from "@ui/types/playerStats";
 
 export function returnStatValue(statsData: IStat[], statId: string): number {
     for (const stat of statsData) {

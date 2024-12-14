@@ -1,6 +1,6 @@
-import { returnStatValue } from "../utils/statUtils.ts";
-import { Map } from '@tps/map.ts';
-import { IPlayerData } from "@ui/types/playerStats.ts";
+import { returnStatValue } from "../utils/statUtils";
+import { Map } from '@tps/map';
+import { IPlayerData } from "@ui/types/playerStats";
 
 export interface IMapDetails {
     key: string;

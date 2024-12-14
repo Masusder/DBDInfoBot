@@ -1,6 +1,6 @@
 
-import { IPlayerData } from "@ui/types/playerStats.ts";
-import { formatNumber } from "@utils/stringUtils.ts";
+import { IPlayerData } from "@ui/types/playerStats";
+import { formatNumber } from "@utils/stringUtils";
 
 export function getPlaytime(playtime: number | null): string {
     return playtime !== null
