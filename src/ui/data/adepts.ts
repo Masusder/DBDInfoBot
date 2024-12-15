@@ -31,24 +31,29 @@ export function returnAdepts(
         }
     });
 
-    const addAchievement = (achievementName: string, adeptKey: string) => {
-        const achievement = achievements.find((ach) => ach.apiname === achievementName);
-        if (achievement) {
-            achievedAdeptsObj[adeptKey] = achievement.achieved;
-            achievedAdeptsArray.push(adeptKey);
-        }
+    const roleAchievements: Record<string, Record<string, string>> = {
+        Killer: {
+            ACH_UNLOCK_CHUCKLES_PERKS: "DBD_FinishWithPerks_Idx268435456",
+            ACH_UNLOCKBANSHEE_PERKS: "DBD_FinishWithPerks_Idx268435457",
+            ACH_UNLOCKHILLBILY_PERKS: "DBD_FinishWithPerks_Idx268435458",
+        },
+        Survivor: {
+            ACH_UNLOCK_DWIGHT_PERKS: "DBD_FinishWithPerks_Idx0",
+            ACH_UNLOCK_MEG_PERKS: "DBD_FinishWithPerks_Idx1",
+            ACH_UNLOCK_CLAUDETTE_PERKS: "DBD_FinishWithPerks_Idx2",
+            ACH_UNLOCK_JACK_PERKS: "DBD_FinishWithPerks_Idx3",
+        },
     };
 
-    if (role === "Killer") {
-        addAchievement("ACH_UNLOCK_CHUCKLES_PERKS", "DBD_FinishWithPerks_Idx268435456");
-        addAchievement("ACH_UNLOCKBANSHEE_PERKS", "DBD_FinishWithPerks_Idx268435457");
-        addAchievement("ACH_UNLOCKHILLBILY_PERKS", "DBD_FinishWithPerks_Idx268435458");
-    } else if (role === "Survivor") {
-        addAchievement("ACH_UNLOCK_DWIGHT_PERKS", "DBD_FinishWithPerks_Idx0");
-        addAchievement("ACH_UNLOCK_MEG_PERKS", "DBD_FinishWithPerks_Idx1");
-        addAchievement("ACH_UNLOCK_CLAUDETTE_PERKS", "DBD_FinishWithPerks_Idx2");
-        addAchievement("ACH_UNLOCK_JACK_PERKS", "DBD_FinishWithPerks_Idx3");
-    }
+    // Process achievements based on role
+    const achievementsMap = roleAchievements[role];
+    achievements.forEach(({ apiname, achieved }) => {
+        const adeptKey = achievementsMap[apiname];
+        if (adeptKey && achieved) {
+            achievedAdeptsObj[adeptKey] = achieved;
+            achievedAdeptsArray.push(adeptKey);
+        }
+    });
 
     const achievedAdeptsArrayFinal = Array.from(new Set(achievedAdeptsArray));
     const achievedAdepts = achievedAdeptsArrayFinal.length;
