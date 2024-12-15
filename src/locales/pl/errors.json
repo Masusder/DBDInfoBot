@@ -30,7 +30,7 @@
     }
   },
   "general": {
-    "unauthorized_title": "Unauthorized",
+    "unauthorized_title": "Brak autoryzacji",
     "unauthorized": "Tylko osoba, która użyła polecenia, może to zrobić.",
     "error_occurred": "Wystąpił błąd"
   },
