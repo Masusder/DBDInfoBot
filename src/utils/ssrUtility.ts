@@ -9,8 +9,9 @@ import { IPlayerData } from "@ui/types/playerStats";
 import * as fs from "node:fs";
 import * as path from "node:path";
 
-const CHROMIUM_PATH: string | undefined = process.env.CHROMIUM_PATH;
 export const generatePlayerStatsSummary = async(playerData: IPlayerData): Promise<Buffer | null> => {
+    const CHROMIUM_PATH: string | undefined = process.env.CHROMIUM_PATH;
+
     try {
         const [characterData, mapsData] = await Promise.all([
             await getCachedCharacters(Locale.EnglishUS),
