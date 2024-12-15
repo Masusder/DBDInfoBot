@@ -9,17 +9,22 @@ import { IPlayerData } from "@ui/types/playerStats";
 import * as fs from "node:fs";
 import * as path from "node:path";
 
+const CHROMIUM_PATH: string | undefined = process.env.CHROMIUM_PATH;
 export const generatePlayerStatsSummary = async(playerData: IPlayerData): Promise<Buffer | null> => {
     try {
-        const characterData = await getCachedCharacters(Locale.EnglishUS);
-        const mapsData = await getCachedMaps(Locale.EnglishUS);
+        const [characterData, mapsData] = await Promise.all([
+            await getCachedCharacters(Locale.EnglishUS),
+            await getCachedMaps(Locale.EnglishUS)
+        ]);
 
         if (!playerData || !characterData || !mapsData) {
             console.warn("Data not found. Failed to render player stats summary.");
             return null;
         }
 
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({
+            ...(CHROMIUM_PATH ? { executablePath: CHROMIUM_PATH } : {})
+        });
         const page = await browser.newPage();
 
         const props = { characterData, mapsData, playerData };
@@ -50,7 +55,7 @@ export const generatePlayerStatsSummary = async(playerData: IPlayerData): Promis
 
         return imageBuffer;
     } catch (error) {
-        console.log(error)
+        console.log(error);
         console.error("Failed generating player stats summary card.");
         return null;
     }
