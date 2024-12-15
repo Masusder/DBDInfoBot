@@ -1,5 +1,5 @@
 import { ButtonInteraction } from "discord.js";
-import { extractInteractionId } from "@utils/stringUtils";
+import { extractMultipleInteractionIds } from "@utils/stringUtils";
 import { getTranslation } from "@utils/localizationUtils";
 import {
     getTabById,
@@ -13,10 +13,16 @@ import {
 import { getCachedGlobalStats } from "@services/statsService";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { sendErrorMessage } from "@handlers/errorResponseHandler";
+import { sendUnauthorizedMessage } from "@handlers/unauthorizedHandler";
 
 export async function globalStatsTabHandler(interaction: ButtonInteraction) {
-    const tabId = extractInteractionId(interaction.customId);
+    const [tabId, userId] = extractMultipleInteractionIds(interaction.customId);
     const locale = interaction.locale;
+
+    if (userId !== interaction.user.id) {
+        await sendUnauthorizedMessage(interaction);
+        return;
+    }
 
     if (!tabId) {
         const message = getTranslation('stats_command.invalid_tab_id', locale, ELocaleNamespace.Errors);
@@ -39,7 +45,7 @@ export async function globalStatsTabHandler(interaction: ButtonInteraction) {
 
     const embeds = createGlobalStatsEmbed(statsSchema, globalStats, activeTab, locale);
 
-    const buttonRows = createTabButtons(globalStatTabs, locale);
+    const buttonRows = createTabButtons(globalStatTabs, locale, interaction);
 
     await interaction.editReply({
         embeds: embeds,

@@ -11,7 +11,8 @@ export async function sendUnauthorizedMessage(interaction: ButtonInteraction | S
 
     const embed = new EmbedBuilder()
         .setColor('Yellow')
-        .setDescription(`:x: ${getTranslation('general.unauthorized', locale, ELocaleNamespace.Errors)}`);
+        .setTitle(getTranslation('general.unauthorized_title', locale, ELocaleNamespace.Errors))
+        .setDescription(`:lock: ${getTranslation('general.unauthorized', locale, ELocaleNamespace.Errors)}`);
 
     try {
         if (interaction.replied || interaction.deferred) {
