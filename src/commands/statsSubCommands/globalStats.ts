@@ -1,6 +1,7 @@
 import {
     ActionRowBuilder,
     ButtonBuilder,
+    ButtonInteraction,
     ButtonStyle,
     ChatInputCommandInteraction,
     EmbedBuilder,
@@ -36,7 +37,7 @@ export async function handleGlobalStatsCommandInteraction(interaction: ChatInput
 
         const { statsSchema, globalStats } = globalStatsData;
 
-        const buttonRows = createTabButtons(GlobalStatTabs, locale);
+        const buttonRows = createTabButtons(GlobalStatTabs, locale, interaction);
 
         const embeds = createGlobalStatsEmbed(statsSchema, globalStats, GlobalStatTabs[1], locale);
 
@@ -109,10 +110,10 @@ export function createGlobalStatsEmbed(
     return embeds;
 }
 
-export function createTabButtons(tabsData: typeof GlobalStatTabs, locale: Locale) {
+export function createTabButtons(tabsData: typeof GlobalStatTabs, locale: Locale, interaction: ChatInputCommandInteraction | ButtonInteraction) {
     const buttons = tabsData.map(tab =>
         new ButtonBuilder()
-            .setCustomId(`global_stats_tab::${tab.id}`)
+            .setCustomId(`global_stats_tab::${tab.id}::${interaction.user.id}`)
             .setLabel(getTranslation(tab.name, locale, ELocaleNamespace.Messages))
             .setStyle(tab.active ? ButtonStyle.Primary : ButtonStyle.Secondary)
     );

@@ -10,6 +10,11 @@ export function extractInteractionId(customId: string): string | null {
     return parts.length > 1 ? parts[1] : null;
 }
 
+export function extractMultipleInteractionIds(customId: string): string[] {
+    const parts = customId.split('::');
+    return parts.length > 1 ? parts.slice(1) : [];
+}
+
 export function combineBaseUrlWithPath(relativePath: string): string {
     // Remove any trailing slash from the base URL and any leading slash from the relative path
     const baseUrl = Constants.DBDINFO_BASE_URL.replace(/\/+$/, '');
