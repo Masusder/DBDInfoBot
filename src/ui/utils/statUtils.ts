@@ -4,6 +4,16 @@ import {
     IStatsSchema
 } from "@ui/types/playerStats";
 
+const excludedCategories = ['AdeptsSurvivor', 'AdeptsKiller', 'EscapesSpecific', 'Rank'];
+
+const parsePercentage = (percentage: string | number | undefined): number => {
+    return percentage !== undefined
+        ? typeof percentage === 'number'
+            ? percentage
+            : parseInt(percentage, 10) || 0
+        : 0;
+}
+
 export function returnStatValue(statsData: IStat[], statId: string): number {
     for (const stat of statsData) {
         if (stat.name === statId) {
@@ -14,8 +24,6 @@ export function returnStatValue(statsData: IStat[], statId: string): number {
 }
 
 export function rollRandomStats(statsSchema: IStatsSchema, count = 6): IStatSchema[] {
-    const excludedCategories = ['AdeptsSurvivor', 'AdeptsKiller', 'EscapesSpecific', 'Rank'];
-
     const allEntries = Object.entries(statsSchema)
         .filter(([key]) => !excludedCategories.includes(key))
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -71,19 +79,12 @@ export function findTopKillerStat(statsSchema: IStatsSchema): IStatSchema {
     };
 }
 
-const parsePercentage = (percentage: string | number | undefined): number => {
-    return percentage !== undefined
-        ? typeof percentage === 'number'
-            ? percentage
-            : parseInt(percentage, 10) || 0
-        : 0;
-}
-
 export function findBestStat(statsSchema: IStatsSchema): IStatSchema | null {
     let bestStat: IStatSchema | null = null;
     let highestPercentage = 0;
 
-    for (const categoryData of Object.values(statsSchema)) {
+    for (const [category, categoryData] of Object.entries(statsSchema)) {
+        if (excludedCategories.includes(category)) continue;
         for (const [id, entry] of Object.entries(categoryData)) {
             const currentPercentage = parsePercentage(entry.percentage);
             if (currentPercentage > highestPercentage) {
