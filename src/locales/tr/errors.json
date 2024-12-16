@@ -30,6 +30,7 @@
     }
   },
   "general": {
+    "unauthorized_title": "Unauthorized",
     "unauthorized": "Only the person who used the command can do that.",
     "error_occurred": "An error has occurred"
   },
