@@ -13,8 +13,8 @@ A powerful Discord bot built for the [DBDInfo](https://www.dbd-info.com/) projec
 
 ## Features
 - **Seamless Integration**: Brings live updates and data from the DBDInfo project to your Discord server.
-- **User-Friendly**: Simple to use for members.
 - **Real-Time Updates**: Stay up to date with the latest Dead by Daylight news and info.
+- **User-Friendly**: Simple to use for members.
 
 ## Links
 - 🌐 [Visit the DBDInfo Website](https://www.dbd-info.com/)
@@ -26,8 +26,42 @@ A powerful Discord bot built for the [DBDInfo](https://www.dbd-info.com/) projec
 Click the link below to invite the bot to your Discord server:  
 👉 [Invite DBDInfoBot](https://discord.com/oauth2/authorize?client_id=1296552447208063139)
 
-### Run the Bot Locally
-1. Clone the repository:
+---
 
-   ```bash
-   git clone https://github.com/yourusername/DBDInfoBot.git
+## Run the Bot Locally
+
+Follow these steps to set up and run the bot locally:
+
+### 1. Clone the Repository
+
+First, clone the repository and navigate into the project folder:
+
+```bash
+git clone https://github.com/Masusder/DBDInfoBot.git
+cd DBDInfoBot
+```
+
+### 2. Install Dependencies
+Install the required Node.js packages:
+
+```bash
+npm i
+```
+
+### 3. Configure Environment Variables
+1. Copy the example environment file to create a .env file:
+
+```bash
+cp .env.example .env
+```
+
+2. Open the .env file and update the values.
+
+### 4. Run the Bot
+Start the bot in development mode:
+
+```bash
+npm run dev
+```
+
+Once the bot starts, you should see logs indicating it is online and running.
