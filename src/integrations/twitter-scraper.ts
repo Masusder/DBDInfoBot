@@ -6,7 +6,7 @@ import {
     Scraper,
     Tweet
 } from '@the-convocation/twitter-scraper';
-import Constants from "./constants";
+import Constants from "../constants";
 
 const scraper = new Scraper();
 

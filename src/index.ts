@@ -5,7 +5,7 @@ import {
     startNewsJob
 } from "./jobs/";
 import interactionCreate from "./interactions/interactionCreate";
-import initI18next from "./i18n";
+import initI18next from "./locales/i18n";
 import client from './client';
 import dotenv from 'dotenv';
 

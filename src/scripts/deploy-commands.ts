@@ -2,7 +2,7 @@ import {
     REST,
     Routes
 } from 'discord.js';
-import initI18next from "./i18n";
+import initI18next from "../locales/i18n";
 import i18next from "i18next";
 import * as dotenv from 'dotenv';
 
