@@ -1,12 +1,10 @@
-import {
-    Client,
-    TextChannel
-} from "discord.js";
+import { TextChannel } from "discord.js";
 import {
     Scraper,
     Tweet
 } from '@the-convocation/twitter-scraper';
 import Constants from "../constants";
+import client from "../client";
 
 const scraper = new Scraper();
 
@@ -72,13 +70,18 @@ async function hasUrlBeenPosted(channel: TextChannel, tweetUrl: string): Promise
 
 /**
  * Logs into Twitter if not already logged in.
+ *
+ * @async
+ * @returns {Promise<boolean>} - A promise that resolves to `true` if logged in.
  */
-async function ensureLoggedIn() {
+async function ensureLoggedIn(): Promise<boolean> {
     const isLoggedIn = await scraper.isLoggedIn();
 
     if (!isLoggedIn) {
-        await loginToTwitter();
+        return loginToTwitter().then(() => true).catch(() => false);
     }
+
+    return isLoggedIn;
 }
 
 /**
@@ -108,7 +111,7 @@ function convertToFxTwitter(url: string): string {
  * setInterval(getLatestTweetLink, 60000);
  * // This will check for new tweets every 60 seconds.
  */
-export async function getLatestTweetLink(client: Client) {
+export async function getLatestTweetLink() {
     console.log(`Checking for new Tweets - ${new Date()}`);
 
     if (isFetchingTweets) {
@@ -119,12 +122,12 @@ export async function getLatestTweetLink(client: Client) {
     isFetchingTweets = true;
 
     try {
-        await ensureLoggedIn();
+        const isLoggedIn = await ensureLoggedIn();
         const tweetsAsyncGenerator: AsyncGenerator<Tweet> = scraper.getTweets('DeadbyDaylight', 1);
 
         const { value: latestTweet, done } = await tweetsAsyncGenerator.next();
 
-        if (!done && latestTweet) {
+        if (!done && latestTweet && isLoggedIn) {
             const tweetUrl = latestTweet.permanentUrl;
 
             if (!tweetUrl) {

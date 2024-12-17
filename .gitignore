@@ -209,4 +209,4 @@ dist
 .pnp.*
 
 .vscode
-src/scripts/changelog-update.ts
+src/scripts/changelogUpdate.ts

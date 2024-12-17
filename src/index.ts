@@ -29,7 +29,7 @@ async function initializeClient() {
         // Don't run during development
         if (process.env.BRANCH !== 'dev') {
             // Check for new tweets every 60 seconds
-            await startTweetJob(client);
+            await startTweetJob();
             // Check for new Shrine
             await startShrineJob(client);
             // Check for in-game news
