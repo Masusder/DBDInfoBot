@@ -8,6 +8,7 @@ import {
 } from "../types";
 import { EGameData } from "@tps/enums/EGameData";
 import { Locale } from "discord.js";
+import { Rarities } from "@data/Rarities";
 
 /**
  * Initializes the add-ons cache for a specific locale.
@@ -39,6 +40,47 @@ export async function getAddonDataByName(name: string, locale: Locale): Promise<
     }
 
     return undefined;
+}
+
+/**
+ * Retrieve a list of filtered add-ons based on optional filter criteria.
+ *
+ * @param filters - An optional object containing filter properties from the Add-on interface.
+ * @param locale - The locale for which to retrieve the add-ons.
+ *
+ * @returns {Promise<Addon[]>} A promise that resolves to an array of filtered Add-on objects.
+ *
+ * @example
+ * const filteredAddons = await getFilteredAddonsList({
+ *     Character: 1
+ * }, Locale.EN_US);
+ *
+ */
+export async function getFilteredAddonsList(filters: Partial<Addon> = {}, locale: Locale): Promise<Addon[]> {
+    const addons = await getCachedAddons(locale);
+
+    let addonList = Object.values(addons);
+    for (const [key, value] of Object.entries(filters)) {
+        if (value !== undefined) {
+            addonList = addonList.filter((addon: Addon) => {
+                const addonValue = addon[key as keyof Addon];
+
+                if (Array.isArray(value) && Array.isArray(addonValue)) {
+                    return value.every((item) => addonValue.includes(item)) && addonValue.every((item) => value.includes(item));
+                }
+
+                return addonValue === value;
+            });
+        }
+    }
+
+    addonList.sort((a, b) => {
+        const rarityA = Rarities[a.Rarity] ? Object.keys(Rarities).indexOf(a.Rarity) : -1;
+        const rarityB = Rarities[b.Rarity] ? Object.keys(Rarities).indexOf(b.Rarity) : -1;
+        return rarityB - rarityA;
+    });
+
+    return addonList;
 }
 
 /**

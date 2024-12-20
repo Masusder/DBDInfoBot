@@ -40,7 +40,7 @@ export async function handleAddonCommandInteraction(interaction: ChatInputComman
 
         const addonBackgroundUrl = rarityData.itemsAddonsBackgroundPath;
         const addonIconUrl = combineBaseUrlWithPath(addonData.Image);
-        const imageBuffer = await layerIcons(addonBackgroundUrl, addonIconUrl);
+        const imageBuffer = await layerIcons(addonBackgroundUrl, addonIconUrl) as Buffer;
 
         const fields: APIEmbedField[] = [
             {

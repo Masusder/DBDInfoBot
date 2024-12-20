@@ -43,7 +43,7 @@ export async function handleCharacterCommandInteraction(interaction: ChatInputCo
 
         const characterBackgroundUrl = roleData.charPortrait;
         const characterIconUrl = combineBaseUrlWithPath(characterData.IconFilePath);
-        const imageBuffer = await layerIcons(characterBackgroundUrl, characterIconUrl);
+        const imageBuffer = await layerIcons(characterBackgroundUrl, characterIconUrl) as Buffer;
 
         const fields: APIEmbedField[] = [];
 

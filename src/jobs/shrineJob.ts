@@ -9,20 +9,21 @@ import {
     generateCustomId
 } from "@utils/stringUtils";
 import { execute as executeShrine } from "@commands/shrineCommand";
-import Constants from "../constants";
+import Constants from "@constants";
+import client from "../client";
 
-export async function startShrineJob(client: Client) {
-    await checkAndScheduleShrine(client);
+export async function startShrineJob() {
+    await checkAndScheduleShrine();
 }
 
-async function checkAndScheduleShrine(client: Client) {
+async function checkAndScheduleShrine() {
     try {
         console.log('Checking Shrine...');
         const shrineData = await getCachedShrine();
 
         if (!shrineData?.currentShrine) {
             console.log("No current Shrine data found. Scheduling next check in 5 minutes.");
-            setTimeout(() => checkAndScheduleShrine(client), 5 * 60 * 1000); // Retry in 5 minutes
+            setTimeout(() => checkAndScheduleShrine(), 5 * 60 * 1000); // Retry in 5 minutes
             return;
         }
 
@@ -40,11 +41,11 @@ async function checkAndScheduleShrine(client: Client) {
         const timeUntilNextCheck = adjustForTimezone(currentShrine.endDate) - Date.now();
         const nextCheckDate = new Date(Date.now() + timeUntilNextCheck);
         console.log(`Next Shrine check scheduled for: ${nextCheckDate.toLocaleString()}`);
-        setTimeout(() => checkAndScheduleShrine(client), timeUntilNextCheck);
+        setTimeout(() => checkAndScheduleShrine(), timeUntilNextCheck);
     } catch (error) {
         console.error('Error checking Shrine:', error);
         // Retry after 1 hour if an error occurs
-        setTimeout(() => checkAndScheduleShrine(client), 60 * 60 * 1000);
+        setTimeout(() => checkAndScheduleShrine(), 60 * 60 * 1000);
     }
 }
 

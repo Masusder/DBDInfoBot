@@ -23,6 +23,7 @@ import { Cosmetic } from "../../types";
 import { Rarities } from "@data/Rarities";
 import { combineImagesIntoGrid } from "@utils/imageUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import { ThemeColors } from "@constants/themeColors";
 
 const COSMETICS_PER_PAGE = 6;
 
@@ -53,7 +54,7 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
             // Let user know that filters were applied
             if (filterCount > 0) title += ` (${getTranslation('list_command.cosmetics_subcommand.filters_applied', locale, ELocaleNamespace.Messages)}: ${filterCount})`;
 
-            const embedColor = Rarity ? Rarities[Rarity].color : '#5865f2';
+            const embedColor = Rarity ? Rarities[Rarity].color : ThemeColors.PRIMARY;
 
             const embed = new EmbedBuilder()
                 .setTitle(title)

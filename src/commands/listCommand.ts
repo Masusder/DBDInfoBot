@@ -5,6 +5,7 @@ import {
     ChatInputCommandInteraction,
     Locale
 } from "discord.js";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import {
     handleCosmeticListCommandAutocompleteInteraction,
     handleCosmeticListCommandInteraction
@@ -21,7 +22,10 @@ import {
     handleBuildsListCommandAutocompleteInteraction,
     handleBuildsListCommandInteraction
 } from "@commands/listSubCommands/builds";
-import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import {
+    handleAddonListCommandInteraction,
+    handleAddonsListCommandAutocompleteInteraction
+} from "@commands/listSubCommands/addons";
 
 const rarityChoices = Object.keys(Rarities)
     .filter(rarity => rarity !== "N/A")
@@ -251,6 +255,22 @@ export const data = i18next.isInitialized
                         .setDescriptionLocalizations(commandLocalizationHelper('list_command.cosmetics_subcommand.options.linked.description'))
                         .setRequired(false)
                 )
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('addons')
+                .setNameLocalizations(commandLocalizationHelper('list_command.addons_subcommand.name'))
+                .setDescription(i18next.t('list_command.addons_subcommand.description', { lng: 'en' }))
+                .setDescriptionLocalizations(commandLocalizationHelper('list_command.addons_subcommand.description'))
+                .addStringOption(option =>
+                    option
+                        .setName('character')
+                        .setNameLocalizations(commandLocalizationHelper('list_command.addons_subcommand.options.character.name'))
+                        .setDescription(i18next.t('list_command.addons_subcommand.options.character.description', { lng: 'en' }))
+                        .setDescriptionLocalizations(commandLocalizationHelper('list_command.addons_subcommand.options.character.description'))
+                        .setAutocomplete(true)
+                        .setRequired(false)
+                )
         ) : undefined;
 
 export async function execute(interaction: ChatInputCommandInteraction) {
@@ -263,6 +283,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             break;
         case 'builds':
             await handleBuildsListCommandInteraction(interaction);
+            break;
+        case 'addons':
+            await handleAddonListCommandInteraction(interaction);
             break;
         default:
             await interaction.reply(getTranslation('list_command.unknown_subcommand', locale, ELocaleNamespace.Errors));
@@ -278,6 +301,9 @@ export async function autocomplete(interaction: AutocompleteInteraction) {
             break;
         case 'builds':
             await handleBuildsListCommandAutocompleteInteraction(interaction);
+            break;
+        case 'addons':
+            await handleAddonsListCommandAutocompleteInteraction(interaction);
             break;
         default:
             break;

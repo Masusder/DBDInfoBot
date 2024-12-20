@@ -57,7 +57,7 @@ interface INewsDataTable {
 const NewsDataTable: Record<string, INewsDataTable> = {
     News: {
         icon: combineBaseUrlWithPath("/images/News/icon_News.png"),
-        primaryColor: "#466571",
+        primaryColor: "#4c6f7e",
         secondaryColor: "#3C4C56"
     },
     Halloween: {

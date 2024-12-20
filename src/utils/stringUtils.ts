@@ -1,4 +1,4 @@
-import Constants from "../constants";
+import Constants from "@constants";
 import * as crypto from 'crypto';
 import { getTranslation } from "@utils/localizationUtils";
 import { Locale } from "discord.js";

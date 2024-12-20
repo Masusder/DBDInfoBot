@@ -37,12 +37,13 @@ import {
 } from "../types";
 import { Role } from "@data/Role";
 import { layerIcons } from "@utils/imageUtils";
-import Constants from "../constants";
+import Constants from "@constants/index";
 import {
     getApplicationEmoji,
     getOrCreateApplicationEmoji
 } from "@utils/emojiManager";
 import { ELocaleNamespace } from '@tps/enums/ELocaleNamespace';
+import { ThemeColors } from "@constants/themeColors";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -143,7 +144,7 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
         const customId = generateCustomId(currentShrine.endDate);
 
         const embed = new EmbedBuilder()
-            .setColor("#1e90ff")
+            .setColor(ThemeColors.PRIMARY)
             .setDescription(description + currenciesMessage)
             .setFields(perksList)
             .setImage('attachment://shrine-of-secrets.png')
@@ -212,7 +213,7 @@ async function createShrineCanvas(correctlyCasedPerkData: CorrectlyCasedPerkData
         const perkBackgroundUrl = Role[role].perkBackground;
         const iconUrl = combineBaseUrlWithPath(perkData[perkId].IconFilePathList);
 
-        const perkIconBuffer = await layerIcons(perkBackgroundUrl, iconUrl);
+        const perkIconBuffer = await layerIcons(perkBackgroundUrl, iconUrl) as Buffer;
 
         emojiCreationPromises.push(
             getOrCreateApplicationEmoji(perkId, perkIconBuffer).catch(() => {})

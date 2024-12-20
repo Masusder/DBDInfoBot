@@ -31,7 +31,7 @@ async function initializeClient() {
             // Check for new tweets every 60 seconds
             await startTweetJob();
             // Check for new Shrine
-            await startShrineJob(client);
+            await startShrineJob();
             // Check for in-game news
             await startNewsJob();
         }

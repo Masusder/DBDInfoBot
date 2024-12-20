@@ -173,7 +173,7 @@ export async function handleBuildCommandInteraction(interaction: ChatInputComman
         let charPortraitBuffer: Buffer | null = null;
         if (characterIndex !== -1) {
             const characterBackgroundUrl = Role[role].charPortrait;
-            charPortraitBuffer = await layerIcons(characterBackgroundUrl, combineBaseUrlWithPath(characterData[characterIndex].IconFilePath))
+            charPortraitBuffer = await layerIcons(characterBackgroundUrl, combineBaseUrlWithPath(characterData[characterIndex].IconFilePath)) as Buffer
             embed.setThumbnail(`attachment://characterImage_${characterIndex}.png`);
         }
 

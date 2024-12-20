@@ -9,7 +9,7 @@ import {
     batchSendNews,
     isEmptyObject
 } from "@commands/newsCommand";
-import Constants from "../constants";
+import Constants from "@constants";
 import client from "../client";
 import { NewsData } from "@tps/news";
 

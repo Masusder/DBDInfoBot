@@ -3,7 +3,7 @@ import {
     Scraper,
     Tweet
 } from '@the-convocation/twitter-scraper';
-import Constants from "../constants";
+import Constants from "@constants";
 import client from "../client";
 
 const scraper = new Scraper();

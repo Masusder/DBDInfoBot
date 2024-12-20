@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Constants from '../constants';
+import Constants from '@constants';
 
 const apiClient = axios.create({
     baseURL: Constants.DBDINFO_BASE_URL,
