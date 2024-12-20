@@ -104,6 +104,16 @@
           }
         }
       }
+    },
+    "addons_subcommand": {
+      "name": "add-ons",
+      "description": "Retrieve list of add-ons.",
+      "options": {
+        "character": {
+          "name": "character",
+          "description": "Name of the character."
+        }
+      }
     }
   },
   "news_command": {
