@@ -92,7 +92,7 @@
         "косметических предметов"
       ],
       "filters_applied": "Фильтры применены",
-      "cosmetics_list": "Список косметических предметов",
+      "cosmetics_list": "Cosmetics list",
       "more_info": [
         "Получить подробную информацию о косметическом предмете можно при помощи команды",
         "информация Косметический предмет <cosmetic_name>"
@@ -103,7 +103,7 @@
         "Страница",
         "из"
       ],
-      "create_your_own_build": "Вы можете создать свою сборку здесь!",
+      "create_your_own_build": "Create your Build here!",
       "builds_matching_filters": "Сборки, соответствующие вашим фильтрам:",
       "builds_list": "Список сборок",
       "created_by": "Автор:",
