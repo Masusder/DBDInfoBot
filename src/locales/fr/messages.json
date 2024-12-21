@@ -92,7 +92,7 @@
         "cosmétiques"
       ],
       "filters_applied": "Filtres appliqués",
-      "cosmetics_list": "Liste des cosmétiques",
+      "cosmetics_list": "Cosmetics list",
       "more_info": [
         "Pour plus d'informations sur un cosmétique spécifique, utilisez la commande",
         "info Cosmétique <cosmetic_name>"
@@ -103,7 +103,7 @@
         "Page",
         "de"
       ],
-      "create_your_own_build": "Vous pouvez créer votre propre build ici !",
+      "create_your_own_build": "Create your Build here!",
       "builds_matching_filters": "Voici les builds correspondant à vos filtres :",
       "builds_list": "Liste des Builds",
       "created_by": "Créé par :",
