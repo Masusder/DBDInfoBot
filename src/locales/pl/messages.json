@@ -92,7 +92,7 @@
         "kosmetyków"
       ],
       "filters_applied": "Zastosowano filtry",
-      "cosmetics_list": "Lista kosmetyków",
+      "cosmetics_list": "Cosmetics list",
       "more_info": [
         "Aby uzyskać więcej informacji o konkretnym kosmetyku, użyj polecenia",
         "info Kosmetyk <nazwa_kosmetyku>"
@@ -103,7 +103,7 @@
         "Strona",
         "z"
       ],
-      "create_your_own_build": "Tutaj możesz stworzyć własny ekwipunek!",
+      "create_your_own_build": "Create your Build here!",
       "builds_matching_filters": "Oto ekwipunki pasujące do Twoich filtrów:",
       "builds_list": "Lista ekwipunków",
       "created_by": "Stworzone przez:",
