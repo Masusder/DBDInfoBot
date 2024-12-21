@@ -112,6 +112,10 @@
         "character": {
           "name": "character",
           "description": "Name of the character."
+        },
+        "rarity": {
+          "name": "rarity",
+          "description": "Specify rarity of the add-ons."
         }
       }
     }
