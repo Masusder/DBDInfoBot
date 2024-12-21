@@ -21,9 +21,15 @@ import { genericPaginationHandler } from "@handlers/genericPaginationHandler";
 import { getTranslation } from "@utils/localizationUtils";
 import { Cosmetic } from "../../types";
 import { Rarities } from "@data/Rarities";
-import { combineImagesIntoGrid } from "@utils/imageUtils";
+import {
+    combineImagesIntoGrid,
+    createStoreCustomizationIcons,
+    IStoreCustomizationItem,
+    layerIcons
+} from "@utils/imageUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { ThemeColors } from "@constants/themeColors";
+import { Role } from "@data/Role";
 
 const COSMETICS_PER_PAGE = 6;
 
@@ -60,8 +66,11 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
                 .setTitle(title)
                 .setDescription(`${getTranslation('list_command.cosmetics_subcommand.more_info.0', locale, ELocaleNamespace.Messages)}: \`/${getTranslation('list_command.cosmetics_subcommand.more_info.1', locale, ELocaleNamespace.Messages)}\``)
                 .setColor(embedColor as ColorResolvable)
-                .setFooter({ text: getTranslation('list_command.cosmetics_subcommand.cosmetics_list', locale, ELocaleNamespace.Messages) })
-                .setTimestamp();
+                .setTimestamp()
+                .setAuthor({
+                    name: getTranslation('list_command.cosmetics_subcommand.cosmetics_list', locale, ELocaleNamespace.Messages),
+                    iconURL: combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_store.png')
+                });
 
             if (Character !== -1) {
                 const characterData = await getCharacterDataByIndex(Character, locale);
@@ -73,7 +82,7 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
 
             pageItems.forEach(cosmetic => {
                 const description = formatHtmlToDiscordMarkdown(cosmetic.Description);
-                const formattedAndTruncatedDescription = description.length > 45 ? description.substring(0, 45) + '..' : description;
+                const formattedAndTruncatedDescription = description.length > 60 ? description.substring(0, 60) + '..' : description;
 
                 embed.addFields({
                     name: cosmetic.CosmeticName,
@@ -85,13 +94,38 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
             return embed;
         };
 
+        const generateThumbnail = async(): Promise<{ attachment: Buffer | string; name: string } | null> => {
+            if (Character !== -1) {
+                const characterData = await getCharacterDataByIndex(Character, locale);
+                if (characterData) {
+                    const characterBackground = Role[characterData.Role as 'Killer' | 'Survivor'].charPortrait;
+                    const characterPortrait = combineBaseUrlWithPath(characterData.IconFilePath);
+
+                    const portraitBuffer = await layerIcons(characterBackground, characterPortrait) as Buffer;
+
+                    return { attachment: portraitBuffer, name: "generated_thumbnail.png"};
+                }
+            }
+
+            return null;
+        };
+
         const generateImage = async(pageItems: Cosmetic[]) => {
-            const imageUrls: string[] = [];
+            const imageSources: IStoreCustomizationItem[] = [];
             pageItems.forEach((cosmetic: Cosmetic) => {
-                imageUrls.push(combineBaseUrlWithPath(cosmetic.IconFilePathList));
+                const model: IStoreCustomizationItem = {
+                    icon: combineBaseUrlWithPath(cosmetic.IconFilePathList),
+                    background: Rarities[cosmetic.Rarity].storeCustomizationPath,
+                    prefix: cosmetic.Prefix,
+                    isLinked: cosmetic.Unbreakable
+                }
+
+                imageSources.push(model);
             });
 
-            return await combineImagesIntoGrid(imageUrls);
+            const customizationBuffers = await createStoreCustomizationIcons(imageSources) as Buffer[];
+
+            return await combineImagesIntoGrid(customizationBuffers);
         };
 
         await genericPaginationHandler({
@@ -101,7 +135,8 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
             generateImage,
             interactionUserId: interaction.user.id,
             interactionReply: interaction,
-            locale
+            locale,
+            generatedThumbnail: await generateThumbnail()
         });
     } catch (error) {
         console.error("Error executing cosmetics list subcommand:", error);

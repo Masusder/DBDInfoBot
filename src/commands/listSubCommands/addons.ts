@@ -1,7 +1,6 @@
 import {
     AutocompleteInteraction,
     ChatInputCommandInteraction,
-
     EmbedBuilder
 } from "discord.js";
 import {
@@ -9,18 +8,25 @@ import {
     getCharacterChoices
 } from "@services/characterService";
 import { getFilteredAddonsList } from "@services/addonService";
-import { genericPaginationHandler } from "@handlers/genericPaginationHandler";
+import {
+    genericPaginationHandler,
+    IPaginationOptions
+} from "@handlers/genericPaginationHandler";
 import {
     combineBaseUrlWithPath,
     formatHtmlToDiscordMarkdown
 } from "@utils/stringUtils";
-import { combineImagesIntroGridAndLayerIcons } from "@utils/imageUtils";
+import {
+    combineImagesIntroGridAndLayerIcons,
+    layerIcons
+} from "@utils/imageUtils";
 import { getTranslation } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { Addon } from "@tps/addon";
 import { Character } from "@tps/character";
 import { Rarities } from "@data/Rarities";
 import { ThemeColors } from "@constants/themeColors";
+import { Role } from "@data/Role";
 
 // region Command interaction
 const ADDONS_PER_PAGE = 9;
@@ -41,29 +47,34 @@ export async function handleAddonListCommandInteraction(interaction: ChatInputCo
 
         if (addons.length === 0) {
             const message = filterCount > 0
-                ? getTranslation('list_command.cosmetics_subcommand.cosmetics_not_found_filters', locale, ELocaleNamespace.Errors)
-                : getTranslation('list_command.cosmetics_subcommand.cosmetics_not_found', locale, ELocaleNamespace.Errors);
+                ? getTranslation('list_command.cosmetics_subcommand.cosmetics_not_found_filters', locale, ELocaleNamespace.Errors) // TODO: localize to addons
+                : getTranslation('list_command.cosmetics_subcommand.cosmetics_not_found', locale, ELocaleNamespace.Errors); // TODO: localize to addons
             await interaction.editReply({ content: message });
             return;
         }
 
-        const { ParentItem } = filters;
+        const { ParentItem, Rarity } = filters;
 
         const generateEmbed = async(pageItems: Addon[]) => {
-            const embed = new EmbedBuilder()
-                .setTitle('Add-ons list')
-                .setDescription(`${getTranslation('list_command.cosmetics_subcommand.more_info.0', locale, ELocaleNamespace.Messages)}: \`/${getTranslation('list_command.cosmetics_subcommand.more_info.1', locale, ELocaleNamespace.Messages)}\``)
-                .setColor(ThemeColors.PRIMARY)
-                .setFooter({ text: getTranslation('list_command.cosmetics_subcommand.cosmetics_list', locale, ELocaleNamespace.Messages) })
-                .setTimestamp();
+            let title = `Found a total of ${addons.length} add-ons`;
 
-            if (ParentItem && ParentItem.length > 0 && characterIndexString) {
-                const character = characterData[characterIndexString];
-                if (character) {
-                    const characterPortrait = combineBaseUrlWithPath(character.IconFilePath);
-                    embed.setThumbnail(characterPortrait);
-                }
+            // Let user know that filters were applied
+            if (filterCount > 0) title += ` (${getTranslation('list_command.cosmetics_subcommand.filters_applied', locale, ELocaleNamespace.Messages)}: ${filterCount})`; // TODO: localize to addons
+
+            let embedColor = ThemeColors.PRIMARY;
+            if (Rarity) {
+                embedColor = Rarities[Rarity].color;
             }
+
+            const embed = new EmbedBuilder()
+                .setTitle(title)
+                .setDescription(`For more information about specific add-on, use the command: \`/info Add-on <add-on name>\``) // TODO: localize to addons
+                .setColor(embedColor)
+                .setTimestamp()
+                .setAuthor({
+                    name: 'Add-ons list', // TODO: localize to addons
+                    iconURL: combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_addons.png')
+                });
 
             pageItems.forEach(addon => {
                 const description = formatHtmlToDiscordMarkdown(addon.Description);
@@ -97,15 +108,34 @@ export async function handleAddonListCommandInteraction(interaction: ChatInputCo
             return await combineImagesIntroGridAndLayerIcons(imageUrls);
         };
 
-        await genericPaginationHandler({
+        const generateThumbnail = async(): Promise<{ attachment: Buffer | string; name: string } | null> => {
+            if (ParentItem && ParentItem.length > 0 && characterIndexString) {
+                const character = characterData[characterIndexString];
+                if (character) {
+                    const characterBackground = Role[character.Role as 'Killer' | 'Survivor'].charPortrait;
+                    const characterPortrait = combineBaseUrlWithPath(character.IconFilePath);
+
+                    const portraitBuffer = await layerIcons(characterBackground, characterPortrait) as Buffer;
+
+                    return { attachment: portraitBuffer, name: "generated_thumbnail.png"};
+                }
+            }
+
+            return null;
+        };
+
+        const paginationOptions: IPaginationOptions = {
             items: addons,
             itemsPerPage: ADDONS_PER_PAGE,
             generateEmbed,
             generateImage,
             interactionUserId: interaction.user.id,
             interactionReply: interaction,
-            locale
-        });
+            locale,
+            generatedThumbnail: await generateThumbnail()
+        };
+
+        await genericPaginationHandler(paginationOptions);
     } catch (error) {
         console.error("Error executing cosmetics list subcommand:", error);
     }
@@ -121,9 +151,11 @@ function constructFilters(
     characterIndexString: string | null
 ): Partial<Addon> {
     const parentItem = characterIndexString ? characterData[characterIndexString].ParentItem : null;
+    const rarity = interaction.options.getString('rarity');
     const filters: Partial<Addon> = {};
 
     if (characterIndexString) filters.ParentItem = parentItem ? [parentItem] : undefined;
+    if (rarity) filters.Rarity = rarity;
 
     return filters;
 }

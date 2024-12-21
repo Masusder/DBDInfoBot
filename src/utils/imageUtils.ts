@@ -14,6 +14,7 @@ import { getCachedPerks } from "@services/perkService";
 import { getCachedAddons } from "@services/addonService";
 import { getCachedOfferings } from "@services/offeringService";
 import { getCachedItems } from "@services/itemService";
+import * as icons from '@constants/icons.json';
 
 export const fetchAndResizeImage = async(imageUrl: string, width: number | null, height: number | null) => {
     const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
@@ -26,6 +27,7 @@ export const fetchAndResizeImage = async(imageUrl: string, width: number | null,
 };
 
 const backgroundCache: Record<string, Promise<Image>> = {};
+
 export async function layerIcons(
     background: string | Buffer | Image,
     icon: string | Buffer | Image,
@@ -43,7 +45,7 @@ export async function layerIcons(
                 ? Promise.resolve(background)
                 : loadImage(background),
 
-        icon instanceof Image ? Promise.resolve(icon) : loadImage(icon),
+        icon instanceof Image ? Promise.resolve(icon) : loadImage(icon)
     ]);
 
     ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
@@ -60,6 +62,73 @@ export async function layerIcons(
     } else {
         return canvas.toBuffer();
     }
+}
+
+export interface IStoreCustomizationItem {
+    icon: string;
+    background: string;
+    prefix: string | null | undefined;
+    isLinked: boolean;
+}
+export async function createStoreCustomizationIcons(storeCustomizationItems: IStoreCustomizationItem | IStoreCustomizationItem[]) {
+    const items = Array.isArray(storeCustomizationItems) ? storeCustomizationItems : [storeCustomizationItems];
+
+    const layerPromises = items.map(async(item) => {
+        const { icon, background, prefix, isLinked } = item;
+
+        let backgroundImage = backgroundCache[background] ?? (backgroundCache[background] = loadImage(background));
+        let iconImage = loadImage(icon);
+
+        const [bgImage, iconImg] = await Promise.all([backgroundImage, iconImage]);
+
+        const canvas = createCanvas(bgImage.width, bgImage.height);
+        const ctx = canvas.getContext('2d');
+
+        ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
+
+        if (prefix && prefix === 'Visceral') {
+            const visceralIcon = new Image();
+            visceralIcon.src = icons.VISCERAL_OVERLAY;
+
+            const visceralIconSize = Math.min(canvas.width, canvas.height);
+            ctx.drawImage(visceralIcon, 0, 0, visceralIconSize, visceralIconSize);
+        }
+
+        const iconSize = Math.min(canvas.width, canvas.height) * 0.9;
+        const x = (canvas.width - iconSize) / 2;
+        const y = (canvas.height - iconSize) / 2;
+
+        const clipLeft = 110;
+        const clipRight = 585;
+        const clipTop = 50;
+
+        // In-game icons are bounded to specific area, we need to consider that
+        ctx.beginPath();
+        ctx.rect(clipLeft, clipTop, clipRight - clipLeft, canvas.height);
+        ctx.clip();
+
+        ctx.drawImage(iconImg, x, y, iconSize, iconSize);
+
+        ctx.restore();
+
+        if (isLinked) {
+            const setIcon = new Image();
+            setIcon.src = icons.LINKED_SET;
+
+            const setIconSize = Math.min(canvas.width, canvas.height) * 0.15;
+            ctx.drawImage(setIcon, 125, 45, setIconSize, setIconSize);
+        }
+
+        return canvas.toBuffer();
+    });
+
+    const layeredIcons = await Promise.all(layerPromises);
+
+    if (layeredIcons.length === 1) {
+        return layeredIcons[0];
+    }
+
+    return layeredIcons.filter(icon => icon !== null);
 }
 
 function calculateDimensions(image: { width: number; height: number }, maxWidth: number): {
@@ -143,7 +212,7 @@ export async function createLoadoutCanvas(
         })) : null,
 
         // Power or Item
-        powerOrItem && powerOrItem !== "None" && itemData ? (async () => {
+        powerOrItem && powerOrItem !== "None" && itemData ? (async() => {
             const rarity = itemData[powerOrItem].Rarity;
             const powerOrItemBackgroundUrl = rarity === "None" ? Rarities["Common"].itemsAddonsBackgroundPath : Rarities[rarity].itemsAddonsBackgroundPath;
             const itemOrPowerUrl = combineBaseUrlWithPath(itemData[powerOrItem].IconFilePathList);
@@ -154,7 +223,7 @@ export async function createLoadoutCanvas(
         })() : null,
 
         // Offering
-        offering && offering !== "None" && offeringData ? (async () => {
+        offering && offering !== "None" && offeringData ? (async() => {
             const rarity = offeringData[offering].Rarity;
             const offeringBackgroundUrl = Rarities[rarity].offeringBackgroundPath;
             const offeringUrl = combineBaseUrlWithPath(offeringData[offering].Image);
@@ -183,6 +252,7 @@ export async function createLoadoutCanvas(
     return canvas.toBuffer('image/png');
 }
 
+// region Image utils
 function composeGrid(images: Image[], maxWidth: number, maxHeight: number, maxImagesPerRow: number = 3, maxImagesPerColumn: number = 2): Buffer {
     const rows = Math.min(Math.ceil(images.length / maxImagesPerRow), maxImagesPerColumn);
     const cols = Math.min(images.length, maxImagesPerRow);
@@ -202,15 +272,22 @@ function composeGrid(images: Image[], maxWidth: number, maxHeight: number, maxIm
     return canvas.toBuffer('image/png');
 }
 
-export async function combineImagesIntoGrid(imageUrls: string[], maxImagesPerRow: number = 3, maxImagesPerColumn: number = 2): Promise<Buffer> {
+// endregion
+
+export async function combineImagesIntoGrid(imageSources: (string | Buffer)[], maxImagesPerRow: number = 3, maxImagesPerColumn: number = 2): Promise<Buffer> {
     let maxWidth = 0;
     let maxHeight = 0;
 
     const images: Image[] = (
         await Promise.all(
-            imageUrls.map((url) =>
-                loadImage(url).catch(() => null)
-            )
+            imageSources.map(async(source) => {
+                if (typeof source === 'string') {
+                    return loadImage(source).catch(() => null);
+                } else if (Buffer.isBuffer(source)) {
+                    return loadImage(source).catch(() => null);
+                }
+                return null;
+            })
         )
     ).filter((img): img is Image => {
         if (img) {
@@ -230,7 +307,7 @@ export async function combineImagesIntroGridAndLayerIcons(icons: Record<string, 
 
     const images: Image[] = (
         await Promise.all(
-            icons.map(async (iconObject) => {
+            icons.map(async(iconObject) => {
                 return Promise.all(
                     Object.entries(iconObject).map(([key, value]) =>
                         layerIcons(key, value, undefined, undefined, true)
@@ -240,13 +317,13 @@ export async function combineImagesIntroGridAndLayerIcons(icons: Record<string, 
         )
     ).flat()
         .filter((img): img is Image => {
-        if (img instanceof Image) {
-            maxWidth = Math.max(maxWidth, img.width);
-            maxHeight = Math.max(maxHeight, img.height);
-            return true;
-        }
-        return false;
-    });
+            if (img instanceof Image) {
+                maxWidth = Math.max(maxWidth, img.width);
+                maxHeight = Math.max(maxHeight, img.height);
+                return true;
+            }
+            return false;
+        });
 
-    return composeGrid(images, maxWidth, maxHeight);
+    return composeGrid(images, maxWidth, maxHeight, 3, 3);
 }

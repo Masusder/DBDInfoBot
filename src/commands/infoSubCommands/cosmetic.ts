@@ -14,15 +14,23 @@ import {
     getCosmeticChoicesFromIndex,
     getCosmeticDataById
 } from "@services/cosmeticService";
-import { Rarities, CosmeticTypes} from "data"
+import {
+    Rarities,
+    CosmeticTypes,
+    Role
+} from "data";
 import {
     adjustForTimezone,
     combineBaseUrlWithPath,
     formatInclusionVersion,
     formatNumber
 } from "@utils/stringUtils";
-import { fetchAndResizeImage } from "@utils/imageUtils";
-import { getCachedCharacters } from "@services/characterService";
+import {
+    createStoreCustomizationIcons,
+    IStoreCustomizationItem,
+    layerIcons
+} from "@utils/imageUtils";
+import { getCharacterDataByIndex } from "@services/characterService";
 import { getTranslation } from "@utils/localizationUtils";
 import { Cosmetic } from "@tps/cosmetic";
 import { ELocaleNamespace } from '@tps/enums/ELocaleNamespace';
@@ -45,9 +53,19 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
         const cosmeticRarity = cosmeticData.Rarity;
         const embedColor: ColorResolvable = Rarities[cosmeticRarity].color as ColorResolvable || Rarities['N/A'].color as ColorResolvable;
         const imageUrl = combineBaseUrlWithPath(cosmeticData.IconFilePathList);
-        const resizedImageBuffer = await fetchAndResizeImage(imageUrl, 256, null);
 
-        const attachment = new AttachmentBuilder(resizedImageBuffer, { name: `cosmetic_${cosmeticData.CosmeticId}.png` });
+        const isLinked = cosmeticData.Unbreakable;
+
+        const storeCustomizationItem: IStoreCustomizationItem = {
+            icon: imageUrl,
+            background: Rarities[cosmeticRarity].storeCustomizationPath,
+            prefix: cosmeticData.Prefix,
+            isLinked
+        };
+        const customizatiomItemBuffer = await createStoreCustomizationIcons(storeCustomizationItem) as Buffer;
+
+        const attachments: AttachmentBuilder[] = [];
+        attachments.push(new AttachmentBuilder(customizatiomItemBuffer, { name: `cosmetic_${cosmeticData.CosmeticId}.png` }));
 
         const isPurchasable = cosmeticData.Purchasable;
 
@@ -107,20 +125,24 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
             }
         }
 
-        const embedTitle = formatEmbedTitle(cosmeticData.CosmeticName, cosmeticData.Unbreakable, locale);
+        const embedTitle = formatEmbedTitle(cosmeticData.CosmeticName, isLinked, locale);
 
-        const characterData = await getCachedCharacters(locale);
-        const characterIndex = cosmeticData.Character;
+        const characterData = await getCharacterDataByIndex(cosmeticData.Character, locale);
 
         const cosmeticDetails = combineBaseUrlWithPath(`/store/cosmetics?cosmeticId=${cosmeticData.CosmeticId}`);
 
         const fields: APIEmbedField[] = [];
-        if (characterIndex !== -1) {
+        if (characterData) {
             fields.push({
                 name: getTranslation('info_command.cosmetic_subcommand.character', locale, ELocaleNamespace.Messages),
-                value: characterData[characterIndex].Name,
+                value: characterData.Name,
                 inline: true
             });
+
+            const characterIcon = combineBaseUrlWithPath(characterData.IconFilePath);
+            const characterBg = Role[characterData.Role as 'Killer' | 'Survivor'].charPortrait;
+            const charPortrait = await layerIcons(characterBg, characterIcon) as Buffer;
+            attachments.push(new AttachmentBuilder(charPortrait, { name: 'character_Icon.png' }));
         }
 
         if (cosmeticData.CollectionName) {
@@ -152,7 +174,7 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
                 value: isPurchasable && !isPastLimitedAvaibilityEndDate ? formattedReleaseDate : 'N/A',
                 inline: true
             },
-            ...priceFields,
+            ...priceFields
         );
 
         const temporaryDiscounts = cosmeticData.TemporaryDiscounts;
@@ -168,7 +190,7 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
                     name: getTranslation('info_command.cosmetic_subcommand.sale', locale, ELocaleNamespace.Messages),
                     value: `<t:${adjustedDiscountEndDateUnix}>`,
                     inline: true
-                })
+                });
             }
         }
 
@@ -183,8 +205,8 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
             .setTimestamp()
             .setFooter({ text: getTranslation('info_command.cosmetic_subcommand.cosmetic_info', locale, ELocaleNamespace.Messages) });
 
-        if (cosmeticData.Unbreakable) {
-            embed.setThumbnail(combineBaseUrlWithPath('/images/Other/CosmeticSetIcon.png'));
+        if (cosmeticData.Character !== -1) {
+            embed.setThumbnail(`attachment://character_Icon.png`);
         }
 
         const viewImagesButton = new ButtonBuilder()
@@ -205,7 +227,7 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
 
         await interaction.editReply({
             embeds: [embed],
-            files: [attachment],
+            files: attachments,
             components: outfitPieces.length > 0 ? [actionRow] : []
         });
     } catch (error) {

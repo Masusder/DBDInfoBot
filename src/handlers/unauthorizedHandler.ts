@@ -5,12 +5,13 @@ import {
 } from "discord.js";
 import { getTranslation } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import { ThemeColors } from "@constants/themeColors";
 
 export async function sendUnauthorizedMessage(interaction: ButtonInteraction | StringSelectMenuInteraction) {
     const locale = interaction.locale;
 
     const embed = new EmbedBuilder()
-        .setColor('Yellow')
+        .setColor(ThemeColors.WARNING)
         .setTitle(getTranslation('general.unauthorized_title', locale, ELocaleNamespace.Errors))
         .setDescription(`:lock: ${getTranslation('general.unauthorized', locale, ELocaleNamespace.Errors)}`);
 

@@ -1,38 +1,48 @@
 import {
     ButtonInteraction,
-    EmbedBuilder,
-    Locale
+    EmbedBuilder
 } from 'discord.js';
-import { getCosmeticDataById } from '@services/cosmeticService';
+import { getCachedCosmetics } from '@services/cosmeticService';
 import {
     combineBaseUrlWithPath,
     extractInteractionId
 } from '@utils/stringUtils';
-import axios from "axios";
-import {
-    createCanvas,
-    loadImage
-} from "canvas";
 import { getTranslation } from "@utils/localizationUtils";
 import { ELocaleNamespace } from '@tps/enums/ELocaleNamespace';
+import {
+    combineImagesIntoGrid,
+    createStoreCustomizationIcons,
+    IStoreCustomizationItem
+} from "@utils/imageUtils";
+import { Rarities } from "@data/Rarities";
+import { Cosmetic } from "@tps/cosmetic";
 
 export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
     const cosmeticId = extractInteractionId(interaction.customId);
     const locale = interaction.locale;
 
     if (!cosmeticId) {
-        await interaction.followUp({ content: getTranslation('info_command.cosmetic_subcommand.button_interaction.invalid_id', locale, ELocaleNamespace.Errors), ephemeral: true });
+        await interaction.followUp({
+            content: getTranslation('info_command.cosmetic_subcommand.button_interaction.invalid_id', locale, ELocaleNamespace.Errors),
+            ephemeral: true
+        });
         return;
     }
 
-    const cosmeticData = await getCosmeticDataById(cosmeticId, locale);
+    const cosmeticsData = await getCachedCosmetics(locale);
+    const cosmeticData = cosmeticsData[cosmeticId];
+
     if (!cosmeticData) {
-        await interaction.followUp({ content: getTranslation('info_command.cosmetic_subcommand.button_interaction.error_retrieving_data', locale, ELocaleNamespace.Errors), ephemeral: true });
+        await interaction.followUp({
+            content: getTranslation('info_command.cosmetic_subcommand.button_interaction.error_retrieving_data', locale, ELocaleNamespace.Errors),
+            ephemeral: true
+        });
         return;
     }
 
-    const outfitPieces = await getCosmeticPiecesCombinedImage(cosmeticData.OutfitItems, locale);
-    const combinedImageBuffer = await combineImages(outfitPieces);
+    const outfitPieces = await getCosmeticPiecesCombinedImage(cosmeticData.OutfitItems, cosmeticsData);
+    const outfitPiecesBuffer = await createStoreCustomizationIcons(outfitPieces) as Buffer[];
+    const combinedImageBuffer = await combineImagesIntoGrid(outfitPiecesBuffer);
 
     const embed = new EmbedBuilder()
         .setTitle(`${getTranslation('info_command.cosmetic_subcommand.button_interaction.outfit_pieces', locale, ELocaleNamespace.Messages)} ${cosmeticData.CosmeticName}`)
@@ -40,7 +50,7 @@ export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
         .setImage('attachment://combined-outfit-pieces.png');
 
     for (const pieceId of cosmeticData.OutfitItems) {
-        const pieceData = await getCosmeticDataById(pieceId, locale);
+        const pieceData = cosmeticsData[pieceId];
         if (pieceData) {
             embed.addFields({
                 name: pieceData.CosmeticName,
@@ -57,45 +67,22 @@ export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
     });
 }
 
-async function getCosmeticPiecesCombinedImage(cosmeticPieces: string[], locale: Locale) {
-    const urls: string[] = [];
+async function getCosmeticPiecesCombinedImage(cosmeticPieces: string[], cosmeticsData: Record<string, Cosmetic>) {
+    const imageSources: IStoreCustomizationItem[] = [];
     for (const cosmeticPieceId of cosmeticPieces) {
-        const cosmeticPieceData = await getCosmeticDataById(cosmeticPieceId, locale);
+        const cosmeticPieceData = cosmeticsData[cosmeticPieceId];
 
         if (cosmeticPieceData) {
-            urls.push(combineBaseUrlWithPath(cosmeticPieceData.IconFilePathList));
+            const model: IStoreCustomizationItem = {
+                icon: combineBaseUrlWithPath(cosmeticPieceData.IconFilePathList),
+                background: Rarities[cosmeticPieceData.Rarity].storeCustomizationPath,
+                prefix: cosmeticPieceData.Prefix,
+                isLinked: cosmeticPieceData.Unbreakable
+            };
+
+            imageSources.push(model);
         }
     }
 
-    return urls;
-}
-
-async function combineImages(imageUrls: string[]): Promise<Buffer> {
-    const imageBuffers: Buffer[] = await Promise.all(
-        imageUrls.map(async(url) => {
-            try {
-                const response = await axios.get(url, { responseType: 'arraybuffer' });
-                return Buffer.from(response.data);
-            } catch (error) {
-                console.error(`Error fetching image from ${url}:`, error);
-                throw error;
-            }
-        })
-    );
-
-    const images = await Promise.all(imageBuffers.map(buffer => loadImage(buffer)));
-
-    const totalWidth = images.reduce((sum, img) => sum + img.width, 0);
-    const maxHeight = Math.max(...images.map(img => img.height));
-
-    const canvas = createCanvas(totalWidth, maxHeight);
-    const ctx = canvas.getContext('2d');
-
-    let currentX = 0;
-    for (const img of images) {
-        ctx.drawImage(img, currentX, 0);
-        currentX += img.width;
-    }
-
-    return canvas.toBuffer('image/png');
+    return imageSources;
 }

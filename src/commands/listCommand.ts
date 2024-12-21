@@ -271,6 +271,15 @@ export const data = i18next.isInitialized
                         .setAutocomplete(true)
                         .setRequired(false)
                 )
+                .addStringOption(option =>
+                    option
+                        .setName('rarity')
+                        .setNameLocalizations(commandLocalizationHelper('list_command.addons_subcommand.options.rarity.name'))
+                        .setDescription(i18next.t('list_command.addons_subcommand.options.rarity.description', { lng: 'en' }))
+                        .setDescriptionLocalizations(commandLocalizationHelper('list_command.addons_subcommand.options.rarity.description'))
+                        .setChoices(...rarityChoices)
+                        .setRequired(false)
+                )
         ) : undefined;
 
 export async function execute(interaction: ChatInputCommandInteraction) {
