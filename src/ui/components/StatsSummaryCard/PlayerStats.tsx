@@ -74,7 +74,7 @@ function PlayerStats({ characterData, mapsData, playerData, user }: PlayerStatsP
                          alt=""/> : null
                 }
                 <div className="generationInfoText"><span
-                    style={{ color: "#d0e7ff" }}>Masusder</span> on {formattedDate}
+                    style={{ color: "#d0e7ff" }}>{user.username}</span> on {formattedDate}
                 </div>
             </div>
         </div>
