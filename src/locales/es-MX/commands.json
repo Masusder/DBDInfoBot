@@ -57,6 +57,10 @@
         "inclusion_version": {
           "name": "inclusion_version",
           "description": "Specify inclusion version of the cosmetic."
+        },
+        "role": {
+          "name": "role",
+          "description": "Specify role cosmetic belongs to."
         }
       }
     },
