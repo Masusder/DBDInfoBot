@@ -57,6 +57,10 @@
         "inclusion_version": {
           "name": "wersja_dodania",
           "description": "Określ wersję, w której został dodany kosmetyk."
+        },
+        "role": {
+          "name": "role",
+          "description": "Specify role cosmetic belongs to."
         }
       }
     },
