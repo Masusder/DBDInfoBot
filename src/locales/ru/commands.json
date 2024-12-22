@@ -57,6 +57,10 @@
         "inclusion_version": {
           "name": "добавлен_с_версии",
           "description": "Укажите в какой версии был добавлен косметический предмет."
+        },
+        "role": {
+          "name": "role",
+          "description": "Specify role cosmetic belongs to."
         }
       }
     },
