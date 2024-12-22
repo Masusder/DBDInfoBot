@@ -45,7 +45,13 @@
     "charm": "Charme",
     "badge": "Écusson",
     "banner": "Bannière",
-    "power": "Pouvoir"
+    "power": "Pouvoir",
+    "killer_power": "Killer's Power",
+    "killer_arm": "Killer's Arm",
+    "killer_mask": "Mask",
+    "killer_upper_body": "Killer's Upper Body",
+    "killer_lower_body": "Killer's Lower Body",
+    "survivor_hand": "Survivor's Hand"
   },
   "build_categories": {
     "fun": "Amusant",
