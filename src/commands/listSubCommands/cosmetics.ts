@@ -30,6 +30,8 @@ import {
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { ThemeColors } from "@constants/themeColors";
 import { Role } from "@data/Role";
+import { CosmeticTypes } from "@data/CosmeticTypes";
+import { ERole } from "@tps/enums/ERole";
 
 const COSMETICS_PER_PAGE = 6;
 
@@ -42,7 +44,7 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
         const filters = constructFilters(interaction);
         const filterCount = Object.keys(filters).length;
 
-        const { Character = -1, Rarity } = filters; // Deconstruct filters for use
+        const { Character = -1, Rarity, Category } = filters; // Deconstruct filters for use
 
         const cosmetics = await getFilteredCosmeticsList(filters, locale);
 
@@ -68,8 +70,10 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
                 .setColor(embedColor as ColorResolvable)
                 .setTimestamp()
                 .setAuthor({
-                    name: getTranslation('list_command.cosmetics_subcommand.cosmetics_list', locale, ELocaleNamespace.Messages),
-                    iconURL: combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_store.png')
+                    name: Category ?
+                        `${getTranslation('list_command.cosmetics_subcommand.cosmetics_list', locale, ELocaleNamespace.Messages)} (${getTranslation(CosmeticTypes[Category].localizedName, locale, ELocaleNamespace.General)})`
+                        : getTranslation('list_command.cosmetics_subcommand.cosmetics_list', locale, ELocaleNamespace.Messages),
+                    iconURL: Category ? CosmeticTypes[Category].icon : combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_store.png')
                 });
 
             if (Character !== -1) {
@@ -103,7 +107,7 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
 
                     const portraitBuffer = await layerIcons(characterBackground, characterPortrait) as Buffer;
 
-                    return { attachment: portraitBuffer, name: "generated_thumbnail.png"};
+                    return { attachment: portraitBuffer, name: "generated_thumbnail.png" };
                 }
             }
 
@@ -118,7 +122,7 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
                     background: Rarities[cosmetic.Rarity].storeCustomizationPath,
                     prefix: cosmetic.Prefix,
                     isLinked: cosmetic.Unbreakable
-                }
+                };
 
                 imageSources.push(model);
             });
@@ -152,6 +156,8 @@ function constructFilters(interaction: ChatInputCommandInteraction): Partial<Cos
     const rarity = interaction.options.getString('rarity');
     const inclusionVersion = interaction.options.getString('inclusion_version');
     const type = interaction.options.getString('type');
+    const role = interaction.options.getString('role');
+
     const filters: Partial<Cosmetic> = {};
 
     if (characterIndexString) filters.Character = parseInt(characterIndexString);
@@ -159,7 +165,8 @@ function constructFilters(interaction: ChatInputCommandInteraction): Partial<Cos
     if (isPurchasable !== null) filters.Purchasable = isPurchasable;
     if (rarity !== null) filters.Rarity = rarity;
     if (inclusionVersion !== null) filters.InclusionVersion = inclusionVersion;
-    if (type !== null) filters.Type = type;
+    if (type !== null) filters.Category = type;
+    if (role !== null) filters.Role = role as ERole;
 
     return filters;
 }

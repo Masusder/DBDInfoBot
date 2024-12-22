@@ -36,12 +36,12 @@ const rarityChoices = Object.keys(Rarities)
         Object.values(Locale).forEach(locale => {
             name_localizations[locale] = i18next.t(localizedName, {
                 lng: mapDiscordLocaleToDbdLang(locale),
-                ns: 'general'
+                ns: ELocaleNamespace.General
             });
         });
 
         return {
-            name: i18next.t(localizedName, { lng: 'en', ns: 'general' }),
+            name: i18next.t(localizedName, { lng: 'en', ns: ELocaleNamespace.General }),
             name_localizations,
             value: rarity
         };
@@ -49,18 +49,18 @@ const rarityChoices = Object.keys(Rarities)
 
 const typeChoices = Object.keys(CosmeticTypes)
     .map(type => {
-        const localizedName = CosmeticTypes[type];
+        const localizedName = CosmeticTypes[type].localizedName;
 
         const name_localizations: Record<string, string> = {};
         Object.values(Locale).forEach(locale => {
             name_localizations[locale] = i18next.t(localizedName, {
                 lng: mapDiscordLocaleToDbdLang(locale),
-                ns: 'general'
+                ns: ELocaleNamespace.General
             });
         });
 
         return {
-            name: i18next.t(localizedName, { lng: 'en', ns: 'general' }),
+            name: i18next.t(localizedName, { lng: 'en', ns: ELocaleNamespace.General }),
             name_localizations,
             value: type
         };
@@ -71,12 +71,12 @@ const buildCategories = Object.entries(BuildCategories).map(([value, name]) => {
     Object.values(Locale).forEach(locale => {
         name_localizations[locale] = i18next.t(name, {
             lng: mapDiscordLocaleToDbdLang(locale),
-            ns: 'general'
+            ns: ELocaleNamespace.General
         });
     });
 
     return {
-        name: i18next.t(name, { lng: 'en', ns: 'general' }),
+        name: i18next.t(name, { lng: 'en', ns: ELocaleNamespace.General }),
         name_localizations,
         value
     };
@@ -228,6 +228,31 @@ export const data = i18next.isInitialized
                         .setDescription(i18next.t('list_command.cosmetics_subcommand.options.type.description', { lng: 'en' }))
                         .setDescriptionLocalizations(commandLocalizationHelper('list_command.cosmetics_subcommand.options.type.description'))
                         .setChoices(...typeChoices)
+                        .setRequired(false)
+                )
+                .addStringOption(option =>
+                    option
+                        .setName('role')
+                        .setNameLocalizations(commandLocalizationHelper('list_command.cosmetics_subcommand.options.role.name'))
+                        .setDescription(i18next.t('list_command.cosmetics_subcommand.options.role.description', { lng: 'en' }))
+                        .setDescriptionLocalizations(commandLocalizationHelper('list_command.cosmetics_subcommand.options.role.description'))
+                        .setChoices(
+                            {
+                                name: i18next.t('roles.killer', { lng: 'en', ns: ELocaleNamespace.General }),
+                                name_localizations: commandLocalizationHelper('roles.killer', ELocaleNamespace.General),
+                                value: 'Killer'
+                            },
+                            {
+                                name: i18next.t('roles.survivor', { lng: 'en', ns: ELocaleNamespace.General }),
+                                name_localizations: commandLocalizationHelper('roles.survivor', ELocaleNamespace.General),
+                                value: 'Survivor'
+                            },
+                            {
+                                name: i18next.t('roles.none', { lng: 'en', ns: ELocaleNamespace.General }),
+                                name_localizations: commandLocalizationHelper('roles.none', ELocaleNamespace.General),
+                                value: 'None'
+                            }
+                        )
                         .setRequired(false)
                 )
                 .addStringOption(option =>

@@ -27,6 +27,7 @@ import { Character } from "@tps/character";
 import { Rarities } from "@data/Rarities";
 import { ThemeColors } from "@constants/themeColors";
 import { Role } from "@data/Role";
+import { ERole } from "@tps/enums/ERole";
 
 // region Command interaction
 const ADDONS_PER_PAGE = 9;
@@ -166,7 +167,7 @@ function constructFilters(
 export async function handleAddonsListCommandAutocompleteInteraction(interaction: AutocompleteInteraction) {
     const locale = interaction.locale;
     const focusedValue = interaction.options.getFocused();
-    const choices = await getCharacterChoices(focusedValue, locale, { Role: 'Killer' });
+    const choices = await getCharacterChoices(focusedValue, locale, { Role: ERole.Killer });
     const options = choices.slice(0, 25).map(character => ({
         name: character.Name,
         value: character.CharacterIndex as string

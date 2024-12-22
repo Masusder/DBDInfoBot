@@ -62,18 +62,18 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
             prefix: cosmeticData.Prefix,
             isLinked
         };
-        const customizatiomItemBuffer = await createStoreCustomizationIcons(storeCustomizationItem) as Buffer;
+        const customizationItemBuffer = await createStoreCustomizationIcons(storeCustomizationItem) as Buffer;
 
         const attachments: AttachmentBuilder[] = [];
-        attachments.push(new AttachmentBuilder(customizatiomItemBuffer, { name: `cosmetic_${cosmeticData.CosmeticId}.png` }));
+        attachments.push(new AttachmentBuilder(customizationItemBuffer, { name: `cosmetic_${cosmeticData.CosmeticId}.png` }));
 
         const isPurchasable = cosmeticData.Purchasable;
 
         const adjustedReleaseDateUnix = cosmeticData.ReleaseDate ? Math.floor(adjustForTimezone(cosmeticData.ReleaseDate) / 1000) : null;
         const formattedReleaseDate = adjustedReleaseDateUnix ? `<t:${adjustedReleaseDateUnix}>` : 'N/A';
 
-        const cosmeticType = CosmeticTypes[cosmeticData.Type];
-        const localizedCosmeticType = cosmeticType ? getTranslation(cosmeticType, locale, ELocaleNamespace.General) : "N/A";
+        const cosmeticTypeName = CosmeticTypes[cosmeticData.Category].localizedName;
+        const localizedCosmeticType = cosmeticTypeName ? getTranslation(cosmeticTypeName, locale, ELocaleNamespace.General) : "N/A";
 
         const outfitPieces: string[] = cosmeticData.OutfitItems || [];
 

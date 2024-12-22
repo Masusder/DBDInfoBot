@@ -1,3 +1,5 @@
+import { ERole } from "@tps/enums/ERole";
+
 /**
  * See https://github.com/Masusder/UEParser/blob/master/UEParser/Models/APIComposerModels/Cosmetic.cs
  */
@@ -23,11 +25,13 @@ export interface Cosmetic {
     InclusionVersion: string;
     CustomizedAudioStateCollection: string;
     Type: string;
+    Category: string;
     Character: number;
     Unbreakable: boolean;
     Purchasable: boolean;
     ReleaseDate: string;
     LimitedTimeEndDate?: string | null;
+    Role: ERole;
     Rarity: string;
     Prefix?: string | null;
     TomeId?: string | null;
