@@ -57,6 +57,10 @@
         "inclusion_version": {
           "name": "inclusion_de_la_version",
           "description": "Spécifiez la version d'introduction du cosmétique."
+        },
+        "role": {
+          "name": "role",
+          "description": "Specify role cosmetic belongs to."
         }
       }
     },
