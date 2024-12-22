@@ -1,12 +1,11 @@
 import {
     ButtonInteraction,
-    ColorResolvable,
     EmbedBuilder,
     Locale
 } from 'discord.js';
 import {
+    combineBaseUrlWithPath,
     formatHtmlToDiscordMarkdown,
-    splitTextIntoChunksBySentence
 } from '@utils/stringUtils';
 import { getCharacterDataByIndex } from "@services/characterService";
 import {
@@ -16,36 +15,32 @@ import {
 import { getTranslation } from "@utils/localizationUtils";
 import { sendUnauthorizedMessage } from "./unauthorizedHandler";
 import { ELocaleNamespace } from '@tps/enums/ELocaleNamespace';
+import { Hint } from "@tps/character";
+import { ERole } from "@tps/enums/ERole";
+import { Role } from "@data/Role";
 
-const MAX_DESCRIPTION_LENGTH = 2024;
-
-function createEmbed(description: string, characterName: string, color: number | null, locale: Locale) {
+function createEmbed(description: string, iconPath: string, title: string, role: ERole, characterName: string, locale: Locale) {
     return new EmbedBuilder()
-        .setTitle(`${getTranslation('info_command.character_subcommand.backstory', locale, ELocaleNamespace.Messages)} ${characterName}`)
+        .setTitle(title)
+        .setThumbnail(iconPath)
         .setDescription(description)
-        .setColor(color as ColorResolvable)
+        .setColor(Role[role].hexColor)
         .setTimestamp()
-        .setFooter(
-            {
-                text: `${getTranslation('info_command.character_subcommand.character_backstory', locale, ELocaleNamespace.Messages)}`
-            }
-        );
+        .setFooter({text: `Hint for ${characterName}`}); // TODO: localize
 }
 
-// Function to create embed chunks without splitting sentences
-function createBackstoryEmbeds(backstory: string, characterName: string, color: number | null, locale: Locale) {
+function createEmbeds(hints: Hint[], characterName: string, locale: Locale) {
     const embeds: EmbedBuilder[] = [];
 
-    const textChunks = splitTextIntoChunksBySentence(backstory, MAX_DESCRIPTION_LENGTH);
-
-    for (const chunk of textChunks) {
-        embeds.push(createEmbed(chunk.trim(), characterName, color, locale));
+    for (const hint of hints) {
+        embeds.push(createEmbed(formatHtmlToDiscordMarkdown(hint.Description), combineBaseUrlWithPath(hint.IconPath), hint.Title, hint.Role, characterName, locale));
     }
 
     return embeds;
 }
 
-export async function showCharacterBackstoryHandler(interaction: ButtonInteraction) {
+export async function characterHintsHandler(interaction: ButtonInteraction) {
+    // noinspection DuplicatedCode
     const [_, characterIndex, userId] = interaction.customId.split('::');
 
     if (userId !== interaction.user.id) {
@@ -72,11 +67,7 @@ export async function showCharacterBackstoryHandler(interaction: ButtonInteracti
         return;
     }
 
-    const backstory = formatHtmlToDiscordMarkdown(characterData.BackStory);
-    const characterName = characterData.Name;
-    const color = interaction.message.embeds[0].color;
-
-    const embeds = createBackstoryEmbeds(backstory, characterName, color, locale);
+    const embeds = createEmbeds(characterData.Hints, characterData.Name, locale);
 
     const paginationOptions: IPaginationOptions = {
         items: embeds,
@@ -84,7 +75,7 @@ export async function showCharacterBackstoryHandler(interaction: ButtonInteracti
         generateEmbed: (pageItems) => pageItems[0],
         interactionUserId: interaction.user.id,
         interactionReply: interaction,
-        timeout: 300_000, // 5 minutes
+        timeout: 60_000, // 1 minute
         locale
     };
 

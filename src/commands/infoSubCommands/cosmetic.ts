@@ -228,7 +228,7 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
         await interaction.editReply({
             embeds: [embed],
             files: attachments,
-            components: outfitPieces.length > 0 ? [actionRow] : []
+            components: [actionRow]
         });
     } catch (error) {
         console.error("Error executing cosmetic subcommand:", error);

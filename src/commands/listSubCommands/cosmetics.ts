@@ -19,7 +19,7 @@ import {
 } from "@utils/stringUtils";
 import { genericPaginationHandler } from "@handlers/genericPaginationHandler";
 import { getTranslation } from "@utils/localizationUtils";
-import { Cosmetic } from "../../types";
+import { Cosmetic } from "@tps/cosmetic";
 import { Rarities } from "@data/Rarities";
 import {
     combineImagesIntoGrid,

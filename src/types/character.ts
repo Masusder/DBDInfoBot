@@ -14,8 +14,16 @@ export interface Character {
     Biography: string;
     IconFilePath: string;
     BackgroundImagePath: string;
+    Hints: Hint[];
     Id: string;
     CharacterIndex?: string;
+}
+
+export interface Hint {
+    Role: ERole;
+    Title: string;
+    Description: string;
+    IconPath: string;
 }
 
 export interface CharacterExtended extends Character {

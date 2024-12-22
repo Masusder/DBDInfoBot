@@ -1,8 +1,10 @@
 import {
     ApplicationEmoji,
-    Collection
+    Collection,
+    Locale
 } from "discord.js";
 import client from "client";
+import { createPerkIcons } from "@utils/imageUtils";
 
 async function fetchAndCacheEmojis(): Promise<Collection<string, ApplicationEmoji>> {
     if (!client.application) return new Collection();
@@ -17,6 +19,37 @@ async function fetchAndCacheEmojis(): Promise<Collection<string, ApplicationEmoj
         console.error('Error fetching emojis:', error);
         return new Collection();
     }
+}
+
+export async function getOrCreateMultiplePerkEmojis(
+    perkIds: string[],
+    locale: Locale
+): Promise<ApplicationEmoji[]> {
+    const existingEmojis = await Promise.all(perkIds.map(perkId => getApplicationEmoji(perkId)));
+
+    const missingPerkIds = perkIds.filter((_perkId, index) => !existingEmojis[index]);
+
+    let perkIconData: { perkId: string, buffer: Buffer }[] = [];
+    if (missingPerkIds.length > 0) {
+        perkIconData = await createPerkIcons(missingPerkIds, locale) as { perkId: string, buffer: Buffer }[];
+    }
+
+    const emojiPromises = perkIds.map(async (perkId, index) => {
+        let emoji = existingEmojis[index];
+
+        if (!emoji) {
+            const { buffer } = perkIconData.find(data => data.perkId === perkId) || { buffer: null };
+            if (buffer) {
+                emoji = await getOrCreateApplicationEmoji(perkId, buffer);
+            }
+        }
+
+        return emoji;
+    });
+
+    const emojis = await Promise.all(emojiPromises);
+
+    return emojis.filter(Boolean) as ApplicationEmoji[];
 }
 
 export async function getOrCreateApplicationEmoji(

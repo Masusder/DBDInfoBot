@@ -6,7 +6,6 @@ import {
     EmbedBuilder,
     Locale
 } from "discord.js";
-import Constants from "@constants";
 import { generatePlayerStatsSummary } from "@utils/ssrUtility";
 import { getCachedPlayerStats } from "@services/statsService";
 import { IPlayerData } from "@ui/types/playerStats";
@@ -38,7 +37,7 @@ export async function handlePersonalStatsCommandInteraction(interaction: ChatInp
             return;
         }
 
-        const summaryCardBuffer = await generatePlayerStatsSummary(playerData);
+        const summaryCardBuffer = await generatePlayerStatsSummary(playerData, interaction.user);
 
         if (!summaryCardBuffer) {
             const message = getTranslation('stats_command.failed_generating_summary_card', locale, ELocaleNamespace.Errors);

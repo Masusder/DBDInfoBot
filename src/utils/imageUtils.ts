@@ -327,3 +327,23 @@ export async function combineImagesIntroGridAndLayerIcons(icons: Record<string, 
 
     return composeGrid(images, maxWidth, maxHeight, 3, 3);
 }
+
+export async function createPerkIcons(perkIds: string[], locale: Locale) {
+    const perkData = await getCachedPerks(locale)
+
+    const perkIconPromises = perkIds.map(async (perkId) => {
+        const perk = perkData[perkId];
+        if (!perk) {
+            throw new Error(`Perk with ID ${perkId} not found`);
+        }
+
+        const role = perk.Role;
+        const perkBackgroundUrl = Role[role].perkBackground;
+        const iconUrl = combineBaseUrlWithPath(perk.IconFilePathList);
+
+        const buffer = await layerIcons(perkBackgroundUrl, iconUrl);
+        return { perkId, buffer };
+    });
+
+    return Promise.all(perkIconPromises);
+}
