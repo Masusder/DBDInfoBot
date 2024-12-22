@@ -57,6 +57,10 @@
         "inclusion_version": {
           "name": "incluso_nella_versione",
           "description": "Specifica la versione in cui è incluso il cosmetico."
+        },
+        "role": {
+          "name": "role",
+          "description": "Specify role cosmetic belongs to."
         }
       }
     },
