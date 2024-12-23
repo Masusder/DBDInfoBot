@@ -33,7 +33,10 @@
       "difficulty": "Сложность",
       "backstory": "Предыстория -",
       "read_backstory": "Прочитать предысторию",
-      "character_backstory": "Предыстория персонажа"
+      "character_backstory": "Предыстория персонажа",
+      "hint_for": "Hint for",
+      "check_hints": "Check Hints",
+      "perks": "Perks"
     },
     "cosmetic_subcommand": {
       "character": "Персонаж",
@@ -94,7 +97,7 @@
       "filters_applied": "Фильтры применены",
       "cosmetics_list": "Cosmetics list",
       "more_info": [
-        "Получить подробную информацию о косметическом предмете можно при помощи команды",
+        "To learn more about a specific cosmetic, use the command",
         "информация Косметический предмет <cosmetic_name>"
       ]
     },
@@ -110,6 +113,19 @@
       "unknown_perk": "Неизвестный навык",
       "any_perks": "Любые навыки",
       "select_for_details": "Выберите сборку, чтобы просмотреть подробности."
+    },
+    "addons_subcommand": {
+      "addons_list": "List of Add-ons",
+      "found_total": [
+        "Found a total of",
+        "add-ons"
+      ],
+      "filters_applied": "Filters applied",
+      "cosmetics_list": "List of Cosmetics",
+      "more_info": [
+        "To learn more about a specific add-on, use the command",
+        "info Add-on <addon_name>"
+      ]
     }
   },
   "shrine_command": {
