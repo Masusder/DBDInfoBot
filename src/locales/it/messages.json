@@ -44,7 +44,7 @@
       "rarity": "Rarità",
       "inclusion_version": "Incluso nella Versione",
       "type": "Tipo",
-      "release_date": "Data di rilascio",
+      "release_date": "Shop Release Date",
       "sale": "Gli sconti terminano",
       "cosmetic_info": "Informazioni cosmetico",
       "more_info": "Più info",
@@ -95,7 +95,7 @@
         "cosmetici"
       ],
       "filters_applied": "Filtri applicati",
-      "cosmetics_list": "Cosmetics list",
+      "cosmetics_list": "List of Cosmetics",
       "more_info": [
         "To learn more about a specific cosmetic, use the command",
         "info Cosmetico <cosmetic_name>"
@@ -121,7 +121,6 @@
         "add-ons"
       ],
       "filters_applied": "Filters applied",
-      "cosmetics_list": "List of Cosmetics",
       "more_info": [
         "To learn more about a specific add-on, use the command",
         "info Add-on <addon_name>"
