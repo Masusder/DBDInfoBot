@@ -69,12 +69,15 @@ export interface IStoreCustomizationItem {
     background: string;
     prefix: string | null | undefined;
     isLinked: boolean;
+    isLimited: boolean;
+    isOnSale: boolean;
 }
+
 export async function createStoreCustomizationIcons(storeCustomizationItems: IStoreCustomizationItem | IStoreCustomizationItem[]) {
     const items = Array.isArray(storeCustomizationItems) ? storeCustomizationItems : [storeCustomizationItems];
 
     const layerPromises = items.map(async(item) => {
-        const { icon, background, prefix, isLinked } = item;
+        const { icon, background, prefix, isLinked, isLimited, isOnSale } = item;
 
         let backgroundImage = backgroundCache[background] ?? (backgroundCache[background] = loadImage(background));
         let iconImage = loadImage(icon);
@@ -102,6 +105,8 @@ export async function createStoreCustomizationIcons(storeCustomizationItems: ISt
         const clipRight = 585;
         const clipTop = 50;
 
+        ctx.save();
+
         // In-game icons are bounded to specific area, we need to consider that
         ctx.beginPath();
         ctx.rect(clipLeft, clipTop, clipRight - clipLeft, canvas.height);
@@ -117,6 +122,20 @@ export async function createStoreCustomizationIcons(storeCustomizationItems: ISt
 
             const setIconSize = Math.min(canvas.width, canvas.height) * 0.15;
             ctx.drawImage(setIcon, 125, 45, setIconSize, setIconSize);
+        }
+
+        if (isLimited) {
+            const limitedFlag = new Image();
+            limitedFlag.src = icons.LIMITED_FLAG;
+
+            ctx.drawImage(limitedFlag, 540, 75, limitedFlag.width, limitedFlag.height);
+        }
+
+        if (isOnSale) {
+            const onSaleFlag = new Image();
+            onSaleFlag.src = icons.SALE_FLAG;
+
+            ctx.drawImage(onSaleFlag, 540, 138, onSaleFlag.width, onSaleFlag.height);
         }
 
         return canvas.toBuffer();
@@ -329,9 +348,9 @@ export async function combineImagesIntroGridAndLayerIcons(icons: Record<string, 
 }
 
 export async function createPerkIcons(perkIds: string[], locale: Locale) {
-    const perkData = await getCachedPerks(locale)
+    const perkData = await getCachedPerks(locale);
 
-    const perkIconPromises = perkIds.map(async (perkId) => {
+    const perkIconPromises = perkIds.map(async(perkId) => {
         const perk = perkData[perkId];
         if (!perk) {
             throw new Error(`Perk with ID ${perkId} not found`);

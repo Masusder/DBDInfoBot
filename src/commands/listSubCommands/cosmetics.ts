@@ -13,6 +13,7 @@ import {
     getInclusionVersionsForCosmetics
 } from "@services/cosmeticService";
 import {
+    adjustForTimezone,
     combineBaseUrlWithPath,
     formatHtmlToDiscordMarkdown,
     formatInclusionVersion
@@ -32,6 +33,10 @@ import { ThemeColors } from "@constants/themeColors";
 import { Role } from "@data/Role";
 import { CosmeticTypes } from "@data/CosmeticTypes";
 import { ERole } from "@tps/enums/ERole";
+import {
+    hasLimitedAvailabilityEnded,
+    isCosmeticOnSale
+} from "@commands/infoSubCommands/cosmetic";
 
 const COSMETICS_PER_PAGE = 6;
 
@@ -44,7 +49,7 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
         const filters = constructFilters(interaction);
         const filterCount = Object.keys(filters).length;
 
-        const { Character = -1, Rarity, Category } = filters; // Deconstruct filters for use
+        const { Character = -1, Rarity, Category, InclusionVersion } = filters; // Deconstruct filters for use
 
         const cosmetics = await getFilteredCosmeticsList(filters, locale);
 
@@ -64,15 +69,18 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
 
             const embedColor = Rarity ? Rarities[Rarity].color : ThemeColors.PRIMARY;
 
+            let authorName = getTranslation('list_command.cosmetics_subcommand.cosmetics_list', locale, ELocaleNamespace.Messages);
+
+            if (Category) authorName += ` (${getTranslation(CosmeticTypes[Category].localizedName, locale, ELocaleNamespace.General)})`
+            if (InclusionVersion) authorName += ` (${formatInclusionVersion(InclusionVersion, locale)})`
+
             const embed = new EmbedBuilder()
                 .setTitle(title)
                 .setDescription(`${getTranslation('list_command.cosmetics_subcommand.more_info.0', locale, ELocaleNamespace.Messages)}: \`/${getTranslation('list_command.cosmetics_subcommand.more_info.1', locale, ELocaleNamespace.Messages)}\``)
                 .setColor(embedColor as ColorResolvable)
                 .setTimestamp()
                 .setAuthor({
-                    name: Category ?
-                        `${getTranslation('list_command.cosmetics_subcommand.cosmetics_list', locale, ELocaleNamespace.Messages)} (${getTranslation(CosmeticTypes[Category].localizedName, locale, ELocaleNamespace.General)})`
-                        : getTranslation('list_command.cosmetics_subcommand.cosmetics_list', locale, ELocaleNamespace.Messages),
+                    name: authorName,
                     iconURL: Category ? CosmeticTypes[Category].icon : combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_store.png')
                 });
 
@@ -117,11 +125,15 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
         const generateImage = async(pageItems: Cosmetic[]) => {
             const imageSources: IStoreCustomizationItem[] = [];
             pageItems.forEach((cosmetic: Cosmetic) => {
+                const { isOnSale } = isCosmeticOnSale(cosmetic);
+
                 const model: IStoreCustomizationItem = {
                     icon: combineBaseUrlWithPath(cosmetic.IconFilePathList),
                     background: Rarities[cosmetic.Rarity].storeCustomizationPath,
                     prefix: cosmetic.Prefix,
-                    isLinked: cosmetic.Unbreakable
+                    isLinked: cosmetic.Unbreakable,
+                    isLimited: cosmetic.Purchasable && !hasLimitedAvailabilityEnded(cosmetic),
+                    isOnSale
                 };
 
                 imageSources.push(model);

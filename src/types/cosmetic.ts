@@ -21,6 +21,7 @@ export interface Cosmetic {
     Description: string;
     IconFilePathList: string;
     EventId?: string | null;
+    ModelDataPath?: string | null;
     CollectionName: string;
     InclusionVersion: string;
     CustomizedAudioStateCollection: string;

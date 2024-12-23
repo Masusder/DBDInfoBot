@@ -16,6 +16,10 @@ import {
 } from "@utils/imageUtils";
 import { Rarities } from "@data/Rarities";
 import { Cosmetic } from "@tps/cosmetic";
+import {
+    hasLimitedAvailabilityEnded,
+    isCosmeticOnSale
+} from "@commands/infoSubCommands/cosmetic";
 
 export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
     const cosmeticId = extractInteractionId(interaction.customId);
@@ -71,13 +75,16 @@ async function getCosmeticPiecesCombinedImage(cosmeticPieces: string[], cosmetic
     const imageSources: IStoreCustomizationItem[] = [];
     for (const cosmeticPieceId of cosmeticPieces) {
         const cosmeticPieceData = cosmeticsData[cosmeticPieceId];
+        const { isOnSale } = isCosmeticOnSale(cosmeticPieceData);
 
         if (cosmeticPieceData) {
             const model: IStoreCustomizationItem = {
                 icon: combineBaseUrlWithPath(cosmeticPieceData.IconFilePathList),
                 background: Rarities[cosmeticPieceData.Rarity].storeCustomizationPath,
                 prefix: cosmeticPieceData.Prefix,
-                isLinked: cosmeticPieceData.Unbreakable
+                isLinked: cosmeticPieceData.Unbreakable,
+                isLimited: cosmeticPieceData.Purchasable && !hasLimitedAvailabilityEnded(cosmeticPieceData),
+                isOnSale
             };
 
             imageSources.push(model);

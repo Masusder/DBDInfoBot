@@ -15,8 +15,8 @@ import {
     getCosmeticDataById
 } from "@services/cosmeticService";
 import {
-    Rarities,
     CosmeticTypes,
+    Rarities,
     Role
 } from "data";
 import {
@@ -56,11 +56,15 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
 
         const isLinked = cosmeticData.Unbreakable;
 
+        const isPastLimitedAvaibilityEndDate = hasLimitedAvailabilityEnded(cosmeticData);
+        const { isOnSale, adjustedDiscountEndDate } = isCosmeticOnSale(cosmeticData);
         const storeCustomizationItem: IStoreCustomizationItem = {
             icon: imageUrl,
             background: Rarities[cosmeticRarity].storeCustomizationPath,
             prefix: cosmeticData.Prefix,
-            isLinked
+            isLinked,
+            isLimited: cosmeticData.Purchasable && !isPastLimitedAvaibilityEndDate && !!cosmeticData.LimitedTimeEndDate,
+            isOnSale: isOnSale
         };
         const customizationItemBuffer = await createStoreCustomizationIcons(storeCustomizationItem) as Buffer;
 
@@ -72,12 +76,7 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
         const adjustedReleaseDateUnix = cosmeticData.ReleaseDate ? Math.floor(adjustForTimezone(cosmeticData.ReleaseDate) / 1000) : null;
         const formattedReleaseDate = adjustedReleaseDateUnix ? `<t:${adjustedReleaseDateUnix}>` : 'N/A';
 
-        const cosmeticTypeName = CosmeticTypes[cosmeticData.Category].localizedName;
-        const localizedCosmeticType = cosmeticTypeName ? getTranslation(cosmeticTypeName, locale, ELocaleNamespace.General) : "N/A";
-
         const outfitPieces: string[] = cosmeticData.OutfitItems || [];
-
-        const isPastLimitedAvaibilityEndDate = cosmeticData.LimitedTimeEndDate ? new Date() > new Date(adjustForTimezone(cosmeticData.LimitedTimeEndDate)) : false;
 
         const priceFields: APIEmbedField[] = [];
         if (cosmeticData.Prices && isPurchasable && !isPastLimitedAvaibilityEndDate) {
@@ -165,33 +164,32 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
                 inline: true
             },
             {
-                name: getTranslation('info_command.cosmetic_subcommand.type', locale, ELocaleNamespace.Messages),
-                value: localizedCosmeticType,
-                inline: true
-            },
-            {
                 name: getTranslation('info_command.cosmetic_subcommand.release_date', locale, ELocaleNamespace.Messages),
-                value: isPurchasable && !isPastLimitedAvaibilityEndDate ? formattedReleaseDate : 'N/A',
+                value: isPurchasable ? formattedReleaseDate : 'N/A',
                 inline: true
             },
             ...priceFields
         );
 
-        const temporaryDiscounts = cosmeticData.TemporaryDiscounts;
+        if (isPurchasable && !isPastLimitedAvaibilityEndDate && cosmeticData.LimitedTimeEndDate) {
+            fields.push(
+                {
+                    name: "Limited Until", // TODO: localize
+                    value: `<t:${Math.floor(adjustForTimezone(cosmeticData.LimitedTimeEndDate) / 1000)}>`,
+                    inline: true
+                }
+            )
+        }
 
-        if (temporaryDiscounts && temporaryDiscounts.length > 0 && isPurchasable && !isPastLimitedAvaibilityEndDate) {
-            const discountEndDate = temporaryDiscounts[0].endDate;
-            const adjustedDiscountEndDate = adjustForTimezone(discountEndDate);
-
-            if (new Date(adjustedDiscountEndDate) > new Date()) {
-                const adjustedDiscountEndDateUnix = Math.floor(adjustedDiscountEndDate / 1000);
+        if (isOnSale && adjustedDiscountEndDate) {
+                const adjustedDiscountEndDateUnix = Math.floor(adjustedDiscountEndDate?.getTime() / 1000);
 
                 fields.push({
                     name: getTranslation('info_command.cosmetic_subcommand.sale', locale, ELocaleNamespace.Messages),
                     value: `<t:${adjustedDiscountEndDateUnix}>`,
                     inline: true
                 });
-            }
+
         }
 
         const filteredFields = fields.filter((field): field is APIEmbedField => field !== null);
@@ -205,6 +203,14 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
             .setTimestamp()
             .setFooter({ text: getTranslation('info_command.cosmetic_subcommand.cosmetic_info', locale, ELocaleNamespace.Messages) });
 
+        const category = CosmeticTypes[cosmeticData.Category];
+        if (category) {
+            embed.setAuthor({
+                name: getTranslation(category.localizedName, locale, ELocaleNamespace.General),
+                iconURL: category.icon
+            })
+        }
+
         if (cosmeticData.Character !== -1) {
             embed.setThumbnail(`attachment://character_Icon.png`);
         }
@@ -214,12 +220,27 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
             .setLabel(getTranslation('info_command.cosmetic_subcommand.view_pieces', locale, ELocaleNamespace.Messages))
             .setStyle(ButtonStyle.Secondary);
 
+        let viewerCosmetics = [cosmeticId];
+        if (cosmeticData.Type === 'outfit') {
+            viewerCosmetics = cosmeticData.OutfitItems;
+        }
+        const viewerCosmeticsParam = encodeURIComponent(JSON.stringify(viewerCosmetics));
+
+        const view3dModelButton = new ButtonBuilder()
+            .setLabel("View 3D Model")
+            .setStyle(ButtonStyle.Link)
+            .setURL(combineBaseUrlWithPath(`/store/3d-viewer?viewerCosmetics=${viewerCosmeticsParam}`))
+
         const redirectButton = new ButtonBuilder()
             .setLabel(getTranslation('info_command.cosmetic_subcommand.more_info', locale, ELocaleNamespace.Messages))
             .setStyle(ButtonStyle.Link)
             .setURL(cosmeticDetails);
 
         const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(redirectButton);
+
+        if (cosmeticData.ModelDataPath || cosmeticData.Type === "outfit") {
+            actionRow.addComponents(view3dModelButton)
+        }
 
         if (outfitPieces.length > 0) {
             actionRow.addComponents(viewImagesButton);
@@ -264,6 +285,28 @@ function getDiscountPercentage(currencyId: string, cosmeticData: Cosmetic): numb
     }
 
     return tempDiscount ? tempDiscount.discountPercentage : cosmeticData.DiscountPercentage;
+}
+
+export function hasLimitedAvailabilityEnded(cosmetic: Cosmetic): boolean {
+    if (!cosmetic.LimitedTimeEndDate) return false;
+    return new Date() > new Date(adjustForTimezone(cosmetic.LimitedTimeEndDate));
+}
+
+export function isCosmeticOnSale(cosmetic: Cosmetic): { isOnSale: boolean; adjustedDiscountEndDate?: Date } {
+    if (!cosmetic.Purchasable && !hasLimitedAvailabilityEnded(cosmetic)) return { isOnSale: false };
+
+    const temporaryDiscounts = cosmetic.TemporaryDiscounts;
+    if (!temporaryDiscounts || temporaryDiscounts.length === 0) return { isOnSale: false };
+
+    const discountEndDate = temporaryDiscounts[0].endDate;
+    const adjustedDiscountEndDateNumber = adjustForTimezone(discountEndDate);
+    const adjustedDiscountEndDate = new Date(adjustedDiscountEndDateNumber);
+
+    if (adjustedDiscountEndDate > new Date()) {
+        return { isOnSale: true, adjustedDiscountEndDate: adjustedDiscountEndDate };
+    }
+
+    return { isOnSale: false };
 }
 
 // endregion
