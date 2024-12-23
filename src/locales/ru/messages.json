@@ -44,7 +44,7 @@
       "rarity": "Редкость",
       "inclusion_version": "Добавлен с Версии",
       "type": "Тип",
-      "release_date": "Дата выхода",
+      "release_date": "Shop Release Date",
       "sale": "Распродажа заканчивается",
       "cosmetic_info": "Информация о косметическом предмете",
       "more_info": "Подробнее",
@@ -95,7 +95,7 @@
         "косметических предметов"
       ],
       "filters_applied": "Фильтры применены",
-      "cosmetics_list": "Cosmetics list",
+      "cosmetics_list": "List of Cosmetics",
       "more_info": [
         "To learn more about a specific cosmetic, use the command",
         "информация Косметический предмет <cosmetic_name>"
@@ -121,7 +121,6 @@
         "add-ons"
       ],
       "filters_applied": "Filters applied",
-      "cosmetics_list": "List of Cosmetics",
       "more_info": [
         "To learn more about a specific add-on, use the command",
         "info Add-on <addon_name>"
