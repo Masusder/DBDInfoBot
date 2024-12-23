@@ -27,6 +27,10 @@
     "builds_subcommand": {
       "error_retrieving_data": "Nie udało się pobrać danych ekwipunku.",
       "builds_not_found_filters": "Nie znaleziono ekwipunków spełniających podane filtry."
+    },
+    "addons_subcommand": {
+      "addons_not_found": "No add-ons found.",
+      "addons_not_found_filters": "No add-ons found for the applied filters."
     }
   },
   "general": {
