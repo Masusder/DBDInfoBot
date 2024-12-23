@@ -174,7 +174,7 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
         if (isPurchasable && !isPastLimitedAvaibilityEndDate && cosmeticData.LimitedTimeEndDate) {
             fields.push(
                 {
-                    name: "Limited Until", // TODO: localize
+                    name: getTranslation('info_command.cosmetic_subcommand.limited_until', locale, ELocaleNamespace.Messages),
                     value: `<t:${Math.floor(adjustForTimezone(cosmeticData.LimitedTimeEndDate) / 1000)}>`,
                     inline: true
                 }
@@ -227,7 +227,7 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
         const viewerCosmeticsParam = encodeURIComponent(JSON.stringify(viewerCosmetics));
 
         const view3dModelButton = new ButtonBuilder()
-            .setLabel("View 3D Model")
+            .setLabel(getTranslation('info_command.cosmetic_subcommand.view_3d_model', locale, ELocaleNamespace.Messages))
             .setStyle(ButtonStyle.Link)
             .setURL(combineBaseUrlWithPath(`/store/3d-viewer?viewerCosmetics=${viewerCosmeticsParam}`))
 
@@ -238,7 +238,7 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
 
         const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(redirectButton);
 
-        if (cosmeticData.ModelDataPath || cosmeticData.Type === "outfit") {
+        if ((cosmeticData.ModelDataPath && cosmeticData.ModelDataPath !== "None") || cosmeticData.Type === "outfit") {
             actionRow.addComponents(view3dModelButton)
         }
 
@@ -288,6 +288,9 @@ function getDiscountPercentage(currencyId: string, cosmeticData: Cosmetic): numb
 }
 
 export function hasLimitedAvailabilityEnded(cosmetic: Cosmetic): boolean {
+    // If LimitedTimeEndDate is null/undefined that means it was never in effect
+    // therefore it has not ended, as it never started
+    // Don't bother me about this. I don't understand this either
     if (!cosmetic.LimitedTimeEndDate) return false;
     return new Date() > new Date(adjustForTimezone(cosmetic.LimitedTimeEndDate));
 }
