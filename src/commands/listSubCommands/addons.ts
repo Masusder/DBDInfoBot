@@ -48,8 +48,8 @@ export async function handleAddonListCommandInteraction(interaction: ChatInputCo
 
         if (addons.length === 0) {
             const message = filterCount > 0
-                ? getTranslation('list_command.cosmetics_subcommand.cosmetics_not_found_filters', locale, ELocaleNamespace.Errors) // TODO: localize to addons
-                : getTranslation('list_command.cosmetics_subcommand.cosmetics_not_found', locale, ELocaleNamespace.Errors); // TODO: localize to addons
+                ? getTranslation('list_command.addons_subcommand.addons_not_found_filters', locale, ELocaleNamespace.Errors)
+                : getTranslation('list_command.addons_subcommand.addons_not_found', locale, ELocaleNamespace.Errors);
             await interaction.editReply({ content: message });
             return;
         }
@@ -60,7 +60,7 @@ export async function handleAddonListCommandInteraction(interaction: ChatInputCo
             let title = `Found a total of ${addons.length} add-ons`;
 
             // Let user know that filters were applied
-            if (filterCount > 0) title += ` (${getTranslation('list_command.cosmetics_subcommand.filters_applied', locale, ELocaleNamespace.Messages)}: ${filterCount})`; // TODO: localize to addons
+            if (filterCount > 0) title += ` (${getTranslation('list_command.addons_subcommand.filters_applied', locale, ELocaleNamespace.Messages)}: ${filterCount})`;
 
             let embedColor = ThemeColors.PRIMARY;
             if (Rarity) {
@@ -69,11 +69,11 @@ export async function handleAddonListCommandInteraction(interaction: ChatInputCo
 
             const embed = new EmbedBuilder()
                 .setTitle(title)
-                .setDescription(`For more information about specific add-on, use the command: \`/info Add-on <add-on name>\``) // TODO: localize to addons
+                .setDescription(`${getTranslation('list_command.addons_subcommand.more_info.0', locale, ELocaleNamespace.Messages)}: \`/${getTranslation('list_command.addons_subcommand.more_info.1', locale, ELocaleNamespace.Messages)}\``)
                 .setColor(embedColor)
                 .setTimestamp()
                 .setAuthor({
-                    name: 'Add-ons list', // TODO: localize to addons
+                    name: getTranslation('list_command.addons_subcommand.addons_list', locale, ELocaleNamespace.Messages),
                     iconURL: combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_addons.png')
                 });
 
@@ -118,7 +118,7 @@ export async function handleAddonListCommandInteraction(interaction: ChatInputCo
 
                     const portraitBuffer = await layerIcons(characterBackground, characterPortrait) as Buffer;
 
-                    return { attachment: portraitBuffer, name: "generated_thumbnail.png"};
+                    return { attachment: portraitBuffer, name: "generated_thumbnail.png" };
                 }
             }
 

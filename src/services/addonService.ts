@@ -22,24 +22,17 @@ export async function initializeAddonsCache(locale: Locale): Promise<void> {
 }
 
 // region Helpers
-
 /**
- * Retrieves a single add-on by its exact name from the cache.
+ * Retrieves a single add-on by its ID from the cache.
  *
- * @param name - The name of the add-on to search for.
+ * @param id - The id of the add-on to search for.
  * @param locale - The locale to fetch add-ons for.
  * @returns {Promise<AddonExtended | undefined>} A promise that resolves with the add-on data if found, otherwise undefined.
  */
-export async function getAddonDataByName(name: string, locale: Locale): Promise<AddonExtended | undefined> {
+export async function getAddonDataById(id: string, locale: Locale): Promise<AddonExtended | undefined> {
     const cachedAddons = await getCachedAddons(locale);
 
-    const addonId = Object.keys(cachedAddons).find(key => cachedAddons[key].Name.toLowerCase() === name.toLowerCase());
-
-    if (addonId) {
-        return { AddonId: addonId, ...cachedAddons[addonId] };
-    }
-
-    return undefined;
+    return { AddonId: id, ...cachedAddons[id] };
 }
 
 /**
@@ -89,14 +82,18 @@ export async function getFilteredAddonsList(filters: Partial<Addon> = {}, locale
  *
  * @param query - The search string to match against add-on names.
  * @param locale - The locale to fetch add-ons for.
- * @returns {Promise<Addon[]>} A promise that resolves with a list of matching add-ons.
+ * @returns {Promise<AddonExtended[]>} A promise that resolves with a list of matching add-ons.
  */
-export async function getAddonChoices(query: string, locale: Locale): Promise<Addon[]> {
+export async function getAddonChoices(query: string, locale: Locale): Promise<AddonExtended[]> {
     const cachedAddons = await getCachedAddons(locale);
 
     const lowerCaseQuery = query.toLowerCase();
-    return Object.values(cachedAddons)
-        .filter(addon => addon.Name.toLowerCase().includes(lowerCaseQuery));
+    return Object.entries(cachedAddons)
+        .filter(([_, { Name }]) => Name.toLowerCase().includes(lowerCaseQuery))
+        .map(([addonId, addon]) => ({
+            ...addon,
+            AddonId: addonId,
+        }));
 }
 
 /**

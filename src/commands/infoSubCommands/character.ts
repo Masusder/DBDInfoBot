@@ -79,7 +79,7 @@ export async function handleCharacterCommandInteraction(interaction: ChatInputCo
                 inline: false
             },
             {
-                name: 'Perks', // TODO: localize
+                name: getTranslation('info_command.character_subcommand.perks', locale, ELocaleNamespace.Messages),
                 value: perkEmojis
                     .map(emoji => {
                         if (emoji.name && perks[emoji.name]) {
@@ -116,7 +116,7 @@ export async function handleCharacterCommandInteraction(interaction: ChatInputCo
         if (characterData.Hints.length > 0) {
             const hintsButton = new ButtonBuilder()
                 .setCustomId(`show_character_hints::${characterData.CharacterIndex}::${interaction.user.id}`)
-                .setLabel("Check Hints") // TODO: localize
+                .setLabel(getTranslation('info_command.character_subcommand.check_hints', locale, ELocaleNamespace.Messages))
                 .setStyle(ButtonStyle.Secondary);
 
             buttons.addComponents(hintsButton);

@@ -102,7 +102,7 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
 
             if (perkInfo.Character !== -1) {
                 const characterData = await getCharacterDataByIndex(perkInfo.Character, locale);
-                characterName = characterData ? `${getTranslation('shrine_command.character', locale, ELocaleNamespace.Messages)}: ${characterData.Name}` : '';
+                characterName = characterData ? `${getTranslation('shrine_command.character', locale, ELocaleNamespace.Messages)} - ${characterData.Name}` : '';
             }
 
             if (!currenciesMessage) {

@@ -5,12 +5,12 @@ import {
 } from 'discord.js';
 import {
     combineBaseUrlWithPath,
-    formatHtmlToDiscordMarkdown,
+    formatHtmlToDiscordMarkdown
 } from '@utils/stringUtils';
 import { getCharacterDataByIndex } from "@services/characterService";
 import {
-    IPaginationOptions,
-    genericPaginationHandler
+    genericPaginationHandler,
+    IPaginationOptions
 } from "./genericPaginationHandler";
 import { getTranslation } from "@utils/localizationUtils";
 import { sendUnauthorizedMessage } from "./unauthorizedHandler";
@@ -26,7 +26,7 @@ function createEmbed(description: string, iconPath: string, title: string, role:
         .setDescription(description)
         .setColor(Role[role].hexColor)
         .setTimestamp()
-        .setFooter({text: `Hint for ${characterName}`}); // TODO: localize
+        .setFooter({text: `${getTranslation('info_command.character_subcommand.hint_for', locale, ELocaleNamespace.Messages)} ${characterName}`});
 }
 
 function createEmbeds(hints: Hint[], characterName: string, locale: Locale) {
