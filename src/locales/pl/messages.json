@@ -50,6 +50,8 @@
       "more_info": "Więcej informacji",
       "view_pieces": "Zobacz elementy stroju",
       "linked_cosmetic": "Połączony kosmetyk",
+      "limited_until": "Limited Until",
+      "view_3d_model": "View 3D Model",
       "button_interaction": {
         "outfit_pieces": "Elementy stroju dla"
       }
