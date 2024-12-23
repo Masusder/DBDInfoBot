@@ -33,7 +33,10 @@
       "difficulty": "Difficoltà",
       "backstory": "Backstory di",
       "read_backstory": "Leggi Backstory",
-      "character_backstory": "Backstory del personaggio"
+      "character_backstory": "Backstory del personaggio",
+      "hint_for": "Hint for",
+      "check_hints": "Check Hints",
+      "perks": "Perks"
     },
     "cosmetic_subcommand": {
       "character": "Personaggio",
@@ -94,7 +97,7 @@
       "filters_applied": "Filtri applicati",
       "cosmetics_list": "Cosmetics list",
       "more_info": [
-        "Per ulteriori informazioni su un cosmetico specifico, utilizzare il comando",
+        "To learn more about a specific cosmetic, use the command",
         "info Cosmetico <cosmetic_name>"
       ]
     },
@@ -110,6 +113,19 @@
       "unknown_perk": "Perk Sconosciuto",
       "any_perks": "Qualsiasi Perk",
       "select_for_details": "Seleziona una build per visualizzare i dettagli."
+    },
+    "addons_subcommand": {
+      "addons_list": "List of Add-ons",
+      "found_total": [
+        "Found a total of",
+        "add-ons"
+      ],
+      "filters_applied": "Filters applied",
+      "cosmetics_list": "List of Cosmetics",
+      "more_info": [
+        "To learn more about a specific add-on, use the command",
+        "info Add-on <addon_name>"
+      ]
     }
   },
   "shrine_command": {
