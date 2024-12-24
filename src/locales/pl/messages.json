@@ -52,6 +52,8 @@
       "linked_cosmetic": "Połączony kosmetyk",
       "limited_until": "Limited Until",
       "view_3d_model": "View 3D Model",
+      "special_event": "Special Event",
+      "released_with_tome": "Released with Tome",
       "button_interaction": {
         "outfit_pieces": "Elementy stroju dla"
       }
