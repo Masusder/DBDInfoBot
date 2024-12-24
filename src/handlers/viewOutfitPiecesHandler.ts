@@ -18,6 +18,7 @@ import { Rarities } from "@data/Rarities";
 import { Cosmetic } from "@tps/cosmetic";
 import {
     hasLimitedAvailabilityEnded,
+    isCosmeticLimited,
     isCosmeticOnSale
 } from "@commands/infoSubCommands/cosmetic";
 
@@ -83,7 +84,7 @@ async function getCosmeticPiecesCombinedImage(cosmeticPieces: string[], cosmetic
                 background: Rarities[cosmeticPieceData.Rarity].storeCustomizationPath,
                 prefix: cosmeticPieceData.Prefix,
                 isLinked: cosmeticPieceData.Unbreakable,
-                isLimited: cosmeticPieceData.Purchasable && !hasLimitedAvailabilityEnded(cosmeticPieceData),
+                isLimited: isCosmeticLimited(cosmeticPieceData),
                 isOnSale
             };
 

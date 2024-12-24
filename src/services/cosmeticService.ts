@@ -110,6 +110,8 @@ export async function getFilteredCosmeticsList(filters: Partial<Cosmetic> = {}, 
     // These aren't cosmetics
     // so, I don't want them obviously
     // Hard-coded to improve performance
+    // TODO: perhaps make separated API endpoint for these
+    //       or simply store them as static data
     let excludeItems = new Set([
         "cellsPack_25",
         "cellsPack_50",
@@ -131,6 +133,22 @@ export async function getFilteredCosmeticsList(filters: Partial<Cosmetic> = {}, 
         if (value !== undefined) {
             cosmeticList = cosmeticList.filter((cosmetic: Cosmetic) => (cosmetic as any)[key] === value);
         }
+    }
+
+    // Filter cosmetics without active discounts
+    // IsDiscounted property still can be 'true' even
+    // when discount has already expired
+    const currentDate = new Date();
+    if (filters.IsDiscounted) {
+        cosmeticList = cosmeticList.filter((cosmetic: Cosmetic) => {
+            if (cosmetic.TemporaryDiscounts) {
+                return cosmetic.TemporaryDiscounts.some(discount =>
+                    currentDate >= new Date(discount.startDate) &&
+                    currentDate <= new Date(discount.endDate)
+                );
+            }
+            return false;
+        });
     }
 
     return cosmeticList;

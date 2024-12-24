@@ -75,7 +75,7 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
             background: Rarities[cosmeticRarity].storeCustomizationPath,
             prefix: cosmeticData.Prefix,
             isLinked,
-            isLimited: cosmeticData.Purchasable && !isPastLimitedAvaibilityEndDate && !!cosmeticData.LimitedTimeEndDate,
+            isLimited: isCosmeticLimited(cosmeticData),
             isOnSale: isOnSale
         };
         const customizationItemBuffer = await createStoreCustomizationIcons(storeCustomizationItem) as Buffer;
@@ -199,7 +199,7 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
 
         if (cosmeticData.EventId && specialEventData[cosmeticData.EventId]) {
             fields.push({
-                name: "Special Event", // TODO: localize
+                name: getTranslation('info_command.cosmetic_subcommand.special_event', locale, ELocaleNamespace.Messages),
                 value: specialEventData[cosmeticData.EventId].Name,
                 inline: true
             });
@@ -207,7 +207,7 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
 
         if (cosmeticData.TomeId && riftData[cosmeticData.TomeId]) {
             fields.push({
-                name: "Released with Tome", // TODO: localize
+                name: getTranslation('info_command.cosmetic_subcommand.released_with_tome', locale, ELocaleNamespace.Messages),
                 value: riftData[cosmeticData.TomeId].Name,
                 inline: true
             });
@@ -313,6 +313,14 @@ export function hasLimitedAvailabilityEnded(cosmetic: Cosmetic): boolean {
     // Don't bother me about this. I don't understand this either
     if (!cosmetic.LimitedTimeEndDate) return false;
     return new Date() > new Date(adjustForTimezone(cosmetic.LimitedTimeEndDate));
+}
+
+// To be limited:
+// 1. Cosmetic has to be purchasable
+// 2. Cosmetic limited availability still needs to be in effect
+// 3. Cosmetic LimitedTimeEndDate cannot be null/undefined, as that means it was never limited
+export function isCosmeticLimited(cosmetic: Cosmetic) {
+    return cosmetic.Purchasable && !hasLimitedAvailabilityEnded(cosmetic) && !!cosmetic.LimitedTimeEndDate;
 }
 
 export function isCosmeticOnSale(cosmetic: Cosmetic): { isOnSale: boolean; adjustedDiscountEndDate?: Date } {

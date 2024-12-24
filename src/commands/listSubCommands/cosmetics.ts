@@ -13,7 +13,6 @@ import {
     getInclusionVersionsForCosmetics
 } from "@services/cosmeticService";
 import {
-    adjustForTimezone,
     combineBaseUrlWithPath,
     formatHtmlToDiscordMarkdown,
     formatInclusionVersion
@@ -34,7 +33,7 @@ import { Role } from "@data/Role";
 import { CosmeticTypes } from "@data/CosmeticTypes";
 import { ERole } from "@tps/enums/ERole";
 import {
-    hasLimitedAvailabilityEnded,
+    isCosmeticLimited,
     isCosmeticOnSale
 } from "@commands/infoSubCommands/cosmetic";
 
@@ -132,7 +131,7 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
                     background: Rarities[cosmetic.Rarity].storeCustomizationPath,
                     prefix: cosmetic.Prefix,
                     isLinked: cosmetic.Unbreakable,
-                    isLimited: cosmetic.Purchasable && !hasLimitedAvailabilityEnded(cosmetic),
+                    isLimited: isCosmeticLimited(cosmetic),
                     isOnSale
                 };
 
@@ -169,6 +168,7 @@ function constructFilters(interaction: ChatInputCommandInteraction): Partial<Cos
     const inclusionVersion = interaction.options.getString('inclusion_version');
     const type = interaction.options.getString('type');
     const role = interaction.options.getString('role');
+    const onSale = interaction.options.getBoolean('on_sale');
 
     const filters: Partial<Cosmetic> = {};
 
@@ -179,6 +179,7 @@ function constructFilters(interaction: ChatInputCommandInteraction): Partial<Cos
     if (inclusionVersion !== null) filters.InclusionVersion = inclusionVersion;
     if (type !== null) filters.Category = type;
     if (role !== null) filters.Role = role as ERole;
+    if (onSale !== null) filters.IsDiscounted = onSale;
 
     return filters;
 }

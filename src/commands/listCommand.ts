@@ -280,6 +280,14 @@ export const data = i18next.isInitialized
                         .setDescriptionLocalizations(commandLocalizationHelper('list_command.cosmetics_subcommand.options.linked.description'))
                         .setRequired(false)
                 )
+                .addBooleanOption(option =>
+                    option
+                        .setName('on_sale')
+                        .setNameLocalizations(commandLocalizationHelper('list_command.cosmetics_subcommand.options.on_sale.name'))
+                        .setDescription(i18next.t('list_command.cosmetics_subcommand.options.on_sale.description', { lng: 'en' }))
+                        .setDescriptionLocalizations(commandLocalizationHelper('list_command.cosmetics_subcommand.options.on_sale.description'))
+                        .setRequired(false)
+                )
         )
         .addSubcommand(subcommand =>
             subcommand
