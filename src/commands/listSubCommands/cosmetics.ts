@@ -23,8 +23,6 @@ import { Cosmetic } from "@tps/cosmetic";
 import { Rarities } from "@data/Rarities";
 import {
     combineImagesIntoGrid,
-    createStoreCustomizationIcons,
-    IStoreCustomizationItem,
     layerIcons
 } from "@utils/imageUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
@@ -32,10 +30,7 @@ import { ThemeColors } from "@constants/themeColors";
 import { Role } from "@data/Role";
 import { CosmeticTypes } from "@data/CosmeticTypes";
 import { ERole } from "@tps/enums/ERole";
-import {
-    isCosmeticLimited,
-    isCosmeticOnSale
-} from "@commands/infoSubCommands/cosmetic";
+import { generateStoreCustomizationIcons } from "@commands/infoSubCommands/cosmetic";
 
 const COSMETICS_PER_PAGE = 6;
 
@@ -70,8 +65,8 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
 
             let authorName = getTranslation('list_command.cosmetics_subcommand.cosmetics_list', locale, ELocaleNamespace.Messages);
 
-            if (Category) authorName += ` (${getTranslation(CosmeticTypes[Category].localizedName, locale, ELocaleNamespace.General)})`
-            if (InclusionVersion) authorName += ` (${formatInclusionVersion(InclusionVersion, locale)})`
+            if (Category) authorName += ` (${getTranslation(CosmeticTypes[Category].localizedName, locale, ELocaleNamespace.General)})`;
+            if (InclusionVersion) authorName += ` (${formatInclusionVersion(InclusionVersion, locale)})`;
 
             const embed = new EmbedBuilder()
                 .setTitle(title)
@@ -122,23 +117,7 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
         };
 
         const generateImage = async(pageItems: Cosmetic[]) => {
-            const imageSources: IStoreCustomizationItem[] = [];
-            pageItems.forEach((cosmetic: Cosmetic) => {
-                const { isOnSale } = isCosmeticOnSale(cosmetic);
-
-                const model: IStoreCustomizationItem = {
-                    icon: combineBaseUrlWithPath(cosmetic.IconFilePathList),
-                    background: Rarities[cosmetic.Rarity].storeCustomizationPath,
-                    prefix: cosmetic.Prefix,
-                    isLinked: cosmetic.Unbreakable,
-                    isLimited: isCosmeticLimited(cosmetic),
-                    isOnSale
-                };
-
-                imageSources.push(model);
-            });
-
-            const customizationBuffers = await createStoreCustomizationIcons(imageSources) as Buffer[];
+            const customizationBuffers = await generateStoreCustomizationIcons(pageItems) as Buffer[];
 
             return await combineImagesIntoGrid(customizationBuffers);
         };

@@ -25,6 +25,9 @@ export interface Cosmetic {
     Character: number;
     Unbreakable: boolean;
     Purchasable: boolean;
+    /**
+     * ISO 8601 string
+     */
     ReleaseDate: string;
     LimitedTimeEndDate?: string | null;
     Role: ERole;

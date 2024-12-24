@@ -340,6 +340,46 @@ export function isCosmeticOnSale(cosmetic: Cosmetic): { isOnSale: boolean; adjus
     return { isOnSale: false };
 }
 
+/**
+ * Generates store customization icons based on either an array of cosmetic IDs or an array of cosmetic objects.
+ *
+ * @param cosmeticItems - An array of cosmetic IDs (strings) or an array of cosmetic objects.
+ * @param cosmeticData - A record containing all the cosmetic data indexed by cosmetic IDs.
+ *
+ * @returns A Promise that resolves to an array of Buffers representing the generated store customization icons.
+ */
+export async function generateStoreCustomizationIcons(cosmeticItems: (string[] | Cosmetic[]), cosmeticData?: Record<string, Cosmetic>): Promise<Buffer[]> {
+    const imageSources: IStoreCustomizationItem[] = [];
+
+    const isCosmeticIdsArray = Array.isArray(cosmeticItems) && typeof cosmeticItems[0] === 'string';
+
+    let items: Cosmetic[] = [];
+    if (isCosmeticIdsArray) {
+        if (!cosmeticData) throw new Error('If passing an array of cosmetic IDs, you must provide cosmetic data. Alternatively, pass an array of Cosmetic objects directly.');
+
+        items = (cosmeticItems as string[]).map(cosmeticId => cosmeticData[cosmeticId]);
+    } else {
+        items = cosmeticItems as Cosmetic[];
+    }
+
+    items.forEach((cosmetic: Cosmetic) => {
+        const { isOnSale } = isCosmeticOnSale(cosmetic);
+
+        const model: IStoreCustomizationItem = {
+            icon: combineBaseUrlWithPath(cosmetic.IconFilePathList),
+            background: Rarities[cosmetic.Rarity].storeCustomizationPath,
+            prefix: cosmetic.Prefix,
+            isLinked: cosmetic.Unbreakable,
+            isLimited: isCosmeticLimited(cosmetic),
+            isOnSale
+        };
+
+        imageSources.push(model);
+    });
+
+    return await createStoreCustomizationIcons(imageSources) as Buffer[];
+}
+
 // endregion
 
 // region Autocomplete

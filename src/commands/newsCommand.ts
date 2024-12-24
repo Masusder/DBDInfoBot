@@ -31,7 +31,11 @@ import {
     NewsItem
 } from "@tps/news";
 import { CosmeticTypes } from "@data/CosmeticTypes";
-import { combineImagesIntoGrid } from "@utils/imageUtils";
+import {
+    combineImagesIntoGrid,
+    createStoreCustomizationIcons,
+    IStoreCustomizationItem
+} from "@utils/imageUtils";
 import { getCachedCosmetics } from "@services/cosmeticService";
 import {
     commandLocalizationHelper,
@@ -39,6 +43,13 @@ import {
 } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { genericPaginationHandler } from "@handlers/genericPaginationHandler";
+import { Cosmetic } from "@tps/cosmetic";
+import {
+    generateStoreCustomizationIcons,
+    isCosmeticLimited,
+    isCosmeticOnSale
+} from "@commands/infoSubCommands/cosmetic";
+import { Rarities } from "@data/Rarities";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -427,8 +438,10 @@ async function createItemShowcaseImage(content: ContentItem[], locale: Locale): 
         }
     }
 
+    const customizationBuffers = await generateStoreCustomizationIcons(cosmeticIds, cosmeticData)
+
     if (imageUrls.length > 0) {
-        return await combineImagesIntoGrid(imageUrls, 5, 10);
+        return await combineImagesIntoGrid(customizationBuffers, 5, 10);
     }
 
     return null;

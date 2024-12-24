@@ -9,8 +9,14 @@ export interface Collection {
     HeroImage: string;
     HeroVideo: string;
     InclusionVersion: string;
-    UpdatedDate: Date;
-    LimitedAvailabilityStartDate?: Date | null;
+    /**
+     * ISO 8601 string
+     */
+    UpdatedDate: string;
+    /**
+     * ISO 8601 string
+     */
+    LimitedAvailabilityStartDate?: string | null;
     Items: string[];
     SortOrder: string;
     VisibleBeforeStartDate: boolean;
