@@ -32,7 +32,12 @@
   "currencies": {
     "bloodpoints": "Очки Крови",
     "shards": "Радужные Осколки",
-    "auric_cells": "Золотые Клетки"
+    "auric_cells": "Золотые Клетки",
+    "rift_fragments": "Rift Fragments",
+    "halloween_event_currency": "Dark Trinkets",
+    "winter_event_currency": "Frosty Trinkets",
+    "spring_event_currency": "Blood Trinkets",
+    "anniversary_event_currency": "Gilded Trinkets"
   },
   "cosmetic_types": {
     "outfit": "Набор Одежды",
