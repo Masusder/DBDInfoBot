@@ -52,6 +52,8 @@
       "linked_cosmetic": "Cosmetico Collegato",
       "limited_until": "Limited Until",
       "view_3d_model": "View 3D Model",
+      "special_event": "Special Event",
+      "released_with_tome": "Released with Tome",
       "button_interaction": {
         "outfit_pieces": "Pezzi di outfit per"
       }
