@@ -39,11 +39,13 @@ import { Role } from "@data/Role";
 import { layerIcons } from "@utils/imageUtils";
 import Constants from "@constants/index";
 import {
+    createEmojiMarkdown,
     getApplicationEmoji,
     getOrCreateApplicationEmoji
 } from "@utils/emojiManager";
 import { ELocaleNamespace } from '@tps/enums/ELocaleNamespace';
 import { ThemeColors } from "@constants/themeColors";
+import { Currencies } from "@data/Currencies";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -64,8 +66,10 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
             await interaction.deferReply();
         }
 
-        const shrineData = await getCachedShrine();
-        const perkData = await getCachedPerks(locale);
+        const [shrineData, perkData] = await Promise.all([
+            getCachedShrine(),
+            getCachedPerks(locale)
+        ])
 
         if (!shrineData || !shrineData.currentShrine || !perkData) return;
 
@@ -89,6 +93,11 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
 
         const shrineCanvasBuffer = await createShrineCanvas(correctlyCasedPerkData, perkData);
 
+        const [bloodpointEmoji, shardEmoji] = await Promise.all([
+            getApplicationEmoji(Currencies["Bloodpoints"].emojiId),
+            getApplicationEmoji(Currencies["Shards"].emojiId)
+        ]) as ApplicationEmoji[];
+
         let currenciesMessage = "";
         const perksList: APIEmbedField[] = [];
         const buttons: ButtonBuilder[] = [];
@@ -98,22 +107,22 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
             if (!perkInfo) continue;
 
             const perkName = perkInfo.Name;
-            let characterName = '';
 
+            let characterName = ' ';
             if (perkInfo.Character !== -1) {
                 const characterData = await getCharacterDataByIndex(perkInfo.Character, locale);
                 characterName = characterData ? `${getTranslation('shrine_command.character', locale, ELocaleNamespace.Messages)} - ${characterData.Name}` : '';
             }
 
             if (!currenciesMessage) {
-                currenciesMessage = `\n\n**${getTranslation('currencies.shards', locale, ELocaleNamespace.General)}:** ${correctlyCasedPerkData[perkId].shards.join('/')} \n**${getTranslation('currencies.bloodpoints', locale, ELocaleNamespace.General)}:** ${formatNumber(correctlyCasedPerkData[perkId].bloodpoints)}`
+                currenciesMessage = `\n\n${createEmojiMarkdown(shardEmoji)} **${getTranslation('currencies.shards', locale, ELocaleNamespace.General)}:** ${correctlyCasedPerkData[perkId].shards.join('/')} \n${createEmojiMarkdown(bloodpointEmoji)} **${getTranslation('currencies.bloodpoints', locale, ELocaleNamespace.General)}:** ${formatNumber(correctlyCasedPerkData[perkId].bloodpoints)}\n⠀`
             }
 
             const perkEmoji = await getApplicationEmoji(perkId);
-            const perkFieldTitle = perkEmoji ? `<:${perkEmoji.name}:${perkEmoji.id}> ${perkName}` : perkName;
+            const perkFieldTitle = perkEmoji ? `${createEmojiMarkdown(perkEmoji)} ${perkName}` : perkName;
             const perkField = {
                 name: perkFieldTitle,
-                value: `${characterName}`,
+                value: characterName,
                 inline: true
             };
 

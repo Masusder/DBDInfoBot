@@ -3,11 +3,6 @@ import { ERole } from "@tps/enums/ERole";
 /**
  * See https://github.com/Masusder/UEParser/blob/master/UEParser/Models/APIComposerModels/Cosmetic.cs
  */
-export interface Price {
-    Cells?: number;
-    Shards?: number;
-}
-
 export interface TemporaryDiscount {
     currencyId: string;
     discountPercentage: number;
@@ -39,6 +34,6 @@ export interface Cosmetic {
     OutfitItems: string[];
     DiscountPercentage: number;
     IsDiscounted: boolean;
-    Prices: Price[];
+    Prices: Record<string, number>[];
     TemporaryDiscounts: TemporaryDiscount[];
 }

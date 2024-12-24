@@ -103,3 +103,7 @@ export async function getApplicationEmoji(emojiName: string): Promise<Applicatio
         return null;
     }
 }
+
+export function createEmojiMarkdown(emoji: ApplicationEmoji) {
+    return `<:${emoji.name}:${emoji.id}>`
+}

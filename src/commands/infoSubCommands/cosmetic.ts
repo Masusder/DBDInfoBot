@@ -22,6 +22,7 @@ import {
 import {
     adjustForTimezone,
     combineBaseUrlWithPath,
+    formatHtmlToDiscordMarkdown,
     formatInclusionVersion,
     formatNumber
 } from "@utils/stringUtils";
@@ -34,6 +35,13 @@ import { getCharacterDataByIndex } from "@services/characterService";
 import { getTranslation } from "@utils/localizationUtils";
 import { Cosmetic } from "@tps/cosmetic";
 import { ELocaleNamespace } from '@tps/enums/ELocaleNamespace';
+import { getCachedSpecialEvents } from "@services/specialEventService";
+import { getCachedRifts } from "@services/riftService";
+import { Currencies } from "@data/Currencies";
+import {
+    createEmojiMarkdown,
+    getApplicationEmoji
+} from "@utils/emojiManager";
 
 export async function handleCosmeticCommandInteraction(interaction: ChatInputCommandInteraction) {
     const cosmeticId = interaction.options.getString('name');
@@ -44,8 +52,12 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
     try {
         await interaction.deferReply();
 
-        const cosmeticData = await getCosmeticDataById(cosmeticId, locale);
-        if (!cosmeticData) {
+        const [cosmeticData, specialEventData, riftData] = await Promise.all([
+            getCosmeticDataById(cosmeticId, locale),
+            getCachedSpecialEvents(locale),
+            getCachedRifts(locale)
+        ]);
+        if (!cosmeticData || !specialEventData || !riftData || Object.keys(specialEventData).length === 0 || Object.keys(riftData).length === 0) {
             await interaction.followUp(`${getTranslation('info_command.cosmetic_subcommand.cosmetic_not_found', locale, ELocaleNamespace.Errors)} "${cosmeticId}".`);
             return;
         }
@@ -80,48 +92,37 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
 
         const priceFields: APIEmbedField[] = [];
         if (cosmeticData.Prices && isPurchasable && !isPastLimitedAvaibilityEndDate) {
-            const cellsPrice = cosmeticData.Prices.find(price => price.Cells);
-            const shardsPrice = cosmeticData.Prices.find(price => price.Shards);
+            cosmeticData.Prices.forEach(price => {
+                Object.keys(price).forEach(async currencyKey => {
+                    const originalPrice = price[currencyKey] ?? 0;
+                    const discountPercentage = getDiscountPercentage(currencyKey, cosmeticData);
+                    const discountedPrice = calculateDiscountedPrice(originalPrice, discountPercentage);
 
-            if (cellsPrice) {
-                const originalCellsPrice = cellsPrice.Cells ?? 0;
-                const discountPercentage = getDiscountPercentage("Cells", cosmeticData);
-                const discountedCellsPrice = calculateDiscountedPrice(originalCellsPrice, discountPercentage);
+                    const currencyData = Currencies[currencyKey];
 
-                if (discountPercentage > 0) {
-                    priceFields.push({
-                        name: getTranslation('currencies.auric_cells', locale, ELocaleNamespace.General),
-                        value: `~~${originalCellsPrice}~~ ${discountedCellsPrice}`,
-                        inline: true
-                    });
-                } else if (originalCellsPrice !== 0) {
-                    priceFields.push({
-                        name: getTranslation('currencies.auric_cells', locale, ELocaleNamespace.General),
-                        value: `${originalCellsPrice}`,
-                        inline: true
-                    });
-                }
-            }
+                    if (!currencyData) return;
 
-            if (shardsPrice) {
-                const originalShardsPrice = shardsPrice.Shards ?? 0;
-                const discountPercentage = getDiscountPercentage("Shards", cosmeticData);
-                const discountedShardsPrice = calculateDiscountedPrice(originalShardsPrice, discountPercentage);
+                    let translationKey = currencyData.localizedName;
 
-                if (discountPercentage > 0) {
-                    priceFields.push({
-                        name: getTranslation('currencies.shards', locale, ELocaleNamespace.General),
-                        value: `~~${formatNumber(originalShardsPrice)}~~ ${formatNumber(discountedShardsPrice)}`,
-                        inline: true
-                    });
-                } else if (originalShardsPrice !== 0) {
-                    priceFields.push({
-                        name: getTranslation('currencies.shards', locale, ELocaleNamespace.General),
-                        value: `${formatNumber(originalShardsPrice)}`,
-                        inline: true
-                    });
-                }
-            }
+                    const currencyEmoji = await getApplicationEmoji(currencyData.emojiId);
+                    const emojiMarkdown = createEmojiMarkdown(currencyEmoji!);
+
+                    const currencyFieldName = `${emojiMarkdown} ${getTranslation(translationKey, locale, ELocaleNamespace.General)}`
+                    if (discountPercentage > 0) {
+                        priceFields.push({
+                            name: currencyFieldName,
+                            value: `~~${formatNumber(originalPrice)}~~ ${formatNumber(discountedPrice)}`,
+                            inline: true
+                        });
+                    } else if (originalPrice !== 0) {
+                        priceFields.push({
+                            name: currencyFieldName,
+                            value: `${formatNumber(originalPrice)}`,
+                            inline: true
+                        });
+                    }
+                });
+            });
         }
 
         const embedTitle = formatEmbedTitle(cosmeticData.CosmeticName, isLinked, locale);
@@ -163,13 +164,18 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
                 value: formatInclusionVersion(cosmeticData.InclusionVersion, locale) || 'N/A',
                 inline: true
             },
-            {
-                name: getTranslation('info_command.cosmetic_subcommand.release_date', locale, ELocaleNamespace.Messages),
-                value: isPurchasable ? formattedReleaseDate : 'N/A',
-                inline: true
-            },
             ...priceFields
         );
+
+        if (isPurchasable) {
+            fields.push(
+                {
+                    name: getTranslation('info_command.cosmetic_subcommand.release_date', locale, ELocaleNamespace.Messages),
+                    value: isPurchasable ? formattedReleaseDate : 'N/A',
+                    inline: true
+                }
+            );
+        }
 
         if (isPurchasable && !isPastLimitedAvaibilityEndDate && cosmeticData.LimitedTimeEndDate) {
             fields.push(
@@ -178,18 +184,33 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
                     value: `<t:${Math.floor(adjustForTimezone(cosmeticData.LimitedTimeEndDate) / 1000)}>`,
                     inline: true
                 }
-            )
+            );
         }
 
         if (isOnSale && adjustedDiscountEndDate) {
-                const adjustedDiscountEndDateUnix = Math.floor(adjustedDiscountEndDate?.getTime() / 1000);
+            const adjustedDiscountEndDateUnix = Math.floor(adjustedDiscountEndDate?.getTime() / 1000);
 
-                fields.push({
-                    name: getTranslation('info_command.cosmetic_subcommand.sale', locale, ELocaleNamespace.Messages),
-                    value: `<t:${adjustedDiscountEndDateUnix}>`,
-                    inline: true
-                });
+            fields.push({
+                name: getTranslation('info_command.cosmetic_subcommand.sale', locale, ELocaleNamespace.Messages),
+                value: `<t:${adjustedDiscountEndDateUnix}>`,
+                inline: true
+            });
+        }
 
+        if (cosmeticData.EventId && specialEventData[cosmeticData.EventId]) {
+            fields.push({
+                name: "Special Event", // TODO: localize
+                value: specialEventData[cosmeticData.EventId].Name,
+                inline: true
+            });
+        }
+
+        if (cosmeticData.TomeId && riftData[cosmeticData.TomeId]) {
+            fields.push({
+                name: "Released with Tome", // TODO: localize
+                value: riftData[cosmeticData.TomeId].Name,
+                inline: true
+            });
         }
 
         const filteredFields = fields.filter((field): field is APIEmbedField => field !== null);
@@ -197,7 +218,7 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
         const embed = new EmbedBuilder()
             .setColor(embedColor)
             .setTitle(embedTitle)
-            .setDescription(cosmeticData.Description)
+            .setDescription(formatHtmlToDiscordMarkdown(cosmeticData.Description))
             .addFields(filteredFields)
             .setImage(`attachment://cosmetic_${cosmeticData.CosmeticId}.png`)
             .setTimestamp()
@@ -208,7 +229,7 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
             embed.setAuthor({
                 name: getTranslation(category.localizedName, locale, ELocaleNamespace.General),
                 iconURL: category.icon
-            })
+            });
         }
 
         if (cosmeticData.Character !== -1) {
@@ -229,7 +250,7 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
         const view3dModelButton = new ButtonBuilder()
             .setLabel(getTranslation('info_command.cosmetic_subcommand.view_3d_model', locale, ELocaleNamespace.Messages))
             .setStyle(ButtonStyle.Link)
-            .setURL(combineBaseUrlWithPath(`/store/3d-viewer?viewerCosmetics=${viewerCosmeticsParam}`))
+            .setURL(combineBaseUrlWithPath(`/store/3d-viewer?viewerCosmetics=${viewerCosmeticsParam}`));
 
         const redirectButton = new ButtonBuilder()
             .setLabel(getTranslation('info_command.cosmetic_subcommand.more_info', locale, ELocaleNamespace.Messages))
@@ -239,7 +260,7 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
         const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(redirectButton);
 
         if ((cosmeticData.ModelDataPath && cosmeticData.ModelDataPath !== "None") || cosmeticData.Type === "outfit") {
-            actionRow.addComponents(view3dModelButton)
+            actionRow.addComponents(view3dModelButton);
         }
 
         if (outfitPieces.length > 0) {
@@ -280,11 +301,10 @@ function getDiscountPercentage(currencyId: string, cosmeticData: Cosmetic): numb
 
     const tempDiscount = activeTemporaryDiscounts.find(discount => discount.currencyId === currencyId);
 
-    if (currencyId === "Shards") {
-        return tempDiscount ? tempDiscount.discountPercentage : 0; // No base discount for Shards
-    }
-
-    return tempDiscount ? tempDiscount.discountPercentage : cosmeticData.DiscountPercentage;
+    // Base discount only applies to Auric Cells
+    return currencyId === "Cells" || tempDiscount
+        ? tempDiscount?.discountPercentage ?? cosmeticData.DiscountPercentage
+        : 0;
 }
 
 export function hasLimitedAvailabilityEnded(cosmetic: Cosmetic): boolean {

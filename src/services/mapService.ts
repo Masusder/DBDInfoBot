@@ -15,7 +15,7 @@ import { Locale } from "discord.js";
  *
  * @returns {Promise<void>} A promise that resolves once the Map cache is initialized.
  */
-export async function initializeMapCache(locale: Locale): Promise<void> {
+async function initializeMapCache(locale: Locale): Promise<void> {
     await initializeGameDataCache<Map>('/api/maps', EGameData.MapsData, locale);
 }
 
