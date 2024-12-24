@@ -32,7 +32,12 @@
   "currencies": {
     "bloodpoints": "Bloodpoints",
     "shards": "Shards",
-    "auric_cells": "Auric Cells"
+    "auric_cells": "Auric Cells",
+    "rift_fragments": "Rift Fragments",
+    "halloween_event_currency": "Dark Trinkets",
+    "winter_event_currency": "Frosty Trinkets",
+    "spring_event_currency": "Blood Trinkets",
+    "anniversary_event_currency": "Gilded Trinkets"
   },
   "cosmetic_types": {
     "outfit": "Outfit",
