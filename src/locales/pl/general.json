@@ -32,7 +32,12 @@
   "currencies": {
     "bloodpoints": "Punkty krwi",
     "shards": "Błyszczące odłamki",
-    "auric_cells": "Złociste mikrobiomy"
+    "auric_cells": "Złociste mikrobiomy",
+    "rift_fragments": "Rift Fragments",
+    "halloween_event_currency": "Dark Trinkets",
+    "winter_event_currency": "Frosty Trinkets",
+    "spring_event_currency": "Blood Trinkets",
+    "anniversary_event_currency": "Gilded Trinkets"
   },
   "cosmetic_types": {
     "outfit": "Strój",
