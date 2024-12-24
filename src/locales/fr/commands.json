@@ -61,6 +61,10 @@
         "role": {
           "name": "role",
           "description": "Specify role cosmetic belongs to."
+        },
+        "on_sale": {
+          "name": "on_sale",
+          "description": "Specify whether cosmetic should be currently on sale."
         }
       }
     },
