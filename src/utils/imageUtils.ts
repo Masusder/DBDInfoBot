@@ -299,14 +299,9 @@ export async function combineImagesIntoGrid(imageSources: (string | Buffer)[], m
 
     const images: Image[] = (
         await Promise.all(
-            imageSources.map(async(source) => {
-                if (typeof source === 'string') {
-                    return loadImage(source).catch(() => null);
-                } else if (Buffer.isBuffer(source)) {
-                    return loadImage(source).catch(() => null);
-                }
-                return null;
-            })
+            imageSources.map(async(source) =>
+                loadImage(source).catch(() => null)
+            )
         )
     ).filter((img): img is Image => {
         if (img) {
