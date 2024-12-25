@@ -34,10 +34,10 @@
     "shards": "Błyszczące odłamki",
     "auric_cells": "Złociste mikrobiomy",
     "rift_fragments": "Fragmenty szczeliny",
-    "halloween_event_currency": "Dark Trinkets",
-    "winter_event_currency": "Frosty Trinkets",
-    "spring_event_currency": "Blood Trinkets",
-    "anniversary_event_currency": "Gilded Trinkets"
+    "halloween_event_currency": "Mroczne gadżety",
+    "winter_event_currency": "Mroźne gadżety",
+    "spring_event_currency": "Zakrzepowe gadżety",
+    "anniversary_event_currency": "Pozłacane gadżety"
   },
   "cosmetic_types": {
     "outfit": "Strój",
@@ -51,12 +51,12 @@
     "badge": "Odznaka",
     "banner": "Baner",
     "power": "Moc",
-    "killer_power": "Killer's Power",
-    "killer_arm": "Killer's Arm",
-    "killer_mask": "Mask",
-    "killer_upper_body": "Killer's Upper Body",
-    "killer_lower_body": "Killer's Lower Body",
-    "survivor_hand": "Survivor's Hand"
+    "killer_power": "Moc zabójcy",
+    "killer_arm": "Ramię zabójcy",
+    "killer_mask": "Maska",
+    "killer_upper_body": "Górna część ciała zabójcy",
+    "killer_lower_body": "Dolna część ciała zabójcy",
+    "survivor_hand": "Ręka ocalałego"
   },
   "build_categories": {
     "fun": "Zabawa",
