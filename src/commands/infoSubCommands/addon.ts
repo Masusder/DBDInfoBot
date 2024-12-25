@@ -14,21 +14,21 @@ import { getTranslation } from "@utils/localizationUtils";
 import { layerIcons } from "@utils/imageUtils";
 import {
     getAddonChoices,
-    getAddonDataByName
+    getAddonDataById,
 } from "@services/addonService";
 import { Rarities } from "@data/Rarities";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 
 export async function handleAddonCommandInteraction(interaction: ChatInputCommandInteraction) {
-    const addonName = interaction.options.getString('name');
+    const addonId = interaction.options.getString('name');
     const locale = interaction.locale;
 
-    if (!addonName) return;
+    if (!addonId) return;
 
     try {
         await interaction.deferReply();
 
-        const addonData = await getAddonDataByName(addonName, locale);
+        const addonData = await getAddonDataById(addonId, locale);
 
         if (!addonData) return;
 
@@ -40,7 +40,7 @@ export async function handleAddonCommandInteraction(interaction: ChatInputComman
 
         const addonBackgroundUrl = rarityData.itemsAddonsBackgroundPath;
         const addonIconUrl = combineBaseUrlWithPath(addonData.Image);
-        const imageBuffer = await layerIcons(addonBackgroundUrl, addonIconUrl);
+        const imageBuffer = await layerIcons(addonBackgroundUrl, addonIconUrl) as Buffer;
 
         const fields: APIEmbedField[] = [
             {
@@ -61,7 +61,7 @@ export async function handleAddonCommandInteraction(interaction: ChatInputComman
 
         const embed = new EmbedBuilder()
             .setColor(rarityData.color as ColorResolvable)
-            .setTitle(addonName)
+            .setTitle(addonData.Name)
             .setFields(fields)
             .setTimestamp()
             .setThumbnail(`attachment://addonImage_${addonData.AddonId}.png`)
@@ -90,7 +90,7 @@ export async function handleAddonCommandAutocompleteInteraction(interaction: Aut
 
         const options = choices.slice(0, 25).map(addon => ({
             name: addon.Name,
-            value: addon.Name
+            value: addon.AddonId
         }));
 
         await interaction.respond(options);

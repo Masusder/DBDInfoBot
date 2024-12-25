@@ -10,7 +10,8 @@ import {
 } from "@services/characterService";
 import {
     getFilteredCosmeticsList,
-    getInclusionVersionsForCosmetics
+    getInclusionVersionsForCosmetics,
+    ICustomFilters
 } from "@services/cosmeticService";
 import {
     combineBaseUrlWithPath,
@@ -19,10 +20,18 @@ import {
 } from "@utils/stringUtils";
 import { genericPaginationHandler } from "@handlers/genericPaginationHandler";
 import { getTranslation } from "@utils/localizationUtils";
-import { Cosmetic } from "../../types";
+import { Cosmetic } from "@tps/cosmetic";
 import { Rarities } from "@data/Rarities";
-import { combineImagesIntoGrid } from "@utils/imageUtils";
+import {
+    combineImagesIntoGrid,
+    layerIcons
+} from "@utils/imageUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import { ThemeColors } from "@constants/themeColors";
+import { Role } from "@data/Role";
+import { CosmeticTypes } from "@data/CosmeticTypes";
+import { ERole } from "@tps/enums/ERole";
+import { generateStoreCustomizationIcons } from "@commands/infoSubCommands/cosmetic";
 
 const COSMETICS_PER_PAGE = 6;
 
@@ -32,12 +41,12 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
     try {
         await interaction.deferReply();
 
-        const filters = constructFilters(interaction);
+        const { filters, customFilters }  = constructFilters(interaction);
         const filterCount = Object.keys(filters).length;
 
-        const { Character = -1, Rarity } = filters; // Deconstruct filters for use
+        const { Character = -1, Rarity, Category, InclusionVersion } = filters; // Deconstruct filters for use
 
-        const cosmetics = await getFilteredCosmeticsList(filters, locale);
+        const cosmetics = await getFilteredCosmeticsList(filters, locale, customFilters);
 
         if (cosmetics.length === 0) {
             const message = filterCount > 0
@@ -53,14 +62,22 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
             // Let user know that filters were applied
             if (filterCount > 0) title += ` (${getTranslation('list_command.cosmetics_subcommand.filters_applied', locale, ELocaleNamespace.Messages)}: ${filterCount})`;
 
-            const embedColor = Rarity ? Rarities[Rarity].color : '#5865f2';
+            const embedColor = Rarity ? Rarities[Rarity].color : ThemeColors.PRIMARY;
+
+            let authorName = getTranslation('list_command.cosmetics_subcommand.cosmetics_list', locale, ELocaleNamespace.Messages);
+
+            if (Category) authorName += ` (${getTranslation(CosmeticTypes[Category].localizedName, locale, ELocaleNamespace.General)})`;
+            if (InclusionVersion) authorName += ` (${formatInclusionVersion(InclusionVersion, locale)})`;
 
             const embed = new EmbedBuilder()
                 .setTitle(title)
                 .setDescription(`${getTranslation('list_command.cosmetics_subcommand.more_info.0', locale, ELocaleNamespace.Messages)}: \`/${getTranslation('list_command.cosmetics_subcommand.more_info.1', locale, ELocaleNamespace.Messages)}\``)
                 .setColor(embedColor as ColorResolvable)
-                .setFooter({ text: getTranslation('list_command.cosmetics_subcommand.cosmetics_list', locale, ELocaleNamespace.Messages) })
-                .setTimestamp();
+                .setTimestamp()
+                .setAuthor({
+                    name: authorName,
+                    iconURL: Category ? CosmeticTypes[Category].icon : combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_store.png')
+                });
 
             if (Character !== -1) {
                 const characterData = await getCharacterDataByIndex(Character, locale);
@@ -72,7 +89,7 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
 
             pageItems.forEach(cosmetic => {
                 const description = formatHtmlToDiscordMarkdown(cosmetic.Description);
-                const formattedAndTruncatedDescription = description.length > 45 ? description.substring(0, 45) + '..' : description;
+                const formattedAndTruncatedDescription = description.length > 60 ? description.substring(0, 60) + '..' : description;
 
                 embed.addFields({
                     name: cosmetic.CosmeticName,
@@ -84,13 +101,26 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
             return embed;
         };
 
-        const generateImage = async(pageItems: Cosmetic[]) => {
-            const imageUrls: string[] = [];
-            pageItems.forEach((cosmetic: Cosmetic) => {
-                imageUrls.push(combineBaseUrlWithPath(cosmetic.IconFilePathList));
-            });
+        const generateThumbnail = async(): Promise<{ attachment: Buffer | string; name: string } | null> => {
+            if (Character !== -1) {
+                const characterData = await getCharacterDataByIndex(Character, locale);
+                if (characterData) {
+                    const characterBackground = Role[characterData.Role as 'Killer' | 'Survivor'].charPortrait;
+                    const characterPortrait = combineBaseUrlWithPath(characterData.IconFilePath);
 
-            return await combineImagesIntoGrid(imageUrls);
+                    const portraitBuffer = await layerIcons(characterBackground, characterPortrait) as Buffer;
+
+                    return { attachment: portraitBuffer, name: "generated_thumbnail.png" };
+                }
+            }
+
+            return null;
+        };
+
+        const generateImage = async(pageItems: Cosmetic[]) => {
+            const customizationBuffers = await generateStoreCustomizationIcons(pageItems) as Buffer[];
+
+            return await combineImagesIntoGrid(customizationBuffers);
         };
 
         await genericPaginationHandler({
@@ -100,7 +130,8 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
             generateImage,
             interactionUserId: interaction.user.id,
             interactionReply: interaction,
-            locale
+            locale,
+            generatedThumbnail: await generateThumbnail()
         });
     } catch (error) {
         console.error("Error executing cosmetics list subcommand:", error);
@@ -109,13 +140,16 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
 
 // region Cosmetic List Utils
 
-function constructFilters(interaction: ChatInputCommandInteraction): Partial<Cosmetic> {
+function constructFilters(interaction: ChatInputCommandInteraction): { filters: Partial<Cosmetic>, customFilters: Partial<ICustomFilters> } {
     const characterIndexString = interaction.options.getString('character');
     const isLinked = interaction.options.getBoolean('linked');
     const isPurchasable = interaction.options.getBoolean('purchasable');
     const rarity = interaction.options.getString('rarity');
     const inclusionVersion = interaction.options.getString('inclusion_version');
     const type = interaction.options.getString('type');
+    const role = interaction.options.getString('role');
+    const onSale = interaction.options.getBoolean('on_sale');
+
     const filters: Partial<Cosmetic> = {};
 
     if (characterIndexString) filters.Character = parseInt(characterIndexString);
@@ -123,9 +157,17 @@ function constructFilters(interaction: ChatInputCommandInteraction): Partial<Cos
     if (isPurchasable !== null) filters.Purchasable = isPurchasable;
     if (rarity !== null) filters.Rarity = rarity;
     if (inclusionVersion !== null) filters.InclusionVersion = inclusionVersion;
-    if (type !== null) filters.Type = type;
+    if (type !== null) filters.Category = type;
+    if (role !== null) filters.Role = role as ERole;
+    if (onSale !== null) filters.IsDiscounted = onSale;
 
-    return filters;
+    const isLimited = interaction.options.getBoolean('limited');
+
+    const customFilters: Partial<ICustomFilters> = {};
+
+    if (isLimited !== null) customFilters.isLimited = isLimited;
+
+    return {filters, customFilters};
 }
 
 // endregion

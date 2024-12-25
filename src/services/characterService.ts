@@ -58,14 +58,30 @@ export async function getCharacterDataByIndex(index: string | number, locale: Lo
  *
  * @param query - The search query to match character names against.
  * @param locale - The locale to fetch the character data for.
+ * @param filters - An optional object containing filter properties from the Character interface.
  * @returns {Promise<Character[]>} A promise that resolves to an array of matching characters.
  */
-export async function getCharacterChoices(query: string, locale: Locale): Promise<Character[]> {
+export async function getCharacterChoices(
+    query: string,
+    locale: Locale,
+    filters: Partial<Character> = {}
+): Promise<Character[]> {
     const cachedCharacters = await getCachedCharacters(locale);
 
     const lowerCaseQuery = query.toLowerCase();
     return Object.entries(cachedCharacters)
-        .filter(([_, character]) => character.Name.toLowerCase().includes(lowerCaseQuery))
+        .filter(([_, character]) => {
+            const matchesQuery = character.Name.toLowerCase().includes(lowerCaseQuery);
+
+            const matchesFilters = Object.entries(filters).every(([key, value]) => {
+                if (key in character) {
+                    return character[key as keyof Character] === value;
+                }
+                return true;
+            });
+
+            return matchesQuery && matchesFilters;
+        })
         .map(([key, character]) => {
             return { ...character, CharacterIndex: key };
         });

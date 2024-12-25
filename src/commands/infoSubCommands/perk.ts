@@ -39,7 +39,7 @@ export async function handlePerkCommandInteraction(interaction: ChatInputCommand
 
         const perkBackgroundUrl = roleData.perkBackground;
         const perkIconUrl = combineBaseUrlWithPath(perkData.IconFilePathList);
-        const imageBuffer = await layerIcons(perkBackgroundUrl, perkIconUrl);
+        const imageBuffer = await layerIcons(perkBackgroundUrl, perkIconUrl) as Buffer;
 
         const characterData = await getCharacterDataByIndex(perkData.Character, locale);
 

@@ -6,7 +6,6 @@ import {
     EmbedBuilder,
     Locale
 } from "discord.js";
-import Constants from "../../constants";
 import { generatePlayerStatsSummary } from "@utils/ssrUtility";
 import { getCachedPlayerStats } from "@services/statsService";
 import { IPlayerData } from "@ui/types/playerStats";
@@ -14,6 +13,7 @@ import { getTranslation } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { combineBaseUrlWithPath } from "@utils/stringUtils";
 import { sendErrorMessage } from "@handlers/errorResponseHandler";
+import { ThemeColors } from "@constants/themeColors";
 
 export async function handlePersonalStatsCommandInteraction(interaction: ChatInputCommandInteraction) {
     const steamId = interaction.options.getString('steam_id');
@@ -37,7 +37,7 @@ export async function handlePersonalStatsCommandInteraction(interaction: ChatInp
             return;
         }
 
-        const summaryCardBuffer = await generatePlayerStatsSummary(playerData);
+        const summaryCardBuffer = await generatePlayerStatsSummary(playerData, interaction.user);
 
         if (!summaryCardBuffer) {
             const message = getTranslation('stats_command.failed_generating_summary_card', locale, ELocaleNamespace.Errors);
@@ -47,7 +47,7 @@ export async function handlePersonalStatsCommandInteraction(interaction: ChatInp
 
         // noinspection SpellCheckingInspection
         const embed = new EmbedBuilder()
-            .setColor(Constants.DEFAULT_DISCORD_COLOR)
+            .setColor(ThemeColors.PRIMARY)
             .setTitle(getTranslation('stats_command.player_stats_overview', locale, ELocaleNamespace.Messages))
             .setDescription(getTranslation('stats_command.summary_desc', locale, ELocaleNamespace.Messages))
             .setTimestamp()

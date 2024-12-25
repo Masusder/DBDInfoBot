@@ -27,9 +27,14 @@
     "builds_subcommand": {
       "error_retrieving_data": "Recupero dati delle builds non riusciti.",
       "builds_not_found_filters": "Nessuna build trovata con i filtri specificati."
+    },
+    "addons_subcommand": {
+      "addons_not_found": "No add-ons found.",
+      "addons_not_found_filters": "No add-ons found for the applied filters."
     }
   },
   "general": {
+    "unauthorized_title": "Unauthorized",
     "unauthorized": "Solo la persona che ha utilizzato il comando può farlo.",
     "error_occurred": "An error has occurred"
   },

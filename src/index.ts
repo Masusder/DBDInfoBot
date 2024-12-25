@@ -5,7 +5,7 @@ import {
     startNewsJob
 } from "./jobs/";
 import interactionCreate from "./interactions/interactionCreate";
-import initI18next from "./i18n";
+import initI18next from "./locales/i18n";
 import client from './client';
 import dotenv from 'dotenv';
 
@@ -29,9 +29,9 @@ async function initializeClient() {
         // Don't run during development
         if (process.env.BRANCH !== 'dev') {
             // Check for new tweets every 60 seconds
-            await startTweetJob(client);
+            await startTweetJob();
             // Check for new Shrine
-            await startShrineJob(client);
+            await startShrineJob();
             // Check for in-game news
             await startNewsJob();
         }

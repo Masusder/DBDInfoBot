@@ -8,6 +8,7 @@ import { Locale } from 'discord.js';
 import { Cosmetic } from '@tps/cosmetic';
 import { EGameData } from "@tps/enums/EGameData";
 import { localizeCacheKey } from "@utils/localizationUtils";
+import { isCosmeticLimited } from "@commands/infoSubCommands/cosmetic";
 
 // Holds indexed cosmetics for fast querying by locale
 let indexedCosmetics: Map<string, Map<string, Cosmetic[]>> = new Map();
@@ -88,11 +89,15 @@ export async function getCosmeticChoicesFromIndex(query: string, locale: Locale)
     return languageMap ? languageMap.get(query) || [] : [];
 }
 
+export interface ICustomFilters {
+    isLimited: boolean;
+}
 /**
  * Retrieve a list of filtered cosmetics based on optional filter criteria.
  *
  * @param filters - An optional object containing filter properties from the Cosmetic interface.
  * @param locale - The locale for which to retrieve the cosmetics.
+ * @param customFilters - An optional object containing filters that require custom logic.
  *
  * @returns {Promise<Cosmetic[]>} A promise that resolves to an array of filtered Cosmetic objects.
  *
@@ -104,12 +109,14 @@ export async function getCosmeticChoicesFromIndex(query: string, locale: Locale)
  * }, Locale.EN_US);
  *
  */
-export async function getFilteredCosmeticsList(filters: Partial<Cosmetic> = {}, locale: Locale): Promise<Cosmetic[]> {
+export async function getFilteredCosmeticsList(filters: Partial<Cosmetic> = {}, locale: Locale, customFilters?: Partial<ICustomFilters>): Promise<Cosmetic[]> {
     const cosmetics = await getCachedCosmetics(locale);
 
     // These aren't cosmetics
     // so, I don't want them obviously
     // Hard-coded to improve performance
+    // TODO: perhaps make separated API endpoint for these
+    //       or simply store them as static data
     let excludeItems = new Set([
         "cellsPack_25",
         "cellsPack_50",
@@ -127,10 +134,45 @@ export async function getFilteredCosmeticsList(filters: Partial<Cosmetic> = {}, 
 
     let cosmeticList = Object.values(cosmetics);
 
+    // Filters that can be applied directly
+    // by matching a property value of the Cosmetic object
     for (const [key, value] of Object.entries(filters)) {
         if (value !== undefined) {
-            cosmeticList = cosmeticList.filter((cosmetic: Cosmetic) => (cosmetic as any)[key] === value);
+            cosmeticList = cosmeticList.filter((cosmetic: Cosmetic) => (cosmetic)[key as keyof Cosmetic] === value);
         }
+    }
+
+    // Filters that require more complex or custom logic
+    // are handled here
+    if (customFilters) {
+        for (const [key, value] of Object.entries(customFilters)) {
+            switch (key) {
+                case "isLimited":
+                    cosmeticList = cosmeticList.filter((cosmetic: Cosmetic) => {
+                        const isLimited = isCosmeticLimited(cosmetic);
+                        return value ? isLimited : !isLimited;
+                    });
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    // Filter cosmetics without active discounts
+    // IsDiscounted property still can be 'true' even
+    // when discount has already expired
+    const currentDate = new Date();
+    if (filters.IsDiscounted) {
+        cosmeticList = cosmeticList.filter((cosmetic: Cosmetic) => {
+            if (cosmetic.TemporaryDiscounts) {
+                return cosmetic.TemporaryDiscounts.some(discount =>
+                    currentDate >= new Date(discount.startDate) &&
+                    currentDate <= new Date(discount.endDate)
+                );
+            }
+            return false;
+        });
     }
 
     return cosmeticList;

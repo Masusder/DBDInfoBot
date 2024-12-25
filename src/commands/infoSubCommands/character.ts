@@ -24,6 +24,8 @@ import {
     layerIcons
 } from "@utils/imageUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import { getOrCreateMultiplePerkEmojis } from "@utils/emojiManager";
+import { getPerksByCharacterIndex } from "@services/perkService";
 
 export async function handleCharacterCommandInteraction(interaction: ChatInputCommandInteraction) {
     const characterName = interaction.options.getString('name');
@@ -43,7 +45,7 @@ export async function handleCharacterCommandInteraction(interaction: ChatInputCo
 
         const characterBackgroundUrl = roleData.charPortrait;
         const characterIconUrl = combineBaseUrlWithPath(characterData.IconFilePath);
-        const imageBuffer = await layerIcons(characterBackgroundUrl, characterIconUrl);
+        const imageBuffer = await layerIcons(characterBackgroundUrl, characterIconUrl) as Buffer;
 
         const fields: APIEmbedField[] = [];
 
@@ -56,6 +58,9 @@ export async function handleCharacterCommandInteraction(interaction: ChatInputCo
                 inline: true
             });
         }
+
+        const perks = await getPerksByCharacterIndex(characterData.CharacterIndex, locale);
+        const perkEmojis = await getOrCreateMultiplePerkEmojis(Object.keys(perks), locale);
 
         fields.push(
             {
@@ -71,6 +76,18 @@ export async function handleCharacterCommandInteraction(interaction: ChatInputCo
             {
                 name: getTranslation('info_command.character_subcommand.description', locale, ELocaleNamespace.Messages),
                 value: formatHtmlToDiscordMarkdown(characterData.Biography),
+                inline: false
+            },
+            {
+                name: getTranslation('info_command.character_subcommand.perks', locale, ELocaleNamespace.Messages),
+                value: perkEmojis
+                    .map(emoji => {
+                        if (emoji.name && perks[emoji.name]) {
+                            return `<:${emoji.name}:${emoji.id}> ${perks[emoji.name].Name}`;
+                        }
+                        return '';
+                    })
+                    .join('\n'),
                 inline: false
             }
         );
@@ -94,7 +111,16 @@ export async function handleCharacterCommandInteraction(interaction: ChatInputCo
             .setLabel(getTranslation('info_command.character_subcommand.read_backstory', locale, ELocaleNamespace.Messages))
             .setStyle(ButtonStyle.Primary);
 
-        const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(backstoryButton);
+        const buttons = new ActionRowBuilder<ButtonBuilder>().addComponents(backstoryButton);
+
+        if (characterData.Hints.length > 0) {
+            const hintsButton = new ButtonBuilder()
+                .setCustomId(`show_character_hints::${characterData.CharacterIndex}::${interaction.user.id}`)
+                .setLabel(getTranslation('info_command.character_subcommand.check_hints', locale, ELocaleNamespace.Messages))
+                .setStyle(ButtonStyle.Secondary);
+
+            buttons.addComponents(hintsButton);
+        }
 
         await interaction.editReply({
             embeds: [embed],
@@ -108,7 +134,7 @@ export async function handleCharacterCommandInteraction(interaction: ChatInputCo
                     name: `characterBackground_${characterData.CharacterIndex}.png`
                 }
             ],
-            components: [actionRow]
+            components: [buttons]
         });
     } catch (error) {
         console.error("Error executing character subcommand:", error);

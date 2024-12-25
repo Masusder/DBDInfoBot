@@ -5,6 +5,7 @@ import {
     ChatInputCommandInteraction,
     Locale
 } from "discord.js";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import {
     handleCosmeticListCommandAutocompleteInteraction,
     handleCosmeticListCommandInteraction
@@ -21,7 +22,10 @@ import {
     handleBuildsListCommandAutocompleteInteraction,
     handleBuildsListCommandInteraction
 } from "@commands/listSubCommands/builds";
-import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import {
+    handleAddonListCommandInteraction,
+    handleAddonsListCommandAutocompleteInteraction
+} from "@commands/listSubCommands/addons";
 
 const rarityChoices = Object.keys(Rarities)
     .filter(rarity => rarity !== "N/A")
@@ -32,12 +36,12 @@ const rarityChoices = Object.keys(Rarities)
         Object.values(Locale).forEach(locale => {
             name_localizations[locale] = i18next.t(localizedName, {
                 lng: mapDiscordLocaleToDbdLang(locale),
-                ns: 'general'
+                ns: ELocaleNamespace.General
             });
         });
 
         return {
-            name: i18next.t(localizedName, { lng: 'en', ns: 'general' }),
+            name: i18next.t(localizedName, { lng: 'en', ns: ELocaleNamespace.General }),
             name_localizations,
             value: rarity
         };
@@ -45,18 +49,18 @@ const rarityChoices = Object.keys(Rarities)
 
 const typeChoices = Object.keys(CosmeticTypes)
     .map(type => {
-        const localizedName = CosmeticTypes[type];
+        const localizedName = CosmeticTypes[type].localizedName;
 
         const name_localizations: Record<string, string> = {};
         Object.values(Locale).forEach(locale => {
             name_localizations[locale] = i18next.t(localizedName, {
                 lng: mapDiscordLocaleToDbdLang(locale),
-                ns: 'general'
+                ns: ELocaleNamespace.General
             });
         });
 
         return {
-            name: i18next.t(localizedName, { lng: 'en', ns: 'general' }),
+            name: i18next.t(localizedName, { lng: 'en', ns: ELocaleNamespace.General }),
             name_localizations,
             value: type
         };
@@ -67,12 +71,12 @@ const buildCategories = Object.entries(BuildCategories).map(([value, name]) => {
     Object.values(Locale).forEach(locale => {
         name_localizations[locale] = i18next.t(name, {
             lng: mapDiscordLocaleToDbdLang(locale),
-            ns: 'general'
+            ns: ELocaleNamespace.General
         });
     });
 
     return {
-        name: i18next.t(name, { lng: 'en', ns: 'general' }),
+        name: i18next.t(name, { lng: 'en', ns: ELocaleNamespace.General }),
         name_localizations,
         value
     };
@@ -228,6 +232,31 @@ export const data = i18next.isInitialized
                 )
                 .addStringOption(option =>
                     option
+                        .setName('role')
+                        .setNameLocalizations(commandLocalizationHelper('list_command.cosmetics_subcommand.options.role.name'))
+                        .setDescription(i18next.t('list_command.cosmetics_subcommand.options.role.description', { lng: 'en' }))
+                        .setDescriptionLocalizations(commandLocalizationHelper('list_command.cosmetics_subcommand.options.role.description'))
+                        .setChoices(
+                            {
+                                name: i18next.t('roles.killer', { lng: 'en', ns: ELocaleNamespace.General }),
+                                name_localizations: commandLocalizationHelper('roles.killer', ELocaleNamespace.General),
+                                value: 'Killer'
+                            },
+                            {
+                                name: i18next.t('roles.survivor', { lng: 'en', ns: ELocaleNamespace.General }),
+                                name_localizations: commandLocalizationHelper('roles.survivor', ELocaleNamespace.General),
+                                value: 'Survivor'
+                            },
+                            {
+                                name: i18next.t('roles.none', { lng: 'en', ns: ELocaleNamespace.General }),
+                                name_localizations: commandLocalizationHelper('roles.none', ELocaleNamespace.General),
+                                value: 'None'
+                            }
+                        )
+                        .setRequired(false)
+                )
+                .addStringOption(option =>
+                    option
                         .setName('inclusion_version')
                         .setNameLocalizations(commandLocalizationHelper('list_command.cosmetics_subcommand.options.inclusion_version.name'))
                         .setDescription(i18next.t('list_command.cosmetics_subcommand.options.inclusion_version.description', { lng: 'en' }))
@@ -251,6 +280,47 @@ export const data = i18next.isInitialized
                         .setDescriptionLocalizations(commandLocalizationHelper('list_command.cosmetics_subcommand.options.linked.description'))
                         .setRequired(false)
                 )
+                .addBooleanOption(option =>
+                    option
+                        .setName('on_sale')
+                        .setNameLocalizations(commandLocalizationHelper('list_command.cosmetics_subcommand.options.on_sale.name'))
+                        .setDescription(i18next.t('list_command.cosmetics_subcommand.options.on_sale.description', { lng: 'en' }))
+                        .setDescriptionLocalizations(commandLocalizationHelper('list_command.cosmetics_subcommand.options.on_sale.description'))
+                        .setRequired(false)
+                )
+                .addBooleanOption(option =>
+                    option
+                        .setName('limited')
+                        .setNameLocalizations(commandLocalizationHelper('list_command.cosmetics_subcommand.options.limited.name'))
+                        .setDescription(i18next.t('list_command.cosmetics_subcommand.options.limited.description', { lng: 'en' }))
+                        .setDescriptionLocalizations(commandLocalizationHelper('list_command.cosmetics_subcommand.options.limited.description'))
+                        .setRequired(false)
+                )
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('addons')
+                .setNameLocalizations(commandLocalizationHelper('list_command.addons_subcommand.name'))
+                .setDescription(i18next.t('list_command.addons_subcommand.description', { lng: 'en' }))
+                .setDescriptionLocalizations(commandLocalizationHelper('list_command.addons_subcommand.description'))
+                .addStringOption(option =>
+                    option
+                        .setName('character')
+                        .setNameLocalizations(commandLocalizationHelper('list_command.addons_subcommand.options.character.name'))
+                        .setDescription(i18next.t('list_command.addons_subcommand.options.character.description', { lng: 'en' }))
+                        .setDescriptionLocalizations(commandLocalizationHelper('list_command.addons_subcommand.options.character.description'))
+                        .setAutocomplete(true)
+                        .setRequired(false)
+                )
+                .addStringOption(option =>
+                    option
+                        .setName('rarity')
+                        .setNameLocalizations(commandLocalizationHelper('list_command.addons_subcommand.options.rarity.name'))
+                        .setDescription(i18next.t('list_command.addons_subcommand.options.rarity.description', { lng: 'en' }))
+                        .setDescriptionLocalizations(commandLocalizationHelper('list_command.addons_subcommand.options.rarity.description'))
+                        .setChoices(...rarityChoices)
+                        .setRequired(false)
+                )
         ) : undefined;
 
 export async function execute(interaction: ChatInputCommandInteraction) {
@@ -263,6 +333,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             break;
         case 'builds':
             await handleBuildsListCommandInteraction(interaction);
+            break;
+        case 'addons':
+            await handleAddonListCommandInteraction(interaction);
             break;
         default:
             await interaction.reply(getTranslation('list_command.unknown_subcommand', locale, ELocaleNamespace.Errors));
@@ -278,6 +351,9 @@ export async function autocomplete(interaction: AutocompleteInteraction) {
             break;
         case 'builds':
             await handleBuildsListCommandAutocompleteInteraction(interaction);
+            break;
+        case 'addons':
+            await handleAddonsListCommandAutocompleteInteraction(interaction);
             break;
         default:
             break;

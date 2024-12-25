@@ -32,7 +32,12 @@
   "currencies": {
     "bloodpoints": "Punti Sangue",
     "shards": "Frammenti",
-    "auric_cells": "Cellule Auriche"
+    "auric_cells": "Cellule Auriche",
+    "rift_fragments": "Rift Fragments",
+    "halloween_event_currency": "Dark Trinkets",
+    "winter_event_currency": "Frosty Trinkets",
+    "spring_event_currency": "Blood Trinkets",
+    "anniversary_event_currency": "Gilded Trinkets"
   },
   "cosmetic_types": {
     "outfit": "Outfit",
@@ -45,7 +50,13 @@
     "charm": "Amuleto",
     "badge": "Badge",
     "banner": "Banner",
-    "power": "Potere"
+    "power": "Potere",
+    "killer_power": "Killer's Power",
+    "killer_arm": "Killer's Arm",
+    "killer_mask": "Mask",
+    "killer_upper_body": "Killer's Upper Body",
+    "killer_lower_body": "Killer's Lower Body",
+    "survivor_hand": "Survivor's Hand"
   },
   "build_categories": {
     "fun": "Divertente",

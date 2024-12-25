@@ -1,5 +1,6 @@
 import { combineBaseUrlWithPath } from "@utils/stringUtils";
 import { ColorResolvable } from "discord.js";
+import { ThemeColors } from "@constants/themeColors";
 
 interface IRole {
     Survivor: {
@@ -31,10 +32,10 @@ export const Role: IRole = {
         localizedName: "roles.killer",
         perkBackground: combineBaseUrlWithPath('/images/Other/KillerRarity.png'),
         charPortrait: combineBaseUrlWithPath('/images/Other/CharPortraitKiller.png'),
-        hexColor: "#ff0000"
+        hexColor: ThemeColors.KILLER
     },
     None: {
         localizedName: "roles.none",
-        hexColor: "#808080"
+        hexColor: ThemeColors.SURVIVOR
     }
-}
+};

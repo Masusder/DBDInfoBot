@@ -39,6 +39,7 @@ import {
 } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { genericPaginationHandler } from "@handlers/genericPaginationHandler";
+import { generateStoreCustomizationIcons } from "@commands/infoSubCommands/cosmetic";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -57,7 +58,7 @@ interface INewsDataTable {
 const NewsDataTable: Record<string, INewsDataTable> = {
     News: {
         icon: combineBaseUrlWithPath("/images/News/icon_News.png"),
-        primaryColor: "#466571",
+        primaryColor: "#4c6f7e",
         secondaryColor: "#3C4C56"
     },
     Halloween: {
@@ -118,7 +119,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             });
 
             return selectMenu;
-        }
+        };
 
         const generateNewsListEmbed = (
             pageItems: any[],
@@ -133,12 +134,12 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 embed.addFields({
                     name: `${index + 1}. ${newsItem.title}`,
                     value: `${getTranslation('news_command.published_on', locale, ELocaleNamespace.Messages)} ${formattedDate}`,
-                    inline: true,
+                    inline: true
                 });
             });
 
             return embed;
-        }
+        };
 
         await genericPaginationHandler({
             items: newsList,
@@ -193,7 +194,7 @@ async function createNewsEmbed(
         embed.setAuthor({
             name: getTranslation('news_command.pinned_article', locale, ELocaleNamespace.Messages),
             iconURL: combineBaseUrlWithPath('/images/News/icon_PinnedMessage.png')
-        })
+        });
     }
 
     if (isFirstEmbed) {
@@ -427,8 +428,10 @@ async function createItemShowcaseImage(content: ContentItem[], locale: Locale): 
         }
     }
 
+    const customizationBuffers = await generateStoreCustomizationIcons(cosmeticIds, cosmeticData);
+
     if (imageUrls.length > 0) {
-        return await combineImagesIntoGrid(imageUrls, 5, 10);
+        return await combineImagesIntoGrid(customizationBuffers, 5, 10);
     }
 
     return null;

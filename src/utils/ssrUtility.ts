@@ -4,12 +4,15 @@ import puppeteer from 'puppeteer';
 import PlayerStats from "@ui/components/StatsSummaryCard/PlayerStats";
 import { getCachedCharacters } from "@services/characterService";
 import { getCachedMaps } from "@services/mapService";
-import { Locale } from "discord.js";
+import {
+    Locale,
+    User
+} from "discord.js";
 import { IPlayerData } from "@ui/types/playerStats";
 import * as fs from "node:fs";
 import * as path from "node:path";
 
-export const generatePlayerStatsSummary = async(playerData: IPlayerData): Promise<Buffer | null> => {
+export const generatePlayerStatsSummary = async(playerData: IPlayerData, user: User): Promise<Buffer | null> => {
     const CHROMIUM_PATH: string | undefined = process.env.CHROMIUM_PATH;
 
     try {
@@ -28,7 +31,7 @@ export const generatePlayerStatsSummary = async(playerData: IPlayerData): Promis
         });
         const page = await browser.newPage();
 
-        const props = { characterData, mapsData, playerData };
+        const props = { characterData, mapsData, playerData, user };
 
         const html = ReactDOMServer.renderToString(React.createElement(PlayerStats, props));
 
@@ -48,7 +51,7 @@ export const generatePlayerStatsSummary = async(playerData: IPlayerData): Promis
 
         await page.setViewport({
             width: 1980,
-            height: 1180
+            height: 1149
         });
 
         const imageBuffer = Buffer.from(await page.screenshot({ omitBackground: true }));

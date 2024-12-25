@@ -8,6 +8,7 @@ import {
 } from "../types";
 import { EGameData } from "@tps/enums/EGameData";
 import { Locale } from "discord.js";
+import { Rarities } from "@data/Rarities";
 
 /**
  * Initializes the add-ons cache for a specific locale.
@@ -21,24 +22,58 @@ export async function initializeAddonsCache(locale: Locale): Promise<void> {
 }
 
 // region Helpers
-
 /**
- * Retrieves a single add-on by its exact name from the cache.
+ * Retrieves a single add-on by its ID from the cache.
  *
- * @param name - The name of the add-on to search for.
+ * @param id - The id of the add-on to search for.
  * @param locale - The locale to fetch add-ons for.
  * @returns {Promise<AddonExtended | undefined>} A promise that resolves with the add-on data if found, otherwise undefined.
  */
-export async function getAddonDataByName(name: string, locale: Locale): Promise<AddonExtended | undefined> {
+export async function getAddonDataById(id: string, locale: Locale): Promise<AddonExtended | undefined> {
     const cachedAddons = await getCachedAddons(locale);
 
-    const addonId = Object.keys(cachedAddons).find(key => cachedAddons[key].Name.toLowerCase() === name.toLowerCase());
+    return { AddonId: id, ...cachedAddons[id] };
+}
 
-    if (addonId) {
-        return { AddonId: addonId, ...cachedAddons[addonId] };
+/**
+ * Retrieve a list of filtered add-ons based on optional filter criteria.
+ *
+ * @param filters - An optional object containing filter properties from the Add-on interface.
+ * @param locale - The locale for which to retrieve the add-ons.
+ *
+ * @returns {Promise<Addon[]>} A promise that resolves to an array of filtered Add-on objects.
+ *
+ * @example
+ * const filteredAddons = await getFilteredAddonsList({
+ *     Character: 1
+ * }, Locale.EN_US);
+ *
+ */
+export async function getFilteredAddonsList(filters: Partial<Addon> = {}, locale: Locale): Promise<Addon[]> {
+    const addons = await getCachedAddons(locale);
+
+    let addonList = Object.values(addons);
+    for (const [key, value] of Object.entries(filters)) {
+        if (value !== undefined) {
+            addonList = addonList.filter((addon: Addon) => {
+                const addonValue = addon[key as keyof Addon];
+
+                if (Array.isArray(value) && Array.isArray(addonValue)) {
+                    return value.every((item) => addonValue.includes(item)) && addonValue.every((item) => value.includes(item));
+                }
+
+                return addonValue === value;
+            });
+        }
     }
 
-    return undefined;
+    addonList.sort((a, b) => {
+        const rarityA = Rarities[a.Rarity] ? Object.keys(Rarities).indexOf(a.Rarity) : -1;
+        const rarityB = Rarities[b.Rarity] ? Object.keys(Rarities).indexOf(b.Rarity) : -1;
+        return rarityB - rarityA;
+    });
+
+    return addonList;
 }
 
 /**
@@ -47,14 +82,18 @@ export async function getAddonDataByName(name: string, locale: Locale): Promise<
  *
  * @param query - The search string to match against add-on names.
  * @param locale - The locale to fetch add-ons for.
- * @returns {Promise<Addon[]>} A promise that resolves with a list of matching add-ons.
+ * @returns {Promise<AddonExtended[]>} A promise that resolves with a list of matching add-ons.
  */
-export async function getAddonChoices(query: string, locale: Locale): Promise<Addon[]> {
+export async function getAddonChoices(query: string, locale: Locale): Promise<AddonExtended[]> {
     const cachedAddons = await getCachedAddons(locale);
 
     const lowerCaseQuery = query.toLowerCase();
-    return Object.values(cachedAddons)
-        .filter(addon => addon.Name.toLowerCase().includes(lowerCaseQuery));
+    return Object.entries(cachedAddons)
+        .filter(([_, { Name }]) => Name.toLowerCase().includes(lowerCaseQuery))
+        .map(([addonId, addon]) => ({
+            ...addon,
+            AddonId: addonId,
+        }));
 }
 
 /**

@@ -1,11 +1,8 @@
+import { ERole } from "@tps/enums/ERole";
+
 /**
  * See https://github.com/Masusder/UEParser/blob/master/UEParser/Models/APIComposerModels/Cosmetic.cs
  */
-export interface Price {
-    Cells?: number;
-    Shards?: number;
-}
-
 export interface TemporaryDiscount {
     currencyId: string;
     discountPercentage: number;
@@ -19,21 +16,27 @@ export interface Cosmetic {
     Description: string;
     IconFilePathList: string;
     EventId?: string | null;
+    ModelDataPath?: string | null;
     CollectionName: string;
     InclusionVersion: string;
     CustomizedAudioStateCollection: string;
     Type: string;
+    Category: string;
     Character: number;
     Unbreakable: boolean;
     Purchasable: boolean;
+    /**
+     * ISO 8601 string
+     */
     ReleaseDate: string;
     LimitedTimeEndDate?: string | null;
+    Role: ERole;
     Rarity: string;
     Prefix?: string | null;
     TomeId?: string | null;
     OutfitItems: string[];
     DiscountPercentage: number;
     IsDiscounted: boolean;
-    Prices: Price[];
+    Prices: Record<string, number>[];
     TemporaryDiscounts: TemporaryDiscount[];
 }

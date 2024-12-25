@@ -8,12 +8,13 @@ import {
 } from 'canvas';
 import { Locale } from "discord.js";
 import { Role } from "@data/Role";
+import { Rarities } from "@data/Rarities";
 import { combineBaseUrlWithPath } from "@utils/stringUtils";
 import { getCachedPerks } from "@services/perkService";
 import { getCachedAddons } from "@services/addonService";
-import { Rarities } from "@data/Rarities";
 import { getCachedOfferings } from "@services/offeringService";
 import { getCachedItems } from "@services/itemService";
+import * as icons from '@constants/icons.json';
 
 export const fetchAndResizeImage = async(imageUrl: string, width: number | null, height: number | null) => {
     const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
@@ -26,7 +27,14 @@ export const fetchAndResizeImage = async(imageUrl: string, width: number | null,
 };
 
 const backgroundCache: Record<string, Promise<Image>> = {};
-export async function layerIcons(background: string | Buffer | Image, icon: string | Buffer | Image, canvasWidth: number = 512, canvasHeight: number = 512): Promise<Buffer> {
+
+export async function layerIcons(
+    background: string | Buffer | Image,
+    icon: string | Buffer | Image,
+    canvasWidth: number = 512,
+    canvasHeight: number = 512,
+    returnImage: boolean = false
+): Promise<Buffer | Image> {
     const canvas = createCanvas(canvasWidth, canvasHeight);
     const ctx = canvas.getContext('2d');
 
@@ -37,7 +45,7 @@ export async function layerIcons(background: string | Buffer | Image, icon: stri
                 ? Promise.resolve(background)
                 : loadImage(background),
 
-        icon instanceof Image ? Promise.resolve(icon) : loadImage(icon),
+        icon instanceof Image ? Promise.resolve(icon) : loadImage(icon)
     ]);
 
     ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
@@ -47,7 +55,99 @@ export async function layerIcons(background: string | Buffer | Image, icon: stri
     const y = (canvas.height - iconSize) / 2;
     ctx.drawImage(iconImage, x, y, iconSize, iconSize);
 
-    return canvas.toBuffer();
+    if (returnImage) {
+        const image = new Image();
+        image.src = canvas.toDataURL();
+        return image;
+    } else {
+        return canvas.toBuffer();
+    }
+}
+
+export interface IStoreCustomizationItem {
+    icon: string;
+    background: string;
+    prefix: string | null | undefined;
+    isLinked: boolean;
+    isLimited: boolean;
+    isOnSale: boolean;
+}
+
+export async function createStoreCustomizationIcons(storeCustomizationItems: IStoreCustomizationItem | IStoreCustomizationItem[]) {
+    const items = Array.isArray(storeCustomizationItems) ? storeCustomizationItems : [storeCustomizationItems];
+
+    const layerPromises = items.map(async(item) => {
+        const { icon, background, prefix, isLinked, isLimited, isOnSale } = item;
+
+        let backgroundImage = backgroundCache[background] ?? (backgroundCache[background] = loadImage(background));
+        let iconImage = loadImage(icon);
+
+        const [bgImage, iconImg] = await Promise.all([backgroundImage, iconImage]);
+
+        const canvas = createCanvas(bgImage.width, bgImage.height);
+        const ctx = canvas.getContext('2d');
+
+        ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
+
+        if (prefix && prefix === 'Visceral') {
+            const visceralIcon = new Image();
+            visceralIcon.src = icons.VISCERAL_OVERLAY;
+
+            const visceralIconSize = Math.min(canvas.width, canvas.height);
+            ctx.drawImage(visceralIcon, 0, 0, visceralIconSize, visceralIconSize);
+        }
+
+        const iconSize = Math.min(canvas.width, canvas.height) * 0.9;
+        const x = (canvas.width - iconSize) / 2;
+        const y = (canvas.height - iconSize) / 2;
+
+        const clipLeft = 110;
+        const clipRight = 585;
+        const clipTop = 50;
+
+        ctx.save();
+
+        // In-game icons are bounded to specific area, we need to consider that
+        ctx.beginPath();
+        ctx.rect(clipLeft, clipTop, clipRight - clipLeft, canvas.height);
+        ctx.clip();
+
+        ctx.drawImage(iconImg, x, y, iconSize, iconSize);
+
+        ctx.restore();
+
+        if (isLinked) {
+            const setIcon = new Image();
+            setIcon.src = icons.LINKED_SET;
+
+            const setIconSize = Math.min(canvas.width, canvas.height) * 0.15;
+            ctx.drawImage(setIcon, 125, 45, setIconSize, setIconSize);
+        }
+
+        if (isLimited) {
+            const limitedFlag = new Image();
+            limitedFlag.src = icons.LIMITED_FLAG;
+
+            ctx.drawImage(limitedFlag, 540, 75, limitedFlag.width, limitedFlag.height);
+        }
+
+        if (isOnSale) {
+            const onSaleFlag = new Image();
+            onSaleFlag.src = icons.SALE_FLAG;
+
+            ctx.drawImage(onSaleFlag, 540, 138, onSaleFlag.width, onSaleFlag.height);
+        }
+
+        return canvas.toBuffer();
+    });
+
+    const layeredIcons = await Promise.all(layerPromises);
+
+    if (layeredIcons.length === 1) {
+        return layeredIcons[0];
+    }
+
+    return layeredIcons.filter(icon => icon !== null);
 }
 
 function calculateDimensions(image: { width: number; height: number }, maxWidth: number): {
@@ -124,31 +224,31 @@ export async function createLoadoutCanvas(
                 const iconUrl = combineBaseUrlWithPath(perk.IconFilePathList);
                 return layerIcons(perkBackgroundBuffer, iconUrl).then((perkIconBuffer) => {
                     if (perkIconBuffer) {
-                        return drawImage(perkIconBuffer, defaultPositions.perk[index], 175, ctx);
+                        return drawImage(perkIconBuffer as Buffer, defaultPositions.perk[index], 175, ctx);
                     }
                 });
             }
         })) : null,
 
         // Power or Item
-        powerOrItem && powerOrItem !== "None" && itemData ? (async () => {
+        powerOrItem && powerOrItem !== "None" && itemData ? (async() => {
             const rarity = itemData[powerOrItem].Rarity;
             const powerOrItemBackgroundUrl = rarity === "None" ? Rarities["Common"].itemsAddonsBackgroundPath : Rarities[rarity].itemsAddonsBackgroundPath;
             const itemOrPowerUrl = combineBaseUrlWithPath(itemData[powerOrItem].IconFilePathList);
             const itemOrPowerIconBuffer = await layerIcons(powerOrItemBackgroundUrl, itemOrPowerUrl);
             if (itemOrPowerIconBuffer) {
-                await drawImage(itemOrPowerIconBuffer, defaultPositions.powerOrItem, 140, ctx);
+                await drawImage(itemOrPowerIconBuffer as Buffer, defaultPositions.powerOrItem, 140, ctx);
             }
         })() : null,
 
         // Offering
-        offering && offering !== "None" && offeringData ? (async () => {
+        offering && offering !== "None" && offeringData ? (async() => {
             const rarity = offeringData[offering].Rarity;
             const offeringBackgroundUrl = Rarities[rarity].offeringBackgroundPath;
             const offeringUrl = combineBaseUrlWithPath(offeringData[offering].Image);
             const offeringIconBuffer = await layerIcons(offeringBackgroundUrl, offeringUrl);
             if (offeringIconBuffer) {
-                await drawImage(offeringIconBuffer, defaultPositions.offering, 160, ctx);
+                await drawImage(offeringIconBuffer as Buffer, defaultPositions.offering, 160, ctx);
             }
         })() : null,
 
@@ -161,7 +261,7 @@ export async function createLoadoutCanvas(
                 const iconUrl = combineBaseUrlWithPath(addon.Image);
                 return layerIcons(addonBackgroundUrl, iconUrl).then((addonIconBuffer) => {
                     if (addonIconBuffer) {
-                        return drawImage(addonIconBuffer, defaultPositions.addon[index], 120, ctx);
+                        return drawImage(addonIconBuffer as Buffer, defaultPositions.addon[index], 120, ctx);
                     }
                 });
             }
@@ -171,15 +271,42 @@ export async function createLoadoutCanvas(
     return canvas.toBuffer('image/png');
 }
 
-export async function combineImagesIntoGrid(imageUrls: string[], maxImagesPerRow: number = 3, maxImagesPerColumn: number = 2): Promise<Buffer> {
+// region Image utils
+function composeGrid(images: Image[], maxWidth: number, maxHeight: number, maxImagesPerRow: number = 3, maxImagesPerColumn: number = 2): Buffer {
+    const rows = Math.min(Math.ceil(images.length / maxImagesPerRow), maxImagesPerColumn);
+    const cols = Math.min(images.length, maxImagesPerRow);
+
+    const totalWidth = maxWidth * cols;
+    const totalHeight = maxHeight * rows;
+
+    const canvas = createCanvas(totalWidth, totalHeight);
+    const ctx = canvas.getContext('2d');
+
+    images.forEach((img, index) => {
+        const x = (index % maxImagesPerRow) * maxWidth;
+        const y = Math.floor(index / maxImagesPerRow) * maxHeight;
+        ctx.drawImage(img, x, y);
+    });
+
+    return canvas.toBuffer('image/png');
+}
+
+// endregion
+
+export async function combineImagesIntoGrid(imageSources: (string | Buffer)[], maxImagesPerRow: number = 3, maxImagesPerColumn: number = 2): Promise<Buffer> {
     let maxWidth = 0;
     let maxHeight = 0;
 
     const images: Image[] = (
         await Promise.all(
-            imageUrls.map((url) =>
-                loadImage(url).catch(() => null)
-            )
+            imageSources.map(async(source) => {
+                if (typeof source === 'string') {
+                    return loadImage(source).catch(() => null);
+                } else if (Buffer.isBuffer(source)) {
+                    return loadImage(source).catch(() => null);
+                }
+                return null;
+            })
         )
     ).filter((img): img is Image => {
         if (img) {
@@ -190,21 +317,52 @@ export async function combineImagesIntoGrid(imageUrls: string[], maxImagesPerRow
         return false;
     });
 
-    const rows = Math.min(Math.ceil(images.length / maxImagesPerRow), maxImagesPerColumn);
-    const cols = Math.min(images.length, maxImagesPerRow);
+    return composeGrid(images, maxWidth, maxHeight, maxImagesPerRow, maxImagesPerColumn);
+}
 
-    const totalWidth = maxWidth * cols;
-    const totalHeight = maxHeight * rows;
+export async function combineImagesIntroGridAndLayerIcons(icons: Record<string, string>[]) {
+    let maxWidth = 0;
+    let maxHeight = 0;
 
-    const canvas = createCanvas(totalWidth, totalHeight);
-    const ctx = canvas.getContext('2d');
+    const images: Image[] = (
+        await Promise.all(
+            icons.map(async(iconObject) => {
+                return Promise.all(
+                    Object.entries(iconObject).map(([key, value]) =>
+                        layerIcons(key, value, undefined, undefined, true)
+                    )
+                );
+            })
+        )
+    ).flat()
+        .filter((img): img is Image => {
+            if (img instanceof Image) {
+                maxWidth = Math.max(maxWidth, img.width);
+                maxHeight = Math.max(maxHeight, img.height);
+                return true;
+            }
+            return false;
+        });
 
-    // Pre-compute positions for each image
-    images.forEach((img, index) => {
-        const x = (index % maxImagesPerRow) * maxWidth;
-        const y = Math.floor(index / maxImagesPerRow) * maxHeight;
-        ctx.drawImage(img, x, y);
+    return composeGrid(images, maxWidth, maxHeight, 3, 3);
+}
+
+export async function createPerkIcons(perkIds: string[], locale: Locale) {
+    const perkData = await getCachedPerks(locale);
+
+    const perkIconPromises = perkIds.map(async(perkId) => {
+        const perk = perkData[perkId];
+        if (!perk) {
+            throw new Error(`Perk with ID ${perkId} not found`);
+        }
+
+        const role = perk.Role;
+        const perkBackgroundUrl = Role[role].perkBackground;
+        const iconUrl = combineBaseUrlWithPath(perk.IconFilePathList);
+
+        const buffer = await layerIcons(perkBackgroundUrl, iconUrl);
+        return { perkId, buffer };
     });
 
-    return canvas.toBuffer('image/png');
+    return Promise.all(perkIconPromises);
 }

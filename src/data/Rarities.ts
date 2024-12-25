@@ -1,10 +1,12 @@
 import { combineBaseUrlWithPath } from "@utils/stringUtils";
+import { ThemeColors } from "@constants/themeColors";
 
 interface IRarities {
     localizedName: string;
     itemsAddonsBackgroundPath: string;
     offeringBackgroundPath: string;
-    color: string;
+    storeCustomizationPath: string;
+    color: ThemeColors;
 }
 
 export const Rarities: Record<string, IRarities> = {
@@ -12,60 +14,70 @@ export const Rarities: Record<string, IRarities> = {
         localizedName: "rarities.common",
         itemsAddonsBackgroundPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Addons/Common.png'),
         offeringBackgroundPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Offerings/Common.png'),
-        color: "#ab713c"
+        storeCustomizationPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Cosmetics/StoreCustomization_Common.png'),
+        color: ThemeColors.COMMON
     },
     Uncommon: {
         localizedName: "rarities.uncommon",
         itemsAddonsBackgroundPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Addons/Uncommon.png'),
         offeringBackgroundPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Offerings/Uncommon.png'),
-        color: "#e8bb38"
+        storeCustomizationPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Cosmetics/StoreCustomization_Uncommon.png'),
+        color: ThemeColors.UNCOMMON
     },
     Rare: {
         localizedName: "rarities.rare",
         itemsAddonsBackgroundPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Addons/Rare.png'),
         offeringBackgroundPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Offerings/Rare.png'),
-        color: "#199b1e"
+        storeCustomizationPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Cosmetics/StoreCustomization_Rare.png'),
+        color: ThemeColors.RARE
     },
     VeryRare: {
         localizedName: "rarities.very_rare",
         itemsAddonsBackgroundPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Addons/VeryRare.png'),
         offeringBackgroundPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Offerings/VeryRare.png'),
-        color: "#ac3ee3"
+        storeCustomizationPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Cosmetics/StoreCustomization_VeryRare.png'),
+        color: ThemeColors.VERY_RARE
     },
     UltraRare: {
         localizedName: "rarities.ultra_rare",
         itemsAddonsBackgroundPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Addons/UltraRare.png'),
         offeringBackgroundPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Offerings/UltraRare.png'),
-        color: "#ff0955"
+        storeCustomizationPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Cosmetics/StoreCustomization_UltraRare.png'),
+        color: ThemeColors.ULTRA_RARE
     },
     Legendary: {
         localizedName: "rarities.legendary",
         itemsAddonsBackgroundPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Addons/Legendary.png'),
         offeringBackgroundPath: "",
-        color: "#c0e0e7"
+        storeCustomizationPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Cosmetics/StoreCustomization_Legendary.png'),
+        color: ThemeColors.LEGENDARY
     },
     SpecialEvent: {
         localizedName: "rarities.special_event",
         itemsAddonsBackgroundPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Addons/SpecialEvent.png'),
         offeringBackgroundPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Offerings/SpecialEvent.png'),
-        color: "#ffa800"
+        storeCustomizationPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Cosmetics/StoreCustomization_SpecialEvent.png'),
+        color: ThemeColors.SPECIAL_EVENT
     },
     Artifact: {
         localizedName: "rarities.artifact",
         itemsAddonsBackgroundPath: "",
         offeringBackgroundPath: "",
-        color: "#ec0dea"
+        storeCustomizationPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Cosmetics/StoreCustomization_Artifact.png'),
+        color: ThemeColors.ARTIFACT
     },
     Limited: {
         localizedName: "rarities.limited",
         itemsAddonsBackgroundPath: "",
         offeringBackgroundPath: "",
-        color: "#D35400"
+        storeCustomizationPath: "",
+        color: ThemeColors.LIMITED
     },
     "N/A": {
         localizedName: "rarities.unknown",
         itemsAddonsBackgroundPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Addons/Common.png'),
         offeringBackgroundPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Offerings/Common.png'),
-        color: "#7F8C8D"
+        storeCustomizationPath: combineBaseUrlWithPath('/images/RarityBackgrounds/Cosmetics/StoreCustomization_Common.png'),
+        color: ThemeColors.UNKNOWN
     }
 };

@@ -1,6 +1,6 @@
 {
   "name": "dbdinfobot",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "DBDInfo Discord bot.",
   "main": "index.js",
   "scripts": {

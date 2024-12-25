@@ -85,6 +85,28 @@ export async function getPerkChoices(query: string, locale: Locale): Promise<Per
 }
 
 /**
+ * Retrieves perks for a given character index.
+ *
+ * @param characterIndex - The index of the character whose perks are to be retrieved.
+ * @param locale - The locale used for retrieving the perk data.
+ *
+ * @returns {Promise<Record<string, Perk>>} A promise that resolves to an array of perks for the character.
+ */
+export async function getPerksByCharacterIndex(
+    characterIndex: string,
+    locale: Locale
+): Promise<Record<string, Perk>> {
+    const cachedPerks = await getCachedPerks(locale);
+
+    return Object.entries(cachedPerks)
+        .filter(([_, perk]) => perk.Character === parseInt(characterIndex))
+        .reduce((acc, [perkId, perk]) => {
+            acc[perkId] = perk;
+            return acc;
+        }, {} as Record<string, Perk>);
+}
+
+/**
  * Retrieves cached perk data for a specified locale.
  *
  * @param locale - The locale used to retrieve the cached perks.

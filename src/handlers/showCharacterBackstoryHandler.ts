@@ -5,7 +5,8 @@ import {
     Locale
 } from 'discord.js';
 import {
-    formatHtmlToDiscordMarkdown
+    formatHtmlToDiscordMarkdown,
+    splitTextIntoChunksBySentence
 } from '@utils/stringUtils';
 import { getCharacterDataByIndex } from "@services/characterService";
 import {
@@ -16,7 +17,7 @@ import { getTranslation } from "@utils/localizationUtils";
 import { sendUnauthorizedMessage } from "./unauthorizedHandler";
 import { ELocaleNamespace } from '@tps/enums/ELocaleNamespace';
 
-const MAX_DESCRIPTION_LENGTH = 3000;
+const MAX_DESCRIPTION_LENGTH = 2024;
 
 function createEmbed(description: string, characterName: string, color: number | null, locale: Locale) {
     return new EmbedBuilder()
@@ -34,28 +35,11 @@ function createEmbed(description: string, characterName: string, color: number |
 // Function to create embed chunks without splitting sentences
 function createBackstoryEmbeds(backstory: string, characterName: string, color: number | null, locale: Locale) {
     const embeds: EmbedBuilder[] = [];
-    const sentenceRegex = /([.!?]\s+|\n)/g; // Matches sentence-ending punctuation followed by a space or a newline
 
-    let currentChunk = '';
-    const sentences = backstory.split(sentenceRegex);
+    const textChunks = splitTextIntoChunksBySentence(backstory, MAX_DESCRIPTION_LENGTH);
 
-    for (const sentence of sentences) {
-        const newChunk = currentChunk + sentence;
-
-        if (newChunk.length <= MAX_DESCRIPTION_LENGTH) {
-            // If adding this sentence doesn't exceed the max length, keep it in the current chunk
-            currentChunk = newChunk;
-        } else {
-            // If it exceeds the max length, push the current chunk as an embed and start a new chunk
-            if (currentChunk) {
-                embeds.push(createEmbed(currentChunk, characterName, color, locale));
-            }
-            currentChunk = sentence;
-        }
-    }
-
-    if (currentChunk) {
-        embeds.push(createEmbed(currentChunk, characterName, color, locale));
+    for (const chunk of textChunks) {
+        embeds.push(createEmbed(chunk.trim(), characterName, color, locale));
     }
 
     return embeds;

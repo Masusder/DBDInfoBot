@@ -1,11 +1,10 @@
 import cron from 'node-cron';
-import { Client } from 'discord.js';
-import { getLatestTweetLink, loginToTwitter } from '../twitter-scraper';
+import { getLatestTweetLink, loginToTwitter } from '../integrations/twitterScraper';
 
-export async function startTweetJob(client: Client) {
+export async function startTweetJob() {
     loginToTwitter().then(() => {
         cron.schedule('* * * * *', async () => {
-            await getLatestTweetLink(client);
+            await getLatestTweetLink();
         });
     });
 }

@@ -40,7 +40,7 @@ export async function handleOfferingCommandInteraction(interaction: ChatInputCom
 
         const offeringBackgroundUrl = rarityData.offeringBackgroundPath;
         const offeringIconUrl = combineBaseUrlWithPath(offeringData.Image);
-        const imageBuffer = await layerIcons(offeringBackgroundUrl, offeringIconUrl);
+        const imageBuffer = await layerIcons(offeringBackgroundUrl, offeringIconUrl) as Buffer;
 
         const markdownDescription = formatHtmlToDiscordMarkdown(offeringData.Description);
         const description = offeringData.Available === "Retired" ?

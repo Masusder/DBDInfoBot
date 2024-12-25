@@ -18,9 +18,9 @@ import {
     IGlobalStatTab
 } from "@data/GlobalStatTabs";
 import { IStatsSchema } from "@ui/types/playerStats";
-import Constants from "../../constants";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { sendErrorMessage } from "@handlers/errorResponseHandler";
+import { ThemeColors } from "@constants/themeColors";
 
 export async function handleGlobalStatsCommandInteraction(interaction: ChatInputCommandInteraction) {
     const locale = interaction.locale;
@@ -73,7 +73,7 @@ export function createGlobalStatsEmbed(
         const embed = new EmbedBuilder()
             .setTitle(`${getTranslation('stats_command.global_stats_title.0', locale, ELocaleNamespace.Messages)} "${getTranslation(activeTab.name, locale, ELocaleNamespace.Messages)}" ${getTranslation('stats_command.global_stats_title.1', locale, ELocaleNamespace.Messages)}`)
             .addFields(fields)
-            .setColor(Constants.DEFAULT_DISCORD_COLOR)
+            .setColor(ThemeColors.PRIMARY)
             .setTimestamp();
 
         if (additionalInfo) {

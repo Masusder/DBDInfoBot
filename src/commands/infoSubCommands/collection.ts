@@ -22,9 +22,18 @@ import {
     genericPaginationHandler,
     IPaginationOptions
 } from "@handlers/genericPaginationHandler";
-import { combineImagesIntoGrid } from "@utils/imageUtils";
+import {
+    combineImagesIntoGrid,
+    createStoreCustomizationIcons,
+    IStoreCustomizationItem
+} from "@utils/imageUtils";
 import { getTranslation } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import {
+    generateStoreCustomizationIcons,
+    isCosmeticLimited,
+    isCosmeticOnSale
+} from "@commands/infoSubCommands/cosmetic";
 
 export async function handleCollectionCommandInteraction(interaction: ChatInputCommandInteraction) {
     const collectionId = interaction.options.getString('name');
@@ -73,7 +82,7 @@ export async function handleCollectionCommandInteraction(interaction: ChatInputC
 
             const description = `${getTranslation('list_command.cosmetics_subcommand.more_info.0', locale, ELocaleNamespace.Messages)}: \`/${getTranslation('list_command.cosmetics_subcommand.more_info.1', locale, ELocaleNamespace.Messages)}\`\n\n${getTranslation('info_command.collection_subcommand.collection_inclusion_version', locale, ELocaleNamespace.Messages)} ${formatInclusionVersion(collectionData.InclusionVersion, locale)}`;
 
-            return new EmbedBuilder()
+            const embed = new EmbedBuilder()
                 .setColor(Rarities[dominantRarity].color as ColorResolvable)
                 .setTitle(title)
                 .setDescription(description)
@@ -82,17 +91,21 @@ export async function handleCollectionCommandInteraction(interaction: ChatInputC
                     name: getTranslation('info_command.collection_subcommand.collection_info', locale, ELocaleNamespace.Messages),
                     iconURL: combineBaseUrlWithPath('/images/UI/Icons/HelpLoading/iconHelpLoading_info.png')
                 })
-                .addFields(cosmeticFields)
-                .setFooter({ text: `${getTranslation('info_command.collection_subcommand.collection_last_updated', locale, ELocaleNamespace.Messages)} ${updateDatePretty}` });
+                .addFields(cosmeticFields);
+
+            if (collectionData.UpdatedDate !== '0001-01-01T00:00:00Z') {
+                embed.setFooter(
+                    { text: `${getTranslation('info_command.collection_subcommand.collection_last_updated', locale, ELocaleNamespace.Messages)} ${updateDatePretty}` }
+                )
+            }
+
+            return embed;
         };
 
         const generateImage = async(pageItems: string[]) => {
-            const imageUrls: string[] = [];
-            pageItems.forEach((cosmeticId: string) => {
-                imageUrls.push(combineBaseUrlWithPath(cosmeticData[cosmeticId].IconFilePathList));
-            });
+            const customizationBuffers = await generateStoreCustomizationIcons(pageItems, cosmeticData);
 
-            return await combineImagesIntoGrid(imageUrls, 3, 3);
+            return await combineImagesIntoGrid(customizationBuffers, 5, 10);
         };
 
         const paginationOptions: IPaginationOptions = {

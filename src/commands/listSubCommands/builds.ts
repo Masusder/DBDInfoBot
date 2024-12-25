@@ -37,6 +37,7 @@ import {
 } from "@utils/emojiManager";
 import { layerIcons } from "@utils/imageUtils";
 import { Role } from "@data/Role";
+import { ThemeColors } from "@constants/themeColors";
 
 export async function handleBuildsListCommandInteraction(interaction: ChatInputCommandInteraction) {
     let currentPage = interaction.options.getNumber('page') || 1;
@@ -152,7 +153,7 @@ async function createEmbed(
     locale: Locale) {
     const embed = new EmbedBuilder()
         .setTitle(`${getTranslation('list_command.builds_subcommand.builds_list', locale, ELocaleNamespace.Messages)} - ${getTranslation('list_command.builds_subcommand.builds_list_page.0', locale, ELocaleNamespace.Messages)} ${currentPage} ${getTranslation('list_command.builds_subcommand.builds_list_page.1', locale, ELocaleNamespace.Messages)} ${totalPages + 1}`)
-        .setColor(role === 'Survivor' ? "#1e90ff" : "Red")
+        .setColor(role === 'Survivor' ? ThemeColors.SURVIVOR : ThemeColors.KILLER)
         .setDescription(getTranslation('list_command.builds_subcommand.builds_matching_filters', locale, ELocaleNamespace.Messages))
         .setTimestamp()
         .setFooter({ text: getTranslation('list_command.builds_subcommand.builds_list', locale, ELocaleNamespace.Messages) })
@@ -187,7 +188,7 @@ async function createEmbed(
                 const perkBuffer = await layerIcons(
                     Role[perkDataEntry.Role].perkBackground,
                     combineBaseUrlWithPath(perkDataEntry.IconFilePathList)
-                );
+                ) as Buffer;
                 listEntryWithEmoji = await getOrCreateApplicationEmoji(perkId, perkBuffer);
             }
 

@@ -8,4 +8,6 @@ export enum EGameData {
     CollectionData = 'collectionData',
     NewsData = 'newsData',
     MapsData = 'mapsData',
+    SpecialEventData = 'specialEventData',
+    RiftData = 'riftData'
 }

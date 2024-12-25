@@ -33,7 +33,10 @@
       "difficulty": "Poziom trudności",
       "backstory": "Historia -",
       "read_backstory": "Przeczytaj historię",
-      "character_backstory": "Historia postaci"
+      "character_backstory": "Historia postaci",
+      "hint_for": "Wskazówka dla",
+      "check_hints": "Sprawdź wskazówki",
+      "perks": "Umiejętności"
     },
     "cosmetic_subcommand": {
       "character": "Postać",
@@ -41,12 +44,16 @@
       "rarity": "Rzadkość",
       "inclusion_version": "Wersja wydania",
       "type": "Typ",
-      "release_date": "Data wydania",
+      "release_date": "Data wydania w sklepie",
       "sale": "Koniec wyprzedaży",
       "cosmetic_info": "Informacje o kosmetyku",
       "more_info": "Więcej informacji",
       "view_pieces": "Zobacz elementy stroju",
       "linked_cosmetic": "Połączony kosmetyk",
+      "limited_until": "Limitowane do",
+      "view_3d_model": "Zobacz model 3D",
+      "special_event": "Specjalne wydarzenie",
+      "released_with_tome": "Wydano z Tomem",
       "button_interaction": {
         "outfit_pieces": "Elementy stroju dla"
       }
@@ -103,13 +110,25 @@
         "Strona",
         "z"
       ],
-      "create_your_own_build": "Tutaj możesz stworzyć własny ekwipunek!",
+      "create_your_own_build": "Stwórz swój ekwipunek",
       "builds_matching_filters": "Oto ekwipunki pasujące do Twoich filtrów:",
       "builds_list": "Lista ekwipunków",
       "created_by": "Stworzone przez:",
       "unknown_perk": "Nieznana umiejętność",
       "any_perks": "Dowolne umiejętności",
       "select_for_details": "Wybierz ekwipunek, aby wyświetlić szczegóły."
+    },
+    "addons_subcommand": {
+      "addons_list": "Lista dodatków",
+      "found_total": [
+        "Znaleziono łącznie",
+        "dodatki"
+      ],
+      "filters_applied": "Zastosowano filtry",
+      "more_info": [
+        "Aby uzyskać więcej informacji o konkretnym dodatku, użyj polecenia",
+        "info Dodatek <nazwa_dodatku>"
+      ]
     }
   },
   "shrine_command": {

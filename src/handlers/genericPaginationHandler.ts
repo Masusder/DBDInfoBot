@@ -23,6 +23,7 @@ export interface IPaginationOptions {
     locale: Locale;
     showPageNumbers?: boolean;
     generateSelectMenu?: (pageItems: any[]) => StringSelectMenuBuilder;
+    generatedThumbnail?: { attachment: Buffer | string; name: string } | null;
 }
 
 export const generatePaginationButtons = (page: number, totalPages: number, locale: Locale, showPageNumbers: boolean = true) => {
@@ -112,7 +113,16 @@ export function determineNewPage(currentPage: number, paginationType: TPaginatio
 }
 
 export async function genericPaginationHandler(options: IPaginationOptions) {
-    const { items, itemsPerPage, generateEmbed, generateImage, interactionUserId, interactionReply, generateSelectMenu } = options;
+    const {
+        items,
+        itemsPerPage,
+        generateEmbed,
+        generateImage,
+        interactionUserId,
+        interactionReply,
+        generateSelectMenu,
+        generatedThumbnail
+    } = options;
 
     let currentPage = 1;
     const totalPages = Math.ceil(items.length / itemsPerPage);
@@ -130,14 +140,24 @@ export async function genericPaginationHandler(options: IPaginationOptions) {
         if (generateSelectMenu) {
             const selectMenu = generateSelectMenu(itemsForPage);
             if (selectMenu) {
-               selectMenuRow = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectMenu);
+                selectMenuRow = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectMenu);
             }
+        }
+
+        let files: { attachment: Buffer | string; name: string }[] = [];
+        let updated = false;
+
+        // Thumbnail should persist across page changes
+        if (generatedThumbnail) {
+            embed.setThumbnail('attachment://generated_thumbnail.png');
+            files.push(generatedThumbnail);
+            updated = true;
         }
 
         const response = await interactionReply.editReply({
             embeds: [embed],
             components: [...(selectMenuRow ? [selectMenuRow] : []), ...generatePaginationButtons(currentPage, totalPages, locale, options?.showPageNumbers)],
-            files: []
+            files
         });
 
         if (generateImage) {
@@ -145,14 +165,19 @@ export async function genericPaginationHandler(options: IPaginationOptions) {
                 const image = await generateImage(itemsForPage);
                 if (image) {
                     embed.setImage('attachment://generated_image.png');
-                    await interactionReply.editReply({
-                        embeds: [embed],
-                        files: [{ attachment: image, name: 'generated_image.png' }],
-                    });
+                    files.push({ attachment: image, name: 'generated_image.png' });
+                    updated = true;
                 }
             } catch (error) {
                 console.error("Error generating image:", error);
             }
+        }
+
+        if (updated) {
+            await interactionReply.editReply({
+                embeds: [embed],
+                files,
+            });
         }
 
         return response;

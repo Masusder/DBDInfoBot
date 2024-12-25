@@ -57,6 +57,18 @@
         "inclusion_version": {
           "name": "incluso_nella_versione",
           "description": "Specifica la versione in cui è incluso il cosmetico."
+        },
+        "role": {
+          "name": "role",
+          "description": "Specify role cosmetic belongs to."
+        },
+        "on_sale": {
+          "name": "on_sale",
+          "description": "Specify whether cosmetic should be currently on sale."
+        },
+        "limited": {
+          "name": "limited",
+          "description": "Specify whether cosmetic is available for purchase for a limited time."
         }
       }
     },
@@ -102,6 +114,20 @@
             "four_stars": "Quattro Stelle",
             "five_stars": "Cinque Stelle"
           }
+        }
+      }
+    },
+    "addons_subcommand": {
+      "name": "add-ons",
+      "description": "Retrieve list of add-ons.",
+      "options": {
+        "character": {
+          "name": "character",
+          "description": "Name of the character."
+        },
+        "rarity": {
+          "name": "rarity",
+          "description": "Specify rarity of the add-ons."
         }
       }
     }
