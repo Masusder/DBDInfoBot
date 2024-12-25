@@ -65,6 +65,10 @@
         "on_sale": {
           "name": "on_sale",
           "description": "Specify whether cosmetic should be currently on sale."
+        },
+        "limited": {
+          "name": "limited",
+          "description": "Specify whether cosmetic is available for purchase for a limited time."
         }
       }
     },
