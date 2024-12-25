@@ -57,7 +57,7 @@ export async function handleAddonListCommandInteraction(interaction: ChatInputCo
         const { ParentItem, Rarity } = filters;
 
         const generateEmbed = async(pageItems: Addon[]) => {
-            let title = `Found a total of ${addons.length} add-ons`;
+            let title = `${getTranslation('list_command.addons_subcommand.found_total.0', locale, ELocaleNamespace.Messages)} ${addons.length} ${getTranslation('list_command.addons_subcommand.found_total.1', locale, ELocaleNamespace.Messages)}`;
 
             // Let user know that filters were applied
             if (filterCount > 0) title += ` (${getTranslation('list_command.addons_subcommand.filters_applied', locale, ELocaleNamespace.Messages)}: ${filterCount})`;
