@@ -65,6 +65,10 @@
         "on_sale": {
           "name": "na_przecenie",
           "description": "Określ, czy kosmetyk ma być aktualnie na przecenie."
+        },
+        "limited": {
+          "name": "limited",
+          "description": "Specify whether cosmetic is available for purchase for a limited time."
         }
       }
     },
