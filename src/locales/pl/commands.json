@@ -67,8 +67,8 @@
           "description": "Określ, czy kosmetyk ma być aktualnie na przecenie."
         },
         "limited": {
-          "name": "limited",
-          "description": "Specify whether cosmetic is available for purchase for a limited time."
+          "name": "limitowane",
+          "description": "Określ czy kosmetyki są dostępne na ograniczony czas."
         }
       }
     },
