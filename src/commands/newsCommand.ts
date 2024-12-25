@@ -31,11 +31,7 @@ import {
     NewsItem
 } from "@tps/news";
 import { CosmeticTypes } from "@data/CosmeticTypes";
-import {
-    combineImagesIntoGrid,
-    createStoreCustomizationIcons,
-    IStoreCustomizationItem
-} from "@utils/imageUtils";
+import { combineImagesIntoGrid } from "@utils/imageUtils";
 import { getCachedCosmetics } from "@services/cosmeticService";
 import {
     commandLocalizationHelper,
@@ -43,13 +39,7 @@ import {
 } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { genericPaginationHandler } from "@handlers/genericPaginationHandler";
-import { Cosmetic } from "@tps/cosmetic";
-import {
-    generateStoreCustomizationIcons,
-    isCosmeticLimited,
-    isCosmeticOnSale
-} from "@commands/infoSubCommands/cosmetic";
-import { Rarities } from "@data/Rarities";
+import { generateStoreCustomizationIcons } from "@commands/infoSubCommands/cosmetic";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -129,7 +119,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             });
 
             return selectMenu;
-        }
+        };
 
         const generateNewsListEmbed = (
             pageItems: any[],
@@ -144,12 +134,12 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 embed.addFields({
                     name: `${index + 1}. ${newsItem.title}`,
                     value: `${getTranslation('news_command.published_on', locale, ELocaleNamespace.Messages)} ${formattedDate}`,
-                    inline: true,
+                    inline: true
                 });
             });
 
             return embed;
-        }
+        };
 
         await genericPaginationHandler({
             items: newsList,
@@ -204,7 +194,7 @@ async function createNewsEmbed(
         embed.setAuthor({
             name: getTranslation('news_command.pinned_article', locale, ELocaleNamespace.Messages),
             iconURL: combineBaseUrlWithPath('/images/News/icon_PinnedMessage.png')
-        })
+        });
     }
 
     if (isFirstEmbed) {
@@ -438,7 +428,7 @@ async function createItemShowcaseImage(content: ContentItem[], locale: Locale): 
         }
     }
 
-    const customizationBuffers = await generateStoreCustomizationIcons(cosmeticIds, cosmeticData)
+    const customizationBuffers = await generateStoreCustomizationIcons(cosmeticIds, cosmeticData);
 
     if (imageUrls.length > 0) {
         return await combineImagesIntoGrid(customizationBuffers, 5, 10);

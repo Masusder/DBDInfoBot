@@ -10,7 +10,8 @@ import {
 } from "@services/characterService";
 import {
     getFilteredCosmeticsList,
-    getInclusionVersionsForCosmetics
+    getInclusionVersionsForCosmetics,
+    ICustomFilters
 } from "@services/cosmeticService";
 import {
     combineBaseUrlWithPath,
@@ -40,12 +41,12 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
     try {
         await interaction.deferReply();
 
-        const filters = constructFilters(interaction);
+        const { filters, customFilters }  = constructFilters(interaction);
         const filterCount = Object.keys(filters).length;
 
         const { Character = -1, Rarity, Category, InclusionVersion } = filters; // Deconstruct filters for use
 
-        const cosmetics = await getFilteredCosmeticsList(filters, locale);
+        const cosmetics = await getFilteredCosmeticsList(filters, locale, customFilters);
 
         if (cosmetics.length === 0) {
             const message = filterCount > 0
@@ -139,7 +140,7 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
 
 // region Cosmetic List Utils
 
-function constructFilters(interaction: ChatInputCommandInteraction): Partial<Cosmetic> {
+function constructFilters(interaction: ChatInputCommandInteraction): { filters: Partial<Cosmetic>, customFilters: Partial<ICustomFilters> } {
     const characterIndexString = interaction.options.getString('character');
     const isLinked = interaction.options.getBoolean('linked');
     const isPurchasable = interaction.options.getBoolean('purchasable');
@@ -160,7 +161,13 @@ function constructFilters(interaction: ChatInputCommandInteraction): Partial<Cos
     if (role !== null) filters.Role = role as ERole;
     if (onSale !== null) filters.IsDiscounted = onSale;
 
-    return filters;
+    const isLimited = interaction.options.getBoolean('limited');
+
+    const customFilters: Partial<ICustomFilters> = {};
+
+    if (isLimited !== null) customFilters.isLimited = isLimited;
+
+    return {filters, customFilters};
 }
 
 // endregion
