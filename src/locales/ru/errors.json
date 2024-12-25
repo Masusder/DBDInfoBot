@@ -27,6 +27,10 @@
     "builds_subcommand": {
       "error_retrieving_data": "Не удалось получить информацию о сборке.",
       "builds_not_found_filters": "Не найдено сборок по указанным фильтрам."
+    },
+    "addons_subcommand": {
+      "addons_not_found": "No add-ons found.",
+      "addons_not_found_filters": "No add-ons found for the applied filters."
     }
   },
   "general": {

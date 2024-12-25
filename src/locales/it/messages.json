@@ -33,7 +33,10 @@
       "difficulty": "Difficoltà",
       "backstory": "Backstory di",
       "read_backstory": "Leggi Backstory",
-      "character_backstory": "Backstory del personaggio"
+      "character_backstory": "Backstory del personaggio",
+      "hint_for": "Hint for",
+      "check_hints": "Check Hints",
+      "perks": "Perks"
     },
     "cosmetic_subcommand": {
       "character": "Personaggio",
@@ -41,12 +44,16 @@
       "rarity": "Rarità",
       "inclusion_version": "Incluso nella Versione",
       "type": "Tipo",
-      "release_date": "Data di rilascio",
+      "release_date": "Shop Release Date",
       "sale": "Gli sconti terminano",
       "cosmetic_info": "Informazioni cosmetico",
       "more_info": "Più info",
       "view_pieces": "Visualizza Pezzi Di Outfit",
       "linked_cosmetic": "Cosmetico Collegato",
+      "limited_until": "Limited Until",
+      "view_3d_model": "View 3D Model",
+      "special_event": "Special Event",
+      "released_with_tome": "Released with Tome",
       "button_interaction": {
         "outfit_pieces": "Pezzi di outfit per"
       }
@@ -92,9 +99,9 @@
         "cosmetici"
       ],
       "filters_applied": "Filtri applicati",
-      "cosmetics_list": "Elenco dei cosmetici",
+      "cosmetics_list": "List of Cosmetics",
       "more_info": [
-        "Per ulteriori informazioni su un cosmetico specifico, utilizzare il comando",
+        "To learn more about a specific cosmetic, use the command",
         "info Cosmetico <cosmetic_name>"
       ]
     },
@@ -103,13 +110,25 @@
         "Pagina",
         "di"
       ],
-      "create_your_own_build": "Qui puoi creare la tua build!",
+      "create_your_own_build": "Create your Build here!",
       "builds_matching_filters": "Ecco le build corrispondenti ai tuoi filtri:",
       "builds_list": "Lista Delle Builds",
       "created_by": "Creato da:",
       "unknown_perk": "Perk Sconosciuto",
       "any_perks": "Qualsiasi Perk",
       "select_for_details": "Seleziona una build per visualizzare i dettagli."
+    },
+    "addons_subcommand": {
+      "addons_list": "List of Add-ons",
+      "found_total": [
+        "Found a total of",
+        "add-ons"
+      ],
+      "filters_applied": "Filters applied",
+      "more_info": [
+        "To learn more about a specific add-on, use the command",
+        "info Add-on <addon_name>"
+      ]
     }
   },
   "shrine_command": {

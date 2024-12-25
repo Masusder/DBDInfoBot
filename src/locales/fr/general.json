@@ -32,7 +32,12 @@
   "currencies": {
     "bloodpoints": "Points de Sang",
     "shards": "Éclats",
-    "auric_cells": "Cellules d'Ora"
+    "auric_cells": "Cellules d'Ora",
+    "rift_fragments": "Rift Fragments",
+    "halloween_event_currency": "Dark Trinkets",
+    "winter_event_currency": "Frosty Trinkets",
+    "spring_event_currency": "Blood Trinkets",
+    "anniversary_event_currency": "Gilded Trinkets"
   },
   "cosmetic_types": {
     "outfit": "Tenue",
@@ -45,7 +50,13 @@
     "charm": "Charme",
     "badge": "Écusson",
     "banner": "Bannière",
-    "power": "Pouvoir"
+    "power": "Pouvoir",
+    "killer_power": "Killer's Power",
+    "killer_arm": "Killer's Arm",
+    "killer_mask": "Mask",
+    "killer_upper_body": "Killer's Upper Body",
+    "killer_lower_body": "Killer's Lower Body",
+    "survivor_hand": "Survivor's Hand"
   },
   "build_categories": {
     "fun": "Amusant",

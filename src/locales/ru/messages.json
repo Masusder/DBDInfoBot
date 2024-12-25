@@ -33,7 +33,10 @@
       "difficulty": "Сложность",
       "backstory": "Предыстория -",
       "read_backstory": "Прочитать предысторию",
-      "character_backstory": "Предыстория персонажа"
+      "character_backstory": "Предыстория персонажа",
+      "hint_for": "Hint for",
+      "check_hints": "Check Hints",
+      "perks": "Perks"
     },
     "cosmetic_subcommand": {
       "character": "Персонаж",
@@ -41,12 +44,16 @@
       "rarity": "Редкость",
       "inclusion_version": "Добавлен с Версии",
       "type": "Тип",
-      "release_date": "Дата выхода",
+      "release_date": "Shop Release Date",
       "sale": "Распродажа заканчивается",
       "cosmetic_info": "Информация о косметическом предмете",
       "more_info": "Подробнее",
       "view_pieces": "Просмотреть элементы набора",
       "linked_cosmetic": "Цельный набор",
+      "limited_until": "Limited Until",
+      "view_3d_model": "View 3D Model",
+      "special_event": "Special Event",
+      "released_with_tome": "Released with Tome",
       "button_interaction": {
         "outfit_pieces": "Элементы набора"
       }
@@ -92,9 +99,9 @@
         "косметических предметов"
       ],
       "filters_applied": "Фильтры применены",
-      "cosmetics_list": "Список косметических предметов",
+      "cosmetics_list": "List of Cosmetics",
       "more_info": [
-        "Получить подробную информацию о косметическом предмете можно при помощи команды",
+        "To learn more about a specific cosmetic, use the command",
         "информация Косметический предмет <cosmetic_name>"
       ]
     },
@@ -103,13 +110,25 @@
         "Страница",
         "из"
       ],
-      "create_your_own_build": "Вы можете создать свою сборку здесь!",
+      "create_your_own_build": "Create your Build here!",
       "builds_matching_filters": "Сборки, соответствующие вашим фильтрам:",
       "builds_list": "Список сборок",
       "created_by": "Автор:",
       "unknown_perk": "Неизвестный навык",
       "any_perks": "Любые навыки",
       "select_for_details": "Выберите сборку, чтобы просмотреть подробности."
+    },
+    "addons_subcommand": {
+      "addons_list": "List of Add-ons",
+      "found_total": [
+        "Found a total of",
+        "add-ons"
+      ],
+      "filters_applied": "Filters applied",
+      "more_info": [
+        "To learn more about a specific add-on, use the command",
+        "info Add-on <addon_name>"
+      ]
     }
   },
   "shrine_command": {

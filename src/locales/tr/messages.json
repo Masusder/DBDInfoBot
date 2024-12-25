@@ -33,7 +33,10 @@
       "difficulty": "Difficulty",
       "backstory": "Backstory of",
       "read_backstory": "Read Backstory",
-      "character_backstory": "Character backstory"
+      "character_backstory": "Character backstory",
+      "hint_for": "Hint for",
+      "check_hints": "Check Hints",
+      "perks": "Perks"
     },
     "cosmetic_subcommand": {
       "character": "Character",
@@ -41,12 +44,16 @@
       "rarity": "Rarity",
       "inclusion_version": "Inclusion Version",
       "type": "Type",
-      "release_date": "Release Date",
+      "release_date": "Shop Release Date",
       "sale": "Sale Ends",
       "cosmetic_info": "Cosmetic Information",
       "more_info": "More Info",
       "view_pieces": "View Outfit Pieces",
       "linked_cosmetic": "Linked Cosmetic",
+      "limited_until": "Limited Until",
+      "view_3d_model": "View 3D Model",
+      "special_event": "Special Event",
+      "released_with_tome": "Released with Tome",
       "button_interaction": {
         "outfit_pieces": "Outfit Pieces for"
       }
@@ -92,9 +99,9 @@
         "cosmetics"
       ],
       "filters_applied": "Filters applied",
-      "cosmetics_list": "List of cosmetics",
+      "cosmetics_list": "List of Cosmetics",
       "more_info": [
-        "For more information about a specific cosmetic, use the command",
+        "To learn more about a specific cosmetic, use the command",
         "info Cosmetic <cosmetic_name>"
       ]
     },
@@ -103,13 +110,25 @@
         "Page",
         "of"
       ],
-      "create_your_own_build": "You can create your own build here!",
+      "create_your_own_build": "Create your Build here!",
       "builds_matching_filters": "Here are the builds matching your filters:",
       "builds_list": "Builds List",
       "created_by": "Created by:",
       "unknown_perk": "Bilinmeyen Avantaj",
       "any_perks": "Any Perks",
       "select_for_details": "Select a build to view details."
+    },
+    "addons_subcommand": {
+      "addons_list": "List of Add-ons",
+      "found_total": [
+        "Found a total of",
+        "add-ons"
+      ],
+      "filters_applied": "Filters applied",
+      "more_info": [
+        "To learn more about a specific add-on, use the command",
+        "info Add-on <addon_name>"
+      ]
     }
   },
   "shrine_command": {

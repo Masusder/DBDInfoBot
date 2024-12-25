@@ -32,7 +32,12 @@
   "currencies": {
     "bloodpoints": "Очки Крови",
     "shards": "Радужные Осколки",
-    "auric_cells": "Золотые Клетки"
+    "auric_cells": "Золотые Клетки",
+    "rift_fragments": "Rift Fragments",
+    "halloween_event_currency": "Dark Trinkets",
+    "winter_event_currency": "Frosty Trinkets",
+    "spring_event_currency": "Blood Trinkets",
+    "anniversary_event_currency": "Gilded Trinkets"
   },
   "cosmetic_types": {
     "outfit": "Набор Одежды",
@@ -45,7 +50,13 @@
     "charm": "Амулет",
     "badge": "Значок",
     "banner": "Баннер",
-    "power": "Сила"
+    "power": "Сила",
+    "killer_power": "Killer's Power",
+    "killer_arm": "Killer's Arm",
+    "killer_mask": "Mask",
+    "killer_upper_body": "Killer's Upper Body",
+    "killer_lower_body": "Killer's Lower Body",
+    "survivor_hand": "Survivor's Hand"
   },
   "build_categories": {
     "fun": "Забавный",

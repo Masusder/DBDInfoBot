@@ -27,6 +27,10 @@
     "builds_subcommand": {
       "error_retrieving_data": "Échec de la récupération des données des builds.",
       "builds_not_found_filters": "Aucun build trouvé avec les filtres spécifiés."
+    },
+    "addons_subcommand": {
+      "addons_not_found": "No add-ons found.",
+      "addons_not_found_filters": "No add-ons found for the applied filters."
     }
   },
   "general": {
