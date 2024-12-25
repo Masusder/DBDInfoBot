@@ -29,8 +29,8 @@
       "builds_not_found_filters": "Nie znaleziono ekwipunków spełniających podane filtry."
     },
     "addons_subcommand": {
-      "addons_not_found": "No add-ons found.",
-      "addons_not_found_filters": "No add-ons found for the applied filters."
+      "addons_not_found": "Nie znaleziono żadnych dodatków.",
+      "addons_not_found_filters": "Nie znaleziono żadnych dodatków dla zastosowanych filtrów."
     }
   },
   "general": {
