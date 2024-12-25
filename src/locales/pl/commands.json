@@ -59,12 +59,12 @@
           "description": "Określ wersję, w której został dodany kosmetyk."
         },
         "role": {
-          "name": "role",
-          "description": "Specify role cosmetic belongs to."
+          "name": "rola",
+          "description": "Określ rolę, do której należy kosmetyk."
         },
         "on_sale": {
-          "name": "on_sale",
-          "description": "Specify whether cosmetic should be currently on sale."
+          "name": "na_przecenie",
+          "description": "Określ, czy kosmetyk ma być aktualnie na przecenie."
         }
       }
     },
@@ -114,16 +114,16 @@
       }
     },
     "addons_subcommand": {
-      "name": "add-ons",
-      "description": "Retrieve list of add-ons.",
+      "name": "dodatki",
+      "description": "Uzyskaj listę dodatków.",
       "options": {
         "character": {
-          "name": "character",
-          "description": "Name of the character."
+          "name": "postać",
+          "description": "Nazwa postaci."
         },
         "rarity": {
-          "name": "rarity",
-          "description": "Specify rarity of the add-ons."
+          "name": "rzadkość",
+          "description": "Określ rzadkość kosmetyku."
         }
       }
     }
