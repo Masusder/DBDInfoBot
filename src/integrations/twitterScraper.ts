@@ -85,18 +85,18 @@ async function ensureLoggedIn(): Promise<boolean> {
 }
 
 /**
- * Converts a Twitter URL to an FXTwitter URL by replacing `twitter.com` with `fxtwitter.com`.
+ * Converts a Twitter URL to an VXTwitter URL by replacing `twitter.com` with `vxtwitter.com`.
  * This is done to get better SEO on external platforms.
  *
  * @param {string} url - The original Twitter URL.
- * @returns {string} The converted FXTwitter URL.
+ * @returns {string} The converted VXTwitter URL.
  *
  * @example
- * convertToFxTwitter("https://twitter.com/user/status/12345");
- * // Returns: "https://fxtwitter.com/user/status/12345"
+ * convertToVxTwitter("https://twitter.com/user/status/12345");
+ * // Returns: "https://vxtwitter.com/user/status/12345"
  */
-function convertToFxTwitter(url: string): string {
-    return url.replace('twitter.com', 'fxtwitter.com');
+function convertToVxTwitter(url: string): string {
+    return url.replace('twitter.com', 'vxtwitter.com');
 }
 
 /**
@@ -135,15 +135,15 @@ export async function getLatestTweetLink() {
                 return;
             }
 
-            const fxTweetUrl: string = convertToFxTwitter(tweetUrl);
-            if (fxTweetUrl !== latestTweetLink) {
-                latestTweetLink = fxTweetUrl;
+            const vxTweetUrl: string = convertToVxTwitter(tweetUrl);
+            if (vxTweetUrl !== latestTweetLink) {
+                latestTweetLink = vxTweetUrl;
                 const channel = client.channels.cache.get(Constants.DBDLEAKS_DBD_NEWS_CHANNEL_ID) as TextChannel;
                 if (channel) {
-                    const urlAlreadyPosted: boolean = await hasUrlBeenPosted(channel, fxTweetUrl);
+                    const urlAlreadyPosted: boolean = await hasUrlBeenPosted(channel, vxTweetUrl);
 
                     if (!urlAlreadyPosted) {
-                        const message = `<@&${Constants.DBDLEAKS_NEWS_NOTIFICATION_ROLE}>\n${fxTweetUrl}`;
+                        const message = `<@&${Constants.DBDLEAKS_NEWS_NOTIFICATION_ROLE}>\n${vxTweetUrl}`;
                         await channel.send(message);
                     } else {
                         console.log('This Tweet has already been posted.');
