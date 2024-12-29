@@ -17,7 +17,6 @@ import {
 import { Rarities } from "@data/Rarities";
 import { Cosmetic } from "@tps/cosmetic";
 import {
-    hasLimitedAvailabilityEnded,
     isCosmeticLimited,
     isCosmeticOnSale
 } from "@commands/infoSubCommands/cosmetic";

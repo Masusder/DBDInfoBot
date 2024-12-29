@@ -7,7 +7,10 @@ import {
     IPlayerData,
     IStatSchema
 } from "@ui/types/playerStats";
-import { formatNumber } from "@utils/stringUtils";
+import {
+    combineBaseUrlWithPath,
+    formatNumber
+} from "@utils/stringUtils";
 
 type BestStatProps = {
     playerData: IPlayerData;
@@ -34,13 +37,13 @@ type BestStatsBoxProps = {
     bestStat: IStatSchema;
 }
 const BestStatBox: React.FC<BestStatsBoxProps> = ({ playerData, bestStat }: BestStatsBoxProps) => {
-    if (!bestStat.statId) return null;
+    if (!bestStat.statId || !bestStat.iconPath) return null;
 
     const value = returnStatValue(playerData.stats, bestStat.statId);
 
     return (
         <div className="bestStat-statsBox">
-            <img className="bestStat-statIcon" src={'https://www.dbd-info.com' + bestStat.iconPath} alt=""/>
+            <img className="bestStat-statIcon" src={combineBaseUrlWithPath(bestStat.iconPath)} alt=""/>
             <div className="bestStat-statsBoxContent">
                 <div className="bestStat-statValue">{formatNumber(Math.trunc(value))}</div>
                 <div className="bestStat-statDescription">{bestStat.description}</div>
