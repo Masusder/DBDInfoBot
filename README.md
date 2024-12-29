@@ -67,7 +67,12 @@ ts-node ./src/scripts/deployCommands.ts
 
 This step ensures that the bot's slash commands are registered with Discord.
 
-### 5. Run the Bot
+### 5. Upload Static Emojis
+Some commands require static emojis to function correctly. Upload the necessary static emojis to the bot's emoji list in the Discord Developer Portal before running the bot:
+
+<img src="./resources/static-emojis.png" alt="Static Emojis" width="400">
+
+### 6. Run the Bot
 Start the bot in development mode:
 
 ```bash
