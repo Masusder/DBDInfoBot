@@ -46,6 +46,7 @@ function createBackstoryEmbeds(backstory: string, characterName: string, color: 
 }
 
 export async function showCharacterBackstoryHandler(interaction: ButtonInteraction) {
+    // noinspection DuplicatedCode
     const [_, characterIndex, userId] = interaction.customId.split('::');
 
     if (userId !== interaction.user.id) {

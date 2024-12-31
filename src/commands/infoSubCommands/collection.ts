@@ -22,18 +22,10 @@ import {
     genericPaginationHandler,
     IPaginationOptions
 } from "@handlers/genericPaginationHandler";
-import {
-    combineImagesIntoGrid,
-    createStoreCustomizationIcons,
-    IStoreCustomizationItem
-} from "@utils/imageUtils";
+import { combineImagesIntoGrid } from "@utils/imageUtils";
 import { getTranslation } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
-import {
-    generateStoreCustomizationIcons,
-    isCosmeticLimited,
-    isCosmeticOnSale
-} from "@commands/infoSubCommands/cosmetic";
+import { generateStoreCustomizationIcons } from "@commands/infoSubCommands/cosmetic";
 
 export async function handleCollectionCommandInteraction(interaction: ChatInputCommandInteraction) {
     const collectionId = interaction.options.getString('name');
@@ -96,7 +88,7 @@ export async function handleCollectionCommandInteraction(interaction: ChatInputC
             if (collectionData.UpdatedDate !== '0001-01-01T00:00:00Z') {
                 embed.setFooter(
                     { text: `${getTranslation('info_command.collection_subcommand.collection_last_updated', locale, ELocaleNamespace.Messages)} ${updateDatePretty}` }
-                )
+                );
             }
 
             return embed;
