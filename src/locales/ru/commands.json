@@ -69,6 +69,10 @@
         "limited": {
           "name": "limited",
           "description": "Specify whether cosmetic is available for purchase for a limited time."
+        },
+        "search": {
+          "name": "search",
+          "description": "Search for cosmetic by its name/description/collection."
         }
       }
     },
