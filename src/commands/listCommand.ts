@@ -296,6 +296,15 @@ export const data = i18next.isInitialized
                         .setDescriptionLocalizations(commandLocalizationHelper('list_command.cosmetics_subcommand.options.limited.description'))
                         .setRequired(false)
                 )
+                .addStringOption(option =>
+                    option
+                        .setName('search')
+                        .setNameLocalizations(commandLocalizationHelper('list_command.cosmetics_subcommand.options.search.name'))
+                        .setDescription(i18next.t('list_command.cosmetics_subcommand.options.search.description', { lng: 'en' }))
+                        .setDescriptionLocalizations(commandLocalizationHelper('list_command.cosmetics_subcommand.options.search.description'))
+                        .setAutocomplete(false)
+                        .setRequired(false)
+                )
         )
         .addSubcommand(subcommand =>
             subcommand

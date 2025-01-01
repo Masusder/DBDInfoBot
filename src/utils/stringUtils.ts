@@ -58,6 +58,10 @@ export function formatHtmlToDiscordMarkdown(html: string): string {
     return html;
 }
 
+export function stripHtml(html: string): string {
+    return html.replace(/<\/?[^>]+(>|$)/g, " ").replace(/\s+/g, " ").trim();
+}
+
 export function formatNumber(number: number | string | undefined = 0): string {
     if (number === undefined || number === null) {
         return "0";

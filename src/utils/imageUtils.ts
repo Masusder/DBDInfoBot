@@ -297,6 +297,12 @@ export async function combineImagesIntoGrid(imageSources: (string | Buffer)[], m
     let maxWidth = 0;
     let maxHeight = 0;
 
+    // Ensure imageSources is always an array
+    // Otherwise it would loop through buffer
+    if (Buffer.isBuffer(imageSources)) {
+        imageSources = [imageSources];
+    }
+
     const images: Image[] = (
         await Promise.all(
             imageSources.map(async(source) =>

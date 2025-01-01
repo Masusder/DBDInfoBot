@@ -68,7 +68,7 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
 
         const isLinked = cosmeticData.Unbreakable;
 
-        const isPastLimitedAvaibilityEndDate = hasLimitedAvailabilityEnded(cosmeticData);
+        const isPastLimitedAvailabilityEndDate = hasLimitedAvailabilityEnded(cosmeticData);
         const { isOnSale, adjustedDiscountEndDate } = isCosmeticOnSale(cosmeticData);
         const storeCustomizationItem: IStoreCustomizationItem = {
             icon: imageUrl,
@@ -91,7 +91,7 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
         const outfitPieces: string[] = cosmeticData.OutfitItems || [];
 
         const priceFields: APIEmbedField[] = [];
-        if (cosmeticData.Prices && isPurchasable && !isPastLimitedAvaibilityEndDate) {
+        if (cosmeticData.Prices && isPurchasable && !isPastLimitedAvailabilityEndDate) {
             cosmeticData.Prices.forEach(price => {
                 Object.keys(price).forEach(async currencyKey => {
                     const originalPrice = price[currencyKey] ?? 0;
@@ -177,7 +177,7 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
             );
         }
 
-        if (isPurchasable && !isPastLimitedAvaibilityEndDate && cosmeticData.LimitedTimeEndDate) {
+        if (isPurchasable && !isPastLimitedAvailabilityEndDate && cosmeticData.LimitedTimeEndDate) {
             fields.push(
                 {
                     name: getTranslation('info_command.cosmetic_subcommand.limited_until', locale, ELocaleNamespace.Messages),

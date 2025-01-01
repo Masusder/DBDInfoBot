@@ -41,7 +41,7 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
     try {
         await interaction.deferReply();
 
-        const { filters, customFilters }  = constructFilters(interaction);
+        const { filters, customFilters } = constructFilters(interaction);
         const filterCount = Object.keys(filters).length;
 
         const { Character = -1, Rarity, Category, InclusionVersion } = filters; // Deconstruct filters for use
@@ -140,7 +140,10 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
 
 // region Cosmetic List Utils
 
-function constructFilters(interaction: ChatInputCommandInteraction): { filters: Partial<Cosmetic>, customFilters: Partial<ICustomFilters> } {
+function constructFilters(interaction: ChatInputCommandInteraction): {
+    filters: Partial<Cosmetic>,
+    customFilters: Partial<ICustomFilters>
+} {
     const characterIndexString = interaction.options.getString('character');
     const isLinked = interaction.options.getBoolean('linked');
     const isPurchasable = interaction.options.getBoolean('purchasable');
@@ -162,12 +165,14 @@ function constructFilters(interaction: ChatInputCommandInteraction): { filters: 
     if (onSale !== null) filters.IsDiscounted = onSale;
 
     const isLimited = interaction.options.getBoolean('limited');
+    const query = interaction.options.getString('search');
 
     const customFilters: Partial<ICustomFilters> = {};
 
     if (isLimited !== null) customFilters.isLimited = isLimited;
+    if (query !== null) customFilters.query = query;
 
-    return {filters, customFilters};
+    return { filters, customFilters };
 }
 
 // endregion
