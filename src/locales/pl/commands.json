@@ -69,6 +69,10 @@
         "limited": {
           "name": "limitowane",
           "description": "Określ czy kosmetyki są dostępne na ograniczony czas."
+        },
+        "search": {
+          "name": "search",
+          "description": "Search for cosmetic by its name/description/collection."
         }
       }
     },
