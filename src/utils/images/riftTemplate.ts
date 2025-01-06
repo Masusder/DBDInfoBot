@@ -5,6 +5,7 @@ import { Cosmetic } from "@tps/cosmetic";
 import { generateStoreCustomizationIcons } from "@commands/infoSubCommands/cosmetic";
 import { Currencies, IRiftCurrency } from "@data/Currencies";
 import { generateCurrencyImage } from "@utils/images/currencyImage";
+import { AC_CURRENCY_PACKS } from "@commands/infoSubCommands/rift";
 
 const FREE_TRACK_Y = 50;
 const PREMIUM_TRACK_Y = 265;
@@ -64,14 +65,14 @@ function drawTierNumbers(ctx: CanvasRenderingContext2D, riftChunk: TierInfo[]) {
 async function drawTrackItems(cosmeticData: Record<string, Cosmetic>, trackItems: TierInfoItem[], ctx: CanvasRenderingContext2D, trackY: number, index: number) {
     let currencies: IRiftCurrency[] = []
     let cosmetics: Cosmetic[] = [];
-    const acCurrencyPacks = ["cellsPack_25", "cellsPack_50", "cellsPack_75"];
+
     trackItems.forEach((trackItem: TierInfoItem) => {
-        if (trackItem.Type === "inventory" && !acCurrencyPacks.includes(trackItem.Id)) {
+        if (trackItem.Type === "inventory" && !AC_CURRENCY_PACKS.includes(trackItem.Id)) {
             const cosmetic = cosmeticData[trackItem.Id];
             if (cosmetic) {
                 cosmetics.push(cosmetic);
             }
-        } else if (acCurrencyPacks.includes(trackItem.Id)) {
+        } else if (AC_CURRENCY_PACKS.includes(trackItem.Id)) {
             let currency = Currencies["Cells"] as IRiftCurrency;
 
             const amount = trackItem.Id.split("_")[1]

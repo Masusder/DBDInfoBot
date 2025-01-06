@@ -24,6 +24,7 @@ export interface IPaginationOptions {
     showPageNumbers?: boolean;
     generateSelectMenu?: (pageItems: any[]) => StringSelectMenuBuilder;
     generatedThumbnail?: { attachment: Buffer | string; name: string } | null;
+    generateAdditionalButtons?: (currentPage: number) => ActionRowBuilder<ButtonBuilder>[];
 }
 
 export const generatePaginationButtons = (page: number, totalPages: number, locale: Locale, showPageNumbers: boolean = true) => {
@@ -121,7 +122,8 @@ export async function genericPaginationHandler(options: IPaginationOptions) {
         interactionUserId,
         interactionReply,
         generateSelectMenu,
-        generatedThumbnail
+        generatedThumbnail,
+        generateAdditionalButtons
     } = options;
 
     let currentPage = 1;
@@ -144,6 +146,11 @@ export async function genericPaginationHandler(options: IPaginationOptions) {
             }
         }
 
+        let additionalButtons: ActionRowBuilder<ButtonBuilder>[] = [];
+        if (generateAdditionalButtons) {
+            additionalButtons = generateAdditionalButtons(currentPage);
+        }
+
         let files: { attachment: Buffer | string; name: string }[] = [];
         let updated = false;
 
@@ -156,7 +163,11 @@ export async function genericPaginationHandler(options: IPaginationOptions) {
 
         const response = await interactionReply.editReply({
             embeds: [embed],
-            components: [...(selectMenuRow ? [selectMenuRow] : []), ...generatePaginationButtons(currentPage, totalPages, locale, options?.showPageNumbers)],
+            components: [
+                ...(additionalButtons ? additionalButtons : []),
+                ...(selectMenuRow ? [selectMenuRow] : []),
+                ...generatePaginationButtons(currentPage, totalPages, locale, options?.showPageNumbers)
+            ],
             files
         });
 
@@ -186,17 +197,18 @@ export async function genericPaginationHandler(options: IPaginationOptions) {
     const message = await updatePageContent(options.locale);
 
     const collector = message.createMessageComponentCollector({
-        filter: (i): i is ButtonInteraction => i.isButton(),
+        filter: (i): i is ButtonInteraction => i.isButton() && i.customId.startsWith('pagination::'),
         time: options.timeout
     });
 
     collector.on('collect', async(interaction: ButtonInteraction) => {
         try {
-            await interaction.deferUpdate();
-            const locale = interaction.locale;
             const [action, paginationType, pageNumber] = interaction.customId.split('::');
 
             if (action === 'pagination') {
+                await interaction.deferUpdate();
+                const locale = interaction.locale;
+
                 if (interaction.user.id !== interactionUserId) {
                     await sendUnauthorizedMessage(interaction);
                     return;

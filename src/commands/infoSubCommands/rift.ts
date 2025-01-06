@@ -1,4 +1,11 @@
-import { AutocompleteInteraction, ChatInputCommandInteraction, EmbedBuilder, Locale } from "discord.js";
+import {
+    ActionRowBuilder,
+    APIEmbedField,
+    AutocompleteInteraction, ButtonBuilder, ButtonStyle,
+    ChatInputCommandInteraction,
+    EmbedBuilder,
+    Locale
+} from "discord.js";
 import { getCachedRifts, getRiftChoices } from "@services/riftService";
 import { getTranslation } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
@@ -14,6 +21,8 @@ import { genericPaginationHandler } from "@handlers/genericPaginationHandler";
 
 // region Command Interactions
 const TIERS_PER_PAGE = 8;
+export const AC_CURRENCY_PACKS = ["cellsPack_25", "cellsPack_50", "cellsPack_75"];
+
 export async function handleRiftCommandInteraction(interaction: ChatInputCommandInteraction) {
     const riftId = interaction.options.getString('name');
     const locale = interaction.locale;
@@ -51,6 +60,46 @@ export async function handleRiftCommandInteraction(interaction: ChatInputCommand
             return await generateRiftTemplate(tiersDivided, cosmeticData, currentPage)
         }
 
+        const generateAdditionalButtons = (currentPage: number) => {
+            const tiersChunk = tiersDivided[currentPage - 1];
+            const actionRows: ActionRowBuilder<ButtonBuilder>[] = [];
+            let currentActionRow = new ActionRowBuilder<ButtonBuilder>();
+
+            tiersChunk.forEach((tierInfo, index) => {
+                let cosmeticIds: string[] = [];
+
+                ["Free", "Premium"].forEach((type) => {
+                    if (currentActionRow.components.length === 5) {
+                        actionRows.push(currentActionRow);
+                        currentActionRow = new ActionRowBuilder<ButtonBuilder>();
+                    }
+
+                    const tierInfoItem = tierInfo[type as 'Free' | 'Premium'];
+                    if (tierInfoItem) {
+                        tierInfoItem.forEach((tierInfoItem) => {
+                            if (tierInfoItem.Type === "inventory" && !AC_CURRENCY_PACKS.includes(tierInfoItem.Id)) {
+                                cosmeticIds.push(tierInfoItem.Id);
+                            }
+                        })
+                    }
+                });
+
+                currentActionRow.addComponents(
+                    new ButtonBuilder()
+                        .setCustomId(`rift_tier::${cosmeticIds.join(",")}::${index}`)
+                        .setLabel(`Tier ${tierInfo.TierId}`) // TODO: localize
+                        .setStyle(ButtonStyle.Primary)
+                        .setDisabled(cosmeticIds.length === 0)
+                );
+            });
+
+            if (currentActionRow.components.length > 0) {
+                actionRows.push(currentActionRow);
+            }
+
+            return actionRows;
+        };
+
         await genericPaginationHandler({
             items: tiersDivided,
             itemsPerPage: 1,
@@ -59,7 +108,8 @@ export async function handleRiftCommandInteraction(interaction: ChatInputCommand
             interactionUserId: interaction.user.id,
             interactionReply: interaction,
             locale,
-            timeout: 120_000
+            timeout: 120_000,
+            generateAdditionalButtons
         });
     } catch (error) {
         console.error("Error executing rift subcommand:", error);
@@ -87,6 +137,7 @@ function chunkArray(arr: TierInfo[], size: number) {
     }
     return result;
 }
+
 // endregion
 
 // region Autocomplete

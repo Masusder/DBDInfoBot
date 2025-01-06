@@ -4,6 +4,7 @@ import { showCharacterBackstoryHandler } from "@handlers/showCharacterBackstoryH
 import { handlePerkCommandInteraction } from "@commands/infoSubCommands/perk";
 import { globalStatsTabHandler } from "@handlers/globalStatsTabHandler";
 import { characterHintsHandler } from "@handlers/characterHintsHandler";
+import { riftTierHandler } from "@handlers/riftTierHandler";
 
 export default async(interaction: ButtonInteraction) => {
     if (!interaction.deferred) await interaction.deferUpdate();
@@ -25,6 +26,9 @@ export default async(interaction: ButtonInteraction) => {
             break;
         case 'global_stats_tab':
             await globalStatsTabHandler(interaction);
+            break;
+        case 'rift_tier':
+            await riftTierHandler(interaction);
             break;
         default:
             console.warn(`Unhandled interaction type: ${interaction.customId}`);
