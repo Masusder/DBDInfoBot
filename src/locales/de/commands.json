@@ -14,7 +14,8 @@
           "character": "Character",
           "cosmetic": "Cosmetic",
           "build": "Build",
-          "collection": "Collection"
+          "collection": "Collection",
+          "rift": "Rift"
         }
       },
       "name": {
