@@ -21,3 +21,7 @@ export interface TierInfoItem {
     Id: string;
     Type: string;
 }
+
+export interface RiftExtended extends Rift {
+    RiftId: string;
+}

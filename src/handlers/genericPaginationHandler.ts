@@ -16,7 +16,7 @@ export interface IPaginationOptions {
     items: any[];
     itemsPerPage: number;
     generateEmbed: (pageItems: any[], currentPage: number, totalPages: number) => EmbedBuilder | Promise<EmbedBuilder>;
-    generateImage?: (pageItems: any[]) => Promise<Buffer>;
+    generateImage?: (pageItems: any[], currentPage: number) => Promise<Buffer>;
     interactionUserId: string;
     interactionReply: ChatInputCommandInteraction | ButtonInteraction;
     timeout?: number;
@@ -162,7 +162,7 @@ export async function genericPaginationHandler(options: IPaginationOptions) {
 
         if (generateImage) {
             try {
-                const image = await generateImage(itemsForPage);
+                const image = await generateImage(itemsForPage, currentPage);
                 if (image) {
                     embed.setImage('attachment://generated_image.png');
                     files.push({ attachment: image, name: 'generated_image.png' });

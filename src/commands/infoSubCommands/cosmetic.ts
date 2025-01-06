@@ -78,10 +78,10 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
             isLimited: isCosmeticLimited(cosmeticData),
             isOnSale: isOnSale
         };
-        const customizationItemBuffer = await createStoreCustomizationIcons(storeCustomizationItem) as Buffer;
+        const customizationItemBuffer = await createStoreCustomizationIcons([storeCustomizationItem]);
 
         const attachments: AttachmentBuilder[] = [];
-        attachments.push(new AttachmentBuilder(customizationItemBuffer, { name: `cosmetic_${cosmeticData.CosmeticId}.png` }));
+        attachments.push(new AttachmentBuilder(customizationItemBuffer[0], { name: `cosmetic_${cosmeticData.CosmeticId}.png` }));
 
         const isPurchasable = cosmeticData.Purchasable;
 
@@ -377,7 +377,7 @@ export async function generateStoreCustomizationIcons(cosmeticItems: (string[] |
         imageSources.push(model);
     });
 
-    return await createStoreCustomizationIcons(imageSources) as Buffer[];
+    return await createStoreCustomizationIcons(imageSources);
 }
 
 // endregion
@@ -390,7 +390,7 @@ export async function handleCosmeticCommandAutocompleteInteraction(interaction: 
         const choices = await getCosmeticChoicesFromIndex(focusedValue, locale);
 
         const options = choices.slice(0, 25).map(cosmetic => ({
-            name: `${cosmetic.CosmeticName} (ID: ${cosmetic.CosmeticId})`,
+            name: `${cosmetic.CosmeticName} (ID: ${cosmetic.CosmeticId})`, // We need to display IDs as names can repeat
             value: cosmetic.CosmeticId
         }));
 

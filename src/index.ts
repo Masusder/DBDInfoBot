@@ -1,4 +1,5 @@
 import { Events } from 'discord.js';
+import { registerFont } from "canvas";
 import {
     startTweetJob,
     startShrineJob,
@@ -22,6 +23,9 @@ async function initializeClient() {
         console.error('Error during i18next setup:', err);
         return; // If i18next fails, don't proceed with client initialization
     }
+
+    // Register Roboto font for Canvas library
+    registerFont('./resources/Roboto-Black.ttf', { family: 'Roboto' }); // DBDCoreFont.uasset
 
     client.once(Events.ClientReady, async(readyClient) => {
         console.log(`Logged in as ${readyClient.user.tag}`);

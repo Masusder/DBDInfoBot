@@ -95,7 +95,7 @@ export async function handleCollectionCommandInteraction(interaction: ChatInputC
         };
 
         const generateImage = async(pageItems: string[]) => {
-            const customizationBuffers = await generateStoreCustomizationIcons(pageItems, cosmeticData);
+            const customizationBuffers = await generateStoreCustomizationIcons(pageItems, cosmeticData) as Buffer[];
 
             return await combineImagesIntoGrid(customizationBuffers, 5, 10);
         };

@@ -1,5 +1,7 @@
 import axios from 'axios';
 import sharp from 'sharp';
+import path from 'path';
+import fs from 'fs';
 import {
     CanvasRenderingContext2D,
     createCanvas,
@@ -26,7 +28,7 @@ export const fetchAndResizeImage = async(imageUrl: string, width: number | null,
     return await sharp(response.data).resize(width, height).toBuffer();
 };
 
-const backgroundCache: Record<string, Promise<Image>> = {};
+export const backgroundCache: Record<string, Promise<Image>> = {};
 
 export async function layerIcons(
     background: string | Buffer | Image,
@@ -73,7 +75,7 @@ export interface IStoreCustomizationItem {
     isOnSale: boolean;
 }
 
-export async function createStoreCustomizationIcons(storeCustomizationItems: IStoreCustomizationItem | IStoreCustomizationItem[]) {
+export async function createStoreCustomizationIcons(storeCustomizationItems: IStoreCustomizationItem[]): Promise<Buffer[]> {
     const items = Array.isArray(storeCustomizationItems) ? storeCustomizationItems : [storeCustomizationItems];
 
     const layerPromises = items.map(async(item) => {
@@ -144,7 +146,7 @@ export async function createStoreCustomizationIcons(storeCustomizationItems: ISt
     const layeredIcons = await Promise.all(layerPromises);
 
     if (layeredIcons.length === 1) {
-        return layeredIcons[0];
+        return [layeredIcons[0]];
     }
 
     return layeredIcons.filter(icon => icon !== null);
@@ -366,4 +368,17 @@ export async function createPerkIcons(perkIds: string[], locale: Locale) {
     });
 
     return Promise.all(perkIconPromises);
+}
+
+export async function loadResourceImage(imageName: string): Promise<Buffer> {
+    return new Promise((resolve, reject) => {
+        const imagePath = path.resolve(process.cwd(), 'resources', imageName);
+        fs.readFile(imagePath, (err, data) => {
+            if (err) {
+                reject(new Error(`Failed to load image: ${imageName}. ${err.message}`));
+            } else {
+                resolve(data);
+            }
+        });
+    });
 }

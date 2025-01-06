@@ -428,7 +428,7 @@ async function createItemShowcaseImage(content: ContentItem[], locale: Locale): 
         }
     }
 
-    const customizationBuffers = await generateStoreCustomizationIcons(cosmeticIds, cosmeticData);
+    const customizationBuffers = await generateStoreCustomizationIcons(cosmeticIds, cosmeticData) as Buffer[];
 
     if (imageUrls.length > 0) {
         return await combineImagesIntoGrid(customizationBuffers, 5, 10);

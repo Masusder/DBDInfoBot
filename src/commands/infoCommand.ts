@@ -37,6 +37,7 @@ import {
     handleCollectionCommandAutocompleteInteraction,
     handleCollectionCommandInteraction
 } from "@commands/infoSubCommands/collection";
+import { handleRiftCommandAutocompleteInteraction, handleRiftCommandInteraction } from "@commands/infoSubCommands/rift";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -90,6 +91,11 @@ export const data = i18next.isInitialized
                         name: i18next.t('info_command.options.type.choices.collection', { lng: 'en' }),
                         name_localizations: commandLocalizationHelper('info_command.options.type.choices.collection'),
                         value: 'collection'
+                    },
+                    {
+                        name: i18next.t('info_command.options.type.choices.rift', { lng: 'en' }),
+                        name_localizations: commandLocalizationHelper('info_command.options.type.choices.rift'),
+                        value: 'rift'
                     }
                 )
         )
@@ -130,6 +136,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         case 'collection':
             await handleCollectionCommandInteraction(interaction);
             break;
+        case 'rift':
+            await handleRiftCommandInteraction(interaction);
+            break;
         default:
             await interaction.reply('Unknown command type.');
     }
@@ -163,6 +172,9 @@ export async function autocomplete(interaction: AutocompleteInteraction) {
             break;
         case 'collection':
             await handleCollectionCommandAutocompleteInteraction(interaction);
+            break;
+        case 'rift':
+            await handleRiftCommandAutocompleteInteraction(interaction);
             break;
         default:
             break;
