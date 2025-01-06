@@ -14,7 +14,8 @@
           "character": "Персонаж",
           "cosmetic": "Косметический предмет",
           "build": "Сборка",
-          "collection": "Коллекция"
+          "collection": "Коллекция",
+          "rift": "Rift"
         }
       },
       "name": {
