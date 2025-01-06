@@ -29,7 +29,7 @@ export async function handleRiftCommandInteraction(interaction: ChatInputCommand
         ]);
 
         if (!riftData || !cosmeticData || Object.keys(riftData).length === 0 || Object.keys(cosmeticData).length === 0) {
-            await sendErrorMessage(interaction, "Failed to retrieve rifts.", false);
+            await sendErrorMessage(interaction, "Failed to retrieve rifts.", false); // TODO: localize
             return;
         }
 
@@ -77,7 +77,7 @@ async function constructDescription(riftData: Rift, locale: Locale): Promise<str
     const riftFragmentEmoji = await getApplicationEmoji(riftFragmentData.emojiId)
     const riftFragmentEmojiMarkdown = riftFragmentEmoji ? createEmojiMarkdown(riftFragmentEmoji) : '';
 
-    return `Rift ends in: <t:${adjustedEndDate}:R>\nRift is active from <t:${adjustedStartDate}> to <t:${adjustedEndDate}>\n\n To progress by one tier you need to earn: **${riftData.Requirement} ${getTranslation(riftFragmentData.localizedName, locale, ELocaleNamespace.General)}** ${riftFragmentEmojiMarkdown}`;
+    return `Rift ends in: <t:${adjustedEndDate}:R>\nRift is active from <t:${adjustedStartDate}> to <t:${adjustedEndDate}>\n\n To progress by one tier you need to earn: **${riftData.Requirement} ${getTranslation(riftFragmentData.localizedName, locale, ELocaleNamespace.General)}** ${riftFragmentEmojiMarkdown}`;  // TODO: localize
 }
 
 function chunkArray(arr: TierInfo[], size: number) {
