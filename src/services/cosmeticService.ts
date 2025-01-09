@@ -8,8 +8,8 @@ import { Locale } from 'discord.js';
 import { Cosmetic } from '@tps/cosmetic';
 import { EGameData } from "@tps/enums/EGameData";
 import { localizeCacheKey } from "@utils/localizationUtils";
-import { isCosmeticLimited } from "@commands/infoSubCommands/cosmetic";
 import { stripHtml } from "@utils/stringUtils";
+import { isCosmeticLimited } from "@commands/info/cosmetic/utils";
 
 // Holds indexed cosmetics for fast querying by locale
 let indexedCosmetics: Map<string, Map<string, Cosmetic[]>> = new Map();

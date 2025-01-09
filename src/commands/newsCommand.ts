@@ -38,8 +38,8 @@ import {
     getTranslation
 } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
-import { genericPaginationHandler } from "@handlers/genericPaginationHandler";
-import { generateStoreCustomizationIcons } from "@commands/infoSubCommands/cosmetic";
+import { paginationHandler } from "@handlers/paginationHandler";
+import { generateStoreCustomizationIcons } from "@commands/info/cosmetic/utils";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -141,7 +141,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             return embed;
         };
 
-        await genericPaginationHandler({
+        await paginationHandler({
             items: newsList,
             itemsPerPage: 25,
             generateEmbed: generateNewsListEmbed,

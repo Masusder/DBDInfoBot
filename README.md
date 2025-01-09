@@ -58,11 +58,11 @@ cp .env.example .env
 
 2. Open the .env file and update the values.
 
-### 4. Deploy Commands to Discord
-Before running the bot, you need to deploy the commands to Discord. Run the following script to deploy the bot's commands:
+### 4. Register Commands with Discord
+Before running the bot, you need to register the commands to Discord. Run the following script to register the bot's commands:
 
 ```bash
-ts-node ./src/scripts/deployCommands.ts
+npm run register
 ```
 
 This step ensures that the bot's slash commands are registered with Discord.

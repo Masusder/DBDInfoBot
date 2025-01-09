@@ -8,14 +8,14 @@ import menuInteractionCreate from './menuInteractionCreate';
 import {
     execute as executeInfo,
     autocomplete as autocompleteInfo
-} from "@commands/infoCommand";
+} from "@commands/info";
 import {
     execute as executeList,
     autocomplete as autocompleteList
-} from "@commands/listCommand";
+} from "@commands/list";
 import { execute as executeShrine } from "@commands/shrineCommand";
 import { execute as executeNews } from "@commands/newsCommand";
-import { execute as executeStats } from "@commands/statsCommand";
+import { execute as executeStats } from "@commands/stats";
 
 interface CommandHandler {
     execute: (interaction: ChatInputCommandInteraction) => Promise<void>;
