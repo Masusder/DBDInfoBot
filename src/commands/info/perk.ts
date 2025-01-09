@@ -3,7 +3,8 @@ import {
     AutocompleteInteraction,
     ButtonInteraction,
     ChatInputCommandInteraction,
-    EmbedBuilder
+    EmbedBuilder,
+    MessageFlags
 } from 'discord.js';
 import {
     getPerkChoices,
@@ -73,7 +74,7 @@ export async function handlePerkCommandInteraction(interaction: ChatInputCommand
                     attachment: imageBuffer,
                     name: `perkImage_${perkData.PerkId}.png`
                 }],
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         } else {
             await interaction.editReply({

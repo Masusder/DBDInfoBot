@@ -1,6 +1,7 @@
 import {
     ButtonInteraction,
-    EmbedBuilder
+    EmbedBuilder,
+    MessageFlags
 } from 'discord.js';
 import { getCachedCosmetics } from '@services/cosmeticService';
 import {
@@ -28,7 +29,7 @@ export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
     if (!cosmeticId) {
         await interaction.followUp({
             content: getTranslation('info_command.cosmetic_subcommand.button_interaction.invalid_id', locale, ELocaleNamespace.Errors),
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
         return;
     }
@@ -39,7 +40,7 @@ export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
     if (!cosmeticData) {
         await interaction.followUp({
             content: getTranslation('info_command.cosmetic_subcommand.button_interaction.error_retrieving_data', locale, ELocaleNamespace.Errors),
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
         return;
     }
@@ -67,7 +68,7 @@ export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
     await interaction.followUp({
         embeds: [embed],
         files: [{ attachment: combinedImageBuffer, name: 'combined-outfit-pieces.png' }],
-        ephemeral: true
+        flags: MessageFlags.Ephemeral
     });
 }
 

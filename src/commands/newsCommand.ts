@@ -8,6 +8,7 @@ import {
     ColorResolvable,
     EmbedBuilder,
     Locale,
+    MessageFlags,
     NewsChannel,
     StringSelectMenuBuilder,
     StringSelectMenuInteraction,
@@ -285,7 +286,7 @@ async function sendNewsContent(newsItem: NewsItem, interactionOrChannel: ChatInp
             await interactionOrChannel.followUp({
                 embeds: [firstEmbed],
                 components: actionRow && textChunks.length === 1 ? [actionRow] : [],
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         }
 
@@ -319,7 +320,7 @@ async function sendNewsContent(newsItem: NewsItem, interactionOrChannel: ChatInp
                 await interactionOrChannel.followUp({
                     embeds: [followUpEmbed],
                     components: actionRow && isLastChunk ? [actionRow] : [],
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral
                 });
             }
         }
@@ -360,7 +361,7 @@ async function sendNewsContent(newsItem: NewsItem, interactionOrChannel: ChatInp
                             name: 'news_showcase_items.png'
                         }
                     ],
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral
                 });
             }
         }

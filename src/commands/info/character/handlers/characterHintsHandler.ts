@@ -1,7 +1,8 @@
 import {
     ButtonInteraction,
     EmbedBuilder,
-    Locale
+    Locale,
+    MessageFlags
 } from 'discord.js';
 import {
     combineBaseUrlWithPath,
@@ -32,7 +33,7 @@ export async function characterHintsHandler(interaction: ButtonInteraction) {
     if (!characterIndex) {
         await interaction.followUp({
             content: getTranslation('info_command.character_subcommand.invalid_index', locale, ELocaleNamespace.Errors),
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
         return;
     }
@@ -41,7 +42,7 @@ export async function characterHintsHandler(interaction: ButtonInteraction) {
     if (!characterData) {
         await interaction.followUp({
             content: getTranslation('info_command.character_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors),
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
         return;
     }

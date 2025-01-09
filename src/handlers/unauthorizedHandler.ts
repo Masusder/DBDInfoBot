@@ -1,6 +1,7 @@
 import {
     ButtonInteraction,
     EmbedBuilder,
+    MessageFlags,
     StringSelectMenuInteraction
 } from "discord.js";
 import { getTranslation } from "@utils/localizationUtils";
@@ -17,9 +18,15 @@ export async function sendUnauthorizedMessage(interaction: ButtonInteraction | S
 
     try {
         if (interaction.replied || interaction.deferred) {
-            await interaction.followUp({ embeds: [embed], ephemeral: true });
+            await interaction.followUp({
+                embeds: [embed],
+                flags: MessageFlags.Ephemeral
+            });
         } else {
-            await interaction.reply({ embeds: [embed], ephemeral: true });
+            await interaction.reply({
+                embeds: [embed],
+                flags: MessageFlags.Ephemeral
+            });
         }
     } catch (error) {
         console.error("Error sending unauthorized message:", error);
