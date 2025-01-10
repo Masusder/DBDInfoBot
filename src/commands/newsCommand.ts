@@ -48,6 +48,7 @@ export const data = i18next.isInitialized
         .setNameLocalizations(commandLocalizationHelper('news_command.name'))
         .setDescription(i18next.t('news_command.description', { lng: 'en' }))
         .setDescriptionLocalizations(commandLocalizationHelper('news_command.description'))
+        .setContexts([0,1,2])
     : undefined;
 
 interface INewsDataTable {

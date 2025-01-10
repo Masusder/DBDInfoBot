@@ -34,6 +34,7 @@ import { constructFilters } from "./utils";
 
 const COSMETICS_PER_PAGE = 6;
 
+// region Interaction Handlers
 export async function handleCosmeticListCommandInteraction(interaction: ChatInputCommandInteraction) {
     const locale = interaction.locale;
 
@@ -136,6 +137,8 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
         console.error("Error executing cosmetics list subcommand:", error);
     }
 }
+
+// endregion
 
 // region Autocomplete
 export async function handleCosmeticListCommandAutocompleteInteraction(interaction: AutocompleteInteraction) {

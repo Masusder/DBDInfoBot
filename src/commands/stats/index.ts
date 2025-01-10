@@ -11,6 +11,7 @@ export const data = i18next.isInitialized
         .setNameLocalizations(commandLocalizationHelper('stats_command.name'))
         .setDescription(i18next.t('stats_command.description', { lng: 'en' }))
         .setDescriptionLocalizations(commandLocalizationHelper('stats_command.description'))
+        .setContexts([0,1,2])
         .addSubcommand((subcommand) =>
             subcommand
                 .setName('global')

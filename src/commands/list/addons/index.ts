@@ -29,9 +29,9 @@ import { Role } from "@data/Role";
 import { ERole } from "@tps/enums/ERole";
 import { constructFilters } from "./utils";
 
-// region Command interaction
 const ADDONS_PER_PAGE = 9;
 
+// region Interaction Handlers
 export async function handleAddonListCommandInteraction(interaction: ChatInputCommandInteraction) {
     const locale = interaction.locale;
 

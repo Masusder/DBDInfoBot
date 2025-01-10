@@ -16,7 +16,7 @@ import { getCachedPerks } from "@services/perkService";
 import { getCachedAddons } from "@services/addonService";
 import { getCachedOfferings } from "@services/offeringService";
 import { getCachedItems } from "@services/itemService";
-import * as icons from '@constants/icons.json';
+import * as icons from '../../resources/base64Icons.json';
 
 export const fetchAndResizeImage = async(imageUrl: string, width: number | null, height: number | null) => {
     const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });

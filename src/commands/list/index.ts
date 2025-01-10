@@ -88,6 +88,7 @@ export const data = i18next.isInitialized
         .setNameLocalizations(commandLocalizationHelper('list_command.name'))
         .setDescription(i18next.t('list_command.description', { lng: 'en' }))
         .setDescriptionLocalizations(commandLocalizationHelper('list_command.description'))
+        .setContexts([0,1,2])
         // The reason why I'm going to use subcommand and not string option
         // is to have support for individual choices for each subcommand
         .addSubcommand(subcommand =>
