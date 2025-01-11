@@ -39,4 +39,5 @@ export interface Cosmetic {
     IsDiscounted: boolean;
     Prices: Record<string, number>[];
     TemporaryDiscounts: TemporaryDiscount[];
+    KillSwitched: boolean | null;
 }

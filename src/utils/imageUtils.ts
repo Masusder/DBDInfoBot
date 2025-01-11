@@ -73,13 +73,14 @@ export interface IStoreCustomizationItem {
     isLinked: boolean;
     isLimited: boolean;
     isOnSale: boolean;
+    isKillSwitched: boolean;
 }
 
 export async function createStoreCustomizationIcons(storeCustomizationItems: IStoreCustomizationItem[]): Promise<Buffer[]> {
     const items = Array.isArray(storeCustomizationItems) ? storeCustomizationItems : [storeCustomizationItems];
 
     const layerPromises = items.map(async(item) => {
-        const { icon, background, prefix, isLinked, isLimited, isOnSale } = item;
+        const { icon, background, prefix, isLinked, isLimited, isOnSale, isKillSwitched } = item;
 
         let backgroundImage = backgroundCache[background] ?? (backgroundCache[background] = loadImage(background));
         let iconImage = loadImage(icon);
@@ -138,6 +139,13 @@ export async function createStoreCustomizationIcons(storeCustomizationItems: ISt
             onSaleFlag.src = icons.SALE_FLAG;
 
             ctx.drawImage(onSaleFlag, 540, 138, onSaleFlag.width, onSaleFlag.height);
+        }
+
+        if (isKillSwitched) {
+            const killSwitchedOverlay = new Image();
+            killSwitchedOverlay.src = icons.KILLSWITCH_OVERLAY_COSMETIC;
+
+            ctx.drawImage(killSwitchedOverlay, 0, 0, killSwitchedOverlay.width, killSwitchedOverlay.height);
         }
 
         return canvas.toBuffer();

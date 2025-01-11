@@ -137,7 +137,8 @@ async function generateCosmeticInteractionData(cosmeticId: string, locale: Local
         prefix: cosmeticData.Prefix,
         isLinked,
         isLimited: isCosmeticLimited(cosmeticData),
-        isOnSale: isOnSale
+        isOnSale: isOnSale,
+        isKillSwitched: !!cosmeticData?.KillSwitched,
     };
     const customizationItemBuffer = await createStoreCustomizationIcons([storeCustomizationItem]);
 
@@ -271,6 +272,14 @@ async function generateCosmeticInteractionData(cosmeticId: string, locale: Local
             name: getTranslation('info_command.cosmetic_subcommand.released_with_tome', locale, ELocaleNamespace.Messages),
             value: riftData[cosmeticData.TomeId].Name,
             inline: true
+        });
+    }
+
+    if (!!cosmeticData?.KillSwitched) {
+        fields.push({
+            name: "Kill Switch", // TODO: localize
+            value: "This cosmetic has been disabled and is currently unavailable for use.", // TODO: localize
+            inline: false
         });
     }
 

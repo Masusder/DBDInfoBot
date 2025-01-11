@@ -85,7 +85,8 @@ async function getCosmeticPiecesCombinedImage(cosmeticPieces: string[], cosmetic
                 prefix: cosmeticPieceData.Prefix,
                 isLinked: cosmeticPieceData.Unbreakable,
                 isLimited: isCosmeticLimited(cosmeticPieceData),
-                isOnSale
+                isOnSale,
+                isKillSwitched: !!cosmeticPieceData?.KillSwitched,
             };
 
             imageSources.push(model);

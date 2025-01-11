@@ -99,7 +99,8 @@ export async function generateStoreCustomizationIcons(cosmeticItems: (string[] |
             prefix: cosmetic.Prefix,
             isLinked: cosmetic.Unbreakable,
             isLimited: isCosmeticLimited(cosmetic),
-            isOnSale
+            isOnSale,
+            isKillSwitched: !!cosmetic?.KillSwitched
         };
 
         imageSources.push(model);
