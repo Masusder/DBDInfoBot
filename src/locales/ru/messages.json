@@ -46,7 +46,6 @@
       "type": "Тип",
       "release_date": "Shop Release Date",
       "sale": "Распродажа заканчивается",
-      "cosmetic_info": "Информация о косметическом предмете",
       "more_info": "Подробнее",
       "view_pieces": "Просмотреть элементы набора",
       "linked_cosmetic": "Цельный набор",
@@ -54,6 +53,8 @@
       "view_3d_model": "View 3D Model",
       "special_event": "Special Event",
       "released_with_tome": "Released with Tome",
+      "kill_switch": "Kill Switch",
+      "kill_switch_desc": "This cosmetic has been disabled and is currently unavailable for use.",
       "button_interaction": {
         "outfit_pieces": "Элементы набора"
       }
@@ -90,6 +91,15 @@
       "collection_inclusion_version": "Эта коллекция была представлена в версии:",
       "collection_info": "Информация о коллекции",
       "collection_last_updated": "Последнее обновление коллекции:"
+    },
+    "rift_subcommand": {
+      "tier": "Tier",
+      "rift_ends": "Rift ends in:",
+      "rift_active": [
+        "Rift is active from",
+        "to"
+      ],
+      "to_progress": "To progress by one tier you need to earn:"
     }
   },
   "list_command": {
