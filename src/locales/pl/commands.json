@@ -14,7 +14,8 @@
           "character": "Postać",
           "cosmetic": "Kosmetyk",
           "build": "Ekwipunek",
-          "collection": "Kolekcja"
+          "collection": "Kolekcja",
+          "rift": "Szczelina"
         }
       },
       "name": {
@@ -69,6 +70,10 @@
         "limited": {
           "name": "limitowane",
           "description": "Określ czy kosmetyki są dostępne na ograniczony czas."
+        },
+        "search": {
+          "name": "wyszukaj",
+          "description": "Szukaj kosmetyków według ich nazwy/opisu/kolekcji."
         }
       }
     },

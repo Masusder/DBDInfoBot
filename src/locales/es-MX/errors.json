@@ -12,10 +12,25 @@
     },
     "character_subcommand": {
       "invalid_index": "Invalid character index.",
-      "error_retrieving_data": "Error retrieving character data."
+      "error_retrieving_data": "There was a problem retrieving character data."
     },
     "collection_subcommand": {
-      "error_retrieving_data": "Failed to retrieve collections or cosmetics data."
+      "error_retrieving_data": "There was a problem retrieving collections or cosmetics data."
+    },
+    "perk_subcommand": {
+      "error_retrieving_data": "There was a problem retrieving perks."
+    },
+    "offering_subcommand": {
+      "error_retrieving_data": "There was a problem retrieving offerings."
+    },
+    "item_subcommand": {
+      "error_retrieving_data": "There was a problem retrieving items."
+    },
+    "addon_subcommand": {
+      "error_retrieving_data": "There was a problem retrieving add-ons."
+    },
+    "rift_subcommand": {
+      "error_retrieving_data": "There was a problem retrieving rift or cosmetics data."
     }
   },
   "list_command": {
@@ -36,7 +51,8 @@
   "general": {
     "unauthorized_title": "Unauthorized",
     "unauthorized": "Only the person who used the command can do that.",
-    "error_occurred": "An error has occurred"
+    "error_occurred": "An error has occurred",
+    "try_again_later": "Please try again later."
   },
   "news_command": {
     "error_retrieving_data": "Failed to retrieve latest news.",

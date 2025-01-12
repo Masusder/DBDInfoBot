@@ -46,7 +46,6 @@
       "type": "Typ",
       "release_date": "Data wydania w sklepie",
       "sale": "Koniec wyprzedaży",
-      "cosmetic_info": "Informacje o kosmetyku",
       "more_info": "Więcej informacji",
       "view_pieces": "Zobacz elementy stroju",
       "linked_cosmetic": "Połączony kosmetyk",
@@ -54,6 +53,8 @@
       "view_3d_model": "Zobacz model 3D",
       "special_event": "Specjalne wydarzenie",
       "released_with_tome": "Wydano z Tomem",
+      "kill_switch": "Wyłącznik awaryjny",
+      "kill_switch_desc": "Ten kosmetyk został wyłączony i jest obecnie niedostępny do użytku.",
       "button_interaction": {
         "outfit_pieces": "Elementy stroju dla"
       }
@@ -90,6 +91,15 @@
       "collection_inclusion_version": "Ta kolekcja została wprowadzona w wersji:",
       "collection_info": "Informacje o kolekcji",
       "collection_last_updated": "Ostatnia aktualizacja kolekcji miała miejsce"
+    },
+    "rift_subcommand": {
+      "tier": "Poziom",
+      "rift_ends": "Szczelina zamyka się za:",
+      "rift_active": [
+        "Szczelina jest aktywna od",
+        "do"
+      ],
+      "to_progress": "Aby awansować o jeden poziom, musisz zdobyć:"
     }
   },
   "list_command": {
