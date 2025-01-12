@@ -53,8 +53,8 @@
       "view_3d_model": "Zobacz model 3D",
       "special_event": "Specjalne wydarzenie",
       "released_with_tome": "Wydano z Tomem",
-      "kill_switch": "Kill Switch",
-      "kill_switch_desc": "This cosmetic has been disabled and is currently unavailable for use.",
+      "kill_switch": "Wyłącznik awaryjny",
+      "kill_switch_desc": "Ten kosmetyk został wyłączony i jest obecnie niedostępny do użytku.",
       "button_interaction": {
         "outfit_pieces": "Elementy stroju dla"
       }
@@ -93,13 +93,13 @@
       "collection_last_updated": "Ostatnia aktualizacja kolekcji miała miejsce"
     },
     "rift_subcommand": {
-      "tier": "Tier",
-      "rift_ends": "Rift ends in:",
+      "tier": "Poziom",
+      "rift_ends": "Szczelina zamyka się za:",
       "rift_active": [
-        "Rift is active from",
-        "to"
+        "Szczelina jest aktywna od",
+        "do"
       ],
-      "to_progress": "To progress by one tier you need to earn:"
+      "to_progress": "Aby awansować o jeden poziom, musisz zdobyć:"
     }
   },
   "list_command": {
