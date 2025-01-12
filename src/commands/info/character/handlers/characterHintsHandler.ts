@@ -21,6 +21,7 @@ import { ERole } from "@tps/enums/ERole";
 import { Role } from "@data/Role";
 
 export async function characterHintsHandler(interaction: ButtonInteraction) {
+    // noinspection DuplicatedCode
     const [_, characterIndex, userId] = interaction.customId.split('::');
 
     if (userId !== interaction.user.id) {

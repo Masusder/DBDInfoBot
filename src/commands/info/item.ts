@@ -14,27 +14,32 @@ import { getTranslation } from "@utils/localizationUtils";
 import { layerIcons } from "@utils/imageUtils";
 import {
     getItemChoices,
-    getItemDataByName
+    getItemDataById
 } from "@services/itemService";
 import { Rarities } from "@data/Rarities";
 import {
     getCharacterByParentItem
 } from "@services/characterService";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import { sendErrorMessage } from "@handlers/errorResponseHandler";
 
 // region Interaction Handlers
 export async function handleItemCommandInteraction(interaction: ChatInputCommandInteraction) {
-    const itemName = interaction.options.getString('name');
+    const itemId = interaction.options.getString('name');
     const locale = interaction.locale;
 
-    if (!itemName) return;
+    if (!itemId) return;
 
     try {
         await interaction.deferReply();
 
-        const itemData = await getItemDataByName(itemName, locale); // TODO: retrieve by id not name
+        const itemData = await getItemDataById(itemId, locale);
 
-        if (!itemData) return; // TODO: respond with message
+        if (!itemData) {
+            const message = getTranslation('info_command.item_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors) + ' ' + getTranslation('general.try_again_later', locale, ELocaleNamespace.Errors);
+            await sendErrorMessage(interaction, message);
+            return;
+        }
 
         const characterData = await getCharacterByParentItem(itemData.ItemId, locale)
 
@@ -73,7 +78,7 @@ export async function handleItemCommandInteraction(interaction: ChatInputCommand
 
         const embed = new EmbedBuilder()
             .setColor(rarityData.color as ColorResolvable)
-            .setTitle(itemName)
+            .setTitle(itemData.Name)
             .setFields(fields)
             .setTimestamp()
             .setDescription(formatHtmlToDiscordMarkdown(itemData.Description)) // Field would be preferred but there's 1024 characters limit
@@ -106,7 +111,7 @@ export async function handleItemCommandAutocompleteInteraction(interaction: Auto
 
         const options = choices.slice(0, 25).map(item => ({
             name: item.Name,
-            value: item.Name
+            value: item.ItemId
         }));
 
         await interaction.respond(options);

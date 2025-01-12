@@ -14,7 +14,6 @@ export function formatEmbedTitle(cosmeticName: string, isUnbreakable: boolean, l
     return cosmeticName;
 }
 
-// Calculate the discounted price
 export function calculateDiscountedPrice(baseCurrency: number, discountPercentage: number): number {
     return Math.round(baseCurrency - (baseCurrency * discountPercentage));
 }
@@ -66,6 +65,11 @@ export function isCosmeticOnSale(cosmetic: Cosmetic): { isOnSale: boolean; adjus
     }
 
     return { isOnSale: false };
+}
+
+export function formatReleaseDate(releaseDate: string) {
+    const adjustedReleaseDateUnix = releaseDate ? Math.floor(adjustForTimezone(releaseDate) / 1000) : null;
+    return adjustedReleaseDateUnix ? `<t:${adjustedReleaseDateUnix}>` : 'N/A';
 }
 
 /**

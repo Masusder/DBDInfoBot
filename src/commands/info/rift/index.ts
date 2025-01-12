@@ -2,13 +2,26 @@ import { ThemeColors } from "@constants/themeColors";
 import { sendErrorMessage } from "@handlers/errorResponseHandler";
 import { paginationHandler } from "@handlers/paginationHandler";
 import { getCachedCosmetics } from "@services/cosmeticService";
-import { getCachedRifts, getRiftChoices } from "@services/riftService";
-import { ActionRowBuilder,
+import {
+    getRiftChoices,
+    getRiftDataById
+} from "@services/riftService";
+import {
+    ActionRowBuilder,
     AutocompleteInteraction,
     ButtonBuilder,
-    ButtonStyle, ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
-import { chunkArray, constructDescription } from "./utils/riftUtils";
+    ButtonStyle,
+    ChatInputCommandInteraction,
+    EmbedBuilder
+} from "discord.js";
+import {
+    chunkArray,
+    constructDescription
+} from "./utils/riftUtils";
 import { generateRiftTemplate } from "./utils/riftTemplate";
+import { isValidData } from "@utils/stringUtils";
+import { getTranslation } from "@utils/localizationUtils";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 
 // region Interaction Handlers
 const TIERS_PER_PAGE = 8;
@@ -24,23 +37,23 @@ export async function handleRiftCommandInteraction(interaction: ChatInputCommand
         await interaction.deferReply();
 
         const [riftData, cosmeticData] = await Promise.all([
-            getCachedRifts(locale), // TODO: retrieve single rift data not all
+            getRiftDataById(riftId, locale),
             getCachedCosmetics(locale)
         ]);
 
-        if (!riftData || !cosmeticData || Object.keys(riftData).length === 0 || Object.keys(cosmeticData).length === 0) {
-            await sendErrorMessage(interaction, "Failed to retrieve rifts.", false); // TODO: localize
+        if (!riftData || !isValidData(cosmeticData)) {
+            const message = getTranslation('info_command.rift_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors) + ' ' + getTranslation('general.try_again_later', locale, ELocaleNamespace.Errors);
+            await sendErrorMessage(interaction, message);
             return;
         }
 
-        const rift = riftData[riftId];
-        const tiersDivided = chunkArray(rift.TierInfo, TIERS_PER_PAGE);
+        const tiersDivided = chunkArray(riftData.TierInfo, TIERS_PER_PAGE);
 
-        const description = await constructDescription(rift, locale);
+        const description = await constructDescription(riftData, locale);
 
         const generateEmbed = () => {
             return new EmbedBuilder()
-                .setTitle(rift.Name)
+                .setTitle(riftData.Name)
                 .setDescription(description)
                 .setColor(ThemeColors.PRIMARY)
                 .setImage(`attachment://riftImage_${riftId}.png`)
@@ -78,7 +91,7 @@ export async function handleRiftCommandInteraction(interaction: ChatInputCommand
                 currentActionRow.addComponents(
                     new ButtonBuilder()
                         .setCustomId(`rift_tier::${cosmeticIds.join(",")}::${index}`)
-                        .setLabel(`Tier ${tierInfo.TierId}`) // TODO: localize
+                        .setLabel(`${getTranslation('info_command.rift_subcommand.tier', locale, ELocaleNamespace.Messages)} ${tierInfo.TierId}`)
                         .setStyle(ButtonStyle.Primary)
                         .setDisabled(cosmeticIds.length === 0)
                 );

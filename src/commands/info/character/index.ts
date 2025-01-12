@@ -15,7 +15,7 @@ import {
 import { getTranslation } from "@utils/localizationUtils";
 import {
     getCharacterChoices,
-    getCharacterDataByName
+    getCharacterDataByIndex,
 } from "@services/characterService";
 import { Difficulties } from "@data/Difficulties";
 import { Genders } from "@data/Genders";
@@ -26,20 +26,25 @@ import {
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { getOrCreateMultiplePerkEmojis } from "@utils/emojiManager";
 import { getPerksByCharacterIndex } from "@services/perkService";
+import { sendErrorMessage } from "@handlers/errorResponseHandler";
 
 // region Interaction Handlers
 export async function handleCharacterCommandInteraction(interaction: ChatInputCommandInteraction) {
-    const characterName = interaction.options.getString('name');
+    const characterIndex = interaction.options.getString('name');
     const locale = interaction.locale;
 
-    if (!characterName) return;
+    if (!characterIndex) return;
 
     try {
         await interaction.deferReply();
 
-        const characterData = await getCharacterDataByName(characterName, locale); // TODO: query by id not name
+        const characterData = await getCharacterDataByIndex(characterIndex, locale);
 
-        if (!characterData) return; // TODO: respond with message
+        if (!characterData) {
+            const message = getTranslation('info_command.character_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors) + ' ' + getTranslation('general.try_again_later', locale, ELocaleNamespace.Errors);
+            await sendErrorMessage(interaction, message);
+            return;
+        }
 
         const role = characterData.Role as 'Killer' | 'Survivor';
         const roleData = Role[role];
@@ -97,7 +102,7 @@ export async function handleCharacterCommandInteraction(interaction: ChatInputCo
 
         const embed = new EmbedBuilder()
             .setColor(roleData.hexColor)
-            .setTitle(characterName)
+            .setTitle(characterData.Name)
             .setFields(fields)
             .setTimestamp()
             .setThumbnail(`attachment://characterImage_${characterData.CharacterIndex}.png`)
@@ -153,7 +158,7 @@ export async function handleCharacterCommandAutocompleteInteraction(interaction:
 
         const options = choices.slice(0, 25).map(character => ({
             name: character.Name,
-            value: character.Name
+            value: character.CharacterIndex as string
         }));
 
         await interaction.respond(options);

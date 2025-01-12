@@ -22,6 +22,7 @@ import {
     checkExistingImageUrl,
     combineBaseUrlWithPath,
     formatHtmlToDiscordMarkdown,
+    isValidData,
     splitTextIntoChunksBySentence,
     transformPackagedPath
 } from "@utils/stringUtils";
@@ -93,7 +94,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
         const newsData: NewsData = await getCachedNews(locale);
 
-        if (!newsData || isEmptyObject(newsData)) {
+        if (!isValidData(newsData)) {
             const message = getTranslation('news_command.error_retrieving_data', locale, ELocaleNamespace.Errors);
             await sendErrorMessage(interaction, message, false);
             return;
@@ -456,10 +457,6 @@ function matchToEvent(eventId: string | null): INewsDataTable {
         default:
             return NewsDataTable.News;
     }
-}
-
-export function isEmptyObject(obj: any): boolean {
-    return obj && typeof obj === 'object' && Object.keys(obj).length === 0;
 }
 
 // endregion

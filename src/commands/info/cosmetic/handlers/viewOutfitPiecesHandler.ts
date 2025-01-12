@@ -21,16 +21,15 @@ import {
     isCosmeticLimited,
     isCosmeticOnSale
 } from "@commands/info/cosmetic/utils";
+import { sendErrorMessage } from "@handlers/errorResponseHandler";
 
 export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
     const cosmeticId = extractInteractionId(interaction.customId);
     const locale = interaction.locale;
 
     if (!cosmeticId) {
-        await interaction.followUp({
-            content: getTranslation('info_command.cosmetic_subcommand.button_interaction.invalid_id', locale, ELocaleNamespace.Errors),
-            flags: MessageFlags.Ephemeral
-        });
+        const message = getTranslation('info_command.cosmetic_subcommand.button_interaction.invalid_id', locale, ELocaleNamespace.Errors);
+        await sendErrorMessage(interaction, message);
         return;
     }
 
@@ -38,10 +37,8 @@ export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
     const cosmeticData = cosmeticsData[cosmeticId];
 
     if (!cosmeticData) {
-        await interaction.followUp({
-            content: getTranslation('info_command.cosmetic_subcommand.button_interaction.error_retrieving_data', locale, ELocaleNamespace.Errors),
-            flags: MessageFlags.Ephemeral
-        });
+        const message = getTranslation('info_command.cosmetic_subcommand.button_interaction.error_retrieving_data', locale, ELocaleNamespace.Errors)
+        await sendErrorMessage(interaction, message);
         return;
     }
 

@@ -9,7 +9,8 @@ import {
     adjustForTimezone,
     combineBaseUrlWithPath,
     formatHtmlToDiscordMarkdown,
-    formatInclusionVersion
+    formatInclusionVersion,
+    isValidData
 } from "@utils/stringUtils";
 import {
     getCollectionChoices,
@@ -26,6 +27,7 @@ import { combineImagesIntoGrid } from "@utils/imageUtils";
 import { getTranslation } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { generateStoreCustomizationIcons } from "@commands/info/cosmetic/utils";
+import { sendErrorMessage } from "@handlers/errorResponseHandler";
 
 // region Interaction Handlers
 export async function handleCollectionCommandInteraction(interaction: ChatInputCommandInteraction) {
@@ -37,13 +39,14 @@ export async function handleCollectionCommandInteraction(interaction: ChatInputC
     try {
         await interaction.deferReply();
 
-        // TODO: parallel fetch
-        const collectionData = await getCollectionDataById(collectionId, locale);
-        const cosmeticData = await getCachedCosmetics(locale);
+        const [collectionData, cosmeticData] = await Promise.all([
+            getCollectionDataById(collectionId, locale),
+            getCachedCosmetics(locale)
+        ])
 
-        if (!collectionData || !cosmeticData) {
-            const message = getTranslation('info_command.collection_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors);
-            await interaction.editReply({ content: message }); // TODO: use error handler
+        if (!collectionData || !isValidData(cosmeticData)) {
+            const message = getTranslation('info_command.collection_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors) + ' ' + getTranslation('general.try_again_later', locale, ELocaleNamespace.Errors);
+            await sendErrorMessage(interaction, message);
             return;
         }
 

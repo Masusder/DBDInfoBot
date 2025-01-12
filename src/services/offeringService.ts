@@ -30,13 +30,33 @@ export async function initializeOfferingCache(locale: Locale): Promise<void> {
  *
  * @returns {Promise<OfferingExtended | undefined>} A promise that resolves to an OfferingExtended object if found, or undefined if not.
  */
-export async function getOfferingDataByName(name: string, locale: Locale): Promise<OfferingExtended | undefined> {
+// export async function getOfferingDataByName(name: string, locale: Locale): Promise<OfferingExtended | undefined> {
+//     const cachedOfferings = await getCachedOfferings(locale);
+//
+//     const offeringId = Object.keys(cachedOfferings).find(key => cachedOfferings[key].Name.toLowerCase() === name.toLowerCase());
+//
+//     if (offeringId) {
+//         return { OfferingId: offeringId, ...cachedOfferings[offeringId] };
+//     }
+//
+//     return undefined;
+// }
+
+/**
+ * Retrieves an offering by its IC.
+ *
+ * @param id - The ID of the offering to be fetched.
+ * @param locale - The locale in which to retrieve the offering data.
+ *
+ * @returns {Promise<OfferingExtended | undefined>} A promise that resolves to an OfferingExtended object if found, or undefined if not.
+ */
+export async function getOfferingDataById(id: string, locale: Locale): Promise<OfferingExtended | undefined> {
     const cachedOfferings = await getCachedOfferings(locale);
 
-    const offeringId = Object.keys(cachedOfferings).find(key => cachedOfferings[key].Name.toLowerCase() === name.toLowerCase());
+    const offeringData: Offering | undefined = cachedOfferings[id];
 
-    if (offeringId) {
-        return { OfferingId: offeringId, ...cachedOfferings[offeringId] };
+    if (offeringData) {
+        return { OfferingId: id, ...offeringData };
     }
 
     return undefined;
@@ -48,14 +68,18 @@ export async function getOfferingDataByName(name: string, locale: Locale): Promi
  * @param query - The query string to search for in offering names.
  * @param locale - The locale used to retrieve the offering data.
  *
- * @returns {Promise<Offering[]>} A promise that resolves to an array of offerings whose names match the query string.
+ * @returns {Promise<OfferingExtended[]>} A promise that resolves to an array of offerings whose names match the query string.
  */
-export async function getOfferingChoices(query: string, locale: Locale): Promise<Offering[]> {
+export async function getOfferingChoices(query: string, locale: Locale): Promise<OfferingExtended[]> {
     const cachedOfferings = await getCachedOfferings(locale);
 
     const lowerCaseQuery = query.toLowerCase();
-    return Object.values(cachedOfferings)
-        .filter(offering => offering.Name.toLowerCase().includes(lowerCaseQuery));
+    return Object.entries(cachedOfferings)
+        .filter(([_, offering]) => offering.Name.toLowerCase().includes(lowerCaseQuery))
+        .map(([offeringId, offering]) => ({
+            ...offering,
+            OfferingId: offeringId
+        }));
 }
 
 /**

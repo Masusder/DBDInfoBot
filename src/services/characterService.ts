@@ -29,13 +29,32 @@ export async function initializeCharactersCache(locale: Locale): Promise<void> {
  * @param locale - The locale to fetch the character data for.
  * @returns {Promise<CharacterExtended | undefined>} A promise that resolves to the character's data if found, or undefined if not.
  */
-export async function getCharacterDataByName(name: string, locale: Locale): Promise<CharacterExtended | undefined> {
+// export async function getCharacterDataByName(name: string, locale: Locale): Promise<CharacterExtended | undefined> {
+//     const cachedCharacters = await getCachedCharacters(locale);
+//
+//     const characterId = Object.keys(cachedCharacters).find(key => cachedCharacters[key].Name.toLowerCase() === name.toLowerCase());
+//
+//     if (characterId) {
+//         return { CharacterIndex: characterId, ...cachedCharacters[characterId] };
+//     }
+//
+//     return undefined;
+// }
+
+/**
+ * Retrieves a single character's data by its id.
+ *
+ * @param id - The name of the character to retrieve.
+ * @param locale - The locale to fetch the character data for.
+ * @returns {Promise<CharacterExtended | undefined>} A promise that resolves to the character's data if found, or undefined if not.
+ */
+export async function getCharacterDataByIndex(id: string | number, locale: Locale): Promise<CharacterExtended | undefined> {
     const cachedCharacters = await getCachedCharacters(locale);
 
-    const characterId = Object.keys(cachedCharacters).find(key => cachedCharacters[key].Name.toLowerCase() === name.toLowerCase());
+    const characterData = cachedCharacters[id];
 
-    if (characterId) {
-        return { CharacterIndex: characterId, ...cachedCharacters[characterId] };
+    if (characterData) {
+        return { CharacterIndex: id.toString(), ...characterData };
     }
 
     return undefined;
@@ -48,10 +67,10 @@ export async function getCharacterDataByName(name: string, locale: Locale): Prom
  * @param locale - The locale to fetch the character data for.
  * @returns {Promise<Character | undefined>} A promise that resolves to the character's data if found, or undefined if not.
  */
-export async function getCharacterDataByIndex(index: string | number, locale: Locale): Promise<Character | undefined> {
-    const cachedCharacters = await getCachedCharacters(locale);
-    return cachedCharacters[index];
-}
+// export async function getCharacterDataByIndex(index: string | number, locale: Locale): Promise<Character | undefined> {
+//     const cachedCharacters = await getCachedCharacters(locale);
+//     return cachedCharacters[index];
+// }
 
 /**
  * Retrieves a list of characters whose names match the query.

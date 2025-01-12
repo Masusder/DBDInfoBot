@@ -4,7 +4,7 @@ import { showCharacterBackstoryHandler } from "@commands/info/character/handlers
 import { globalStatsTabHandler } from "@commands/stats/global/handlers/globalStatsTabHandler";
 import { characterHintsHandler } from "@commands/info/character/handlers/characterHintsHandler";
 import { riftTierHandler } from "@commands/info/rift/handlers/riftTierHandler";
-import { handlePerkCommandInteraction } from "@commands/info/perk";
+import { handlePerkButtonInteraction, } from "@commands/info/perk";
 
 export default async(interaction: ButtonInteraction) => {
     if (!interaction.deferred) await interaction.deferUpdate();
@@ -22,7 +22,7 @@ export default async(interaction: ButtonInteraction) => {
             await characterHintsHandler(interaction);
             break;
         case 'shrine_perk':
-            await handlePerkCommandInteraction(interaction);
+            await handlePerkButtonInteraction(interaction);
             break;
         case 'global_stats_tab':
             await globalStatsTabHandler(interaction);

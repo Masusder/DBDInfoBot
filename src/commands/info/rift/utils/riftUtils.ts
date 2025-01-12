@@ -20,7 +20,7 @@ export async function constructDescription(riftData: Rift, locale: Locale): Prom
     const riftFragmentEmoji = await getApplicationEmoji(riftFragmentData.emojiId)
     const riftFragmentEmojiMarkdown = riftFragmentEmoji ? createEmojiMarkdown(riftFragmentEmoji) : '';
 
-    return `Rift ends in: <t:${adjustedEndDate}:R>\nRift is active from <t:${adjustedStartDate}> to <t:${adjustedEndDate}>\n\n To progress by one tier you need to earn: **${riftData.Requirement} ${getTranslation(riftFragmentData.localizedName, locale, ELocaleNamespace.General)}** ${riftFragmentEmojiMarkdown}`;  // TODO: localize
+    return `${getTranslation('info_command.rift_subcommand.rift_ends', locale, ELocaleNamespace.Messages)} <t:${adjustedEndDate}:R>\n${getTranslation('info_command.rift_subcommand.rift_active.0', locale, ELocaleNamespace.Messages)} <t:${adjustedStartDate}> ${getTranslation('info_command.rift_subcommand.rift_active.1', locale, ELocaleNamespace.Messages)} <t:${adjustedEndDate}>\n\n ${getTranslation('info_command.rift_subcommand.to_progress', locale, ELocaleNamespace.Messages)} **${riftData.Requirement} ${getTranslation(riftFragmentData.localizedName, locale, ELocaleNamespace.General)}** ${riftFragmentEmojiMarkdown}`;
 }
 
 export function chunkArray(arr: TierInfo[], size: number) {

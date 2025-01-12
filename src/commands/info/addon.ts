@@ -18,6 +18,7 @@ import {
 } from "@services/addonService";
 import { Rarities } from "@data/Rarities";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import { sendErrorMessage } from "@handlers/errorResponseHandler";
 
 // region Interaction Handlers
 export async function handleAddonCommandInteraction(interaction: ChatInputCommandInteraction) {
@@ -31,7 +32,11 @@ export async function handleAddonCommandInteraction(interaction: ChatInputComman
 
         const addonData = await getAddonDataById(addonId, locale);
 
-        if (!addonData) return; // TODO: respond with message
+        if (!addonData) {
+            const message = getTranslation('info_command.addon_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors) + ' ' + getTranslation('general.try_again_later', locale, ELocaleNamespace.Errors);
+            await sendErrorMessage(interaction, message);
+            return;
+        }
 
         const role = addonData.Role as 'Killer' | 'Survivor' | 'None';
         const roleData = Role[role];

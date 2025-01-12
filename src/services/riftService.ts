@@ -20,6 +20,28 @@ async function initializeRiftCache(locale: Locale): Promise<void> {
 // region Helpers
 
 /**
+ * Retrieves a single rift by its ID.
+ *
+ * @param id - The ID of the rift to retrieve.
+ * @param locale - The locale to fetch the rift data for.
+ *
+ * @returns {Promise<RiftExtended | undefined>} A promise that resolves to the rift's data if found, or undefined if not.
+ */
+export async function getRiftDataById(id: string, locale: Locale): Promise<RiftExtended | undefined> {
+    const cachedRifts = await getCachedRifts(locale);
+
+    const rift = cachedRifts[id];
+    if (!rift) {
+        return undefined;
+    }
+
+    return {
+        ...rift,
+        RiftId: id
+    };
+}
+
+/**
  * Retrieves a list of rifts that match the given query string.
  *
  * @param query - The query string to search for in rift names.

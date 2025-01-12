@@ -150,3 +150,7 @@ export function splitTextIntoChunksBySentence(text: string, maxLength: number) {
 
     return chunks;
 }
+
+export function isValidData(data: Record<string, any> | null | undefined): data is Record<string, any> {
+    return data !== null && data !== undefined && Object.keys(data).length > 0;
+}

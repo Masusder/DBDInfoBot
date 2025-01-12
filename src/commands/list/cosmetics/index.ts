@@ -42,7 +42,7 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
         await interaction.deferReply();
 
         const { filters, customFilters } = constructFilters(interaction);
-        const filterCount = Object.keys(filters).length;
+        const filterCount = Object.keys(filters).length + Object.keys(customFilters).length;
 
         const { Character = -1, Rarity, Category, InclusionVersion } = filters; // Deconstruct filters for use
 
@@ -131,7 +131,8 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
             interactionUserId: interaction.user.id,
             interactionReply: interaction,
             locale,
-            generatedThumbnail: await generateThumbnail()
+            generatedThumbnail: await generateThumbnail(),
+            timeout: 120_000
         });
     } catch (error) {
         console.error("Error executing cosmetics list subcommand:", error);

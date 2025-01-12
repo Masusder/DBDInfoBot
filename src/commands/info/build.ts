@@ -24,6 +24,7 @@ import {
 import { getCachedOfferings } from "@services/offeringService";
 import { getCachedCharacters } from "@services/characterService";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import { sendErrorMessage } from "@handlers/errorResponseHandler";
 
 // region Interaction Handlers
 export async function handleBuildCommandInteraction(interaction: ChatInputCommandInteraction | StringSelectMenuInteraction) {
@@ -35,7 +36,6 @@ export async function handleBuildCommandInteraction(interaction: ChatInputComman
     if (!buildId) return;
 
     try {
-        // TODO: split into two handlers
         if (interaction.isChatInputCommand()) {
             await interaction.deferReply();
         } else if (interaction.isStringSelectMenu()) {
@@ -53,7 +53,7 @@ export async function handleBuildCommandInteraction(interaction: ChatInputComman
 
         if (!buildData || !perkData || !itemData || !addonData || !offeringData) {
             const message = getTranslation('info_command.build_subcommand.build_not_found', locale, ELocaleNamespace.Errors);
-            await interaction.editReply({ content: message });  // TODO: use error handler
+            await sendErrorMessage(interaction, message);
             return;
         }
 

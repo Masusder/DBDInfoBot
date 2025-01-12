@@ -14,24 +14,29 @@ import { getTranslation } from "@utils/localizationUtils";
 import { layerIcons } from "@utils/imageUtils";
 import {
     getOfferingChoices,
-    getOfferingDataByName
+    getOfferingDataById
 } from "@services/offeringService";
 import { Rarities } from "@data/Rarities";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import { sendErrorMessage } from "@handlers/errorResponseHandler";
 
 // region Interaction Handlers
 export async function handleOfferingCommandInteraction(interaction: ChatInputCommandInteraction) {
-    const offeringName = interaction.options.getString('name');
+    const offeringId = interaction.options.getString('name');
     const locale = interaction.locale;
 
-    if (!offeringName) return;
+    if (!offeringId) return;
 
     try {
         await interaction.deferReply();
 
-        const offeringData = await getOfferingDataByName(offeringName, locale); // TODO: retrieve by id not name
+        const offeringData = await getOfferingDataById(offeringId, locale);
 
-        if (!offeringData) return; // TODO: respond with message
+        if (!offeringData) {
+            const message = getTranslation('info_command.offering_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors) + ' ' + getTranslation('general.try_again_later', locale, ELocaleNamespace.Errors);
+            await sendErrorMessage(interaction, message);
+            return;
+        }
 
         const role = offeringData.Role as 'Killer' | 'Survivor' | 'None';
         const roleData = Role[role];
@@ -67,7 +72,7 @@ export async function handleOfferingCommandInteraction(interaction: ChatInputCom
 
         const embed = new EmbedBuilder()
             .setColor(rarityData.color as ColorResolvable)
-            .setTitle(offeringName)
+            .setTitle(offeringData.Name)
             .setFields(fields)
             .setTimestamp()
             .setThumbnail(`attachment://offeringImage_${offeringData.OfferingId}.png`)
@@ -99,7 +104,7 @@ export async function handleOfferingCommandAutocompleteInteraction(interaction: 
 
         const options = choices.slice(0, 25).map(offering => ({
             name: offering.Name,
-            value: offering.Name
+            value: offering.OfferingId
         }));
 
         await interaction.respond(options);
