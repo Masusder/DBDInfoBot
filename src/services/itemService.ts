@@ -30,13 +30,33 @@ export async function initializeItemsCache(locale: Locale): Promise<void> {
  *
  * @returns {Promise<ItemExtended | undefined>} A promise that resolves to an ItemExtended object if found, or undefined if not.
  */
-export async function getItemDataByName(name: string, locale: Locale): Promise<ItemExtended | undefined> {
+// export async function getItemDataByName(name: string, locale: Locale): Promise<ItemExtended | undefined> {
+//     const cachedItems = await getCachedItems(locale);
+//
+//     const itemId = Object.keys(cachedItems).find(key => cachedItems[key].Name.toLowerCase() === name.toLowerCase());
+//
+//     if (itemId) {
+//         return { ItemId: itemId, ...cachedItems[itemId] };
+//     }
+//
+//     return undefined;
+// }
+
+/**
+ * Retrieves an item by its id.
+ *
+ * @param id - The id of the item to be fetched.
+ * @param locale - The locale in which to retrieve the item data.
+ *
+ * @returns {Promise<ItemExtended | undefined>} A promise that resolves to an ItemExtended object if found, or undefined if not.
+ */
+export async function getItemDataById(id: string, locale: Locale): Promise<ItemExtended | undefined> {
     const cachedItems = await getCachedItems(locale);
 
-    const itemId = Object.keys(cachedItems).find(key => cachedItems[key].Name.toLowerCase() === name.toLowerCase());
+    const itemData = cachedItems[id];
 
-    if (itemId) {
-        return { ItemId: itemId, ...cachedItems[itemId] };
+    if (itemData) {
+        return { ItemId: id, ...itemData };
     }
 
     return undefined;
@@ -48,14 +68,18 @@ export async function getItemDataByName(name: string, locale: Locale): Promise<I
  * @param query - The query string to search for in item names.
  * @param locale - The locale used to retrieve the item data.
  *
- * @returns {Promise<Item[]>} A promise that resolves to an array of items whose names match the query string.
+ * @returns {Promise<ItemExtended[]>} A promise that resolves to an array of items whose names match the query string.
  */
-export async function getItemChoices(query: string, locale: Locale): Promise<Item[]> {
+export async function getItemChoices(query: string, locale: Locale): Promise<ItemExtended[]> {
     const cachedItems = await getCachedItems(locale);
 
     const lowerCaseQuery = query.toLowerCase();
-    return Object.values(cachedItems)
-        .filter(item => item.Name.toLowerCase().includes(lowerCaseQuery));
+    return Object.entries(cachedItems)
+        .filter(([_, item]) => item.Name.toLowerCase().includes(lowerCaseQuery))
+        .map(([itemId, item]) => ({
+            ...item,
+            ItemId: itemId
+        }));
 }
 
 /**

@@ -52,7 +52,9 @@ export const data = i18next.isInitialized
         .setName('shrine')
         .setNameLocalizations(commandLocalizationHelper('shrine_command.name'))
         .setDescription(i18next.t('shrine_command.description', { lng: 'en' }))
-        .setDescriptionLocalizations(commandLocalizationHelper('shrine_command.description')) : undefined;
+        .setDescriptionLocalizations(commandLocalizationHelper('shrine_command.description'))
+        .setContexts([0,1,2])
+        : undefined;
 
 type CorrectlyCasedPerkData = {
     [key: string]: { bloodpoints: number; shards: number[] };

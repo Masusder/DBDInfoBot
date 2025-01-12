@@ -1,6 +1,6 @@
 import { Locale } from "discord.js";
 import { EGameData } from "@tps/enums/EGameData";
-import { Rift } from "@tps/rift";
+import { Rift, RiftExtended } from "@tps/rift";
 import {
     getCachedGameData,
     initializeGameDataCache
@@ -18,6 +18,48 @@ async function initializeRiftCache(locale: Locale): Promise<void> {
 }
 
 // region Helpers
+
+/**
+ * Retrieves a single rift by its ID.
+ *
+ * @param id - The ID of the rift to retrieve.
+ * @param locale - The locale to fetch the rift data for.
+ *
+ * @returns {Promise<RiftExtended | undefined>} A promise that resolves to the rift's data if found, or undefined if not.
+ */
+export async function getRiftDataById(id: string, locale: Locale): Promise<RiftExtended | undefined> {
+    const cachedRifts = await getCachedRifts(locale);
+
+    const rift = cachedRifts[id];
+    if (!rift) {
+        return undefined;
+    }
+
+    return {
+        ...rift,
+        RiftId: id
+    };
+}
+
+/**
+ * Retrieves a list of rifts that match the given query string.
+ *
+ * @param query - The query string to search for in rift names.
+ * @param locale - The locale used to retrieve the rift data.
+ *
+ * @returns {Promise<RiftExtended[]>} A promise that resolves to an array of rifts whose names match the query string.
+ */
+export async function getRiftChoices(query: string, locale: Locale): Promise<RiftExtended[]> {
+    const cachedRifts = await getCachedRifts(locale);
+
+    const lowerCaseQuery = query.toLowerCase();
+    return Object.entries(cachedRifts)
+        .filter(([_, rift]) => rift.Name.toLowerCase().includes(lowerCaseQuery))
+        .map(([riftId, rift]) => ({
+            ...rift,
+            RiftId: riftId
+        }));
+}
 
 /**
  * Retrieves cached Rift data for a specified locale.

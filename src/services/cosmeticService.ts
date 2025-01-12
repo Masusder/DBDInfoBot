@@ -8,7 +8,8 @@ import { Locale } from 'discord.js';
 import { Cosmetic } from '@tps/cosmetic';
 import { EGameData } from "@tps/enums/EGameData";
 import { localizeCacheKey } from "@utils/localizationUtils";
-import { isCosmeticLimited } from "@commands/infoSubCommands/cosmetic";
+import { stripHtml } from "@utils/stringUtils";
+import { isCosmeticLimited } from "@commands/info/cosmetic/utils";
 
 // Holds indexed cosmetics for fast querying by locale
 let indexedCosmetics: Map<string, Map<string, Cosmetic[]>> = new Map();
@@ -91,7 +92,9 @@ export async function getCosmeticChoicesFromIndex(query: string, locale: Locale)
 
 export interface ICustomFilters {
     isLimited: boolean;
+    query: string;
 }
+
 /**
  * Retrieve a list of filtered cosmetics based on optional filter criteria.
  *
@@ -111,26 +114,6 @@ export interface ICustomFilters {
  */
 export async function getFilteredCosmeticsList(filters: Partial<Cosmetic> = {}, locale: Locale, customFilters?: Partial<ICustomFilters>): Promise<Cosmetic[]> {
     const cosmetics = await getCachedCosmetics(locale);
-
-    // These aren't cosmetics
-    // so, I don't want them obviously
-    // Hard-coded to improve performance
-    // TODO: perhaps make separated API endpoint for these
-    //       or simply store them as static data
-    let excludeItems = new Set([
-        "cellsPack_25",
-        "cellsPack_50",
-        "cellsPack_75",
-        "HalloweenEventCurrency",
-        "BonusBloodpoints",
-        "WinterEventCurrency",
-        "SpringEventCurrency",
-        "AnniversaryEventCurrency",
-        "Shards"
-    ]);
-    for (const itemId of excludeItems) {
-        delete cosmetics[itemId];
-    }
 
     let cosmeticList = Object.values(cosmetics);
 
@@ -152,6 +135,19 @@ export async function getFilteredCosmeticsList(filters: Partial<Cosmetic> = {}, 
                         const isLimited = isCosmeticLimited(cosmetic);
                         return value ? isLimited : !isLimited;
                     });
+                    break;
+                case "query":
+                    if (typeof value === "string" && value.trim()) {
+                        const query = value.trim().toLowerCase();
+
+                        cosmeticList = cosmeticList.filter((cosmetic: Cosmetic) => {
+                            // Search without html tags
+                            const cleanDescription = stripHtml(cosmetic.Description).toLowerCase();
+                            return cosmetic.CosmeticName.toLowerCase().includes(query) ||
+                                cosmetic.CollectionName.toLowerCase().includes(query) ||
+                                cleanDescription.includes(query);
+                        });
+                    }
                     break;
                 default:
                     break;

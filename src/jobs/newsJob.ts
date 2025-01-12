@@ -7,11 +7,11 @@ import cron from "node-cron";
 import { getCachedNews } from "@services/newsService";
 import {
     batchSendNews,
-    isEmptyObject
 } from "@commands/newsCommand";
 import Constants from "@constants";
 import client from "../client";
 import { NewsData } from "@tps/news";
+import { isValidData } from "@utils/stringUtils";
 
 let cachedNewsIds: Set<string> = new Set();
 
@@ -29,7 +29,7 @@ export async function resolveNewsArticles() {
         console.log('Checking News...');
         const newsData: NewsData = await getCachedNews(Locale.EnglishUS)
 
-        if (!newsData || isEmptyObject(newsData)) {
+        if (!isValidData(newsData)) {
             console.log("Not found News data.");
             return;
         }

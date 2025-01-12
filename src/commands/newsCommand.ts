@@ -8,6 +8,7 @@ import {
     ColorResolvable,
     EmbedBuilder,
     Locale,
+    MessageFlags,
     NewsChannel,
     StringSelectMenuBuilder,
     StringSelectMenuInteraction,
@@ -21,6 +22,7 @@ import {
     checkExistingImageUrl,
     combineBaseUrlWithPath,
     formatHtmlToDiscordMarkdown,
+    isValidData,
     splitTextIntoChunksBySentence,
     transformPackagedPath
 } from "@utils/stringUtils";
@@ -38,8 +40,8 @@ import {
     getTranslation
 } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
-import { genericPaginationHandler } from "@handlers/genericPaginationHandler";
-import { generateStoreCustomizationIcons } from "@commands/infoSubCommands/cosmetic";
+import { paginationHandler } from "@handlers/paginationHandler";
+import { generateStoreCustomizationIcons } from "@commands/info/cosmetic/utils";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -47,6 +49,7 @@ export const data = i18next.isInitialized
         .setNameLocalizations(commandLocalizationHelper('news_command.name'))
         .setDescription(i18next.t('news_command.description', { lng: 'en' }))
         .setDescriptionLocalizations(commandLocalizationHelper('news_command.description'))
+        .setContexts([0,1,2])
     : undefined;
 
 interface INewsDataTable {
@@ -91,7 +94,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
         const newsData: NewsData = await getCachedNews(locale);
 
-        if (!newsData || isEmptyObject(newsData)) {
+        if (!isValidData(newsData)) {
             const message = getTranslation('news_command.error_retrieving_data', locale, ELocaleNamespace.Errors);
             await sendErrorMessage(interaction, message, false);
             return;
@@ -141,7 +144,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             return embed;
         };
 
-        await genericPaginationHandler({
+        await paginationHandler({
             items: newsList,
             itemsPerPage: 25,
             generateEmbed: generateNewsListEmbed,
@@ -285,7 +288,7 @@ async function sendNewsContent(newsItem: NewsItem, interactionOrChannel: ChatInp
             await interactionOrChannel.followUp({
                 embeds: [firstEmbed],
                 components: actionRow && textChunks.length === 1 ? [actionRow] : [],
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         }
 
@@ -319,7 +322,7 @@ async function sendNewsContent(newsItem: NewsItem, interactionOrChannel: ChatInp
                 await interactionOrChannel.followUp({
                     embeds: [followUpEmbed],
                     components: actionRow && isLastChunk ? [actionRow] : [],
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral
                 });
             }
         }
@@ -360,7 +363,7 @@ async function sendNewsContent(newsItem: NewsItem, interactionOrChannel: ChatInp
                             name: 'news_showcase_items.png'
                         }
                     ],
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral
                 });
             }
         }
@@ -428,7 +431,7 @@ async function createItemShowcaseImage(content: ContentItem[], locale: Locale): 
         }
     }
 
-    const customizationBuffers = await generateStoreCustomizationIcons(cosmeticIds, cosmeticData);
+    const customizationBuffers = await generateStoreCustomizationIcons(cosmeticIds, cosmeticData) as Buffer[];
 
     if (imageUrls.length > 0) {
         return await combineImagesIntoGrid(customizationBuffers, 5, 10);
@@ -454,10 +457,6 @@ function matchToEvent(eventId: string | null): INewsDataTable {
         default:
             return NewsDataTable.News;
     }
-}
-
-export function isEmptyObject(obj: any): boolean {
-    return obj && typeof obj === 'object' && Object.keys(obj).length === 0;
 }
 
 // endregion

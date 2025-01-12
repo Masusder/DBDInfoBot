@@ -36,21 +36,3 @@ export const DiscordLocaleToDbdLangCode: Record<Locale, string> = {
     [Locale.Ukrainian]: 'en',
     [Locale.Vietnamese]: 'en'
 };
-
-// export const Languages: ILang[] = [
-//     { code: 'de', name: 'Deutsch' },
-//     { code: 'en', name: 'English' },
-//     { code: 'es', name: 'Español' },
-//     { code: 'es-MX', name: 'Español (Mexicano)' },
-//     { code: 'fr', name: 'Français' },
-//     { code: 'it', name: 'Italiano' },
-//     { code: 'ja', name: '日本' },
-//     { code: 'ko', name: '한국인' },
-//     { code: 'pl', name: 'Polski' },
-//     { code: 'pt-BR', name: 'Português (Brasil)' },
-//     { code: 'ru', name: 'Русский' },
-//     { code: 'th', name: 'เมืองไทย' },
-//     { code: 'tr', name: 'Türkçe' },
-//     { code: 'zh-Hans', name: '简体中文' },
-//     { code: 'zh-Hant', name: '繁體中文' }
-// ];

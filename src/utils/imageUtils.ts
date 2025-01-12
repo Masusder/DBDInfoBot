@@ -1,5 +1,7 @@
 import axios from 'axios';
 import sharp from 'sharp';
+import path from 'path';
+import fs from 'fs';
 import {
     CanvasRenderingContext2D,
     createCanvas,
@@ -14,7 +16,7 @@ import { getCachedPerks } from "@services/perkService";
 import { getCachedAddons } from "@services/addonService";
 import { getCachedOfferings } from "@services/offeringService";
 import { getCachedItems } from "@services/itemService";
-import * as icons from '@constants/icons.json';
+import * as icons from '../../resources/base64Icons.json';
 
 export const fetchAndResizeImage = async(imageUrl: string, width: number | null, height: number | null) => {
     const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
@@ -26,7 +28,7 @@ export const fetchAndResizeImage = async(imageUrl: string, width: number | null,
     return await sharp(response.data).resize(width, height).toBuffer();
 };
 
-const backgroundCache: Record<string, Promise<Image>> = {};
+export const backgroundCache: Record<string, Promise<Image>> = {};
 
 export async function layerIcons(
     background: string | Buffer | Image,
@@ -71,13 +73,14 @@ export interface IStoreCustomizationItem {
     isLinked: boolean;
     isLimited: boolean;
     isOnSale: boolean;
+    isKillSwitched: boolean;
 }
 
-export async function createStoreCustomizationIcons(storeCustomizationItems: IStoreCustomizationItem | IStoreCustomizationItem[]) {
+export async function createStoreCustomizationIcons(storeCustomizationItems: IStoreCustomizationItem[]): Promise<Buffer[]> {
     const items = Array.isArray(storeCustomizationItems) ? storeCustomizationItems : [storeCustomizationItems];
 
     const layerPromises = items.map(async(item) => {
-        const { icon, background, prefix, isLinked, isLimited, isOnSale } = item;
+        const { icon, background, prefix, isLinked, isLimited, isOnSale, isKillSwitched } = item;
 
         let backgroundImage = backgroundCache[background] ?? (backgroundCache[background] = loadImage(background));
         let iconImage = loadImage(icon);
@@ -138,13 +141,20 @@ export async function createStoreCustomizationIcons(storeCustomizationItems: ISt
             ctx.drawImage(onSaleFlag, 540, 138, onSaleFlag.width, onSaleFlag.height);
         }
 
+        if (isKillSwitched) {
+            const killSwitchedOverlay = new Image();
+            killSwitchedOverlay.src = icons.KILLSWITCH_OVERLAY_COSMETIC;
+
+            ctx.drawImage(killSwitchedOverlay, 0, 0, killSwitchedOverlay.width, killSwitchedOverlay.height);
+        }
+
         return canvas.toBuffer();
     });
 
     const layeredIcons = await Promise.all(layerPromises);
 
     if (layeredIcons.length === 1) {
-        return layeredIcons[0];
+        return [layeredIcons[0]];
     }
 
     return layeredIcons.filter(icon => icon !== null);
@@ -297,6 +307,12 @@ export async function combineImagesIntoGrid(imageSources: (string | Buffer)[], m
     let maxWidth = 0;
     let maxHeight = 0;
 
+    // Ensure imageSources is always an array
+    // Otherwise it would loop through buffer
+    if (Buffer.isBuffer(imageSources)) {
+        imageSources = [imageSources];
+    }
+
     const images: Image[] = (
         await Promise.all(
             imageSources.map(async(source) =>
@@ -360,4 +376,17 @@ export async function createPerkIcons(perkIds: string[], locale: Locale) {
     });
 
     return Promise.all(perkIconPromises);
+}
+
+export async function loadResourceImage(imageName: string): Promise<Buffer> {
+    return new Promise((resolve, reject) => {
+        const imagePath = path.resolve(process.cwd(), 'resources', imageName);
+        fs.readFile(imagePath, (err, data) => {
+            if (err) {
+                reject(new Error(`Failed to load image: ${imageName}. ${err.message}`));
+            } else {
+                resolve(data);
+            }
+        });
+    });
 }

@@ -45,6 +45,10 @@ export const CosmeticTypes: Record<string, ICosmeticType> = {
         localizedName: "cosmetic_types.killer_body",
         icon: combineBaseUrlWithPath("/images/UI/Icons/StoreTabs/categoryIcon_body.png")
     },
+    KillerTorso: {
+        localizedName: "cosmetic_types.killer_body",
+        icon: combineBaseUrlWithPath("/images/UI/Icons/StoreTabs/categoryIcon_body.png")
+    },
     // Non-standard type
     KillerLowerBody: {
         localizedName: "cosmetic_types.killer_lower_body",

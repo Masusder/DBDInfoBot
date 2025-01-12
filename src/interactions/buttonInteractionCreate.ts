@@ -1,9 +1,10 @@
 import { ButtonInteraction } from 'discord.js';
-import { viewOutfitPiecesHandler } from '@handlers/viewOutfitPiecesHandler';
-import { showCharacterBackstoryHandler } from "@handlers/showCharacterBackstoryHandler";
-import { handlePerkCommandInteraction } from "@commands/infoSubCommands/perk";
-import { globalStatsTabHandler } from "@handlers/globalStatsTabHandler";
-import { characterHintsHandler } from "@handlers/characterHintsHandler";
+import { viewOutfitPiecesHandler } from '@commands/info/cosmetic/handlers/viewOutfitPiecesHandler';
+import { showCharacterBackstoryHandler } from "@commands/info/character/handlers/showCharacterBackstoryHandler";
+import { globalStatsTabHandler } from "@commands/stats/global/handlers/globalStatsTabHandler";
+import { characterHintsHandler } from "@commands/info/character/handlers/characterHintsHandler";
+import { riftTierHandler } from "@commands/info/rift/handlers/riftTierHandler";
+import { handlePerkButtonInteraction, } from "@commands/info/perk";
 
 export default async(interaction: ButtonInteraction) => {
     if (!interaction.deferred) await interaction.deferUpdate();
@@ -21,10 +22,13 @@ export default async(interaction: ButtonInteraction) => {
             await characterHintsHandler(interaction);
             break;
         case 'shrine_perk':
-            await handlePerkCommandInteraction(interaction);
+            await handlePerkButtonInteraction(interaction);
             break;
         case 'global_stats_tab':
             await globalStatsTabHandler(interaction);
+            break;
+        case 'rift_tier':
+            await riftTierHandler(interaction);
             break;
         default:
             console.warn(`Unhandled interaction type: ${interaction.customId}`);

@@ -1,5 +1,5 @@
 # DBDInfoBot
-![Version](https://img.shields.io/badge/version-1.2.1-blue)
+![Version](https://img.shields.io/badge/version-1.2.2-blue)
 [![License](https://img.shields.io/badge/license-MIT-green)](https://opensource.org/license/mit)
 [![Crowdin](https://badges.crowdin.net/dbdinfo-discord-bot/localized.svg)](https://crowdin.com/project/dbdinfo-discord-bot)
 [![Discord](https://discordapp.com/api/guilds/637265123144237061/widget.png?style=shield)](https://discord.gg/dbdleaks)
@@ -58,11 +58,11 @@ cp .env.example .env
 
 2. Open the .env file and update the values.
 
-### 4. Deploy Commands to Discord
-Before running the bot, you need to deploy the commands to Discord. Run the following script to deploy the bot's commands:
+### 4. Register Commands with Discord
+Before running the bot, you need to register the commands to Discord. Run the following script to register the bot's commands:
 
 ```bash
-ts-node ./src/scripts/deployCommands.ts
+npm run register
 ```
 
 This step ensures that the bot's slash commands are registered with Discord.

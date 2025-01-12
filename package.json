@@ -1,13 +1,14 @@
 {
   "name": "dbdinfobot",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "DBDInfo Discord bot.",
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
     "build": "tsc && tsc-alias",
     "dev": "ts-node src/index.ts",
-    "deploy": "npm run build && npm run start"
+    "deploy": "npm run build && npm run start",
+    "register": "ts-node src/scripts/registerCommands.ts"
   },
   "keywords": [],
   "author": "",
