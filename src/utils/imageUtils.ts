@@ -16,7 +16,7 @@ import { getCachedPerks } from "@services/perkService";
 import { getCachedAddons } from "@services/addonService";
 import { getCachedOfferings } from "@services/offeringService";
 import { getCachedItems } from "@services/itemService";
-import * as icons from '../../resources/base64Icons.json';
+import * as icons from '../resources/base64Icons.json';
 
 export const fetchAndResizeImage = async(imageUrl: string, width: number | null, height: number | null) => {
     const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
@@ -380,7 +380,7 @@ export async function createPerkIcons(perkIds: string[], locale: Locale) {
 
 export async function loadResourceImage(imageName: string): Promise<Buffer> {
     return new Promise((resolve, reject) => {
-        const imagePath = path.resolve(process.cwd(), 'resources', imageName);
+        const imagePath = path.resolve(process.cwd(), 'src', 'resources', imageName);
         fs.readFile(imagePath, (err, data) => {
             if (err) {
                 reject(new Error(`Failed to load image: ${imageName}. ${err.message}`));

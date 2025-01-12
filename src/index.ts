@@ -25,7 +25,7 @@ async function initializeClient() {
     }
 
     // Register Roboto font for Canvas library
-    registerFont('./resources/Roboto-Black.ttf', { family: 'Roboto' }); // DBDCoreFont.uasset
+    registerFont('./src/resources/Roboto-Black.ttf', { family: 'Roboto' }); // DBDCoreFont.uasset
 
     client.once(Events.ClientReady, async(readyClient) => {
         console.log(`Logged in as ${readyClient.user.tag}`);
