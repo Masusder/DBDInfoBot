@@ -46,7 +46,6 @@
       "type": "Type",
       "release_date": "Shop Release Date",
       "sale": "Fin des Soldes",
-      "cosmetic_info": "Information Cosmétique",
       "more_info": "Plus d'informations",
       "view_pieces": "Voir les Pièces de la Tenue",
       "linked_cosmetic": "Cosmétique Liée",
@@ -54,6 +53,8 @@
       "view_3d_model": "View 3D Model",
       "special_event": "Special Event",
       "released_with_tome": "Released with Tome",
+      "kill_switch": "Kill Switch",
+      "kill_switch_desc": "This cosmetic has been disabled and is currently unavailable for use.",
       "button_interaction": {
         "outfit_pieces": "Pièces de la Tenue pour"
       }
@@ -90,6 +91,15 @@
       "collection_inclusion_version": "Cette collection a été introduite dans la version :",
       "collection_info": "Informations sur la Collection",
       "collection_last_updated": "La Collection a été mise à jour pour la dernière fois le"
+    },
+    "rift_subcommand": {
+      "tier": "Tier",
+      "rift_ends": "Rift ends in:",
+      "rift_active": [
+        "Rift is active from",
+        "to"
+      ],
+      "to_progress": "To progress by one tier you need to earn:"
     }
   },
   "list_command": {
