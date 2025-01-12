@@ -12,25 +12,25 @@
     },
     "character_subcommand": {
       "invalid_index": "Nieprawidłowy indeks postaci.",
-      "error_retrieving_data": "There was a problem retrieving character data."
+      "error_retrieving_data": "Wystąpił problem podczas pobierania danych postaci."
     },
     "collection_subcommand": {
-      "error_retrieving_data": "There was a problem retrieving collections or cosmetics data."
+      "error_retrieving_data": "Wystąpił błąd podczas pobierania kolekcji lub danych kosmetycznych."
     },
     "perk_subcommand": {
-      "error_retrieving_data": "There was a problem retrieving perks."
+      "error_retrieving_data": "Wystąpił problem podczas pobierania danych o umiejętnościach."
     },
     "offering_subcommand": {
-      "error_retrieving_data": "There was a problem retrieving offerings."
+      "error_retrieving_data": "Wystąpił problem podczas pobierania danych o darach."
     },
     "item_subcommand": {
-      "error_retrieving_data": "There was a problem retrieving items."
+      "error_retrieving_data": "Wystąpił problem podczas pobierania danych o przedmiotach."
     },
     "addon_subcommand": {
-      "error_retrieving_data": "There was a problem retrieving add-ons."
+      "error_retrieving_data": "Wystąpił problem podczas pobierania danych o dodatkach."
     },
     "rift_subcommand": {
-      "error_retrieving_data": "There was a problem retrieving rift or cosmetics data."
+      "error_retrieving_data": "Wystąpił problem podczas pobierania danych szczeliny lub kosmetyków."
     }
   },
   "list_command": {
@@ -52,7 +52,7 @@
     "unauthorized_title": "Brak autoryzacji",
     "unauthorized": "Tylko osoba, która użyła polecenia, może to zrobić.",
     "error_occurred": "Wystąpił błąd",
-    "try_again_later": "Please try again later."
+    "try_again_later": "Spróbuj ponownie później."
   },
   "news_command": {
     "error_retrieving_data": "Nie udało się pobrać najnowszych wiadomości.",
