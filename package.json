@@ -23,7 +23,7 @@
     "i18next-fs-backend": "^2.6.0",
     "node-cache": "^5.1.2",
     "node-cron": "^3.0.3",
-    "puppeteer": "^23.11.1",
+    "puppeteer": "^24.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sharp": "^0.33.5"
