@@ -54,6 +54,7 @@ export const data = i18next.isInitialized
         .setDescription(i18next.t('shrine_command.description', { lng: 'en' }))
         .setDescriptionLocalizations(commandLocalizationHelper('shrine_command.description'))
         .setContexts([0,1,2])
+        .setIntegrationTypes([0,1])
         : undefined;
 
 type CorrectlyCasedPerkData = {

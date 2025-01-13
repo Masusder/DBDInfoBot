@@ -50,6 +50,7 @@ export const data = i18next.isInitialized
         .setDescription(i18next.t('info_command.description', { lng: 'en' }))
         .setDescriptionLocalizations(commandLocalizationHelper('info_command.description'))
         .setContexts([0,1,2])
+        .setIntegrationTypes([0,1])
         .addStringOption(option =>
             option.setName('type')
                 .setNameLocalizations(commandLocalizationHelper('info_command.options.type.name'))

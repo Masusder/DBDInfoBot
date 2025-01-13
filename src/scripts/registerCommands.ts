@@ -37,6 +37,8 @@ async function registerCommands() {
             ? Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID!, process.env.GUILD_ID!)
             : Routes.applicationCommands(process.env.DISCORD_CLIENT_ID!);
 
+        console.log(commands);
+
         await rest.put(route, { body: commands });
 
         console.log('Successfully reloaded application (/) commands.');
