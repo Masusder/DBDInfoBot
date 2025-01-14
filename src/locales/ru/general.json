@@ -54,9 +54,9 @@
     "killer_power": "Сила Убийцы",
     "killer_arm": "Рука Убийцы",
     "killer_mask": "Маска",
-    "killer_upper_body": "Killer's Upper Body",
-    "killer_lower_body": "Killer's Lower Body",
-    "survivor_hand": "Survivor's Hand"
+    "killer_upper_body": "Торс Убийцы",
+    "killer_lower_body": "Нижняя часть тела Убийцы",
+    "survivor_hand": "Рука Выжившего"
   },
   "build_categories": {
     "fun": "Забавный",
