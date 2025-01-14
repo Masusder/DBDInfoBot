@@ -34,8 +34,8 @@
       "backstory": "Предыстория -",
       "read_backstory": "Прочитать предысторию",
       "character_backstory": "Предыстория персонажа",
-      "hint_for": "Hint for",
-      "check_hints": "Check Hints",
+      "hint_for": "Подсказка",
+      "check_hints": "Подсказки",
       "perks": "Навыки"
     },
     "cosmetic_subcommand": {
@@ -53,7 +53,7 @@
       "view_3d_model": "Посмотреть 3D-модель",
       "special_event": "Особое Событие",
       "released_with_tome": "Выпущено с Книгой",
-      "kill_switch": "Kill Switch",
+      "kill_switch": "Аварийный выключатель",
       "kill_switch_desc": "Этот косметический предмет был отключен и в настоящее время недоступен для использования.",
       "button_interaction": {
         "outfit_pieces": "Элементы набора"
@@ -137,7 +137,7 @@
       "filters_applied": "Фильтры применены",
       "more_info": [
         "Чтобы узнать больше о конкретном улучшении, используйте команду",
-        "информация Улучшение <addon_name>"
+        "информация Улучшение <название_улучшения>"
       ]
     }
   },
@@ -175,8 +175,8 @@
     "summary_desc": "Краткая инфографика со статистикой игрока.",
     "full_stats": "Полная статистика",
     "global_stats_title": [
-      "Global Steam Statistics in",
-      "category"
+      "Глобальная статистика Steam в категории",
+      ""
     ],
     "data_collected_from": [
       "Данные, полученные от более чем",
