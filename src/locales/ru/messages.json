@@ -36,7 +36,7 @@
       "character_backstory": "Предыстория персонажа",
       "hint_for": "Hint for",
       "check_hints": "Check Hints",
-      "perks": "Perks"
+      "perks": "Навыки"
     },
     "cosmetic_subcommand": {
       "character": "Персонаж",
@@ -44,15 +44,15 @@
       "rarity": "Редкость",
       "inclusion_version": "Добавлен с Версии",
       "type": "Тип",
-      "release_date": "Shop Release Date",
+      "release_date": "Дата выхода в продажу",
       "sale": "Распродажа заканчивается",
       "more_info": "Подробнее",
       "view_pieces": "Просмотреть элементы набора",
       "linked_cosmetic": "Цельный набор",
       "limited_until": "Limited Until",
-      "view_3d_model": "View 3D Model",
-      "special_event": "Special Event",
-      "released_with_tome": "Released with Tome",
+      "view_3d_model": "Посмотреть 3D-модель",
+      "special_event": "Особое Событие",
+      "released_with_tome": "Выпущено с Книгой",
       "kill_switch": "Kill Switch",
       "kill_switch_desc": "This cosmetic has been disabled and is currently unavailable for use.",
       "button_interaction": {
@@ -179,12 +179,12 @@
       "category"
     ],
     "data_collected_from": [
-      "Data collected from over",
-      "players"
+      "Данные, полученные от более чем",
+      "игроков"
     ],
     "global_stat_tabs": {
       "other": "Other",
-      "bloodweb": "Bloodweb",
+      "bloodweb": "Кровавая паутина",
       "wins": "Wins",
       "loadout": "Loadout",
       "trial_survivor": "Survivor Trial Actions",
