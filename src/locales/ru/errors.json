@@ -49,7 +49,7 @@
     }
   },
   "general": {
-    "unauthorized_title": "Unauthorized",
+    "unauthorized_title": "Нет прав",
     "unauthorized": "Только тот, кто применил команду, может сделать это.",
     "error_occurred": "Произошла ошибка",
     "try_again_later": "Пожалуйста, повторите попытку позже."
@@ -63,6 +63,6 @@
     "not_found_player_data": "Невозможно получить данные игрока. Убедитесь, что ваш профиль Steam и данные об игре публичны.",
     "failed_generating_summary_card": "Невозможно сгенерировать сводную карточку.",
     "failed_to_fetch_global_stats": "Не удалось получить глобальную статистику.",
-    "invalid_tab_id": "Invalid tab ID."
+    "invalid_tab_id": "Неверный ID вкладки."
   }
 }
