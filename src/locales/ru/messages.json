@@ -49,12 +49,12 @@
       "more_info": "Подробнее",
       "view_pieces": "Просмотреть элементы набора",
       "linked_cosmetic": "Цельный набор",
-      "limited_until": "Limited Until",
+      "limited_until": "Ограничено до",
       "view_3d_model": "Посмотреть 3D-модель",
       "special_event": "Особое Событие",
       "released_with_tome": "Выпущено с Книгой",
       "kill_switch": "Kill Switch",
-      "kill_switch_desc": "This cosmetic has been disabled and is currently unavailable for use.",
+      "kill_switch_desc": "Этот косметический предмет был отключен и в настоящее время недоступен для использования.",
       "button_interaction": {
         "outfit_pieces": "Элементы набора"
       }
@@ -93,13 +93,13 @@
       "collection_last_updated": "Последнее обновление коллекции:"
     },
     "rift_subcommand": {
-      "tier": "Tier",
-      "rift_ends": "Rift ends in:",
+      "tier": "Уровень",
+      "rift_ends": "Разрыв закрывается:",
       "rift_active": [
-        "Rift is active from",
-        "to"
+        "Разрыв открыт с",
+        "до"
       ],
-      "to_progress": "To progress by one tier you need to earn:"
+      "to_progress": "Для продвижения на один уровень, нужно заработать:"
     }
   },
   "list_command": {
@@ -109,9 +109,9 @@
         "косметических предметов"
       ],
       "filters_applied": "Фильтры применены",
-      "cosmetics_list": "List of Cosmetics",
+      "cosmetics_list": "Список косметических предметов",
       "more_info": [
-        "To learn more about a specific cosmetic, use the command",
+        "Чтобы узнать больше о конкретном косметическом предмете, используйте команду",
         "информация Косметический предмет <cosmetic_name>"
       ]
     },
@@ -120,7 +120,7 @@
         "Страница",
         "из"
       ],
-      "create_your_own_build": "Create your Build here!",
+      "create_your_own_build": "Создайте свой Сборку тут!",
       "builds_matching_filters": "Сборки, соответствующие вашим фильтрам:",
       "builds_list": "Список сборок",
       "created_by": "Автор:",
@@ -129,15 +129,15 @@
       "select_for_details": "Выберите сборку, чтобы просмотреть подробности."
     },
     "addons_subcommand": {
-      "addons_list": "List of Add-ons",
+      "addons_list": "Список Улучшений",
       "found_total": [
-        "Found a total of",
-        "add-ons"
+        "Найдено",
+        "улучшений"
       ],
-      "filters_applied": "Filters applied",
+      "filters_applied": "Фильтры применены",
       "more_info": [
-        "To learn more about a specific add-on, use the command",
-        "info Add-on <addon_name>"
+        "Чтобы узнать больше о конкретном улучшении, используйте команду",
+        "информация Улучшение <addon_name>"
       ]
     }
   },
@@ -161,19 +161,19 @@
     "last": "Последняя"
   },
   "news_command": {
-    "select_news_article": "Select a news article.",
-    "news": "News",
-    "published_on": "Published on:",
-    "untitled_news": "Untitled News",
-    "click_here": "Click here",
-    "showcased_items": "Showcased Items",
-    "items_featured_in_article": "These items are featured in the associated news article:",
-    "pinned_article": "This news article is pinned"
+    "select_news_article": "Выберите новость.",
+    "news": "Новости",
+    "published_on": "Опубликовано:",
+    "untitled_news": "Новости без названия",
+    "click_here": "Нажмите здесь",
+    "showcased_items": "Представленные предметы",
+    "items_featured_in_article": "Эти предметы представлены в соответствующей новости:",
+    "pinned_article": "Эта новостная статья закреплена"
   },
   "stats_command": {
-    "player_stats_overview": "Player Statistics Overview",
-    "summary_desc": "A quick infographic summary of the player's stats.",
-    "full_stats": "Full Stats",
+    "player_stats_overview": "Обзор статистики игрока",
+    "summary_desc": "Краткая инфографика со статистикой игрока.",
+    "full_stats": "Полная статистика",
     "global_stats_title": [
       "Global Steam Statistics in",
       "category"
@@ -183,20 +183,20 @@
       "игроков"
     ],
     "global_stat_tabs": {
-      "other": "Other",
+      "other": "Другое",
       "bloodweb": "Кровавая паутина",
-      "wins": "Wins",
-      "loadout": "Loadout",
-      "trial_survivor": "Survivor Trial Actions",
-      "healing": "Healing",
-      "chase": "Chases",
-      "escapes": "Escapes",
-      "kills": "Kills",
-      "hooks": "Hooks",
-      "trial_killer": "Killer Trial Actions",
-      "downs": "Downs",
-      "killer_downs": "Killer Downs",
-      "killer_specific": "Killer Ability"
+      "wins": "Победы",
+      "loadout": "Снаряжение",
+      "trial_survivor": "Действия Выживших",
+      "healing": "Исцеление",
+      "chase": "Погони",
+      "escapes": "Побеги",
+      "kills": "Убийства",
+      "hooks": "Повешения",
+      "trial_killer": "Действия Убийц",
+      "downs": "Сбивания",
+      "killer_downs": "Сбивания Убийцами",
+      "killer_specific": "Способности Убийц"
     }
   }
 }
