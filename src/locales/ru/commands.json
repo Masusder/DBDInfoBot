@@ -15,7 +15,7 @@
           "cosmetic": "Косметический предмет",
           "build": "Сборка",
           "collection": "Коллекция",
-          "rift": "Rift"
+          "rift": "Разрыв"
         }
       },
       "name": {
@@ -60,20 +60,20 @@
           "description": "Укажите в какой версии был добавлен косметический предмет."
         },
         "role": {
-          "name": "role",
-          "description": "Specify role cosmetic belongs to."
+          "name": "роль",
+          "description": "Укажите роль, которой принадлежит косметика."
         },
         "on_sale": {
-          "name": "on_sale",
-          "description": "Specify whether cosmetic should be currently on sale."
+          "name": "на_распродаже",
+          "description": "Укажите, должен ли косметический предмет находить на распродаже в настоящее время."
         },
         "limited": {
-          "name": "limited",
-          "description": "Specify whether cosmetic is available for purchase for a limited time."
+          "name": "лимитированный",
+          "description": "Укажите, доступен ли косметический предмет для покупки в течение ограниченного времени."
         },
         "search": {
-          "name": "search",
-          "description": "Search for cosmetic by its name/description/collection."
+          "name": "поиск",
+          "description": "Поиск косметических предметов по их названию/описанию/коллекции."
         }
       }
     },
@@ -123,38 +123,38 @@
       }
     },
     "addons_subcommand": {
-      "name": "add-ons",
-      "description": "Retrieve list of add-ons.",
+      "name": "улучшения",
+      "description": "Получите список улучшений.",
       "options": {
         "character": {
-          "name": "character",
-          "description": "Name of the character."
+          "name": "персонаж",
+          "description": "Имя персонажа."
         },
         "rarity": {
-          "name": "rarity",
-          "description": "Specify rarity of the add-ons."
+          "name": "редкость",
+          "description": "Укажите редкость улучшений."
         }
       }
     }
   },
   "news_command": {
-    "name": "news",
-    "description": "Retrieve latest in-game news."
+    "name": "новости",
+    "description": "Получите последние внутриигровые новости."
   },
   "stats_command": {
-    "name": "stats",
-    "description": "View Steam statistics (global or personal).",
+    "name": "статистика",
+    "description": "Просмотреть статистику Steam (глобальную или персональную).",
     "global_subcommand": {
-      "name": "global",
-      "description": "View global statistics."
+      "name": "глобальная",
+      "description": "Просмотреть глобальную статистику."
     },
     "personal_subcommand": {
-      "name": "personal",
-      "description": "View a summarized infographic of player statistics.",
+      "name": "персональная",
+      "description": "Просмотреть инфографику статистики игрока.",
       "options": {
         "steam_id": {
           "name": "steam_id",
-          "description": "The Steam ID, username, or profile URL of the player whose statistics you want to view."
+          "description": "Steam ID, имя пользователя или URL-адрес профиля игрока, статистику которого вы хотите просмотреть."
         }
       }
     }
