@@ -78,36 +78,27 @@
       "any_offering": "Any offering",
       "desc_not_provided": "Description for this build wasn't provided.",
       "build_info": "Build Information",
-      "created_by": [
-        "Created by",
-        "on"
-      ]
+      "created_by": "Created by {{username}} on {{date}}"
     },
     "collection_subcommand": {
-      "total_of_cosmetics": [
-        "Total of",
-        "cosmetics"
-      ],
+      "total_of_cosmetics": "{{collection_title}} (Total of {{cosmetics_count}} cosmetics)",
       "collection_inclusion_version": "This collection was introduced in version:",
       "collection_info": "Collection Information",
       "collection_last_updated": "The collection was last updated on"
     },
     "rift_subcommand": {
       "tier": "Tier",
-      "rift_ends": "Rift ends in:",
-      "rift_active": [
-        "Rift is active from",
-        "to"
-      ],
-      "to_progress": "To progress by one tier you need to earn:"
+      "rift_ends_active": "Rift ends in:",
+      "rift_ends_expired": "Rift ended:",
+      "rift_active": "Rift is active from <t:{{start_date}}> to <t:{{end_date}}>",
+      "rift_expired": "Rift was active from <t:{{start_date}}> to <t:{{end_date}}>",
+      "to_progress_active": "To progress by one tier you need to earn:",
+      "to_progress_expired": "To progress by one tier you had to earn:"
     }
   },
   "list_command": {
     "cosmetics_subcommand": {
-      "found_total": [
-        "Found a total of",
-        "cosmetics"
-      ],
+      "found_total": "Found a total of {{cosmetics_count}} cosmetics",
       "filters_applied": "Filters applied",
       "cosmetics_list": "List of Cosmetics",
       "more_info": [
@@ -116,10 +107,7 @@
       ]
     },
     "builds_subcommand": {
-      "builds_list_page": [
-        "Page",
-        "of"
-      ],
+      "builds_list_page": "Page {{current_page}} of {{total_pages}}",
       "create_your_own_build": "Create your Build here!",
       "builds_matching_filters": "Here are the builds matching your filters:",
       "builds_list": "Builds List",
@@ -130,10 +118,7 @@
     },
     "addons_subcommand": {
       "addons_list": "List of Add-ons",
-      "found_total": [
-        "Found a total of",
-        "add-ons"
-      ],
+      "found_total": "Found a total of {{addons_count}} add-ons",
       "filters_applied": "Filters applied",
       "more_info": [
         "To learn more about a specific add-on, use the command",
@@ -153,10 +138,7 @@
   "generic_pagination": {
     "first": "First",
     "previous": "Previous",
-    "page_number": [
-      "Page",
-      "of"
-    ],
+    "page_number": "Page {{current_page}} of {{total_pages}}",
     "next": "Next",
     "last": "Last"
   },
@@ -174,14 +156,8 @@
     "player_stats_overview": "Player Statistics Overview",
     "summary_desc": "A quick infographic summary of the player's stats.",
     "full_stats": "Full Stats",
-    "global_stats_title": [
-      "Global Steam Statistics in",
-      "category"
-    ],
-    "data_collected_from": [
-      "Data collected from over",
-      "players"
-    ],
+    "global_stats_title": "Global Steam Statistics in \"{{category}}\" category",
+    "data_collected_from": "Data collected from over **{{player_count}}** players.",
     "global_stat_tabs": {
       "other": "Other",
       "bloodweb": "Bloodweb",

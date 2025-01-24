@@ -1,5 +1,5 @@
 import { Locale } from "discord.js";
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { Cosmetic } from "@tps/cosmetic";
 import { adjustForTimezone, combineBaseUrlWithPath } from "@utils/stringUtils";
@@ -8,7 +8,7 @@ import { Rarities } from "@data/Rarities";
 
 export function formatEmbedTitle(cosmeticName: string, isUnbreakable: boolean, locale: Locale): string {
     if (isUnbreakable) {
-        return `${cosmeticName.trim()} (${getTranslation('info_command.cosmetic_subcommand.linked_cosmetic', locale, ELocaleNamespace.Messages)})`;
+        return `${cosmeticName.trim()} (${t('info_command.cosmetic_subcommand.linked_cosmetic', locale, ELocaleNamespace.Messages)})`;
     }
 
     return cosmeticName;

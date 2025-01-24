@@ -9,7 +9,7 @@ import {
     createEmojiMarkdown,
     getApplicationEmoji
 } from "@utils/emojiManager";
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 
 export async function constructDescription(riftData: Rift, locale: Locale): Promise<string> {
@@ -20,7 +20,33 @@ export async function constructDescription(riftData: Rift, locale: Locale): Prom
     const riftFragmentEmoji = await getApplicationEmoji(riftFragmentData.emojiId)
     const riftFragmentEmojiMarkdown = riftFragmentEmoji ? createEmojiMarkdown(riftFragmentEmoji) : '';
 
-    return `${getTranslation('info_command.rift_subcommand.rift_ends', locale, ELocaleNamespace.Messages)} <t:${adjustedEndDate}:R>\n${getTranslation('info_command.rift_subcommand.rift_active.0', locale, ELocaleNamespace.Messages)} <t:${adjustedStartDate}> ${getTranslation('info_command.rift_subcommand.rift_active.1', locale, ELocaleNamespace.Messages)} <t:${adjustedEndDate}>\n\n ${getTranslation('info_command.rift_subcommand.to_progress', locale, ELocaleNamespace.Messages)} **${riftData.Requirement} ${getTranslation(riftFragmentData.localizedName, locale, ELocaleNamespace.General)}** ${riftFragmentEmojiMarkdown}`;
+    const now = Math.floor(Date.now() / 1000);
+    const expired = now > adjustedEndDate;
+
+    let message = ''
+    const riftFragmentsText = ` **${riftData.Requirement} ${t(riftFragmentData.localizedName, locale, ELocaleNamespace.General)}** ${riftFragmentEmojiMarkdown}`;
+
+    if (expired) {
+        message += `${t('info_command.rift_subcommand.rift_ends_expired', locale, ELocaleNamespace.Messages)} <t:${adjustedEndDate}:R>\n`
+        message += t('info_command.rift_subcommand.rift_expired', locale, ELocaleNamespace.Messages, {
+            start_date: adjustedStartDate.toString(),
+            end_date: adjustedEndDate.toString(),
+        });
+        message += `\n\n`
+        message += t('info_command.rift_subcommand.to_progress_expired', locale, ELocaleNamespace.Messages)
+        message += riftFragmentsText
+    } else {
+        message += `${t('info_command.rift_subcommand.rift_ends_active', locale, ELocaleNamespace.Messages)} <t:${adjustedEndDate}:R>\n`
+        message += t('info_command.rift_subcommand.rift_active', locale, ELocaleNamespace.Messages, {
+            start_date: adjustedStartDate.toString(),
+            end_date: adjustedEndDate.toString(),
+        });
+        message += `\n\n`
+        message += t('info_command.rift_subcommand.to_progress_active', locale, ELocaleNamespace.Messages)
+        message += riftFragmentsText
+    }
+
+    return message;
 }
 
 export function chunkArray(arr: TierInfo[], size: number) {

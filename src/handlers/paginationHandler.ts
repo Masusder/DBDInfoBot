@@ -8,7 +8,7 @@ import {
     Locale,
     StringSelectMenuBuilder
 } from "discord.js";
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import { sendUnauthorizedMessage } from "./unauthorizedHandler";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 
@@ -27,7 +27,12 @@ export interface IPaginationOptions {
     generateAdditionalButtons?: (currentPage: number) => ActionRowBuilder<ButtonBuilder>[];
 }
 
-export const generatePaginationButtons = (page: number, totalPages: number, locale: Locale, showPageNumbers: boolean = true) => {
+export const generatePaginationButtons = (
+    page: number,
+    totalPages: number,
+    locale: Locale,
+    showPageNumbers: boolean = true
+) => {
     if (totalPages <= 1) return [];
 
     const actionRow1 = new ActionRowBuilder<ButtonBuilder>();
@@ -37,27 +42,30 @@ export const generatePaginationButtons = (page: number, totalPages: number, loca
     actionRow1.addComponents(
         new ButtonBuilder()
             .setCustomId('pagination::first')
-            .setLabel(getTranslation('generic_pagination.first', locale, ELocaleNamespace.Messages))
+            .setLabel(t('generic_pagination.first', locale, ELocaleNamespace.Messages))
             .setStyle(ButtonStyle.Primary)
             .setDisabled(page === 1),
         new ButtonBuilder()
             .setCustomId('pagination::previous')
-            .setLabel(getTranslation('generic_pagination.previous', locale, ELocaleNamespace.Messages))
+            .setLabel(t('generic_pagination.previous', locale, ELocaleNamespace.Messages))
             .setStyle(ButtonStyle.Secondary)
             .setDisabled(page === 1),
         new ButtonBuilder()
             .setCustomId(`pagination::current::${page}::${totalPages}`)
-            .setLabel(`${getTranslation('generic_pagination.page_number.0', locale, ELocaleNamespace.Messages)} ${page} ${getTranslation('generic_pagination.page_number.1', locale, ELocaleNamespace.Messages)} ${totalPages}`)
+            .setLabel(t('generic_pagination.page_number', locale, ELocaleNamespace.Messages, {
+                current_page: page.toString(),
+                total_pages: totalPages.toString()
+            }))
             .setStyle(ButtonStyle.Secondary)
             .setDisabled(true),
         new ButtonBuilder()
             .setCustomId('pagination::next')
-            .setLabel(getTranslation('generic_pagination.next', locale, ELocaleNamespace.Messages))
+            .setLabel(t('generic_pagination.next', locale, ELocaleNamespace.Messages))
             .setStyle(ButtonStyle.Secondary)
             .setDisabled(page === totalPages),
         new ButtonBuilder()
             .setCustomId('pagination::last')
-            .setLabel(getTranslation('generic_pagination.last', locale, ELocaleNamespace.Messages))
+            .setLabel(t('generic_pagination.last', locale, ELocaleNamespace.Messages))
             .setStyle(ButtonStyle.Primary)
             .setDisabled(page === totalPages)
     );
@@ -96,7 +104,12 @@ export const generatePaginationButtons = (page: number, totalPages: number, loca
 
 export type TPaginationType = 'page' | 'first' | 'previous' | 'next' | 'last';
 
-export function determineNewPage(currentPage: number, paginationType: TPaginationType, totalPages: number, pageNumber: string): number {
+export function determineNewPage(
+    currentPage: number,
+    paginationType: TPaginationType,
+    totalPages: number,
+    pageNumber: string
+): number {
     switch (paginationType) {
         case 'page':
             return parseInt(pageNumber, 10);

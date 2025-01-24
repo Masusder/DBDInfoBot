@@ -6,13 +6,4 @@ export const InventoryItemSchema = z.object({
     lastUpdateAt: z.number(),
 });
 
-// Response from API
-export const DataInventorySchema = z.object({
-    data: z.object({
-        playerId: z.string(),
-        inventory: z.array(InventoryItemSchema),
-    }),
-});
-
 export type InventoryItem = z.infer<typeof InventoryItemSchema>;
-export type DataInventory = z.infer<typeof DataInventorySchema>;

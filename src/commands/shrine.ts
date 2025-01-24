@@ -25,7 +25,7 @@ import {
 } from "@utils/stringUtils";
 import {
     commandLocalizationHelper,
-    getTranslation
+    t
 } from "@utils/localizationUtils";
 import {
     createCanvas,
@@ -53,9 +53,9 @@ export const data = i18next.isInitialized
         .setNameLocalizations(commandLocalizationHelper('shrine_command.name'))
         .setDescription(i18next.t('shrine_command.description', { lng: 'en' }))
         .setDescriptionLocalizations(commandLocalizationHelper('shrine_command.description'))
-        .setContexts([0,1,2])
-        .setIntegrationTypes([0,1])
-        : undefined;
+        .setContexts([0, 1, 2])
+        .setIntegrationTypes([0, 1])
+    : undefined;
 
 type CorrectlyCasedPerkData = {
     [key: string]: { bloodpoints: number; shards: number[] };
@@ -114,11 +114,11 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
             let characterName = ' ';
             if (perkInfo.Character !== -1) {
                 const characterData = await getCharacterDataByIndex(perkInfo.Character, locale);
-                characterName = characterData ? `${getTranslation('shrine_command.character', locale, ELocaleNamespace.Messages)} - ${characterData.Name}` : '';
+                characterName = characterData ? `${t('shrine_command.character', locale, ELocaleNamespace.Messages)} - ${characterData.Name}` : '';
             }
 
             if (!currenciesMessage) {
-                currenciesMessage = `\n\n${createEmojiMarkdown(shardEmoji)} **${getTranslation('currencies.shards', locale, ELocaleNamespace.General)}:** ${correctlyCasedPerkData[perkId].shards.join('/')} \n${createEmojiMarkdown(bloodpointEmoji)} **${getTranslation('currencies.bloodpoints', locale, ELocaleNamespace.General)}:** ${formatNumber(correctlyCasedPerkData[perkId].bloodpoints)}\n⠀`
+                currenciesMessage = `\n\n${createEmojiMarkdown(shardEmoji)} **${t('currencies.shards', locale, ELocaleNamespace.General)}:** ${correctlyCasedPerkData[perkId].shards.join('/')} \n${createEmojiMarkdown(bloodpointEmoji)} **${t('currencies.bloodpoints', locale, ELocaleNamespace.General)}:** ${formatNumber(correctlyCasedPerkData[perkId].bloodpoints)}\n⠀`
             }
 
             const perkEmoji = await getApplicationEmoji(perkId);
@@ -151,7 +151,7 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
         const startDateUnix = Math.floor(adjustedStartDate / 1000);
         const adjustedEndDateUnix = Math.floor(adjustedEndDate / 1000);
 
-        const description = `**${getTranslation('shrine_command.time_left', locale, ELocaleNamespace.Messages)}** <t:${adjustedEndDateUnix}:R>\n**${getTranslation('shrine_command.shrine_active.0', locale, ELocaleNamespace.Messages)}** <t:${startDateUnix}> ${getTranslation('shrine_command.shrine_active.1', locale, ELocaleNamespace.Messages)} <t:${adjustedEndDateUnix}>`;
+        const description = `**${t('shrine_command.time_left', locale, ELocaleNamespace.Messages)}** <t:${adjustedEndDateUnix}:R>\n**${t('shrine_command.shrine_active.0', locale, ELocaleNamespace.Messages)}** <t:${startDateUnix}> ${t('shrine_command.shrine_active.1', locale, ELocaleNamespace.Messages)} <t:${adjustedEndDateUnix}>`;
 
         const customId = generateCustomId(currentShrine.endDate);
 
@@ -162,7 +162,7 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
             .setImage('attachment://shrine-of-secrets.png')
             .setTimestamp()
             .setAuthor({
-                name: getTranslation('shrine_command.author_title', locale, ELocaleNamespace.Messages),
+                name: t('shrine_command.author_title', locale, ELocaleNamespace.Messages),
                 iconURL: combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_shrineOfSecrets.png')
             })
             .setFooter({
@@ -220,7 +220,7 @@ async function createShrineCanvas(correctlyCasedPerkData: CorrectlyCasedPerkData
 
     const emojiCreationPromises: Promise<void | ApplicationEmoji | null>[] = [];
     const perkIds = Object.keys(correctlyCasedPerkData);
-    const perkPromises = perkIds.map(async (perkId, index) => {
+    const perkPromises = perkIds.map(async(perkId, index) => {
         const role = perkData[perkId].Role;
         const perkBackgroundUrl = Role[role].perkBackground;
         const iconUrl = combineBaseUrlWithPath(perkData[perkId].IconFilePathList);
@@ -228,7 +228,8 @@ async function createShrineCanvas(correctlyCasedPerkData: CorrectlyCasedPerkData
         const perkIconBuffer = await layerIcons(perkBackgroundUrl, iconUrl) as Buffer;
 
         emojiCreationPromises.push(
-            getOrCreateApplicationEmoji(perkId, perkIconBuffer).catch(() => {})
+            getOrCreateApplicationEmoji(perkId, perkIconBuffer).catch(() => {
+            })
         );
 
         const icon = await loadImage(perkIconBuffer);

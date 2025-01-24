@@ -1,6 +1,6 @@
 import Constants from "@constants";
 import * as crypto from 'crypto';
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import { Locale } from "discord.js";
 import axios from "axios";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
@@ -24,7 +24,7 @@ export function combineBaseUrlWithPath(relativePath: string): string {
 }
 
 export function formatInclusionVersion(inclusionVersion: string, locale: Locale): string {
-    return inclusionVersion === "Legacy" ? getTranslation('legacy', locale, ELocaleNamespace.General) : inclusionVersion;
+    return inclusionVersion === "Legacy" ? t('legacy', locale, ELocaleNamespace.General) : inclusionVersion;
 }
 
 export function formatHtmlToDiscordMarkdown(html: string): string {

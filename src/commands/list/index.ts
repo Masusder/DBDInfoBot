@@ -13,7 +13,7 @@ import {
 import { Rarities } from "@data/Rarities";
 import {
     commandLocalizationHelper,
-    getTranslation,
+    t,
     mapDiscordLocaleToDbdLang
 } from "@utils/localizationUtils";
 import { CosmeticTypes } from "@data/CosmeticTypes";
@@ -349,7 +349,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             await handleAddonListCommandInteraction(interaction);
             break;
         default:
-            await interaction.reply(getTranslation('list_command.unknown_subcommand', locale, ELocaleNamespace.Errors));
+            await interaction.reply(t('list_command.unknown_subcommand', locale, ELocaleNamespace.Errors));
     }
 }
 

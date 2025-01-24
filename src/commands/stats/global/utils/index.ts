@@ -16,7 +16,7 @@ import {
     combineBaseUrlWithPath,
     formatNumber
 } from "@utils/stringUtils";
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { ThemeColors } from "@constants/themeColors";
 
@@ -40,13 +40,13 @@ export function createGlobalStatsEmbed(
 
     const addEmbed = (additionalInfo: boolean) => {
         const embed = new EmbedBuilder()
-            .setTitle(`${getTranslation('stats_command.global_stats_title.0', locale, ELocaleNamespace.Messages)} "${getTranslation(activeTab.name, locale, ELocaleNamespace.Messages)}" ${getTranslation('stats_command.global_stats_title.1', locale, ELocaleNamespace.Messages)}`)
+            .setTitle(t('stats_command.global_stats_title', locale, ELocaleNamespace.Messages, { category: t(activeTab.name, locale, ELocaleNamespace.Messages) }))
             .addFields(fields)
             .setColor(ThemeColors.PRIMARY)
             .setTimestamp();
 
         if (additionalInfo) {
-            embed.setDescription(`${getTranslation('stats_command.data_collected_from.0', locale, ELocaleNamespace.Messages)} **${playerCount}** ${getTranslation('stats_command.data_collected_from.1', locale, ELocaleNamespace.Messages)}.`);
+            embed.setDescription(t('stats_command.data_collected_from', locale, ELocaleNamespace.Messages, { player_count: playerCount.toString()}));
         }
 
         if (additionalInfo && randomIconPath) {
@@ -79,11 +79,15 @@ export function createGlobalStatsEmbed(
     return embeds;
 }
 
-export function createTabButtons(tabsData: typeof GlobalStatTabs, locale: Locale, interaction: ChatInputCommandInteraction | ButtonInteraction) {
+export function createTabButtons(
+    tabsData: typeof GlobalStatTabs,
+    locale: Locale,
+    interaction: ChatInputCommandInteraction | ButtonInteraction
+) {
     const buttons = tabsData.map(tab =>
         new ButtonBuilder()
             .setCustomId(`global_stats_tab::${tab.id}::${interaction.user.id}`)
-            .setLabel(getTranslation(tab.name, locale, ELocaleNamespace.Messages))
+            .setLabel(t(tab.name, locale, ELocaleNamespace.Messages))
             .setStyle(tab.active ? ButtonStyle.Primary : ButtonStyle.Secondary)
     );
 

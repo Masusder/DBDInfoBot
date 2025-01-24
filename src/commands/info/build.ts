@@ -7,7 +7,7 @@ import {
     StringSelectMenuInteraction
 } from "discord.js";
 import { retrieveBuildById } from "@services/buildService";
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import {
     adjustForTimezone,
     combineBaseUrlWithPath
@@ -39,7 +39,7 @@ export async function handleBuildCommandInteraction(interaction: ChatInputComman
         if (interaction.isChatInputCommand()) {
             await interaction.deferReply();
         } else if (interaction.isStringSelectMenu()) {
-           if (!interaction.deferred) await interaction.deferUpdate();
+            if (!interaction.deferred) await interaction.deferUpdate();
         }
 
         const [buildData, perkData, itemData, addonData, offeringData, characterData] = await Promise.all([
@@ -52,7 +52,7 @@ export async function handleBuildCommandInteraction(interaction: ChatInputComman
         ]);
 
         if (!buildData || !perkData || !itemData || !addonData || !offeringData) {
-            const message = getTranslation('info_command.build_subcommand.build_not_found', locale, ELocaleNamespace.Errors);
+            const message = t('info_command.build_subcommand.build_not_found', locale, ELocaleNamespace.Errors);
             await sendErrorMessage(interaction, message);
             return;
         }
@@ -83,68 +83,68 @@ export async function handleBuildCommandInteraction(interaction: ChatInputComman
         const fields: APIEmbedField[] = [];
 
         const perksPrettyList = perks
-            .map(perk => `- ${perkData[perk]?.Name ?? `- ${getTranslation('info_command.build_subcommand.unknown_perk', locale, ELocaleNamespace.Messages)}`}`);
+            .map(perk => `- ${perkData[perk]?.Name ?? `- ${t('info_command.build_subcommand.unknown_perk', locale, ELocaleNamespace.Messages)}`}`);
 
         fields.push({
-            name: getTranslation('info_command.build_subcommand.perks', locale, ELocaleNamespace.Messages),
-            value: perksPrettyList.length ? perksPrettyList.join(' \n ') : getTranslation('info_command.build_subcommand.any_perks', locale, ELocaleNamespace.Messages),
+            name: t('info_command.build_subcommand.perks', locale, ELocaleNamespace.Messages),
+            value: perksPrettyList.length ? perksPrettyList.join(' \n ') : t('info_command.build_subcommand.any_perks', locale, ELocaleNamespace.Messages),
             inline: true
         });
 
         const addons = [addon1, addon2].filter(addon => addon !== "None");
         const prettyAddons = addons.filter(Boolean)
-            .map(addon => addonData[addon]?.Name ?? ` - ${getTranslation('info_command.build_subcommand.unknown_addon', locale, ELocaleNamespace.Messages)}`)
+            .map(addon => addonData[addon]?.Name ?? ` - ${t('info_command.build_subcommand.unknown_addon', locale, ELocaleNamespace.Messages)}`)
             .map(addon => ` - ${addon}`)
             .join(' \n ');
         if (role === 'Survivor') {
-            const item = itemPower && itemPower !== "None" ? ` - ${itemData[itemPower].Name}` : getTranslation('info_command.build_subcommand.any_item', locale, ELocaleNamespace.Messages);
+            const item = itemPower && itemPower !== "None" ? ` - ${itemData[itemPower].Name}` : t('info_command.build_subcommand.any_item', locale, ELocaleNamespace.Messages);
             fields.push({
-                name: getTranslation('info_command.build_subcommand.item_addons', locale, ELocaleNamespace.Messages),
+                name: t('info_command.build_subcommand.item_addons', locale, ELocaleNamespace.Messages),
                 value: item + ' \n ' + prettyAddons,
                 inline: true
             });
         } else if (role === 'Killer') {
-            const power = itemPower && itemPower !== "None" ? ` - ${itemData[itemPower].Name}` : getTranslation('info_command.build_subcommand.any_power', locale, ELocaleNamespace.Messages);
+            const power = itemPower && itemPower !== "None" ? ` - ${itemData[itemPower].Name}` : t('info_command.build_subcommand.any_power', locale, ELocaleNamespace.Messages);
 
             fields.push({
-                name: getTranslation('info_command.build_subcommand.power_addons', locale, ELocaleNamespace.Messages),
+                name: t('info_command.build_subcommand.power_addons', locale, ELocaleNamespace.Messages),
                 value: power + ' \n ' + prettyAddons,
                 inline: true
             });
         }
 
-        const offeringPretty = offering && offering !== "None" ? offeringData[offering].Name : getTranslation('info_command.build_subcommand.any_offering', locale, ELocaleNamespace.Messages);
+        const offeringPretty = offering && offering !== "None" ? offeringData[offering].Name : t('info_command.build_subcommand.any_offering', locale, ELocaleNamespace.Messages);
         fields.push({
-            name: getTranslation('info_command.build_subcommand.offering', locale, ELocaleNamespace.Messages),
+            name: t('info_command.build_subcommand.offering', locale, ELocaleNamespace.Messages),
             value: offeringPretty,
             inline: true
         });
 
         const categoryPretty = BuildCategories[category];
         fields.push({
-            name: getTranslation('info_command.build_subcommand.category', locale, ELocaleNamespace.Messages),
-            value: getTranslation(categoryPretty, locale, ELocaleNamespace.General),
+            name: t('info_command.build_subcommand.category', locale, ELocaleNamespace.Messages),
+            value: t(categoryPretty, locale, ELocaleNamespace.General),
             inline: true
         });
 
         const characterIndex = character != "None" ? parseInt(character) : -1;
         if (character && characterIndex !== -1) {
             fields.push({
-                name: getTranslation('info_command.build_subcommand.character', locale, ELocaleNamespace.Messages),
+                name: t('info_command.build_subcommand.character', locale, ELocaleNamespace.Messages),
                 value: characterData[characterIndex].Name,
                 inline: true
             });
         }
 
         const voteText = ratingCount !== 1
-            ? getTranslation('info_command.build_subcommand.votes', locale, ELocaleNamespace.Messages)
-            : getTranslation('info_command.build_subcommand.vote', locale, ELocaleNamespace.Messages);
+            ? t('info_command.build_subcommand.votes', locale, ELocaleNamespace.Messages)
+            : t('info_command.build_subcommand.vote', locale, ELocaleNamespace.Messages);
 
         const averageRating = Math.round(buildData.averageRating);
         const stars = '⭐'.repeat(averageRating) + '☆'.repeat(5 - averageRating);
         fields.push({
-            name: getTranslation('info_command.build_subcommand.rating', locale, ELocaleNamespace.Messages),
-            value: `${stars} ${getTranslation('info_command.build_subcommand.rating_desc', locale, ELocaleNamespace.Messages)} ${ratingCount} ${voteText}`,
+            name: t('info_command.build_subcommand.rating', locale, ELocaleNamespace.Messages),
+            value: `${stars} ${t('info_command.build_subcommand.rating_desc', locale, ELocaleNamespace.Messages)} ${ratingCount} ${voteText}`,
             inline: false
         });
 
@@ -155,7 +155,7 @@ export async function handleBuildCommandInteraction(interaction: ChatInputComman
             day: "numeric"
         });
 
-        const formattedDescription = description ? description : getTranslation('info_command.build_subcommand.desc_not_provided', locale, ELocaleNamespace.Messages);
+        const formattedDescription = description ? description : t('info_command.build_subcommand.desc_not_provided', locale, ELocaleNamespace.Messages);
 
         const embed = new EmbedBuilder()
             .setColor(roleColor)
@@ -165,11 +165,14 @@ export async function handleBuildCommandInteraction(interaction: ChatInputComman
             .setImage('attachment://loadout.png')
             .setFields(fields)
             .setAuthor({
-                name: getTranslation('info_command.build_subcommand.build_info', locale, ELocaleNamespace.Messages),
+                name: t('info_command.build_subcommand.build_info', locale, ELocaleNamespace.Messages),
                 iconURL: combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_loadout.png')
             })
             .setFooter({
-                text: `${getTranslation('info_command.build_subcommand.created_by.0', locale, ELocaleNamespace.Messages)} ${username} ${getTranslation('info_command.build_subcommand.created_by.1', locale, ELocaleNamespace.Messages)} ${creationDatePretty} | ID: ${buildId}`
+                text: `${t('info_command.build_subcommand.created_by', locale, ELocaleNamespace.Messages, {
+                    username,
+                    date: creationDatePretty
+                })} | ID: ${buildId}`
             });
 
         let charPortraitBuffer: Buffer | null = null;

@@ -12,7 +12,7 @@ import {
     combineBaseUrlWithPath,
     formatHtmlToDiscordMarkdown
 } from "@utils/stringUtils";
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import {
     getCharacterChoices,
     getCharacterDataByIndex,
@@ -41,7 +41,7 @@ export async function handleCharacterCommandInteraction(interaction: ChatInputCo
         const characterData = await getCharacterDataByIndex(characterIndex, locale);
 
         if (!characterData) {
-            const message = getTranslation('info_command.character_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors) + ' ' + getTranslation('general.try_again_later', locale, ELocaleNamespace.Errors);
+            const message = t('info_command.character_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors) + ' ' + t('general.try_again_later', locale, ELocaleNamespace.Errors);
             await sendErrorMessage(interaction, message);
             return;
         }
@@ -59,8 +59,8 @@ export async function handleCharacterCommandInteraction(interaction: ChatInputCo
 
         if (difficulty !== "None") {
             fields.push({
-                name: getTranslation('info_command.character_subcommand.difficulty', locale, ELocaleNamespace.Messages),
-                value: getTranslation(Difficulties[difficulty], locale, ELocaleNamespace.General),
+                name: t('info_command.character_subcommand.difficulty', locale, ELocaleNamespace.Messages),
+                value: t(Difficulties[difficulty], locale, ELocaleNamespace.General),
                 inline: true
             });
         }
@@ -70,22 +70,22 @@ export async function handleCharacterCommandInteraction(interaction: ChatInputCo
 
         fields.push(
             {
-                name: getTranslation('info_command.character_subcommand.role', locale, ELocaleNamespace.Messages),
-                value: getTranslation(roleData.localizedName, locale, ELocaleNamespace.General),
+                name: t('info_command.character_subcommand.role', locale, ELocaleNamespace.Messages),
+                value: t(roleData.localizedName, locale, ELocaleNamespace.General),
                 inline: true
             },
             {
-                name: getTranslation('info_command.character_subcommand.gender', locale, ELocaleNamespace.Messages),
-                value: getTranslation(Genders[characterData.Gender], locale, ELocaleNamespace.General),
+                name: t('info_command.character_subcommand.gender', locale, ELocaleNamespace.Messages),
+                value: t(Genders[characterData.Gender], locale, ELocaleNamespace.General),
                 inline: true
             },
             {
-                name: getTranslation('info_command.character_subcommand.description', locale, ELocaleNamespace.Messages),
+                name: t('info_command.character_subcommand.description', locale, ELocaleNamespace.Messages),
                 value: formatHtmlToDiscordMarkdown(characterData.Biography),
                 inline: false
             },
             {
-                name: getTranslation('info_command.character_subcommand.perks', locale, ELocaleNamespace.Messages),
+                name: t('info_command.character_subcommand.perks', locale, ELocaleNamespace.Messages),
                 value: perkEmojis
                     .map(emoji => {
                         if (emoji.name && perks[emoji.name]) {
@@ -107,14 +107,14 @@ export async function handleCharacterCommandInteraction(interaction: ChatInputCo
             .setTimestamp()
             .setThumbnail(`attachment://characterImage_${characterData.CharacterIndex}.png`)
             .setAuthor({
-                name: getTranslation('info_command.character_subcommand.character_information', locale, ELocaleNamespace.Messages),
+                name: t('info_command.character_subcommand.character_information', locale, ELocaleNamespace.Messages),
                 iconURL: role === 'Survivor' ? combineBaseUrlWithPath('/images/UI/Icons/Help/help_levelIcon_survivor.png') : combineBaseUrlWithPath('/images/UI/Icons/Help/help_levelIcon_killer.png')
             })
             .setImage(`attachment://characterBackground_${characterData.CharacterIndex}.png`);
 
         const backstoryButton = new ButtonBuilder()
             .setCustomId(`show_character_backstory::${characterData.CharacterIndex}::${interaction.user.id}`)
-            .setLabel(getTranslation('info_command.character_subcommand.read_backstory', locale, ELocaleNamespace.Messages))
+            .setLabel(t('info_command.character_subcommand.read_backstory', locale, ELocaleNamespace.Messages))
             .setStyle(ButtonStyle.Primary);
 
         const buttons = new ActionRowBuilder<ButtonBuilder>().addComponents(backstoryButton);
@@ -122,7 +122,7 @@ export async function handleCharacterCommandInteraction(interaction: ChatInputCo
         if (characterData.Hints.length > 0) {
             const hintsButton = new ButtonBuilder()
                 .setCustomId(`show_character_hints::${characterData.CharacterIndex}::${interaction.user.id}`)
-                .setLabel(getTranslation('info_command.character_subcommand.check_hints', locale, ELocaleNamespace.Messages))
+                .setLabel(t('info_command.character_subcommand.check_hints', locale, ELocaleNamespace.Messages))
                 .setStyle(ButtonStyle.Secondary);
 
             buttons.addComponents(hintsButton);

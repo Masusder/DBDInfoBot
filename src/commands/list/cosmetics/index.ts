@@ -18,7 +18,7 @@ import {
     formatInclusionVersion
 } from "@utils/stringUtils";
 import { paginationHandler } from "@handlers/paginationHandler";
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import { Cosmetic } from "@tps/cosmetic";
 import { Rarities } from "@data/Rarities";
 import {
@@ -50,28 +50,28 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
 
         if (cosmetics.length === 0) {
             const message = filterCount > 0
-                ? getTranslation('list_command.cosmetics_subcommand.cosmetics_not_found_filters', locale, ELocaleNamespace.Errors)
-                : getTranslation('list_command.cosmetics_subcommand.cosmetics_not_found', locale, ELocaleNamespace.Errors);
+                ? t('list_command.cosmetics_subcommand.cosmetics_not_found_filters', locale, ELocaleNamespace.Errors)
+                : t('list_command.cosmetics_subcommand.cosmetics_not_found', locale, ELocaleNamespace.Errors);
             await interaction.editReply({ content: message });
             return;
         }
 
         const generateEmbed = async(pageItems: Cosmetic[]) => {
-            let title = `${getTranslation('list_command.cosmetics_subcommand.found_total.0', locale, ELocaleNamespace.Messages)} ${cosmetics.length} ${getTranslation('list_command.cosmetics_subcommand.found_total.1', locale, ELocaleNamespace.Messages)}`;
+            let title = t('list_command.cosmetics_subcommand.found_total', locale, ELocaleNamespace.Messages, {cosmetics_count: cosmetics.length.toString() })
 
             // Let user know that filters were applied
-            if (filterCount > 0) title += ` (${getTranslation('list_command.cosmetics_subcommand.filters_applied', locale, ELocaleNamespace.Messages)}: ${filterCount})`;
+            if (filterCount > 0) title += ` (${t('list_command.cosmetics_subcommand.filters_applied', locale, ELocaleNamespace.Messages)}: ${filterCount})`;
 
             const embedColor = Rarity ? Rarities[Rarity].color : ThemeColors.PRIMARY;
 
-            let authorName = getTranslation('list_command.cosmetics_subcommand.cosmetics_list', locale, ELocaleNamespace.Messages);
+            let authorName = t('list_command.cosmetics_subcommand.cosmetics_list', locale, ELocaleNamespace.Messages);
 
-            if (Category) authorName += ` (${getTranslation(CosmeticTypes[Category].localizedName, locale, ELocaleNamespace.General)})`;
+            if (Category) authorName += ` (${t(CosmeticTypes[Category].localizedName, locale, ELocaleNamespace.General)})`;
             if (InclusionVersion) authorName += ` (${formatInclusionVersion(InclusionVersion, locale)})`;
 
             const embed = new EmbedBuilder()
                 .setTitle(title)
-                .setDescription(`${getTranslation('list_command.cosmetics_subcommand.more_info.0', locale, ELocaleNamespace.Messages)}: \`/${getTranslation('list_command.cosmetics_subcommand.more_info.1', locale, ELocaleNamespace.Messages)}\``)
+                .setDescription(`${t('list_command.cosmetics_subcommand.more_info.0', locale, ELocaleNamespace.Messages)}: \`/${t('list_command.cosmetics_subcommand.more_info.1', locale, ELocaleNamespace.Messages)}\``)
                 .setColor(embedColor as ColorResolvable)
                 .setTimestamp()
                 .setAuthor({

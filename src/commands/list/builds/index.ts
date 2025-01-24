@@ -18,7 +18,7 @@ import {
 import { sendUnauthorizedMessage } from "@handlers/unauthorizedHandler";
 import { IBuildFilters } from "@tps/index";
 import { handleBuildCommandInteraction } from "@commands/info/build";
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import {
     createEmbed,
@@ -46,13 +46,13 @@ export async function handleBuildsListCommandInteraction(interaction: ChatInputC
 
         const buildsList = await retrieveBuilds(filters);
         if (!buildsList) {
-            return await interaction.editReply({ content: getTranslation('list_command.builds_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors) });
+            return await interaction.editReply({ content: t('list_command.builds_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors) });
         }
 
         const { builds, totalPages } = buildsList;
 
         if (!builds || builds.length === 0) {
-            return await interaction.editReply({ content: getTranslation('list_command.builds_subcommand.builds_not_found_filters', locale, ELocaleNamespace.Errors) });
+            return await interaction.editReply({ content: t('list_command.builds_subcommand.builds_not_found_filters', locale, ELocaleNamespace.Errors) });
         }
 
         const perkData = await getCachedPerks(locale);
@@ -89,7 +89,7 @@ export async function handleBuildsListCommandInteraction(interaction: ChatInputC
 
                     const buildsList = await retrieveBuilds(newFilters);
                     if (!buildsList) return await i.update({
-                        content: getTranslation('list_command.builds_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors),
+                        content: t('list_command.builds_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors),
                         components: []
                     });
 
@@ -97,7 +97,7 @@ export async function handleBuildsListCommandInteraction(interaction: ChatInputC
 
                     if (!newBuilds || newBuilds.length === 0) {
                         return await i.editReply({
-                            content: getTranslation('list_command.builds_subcommand.builds_not_found_filters', locale, ELocaleNamespace.Errors),
+                            content: t('list_command.builds_subcommand.builds_not_found_filters', locale, ELocaleNamespace.Errors),
                             components: []
                         });
                     }

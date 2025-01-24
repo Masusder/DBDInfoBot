@@ -10,7 +10,7 @@ import {
     combineBaseUrlWithPath,
     formatHtmlToDiscordMarkdown
 } from "@utils/stringUtils";
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import { layerIcons } from "@utils/imageUtils";
 import {
     getOfferingChoices,
@@ -33,7 +33,7 @@ export async function handleOfferingCommandInteraction(interaction: ChatInputCom
         const offeringData = await getOfferingDataById(offeringId, locale);
 
         if (!offeringData) {
-            const message = getTranslation('info_command.offering_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors) + ' ' + getTranslation('general.try_again_later', locale, ELocaleNamespace.Errors);
+            const message = t('info_command.offering_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors) + ' ' + t('general.try_again_later', locale, ELocaleNamespace.Errors);
             await sendErrorMessage(interaction, message);
             return;
         }
@@ -50,22 +50,22 @@ export async function handleOfferingCommandInteraction(interaction: ChatInputCom
 
         const markdownDescription = formatHtmlToDiscordMarkdown(offeringData.Description);
         const description = offeringData.Available === "Retired" ?
-            `${markdownDescription}\n\n**${getTranslation('info_command.offering_subcommand.retired', locale, ELocaleNamespace.Messages)}**`
+            `${markdownDescription}\n\n**${t('info_command.offering_subcommand.retired', locale, ELocaleNamespace.Messages)}**`
             : markdownDescription;
 
         const fields: APIEmbedField[] = [
             {
-                name: getTranslation('info_command.offering_subcommand.role', locale, ELocaleNamespace.Messages),
-                value: getTranslation(roleData.localizedName, locale, ELocaleNamespace.General),
+                name: t('info_command.offering_subcommand.role', locale, ELocaleNamespace.Messages),
+                value: t(roleData.localizedName, locale, ELocaleNamespace.General),
                 inline: true
             },
             {
-                name: getTranslation('info_command.offering_subcommand.rarity', locale, ELocaleNamespace.Messages),
-                value: getTranslation(rarityData.localizedName, locale, ELocaleNamespace.General),
+                name: t('info_command.offering_subcommand.rarity', locale, ELocaleNamespace.Messages),
+                value: t(rarityData.localizedName, locale, ELocaleNamespace.General),
                 inline: true
             },
             {
-                name: getTranslation('info_command.offering_subcommand.description', locale, ELocaleNamespace.Messages),
+                name: t('info_command.offering_subcommand.description', locale, ELocaleNamespace.Messages),
                 value: description,
                 inline: false
             }];
@@ -77,7 +77,7 @@ export async function handleOfferingCommandInteraction(interaction: ChatInputCom
             .setTimestamp()
             .setThumbnail(`attachment://offeringImage_${offeringData.OfferingId}.png`)
             .setAuthor({
-                name: getTranslation('info_command.offering_subcommand.offering_information', locale, ELocaleNamespace.Messages),
+                name: t('info_command.offering_subcommand.offering_information', locale, ELocaleNamespace.Messages),
                 iconURL: combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_offerings.png')
             });
 

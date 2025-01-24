@@ -21,7 +21,7 @@ import {
     formatNumber,
     isValidData
 } from "@utils/stringUtils";
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { getCharacterDataByIndex } from "@services/characterService";
 import {
@@ -64,7 +64,7 @@ export default async function generateCosmeticInteractionData(
     ]);
 
     if (!cosmeticData || !isValidData(specialEventData) || !isValidData(riftData)) {
-        const message = `${getTranslation('info_command.cosmetic_subcommand.cosmetic_not_found', locale, ELocaleNamespace.Errors)} "${cosmeticId}".`;
+        const message = `${t('info_command.cosmetic_subcommand.cosmetic_not_found', locale, ELocaleNamespace.Errors)} "${cosmeticId}".`;
         await sendErrorMessage(interaction, message);
         throw new Error(`Cosmetic data not found for ID "${cosmeticId}".`);
     }
@@ -127,7 +127,7 @@ function buildActionRow(cosmeticData: Cosmetic, locale: Locale) {
 
     const viewImagesButton = new ButtonBuilder()
         .setCustomId(`view_outfit_pieces::${cosmeticData.CosmeticId}`)
-        .setLabel(getTranslation('info_command.cosmetic_subcommand.view_pieces', locale, ELocaleNamespace.Messages))
+        .setLabel(t('info_command.cosmetic_subcommand.view_pieces', locale, ELocaleNamespace.Messages))
         .setStyle(ButtonStyle.Secondary);
 
     let viewerCosmetics = [cosmeticData.CosmeticId];
@@ -137,12 +137,12 @@ function buildActionRow(cosmeticData: Cosmetic, locale: Locale) {
     const viewerCosmeticsParam = encodeURIComponent(JSON.stringify(viewerCosmetics));
 
     const view3dModelButton = new ButtonBuilder()
-        .setLabel(getTranslation('info_command.cosmetic_subcommand.view_3d_model', locale, ELocaleNamespace.Messages))
+        .setLabel(t('info_command.cosmetic_subcommand.view_3d_model', locale, ELocaleNamespace.Messages))
         .setStyle(ButtonStyle.Link)
         .setURL(combineBaseUrlWithPath(`/store/3d-viewer?viewerCosmetics=${viewerCosmeticsParam}`));
 
     const redirectButton = new ButtonBuilder()
-        .setLabel(getTranslation('info_command.cosmetic_subcommand.more_info', locale, ELocaleNamespace.Messages))
+        .setLabel(t('info_command.cosmetic_subcommand.more_info', locale, ELocaleNamespace.Messages))
         .setStyle(ButtonStyle.Link)
         .setURL(combineBaseUrlWithPath(`/store/cosmetics?cosmeticId=${cosmeticData.CosmeticId}`));
 
@@ -183,7 +183,7 @@ async function createPriceField(originalPrice: number, currencyKey: string, cosm
     const currencyEmoji = await getApplicationEmoji(currencyData.emojiId);
     const emojiMarkdown = createEmojiMarkdown(currencyEmoji!);
 
-    const currencyFieldName = `${emojiMarkdown} ${getTranslation(translationKey, locale, ELocaleNamespace.General)}`;
+    const currencyFieldName = `${emojiMarkdown} ${t(translationKey, locale, ELocaleNamespace.General)}`;
     if (discountPercentage > 0) {
         return {
             name: currencyFieldName,
@@ -226,7 +226,7 @@ function buildEmbed(
     const category = CosmeticTypes[cosmeticData.Category];
     if (category) {
         embed.setAuthor({
-            name: getTranslation(category.localizedName, locale, ELocaleNamespace.General),
+            name: t(category.localizedName, locale, ELocaleNamespace.General),
             iconURL: category.icon
         });
     }
@@ -252,7 +252,7 @@ function prepareEmbedFields(
 
     if (characterData) {
         fields.push({
-            name: getTranslation('info_command.cosmetic_subcommand.character', locale, ELocaleNamespace.Messages),
+            name: t('info_command.cosmetic_subcommand.character', locale, ELocaleNamespace.Messages),
             value: characterData.Name,
             inline: true
         });
@@ -260,7 +260,7 @@ function prepareEmbedFields(
 
     if (cosmeticData.CollectionName) {
         fields.push({
-            name: getTranslation('info_command.cosmetic_subcommand.collection', locale, ELocaleNamespace.Messages),
+            name: t('info_command.cosmetic_subcommand.collection', locale, ELocaleNamespace.Messages),
             value: cosmeticData.CollectionName,
             inline: true
         });
@@ -268,12 +268,12 @@ function prepareEmbedFields(
 
     fields.push(
         {
-            name: getTranslation('info_command.cosmetic_subcommand.rarity', locale, ELocaleNamespace.Messages),
-            value: getTranslation(Rarities[cosmeticData.Rarity]?.localizedName, locale, ELocaleNamespace.General) || 'N/A',
+            name: t('info_command.cosmetic_subcommand.rarity', locale, ELocaleNamespace.Messages),
+            value: t(Rarities[cosmeticData.Rarity]?.localizedName, locale, ELocaleNamespace.General) || 'N/A',
             inline: true
         },
         {
-            name: getTranslation('info_command.cosmetic_subcommand.inclusion_version', locale, ELocaleNamespace.Messages),
+            name: t('info_command.cosmetic_subcommand.inclusion_version', locale, ELocaleNamespace.Messages),
             value: formatInclusionVersion(cosmeticData.InclusionVersion, locale) || 'N/A',
             inline: true
         },
@@ -284,7 +284,7 @@ function prepareEmbedFields(
 
     if (isPurchasable) {
         fields.push({
-            name: getTranslation('info_command.cosmetic_subcommand.release_date', locale, ELocaleNamespace.Messages),
+            name: t('info_command.cosmetic_subcommand.release_date', locale, ELocaleNamespace.Messages),
             value: formatReleaseDate(cosmeticData.ReleaseDate),
             inline: true
         });
@@ -293,7 +293,7 @@ function prepareEmbedFields(
     if (isPurchasable && !hasLimitedAvailabilityEnded(cosmeticData) && cosmeticData.LimitedTimeEndDate) {
         fields.push(
             {
-                name: getTranslation('info_command.cosmetic_subcommand.limited_until', locale, ELocaleNamespace.Messages),
+                name: t('info_command.cosmetic_subcommand.limited_until', locale, ELocaleNamespace.Messages),
                 value: `<t:${Math.floor(adjustForTimezone(cosmeticData.LimitedTimeEndDate) / 1000)}>`,
                 inline: true
             }
@@ -304,7 +304,7 @@ function prepareEmbedFields(
         const adjustedDiscountEndDateUnix = Math.floor(adjustedDiscountEndDate?.getTime() / 1000);
 
         fields.push({
-            name: getTranslation('info_command.cosmetic_subcommand.sale', locale, ELocaleNamespace.Messages),
+            name: t('info_command.cosmetic_subcommand.sale', locale, ELocaleNamespace.Messages),
             value: `<t:${adjustedDiscountEndDateUnix}>`,
             inline: true
         });
@@ -312,7 +312,7 @@ function prepareEmbedFields(
 
     if (cosmeticData.EventId && specialEventData[cosmeticData.EventId]) {
         fields.push({
-            name: getTranslation('info_command.cosmetic_subcommand.special_event', locale, ELocaleNamespace.Messages),
+            name: t('info_command.cosmetic_subcommand.special_event', locale, ELocaleNamespace.Messages),
             value: specialEventData[cosmeticData.EventId].Name,
             inline: true
         });
@@ -320,7 +320,7 @@ function prepareEmbedFields(
 
     if (cosmeticData.TomeId && riftData[cosmeticData.TomeId]) {
         fields.push({
-            name: getTranslation('info_command.cosmetic_subcommand.released_with_tome', locale, ELocaleNamespace.Messages),
+            name: t('info_command.cosmetic_subcommand.released_with_tome', locale, ELocaleNamespace.Messages),
             value: riftData[cosmeticData.TomeId].Name,
             inline: true
         });
@@ -328,8 +328,8 @@ function prepareEmbedFields(
 
     if (!!cosmeticData?.KillSwitched) {
         fields.push({
-            name: getTranslation('info_command.cosmetic_subcommand.kill_switch', locale, ELocaleNamespace.Messages),
-            value: getTranslation('info_command.cosmetic_subcommand.kill_switch_desc', locale, ELocaleNamespace.Messages),
+            name: t('info_command.cosmetic_subcommand.kill_switch', locale, ELocaleNamespace.Messages),
+            value: t('info_command.cosmetic_subcommand.kill_switch_desc', locale, ELocaleNamespace.Messages),
             inline: false
         });
     }

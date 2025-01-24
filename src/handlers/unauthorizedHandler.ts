@@ -4,7 +4,7 @@ import {
     MessageFlags,
     StringSelectMenuInteraction
 } from "discord.js";
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { ThemeColors } from "@constants/themeColors";
 
@@ -13,8 +13,8 @@ export async function sendUnauthorizedMessage(interaction: ButtonInteraction | S
 
     const embed = new EmbedBuilder()
         .setColor(ThemeColors.WARNING)
-        .setTitle(getTranslation('general.unauthorized_title', locale, ELocaleNamespace.Errors))
-        .setDescription(`:lock: ${getTranslation('general.unauthorized', locale, ELocaleNamespace.Errors)}`);
+        .setTitle(t('general.unauthorized_title', locale, ELocaleNamespace.Errors))
+        .setDescription(`:lock: ${t('general.unauthorized', locale, ELocaleNamespace.Errors)}`);
 
     try {
         if (interaction.replied || interaction.deferred) {

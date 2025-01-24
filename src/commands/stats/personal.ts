@@ -10,7 +10,7 @@ import {
 import { renderBrowserBuffer } from "@utils/ssrUtility";
 import { getCachedPlayerStats } from "@services/statsService";
 import { IPlayerData } from "@ui/components/StatsSummaryCard/types/playerStats";
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import {
     combineBaseUrlWithPath,
@@ -30,7 +30,7 @@ export async function handlePersonalStatsCommandInteraction(interaction: ChatInp
         await interaction.deferReply();
 
         if (!steamId) {
-            const message = getTranslation('stats_command.missing_steam_id', locale, ELocaleNamespace.Errors);
+            const message = t('stats_command.missing_steam_id', locale, ELocaleNamespace.Errors);
             await sendErrorMessage(interaction, message);
             return;
         }
@@ -39,7 +39,7 @@ export async function handlePersonalStatsCommandInteraction(interaction: ChatInp
         const playerData = deconstructPlayerStatsData(playerDataCached);
 
         if (!playerData) {
-            const message = getTranslation('stats_command.not_found_player_data', locale, ELocaleNamespace.Errors);
+            const message = t('stats_command.not_found_player_data', locale, ELocaleNamespace.Errors);
             await sendErrorMessage(interaction, message);
             return;
         }
@@ -47,7 +47,7 @@ export async function handlePersonalStatsCommandInteraction(interaction: ChatInp
         const summaryCardBuffer = await generatePlayerStatsSummary(playerData, interaction.user);
 
         if (!summaryCardBuffer) {
-            const message = getTranslation('stats_command.failed_generating_summary_card', locale, ELocaleNamespace.Errors);
+            const message = t('stats_command.failed_generating_summary_card', locale, ELocaleNamespace.Errors);
             await sendErrorMessage(interaction, message);
             return;
         }
@@ -55,8 +55,8 @@ export async function handlePersonalStatsCommandInteraction(interaction: ChatInp
         // noinspection SpellCheckingInspection
         const embed = new EmbedBuilder()
             .setColor(ThemeColors.PRIMARY)
-            .setTitle(getTranslation('stats_command.player_stats_overview', locale, ELocaleNamespace.Messages))
-            .setDescription(getTranslation('stats_command.summary_desc', locale, ELocaleNamespace.Messages))
+            .setTitle(t('stats_command.player_stats_overview', locale, ELocaleNamespace.Messages))
+            .setDescription(t('stats_command.summary_desc', locale, ELocaleNamespace.Messages))
             .setTimestamp()
             .setImage(`attachment://playerStatsSummary_${playerData.steam.steamId}.png`)
             .setThumbnail(combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_DBDlogo.png'))
@@ -115,7 +115,7 @@ function createRedirectButton(steamId: string, locale: Locale): ActionRowBuilder
     const redirectUrl = combineBaseUrlWithPath(`/player-profile/${encodeURIComponent(steamId)}/overview`);
 
     const button = new ButtonBuilder()
-        .setLabel(getTranslation('stats_command.full_stats', locale, ELocaleNamespace.Messages))
+        .setLabel(t('stats_command.full_stats', locale, ELocaleNamespace.Messages))
         .setStyle(ButtonStyle.Link)
         .setURL(redirectUrl);
 

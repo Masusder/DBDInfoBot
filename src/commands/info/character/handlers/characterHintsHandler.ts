@@ -13,7 +13,7 @@ import {
     paginationHandler,
     IPaginationOptions
 } from "@handlers/paginationHandler";
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import { sendUnauthorizedMessage } from "@handlers/unauthorizedHandler";
 import { ELocaleNamespace } from '@tps/enums/ELocaleNamespace';
 import { Hint } from "@tps/character";
@@ -33,7 +33,7 @@ export async function characterHintsHandler(interaction: ButtonInteraction) {
 
     if (!characterIndex) {
         await interaction.followUp({
-            content: getTranslation('info_command.character_subcommand.invalid_index', locale, ELocaleNamespace.Errors),
+            content: t('info_command.character_subcommand.invalid_index', locale, ELocaleNamespace.Errors),
             flags: MessageFlags.Ephemeral
         });
         return;
@@ -42,7 +42,7 @@ export async function characterHintsHandler(interaction: ButtonInteraction) {
     const characterData = await getCharacterDataByIndex(characterIndex, locale);
     if (!characterData) {
         await interaction.followUp({
-            content: getTranslation('info_command.character_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors),
+            content: t('info_command.character_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors),
             flags: MessageFlags.Ephemeral
         });
         return;
@@ -70,7 +70,7 @@ function createEmbed(description: string, iconPath: string, title: string, role:
         .setDescription(description)
         .setColor(Role[role].hexColor)
         .setTimestamp()
-        .setFooter({text: `${getTranslation('info_command.character_subcommand.hint_for', locale, ELocaleNamespace.Messages)} ${characterName}`});
+        .setFooter({text: `${t('info_command.character_subcommand.hint_for', locale, ELocaleNamespace.Messages)} ${characterName}`});
 }
 
 function createEmbeds(hints: Hint[], characterName: string, locale: Locale) {

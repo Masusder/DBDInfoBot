@@ -20,7 +20,7 @@ import {
 } from "./utils/riftUtils";
 import { generateRiftTemplate } from "./utils/riftTemplate";
 import { isValidData } from "@utils/stringUtils";
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 
 // region Interaction Handlers
@@ -42,7 +42,7 @@ export async function handleRiftCommandInteraction(interaction: ChatInputCommand
         ]);
 
         if (!riftData || !isValidData(cosmeticData)) {
-            const message = getTranslation('info_command.rift_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors) + ' ' + getTranslation('general.try_again_later', locale, ELocaleNamespace.Errors);
+            const message = t('info_command.rift_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors) + ' ' + t('general.try_again_later', locale, ELocaleNamespace.Errors);
             await sendErrorMessage(interaction, message);
             return;
         }
@@ -91,7 +91,7 @@ export async function handleRiftCommandInteraction(interaction: ChatInputCommand
                 currentActionRow.addComponents(
                     new ButtonBuilder()
                         .setCustomId(`rift_tier::${cosmeticIds.join(",")}::${index}`)
-                        .setLabel(`${getTranslation('info_command.rift_subcommand.tier', locale, ELocaleNamespace.Messages)} ${tierInfo.TierId}`)
+                        .setLabel(`${t('info_command.rift_subcommand.tier', locale, ELocaleNamespace.Messages)} ${tierInfo.TierId}`)
                         .setStyle(ButtonStyle.Primary)
                         .setDisabled(cosmeticIds.length === 0)
                 );

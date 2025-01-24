@@ -12,8 +12,13 @@ export function mapDiscordLocaleToDbdLang(discordLocale: Locale) {
     return DiscordLocaleToDbdLangCode[discordLocale] || 'en';
 }
 
-export function getTranslation(key: string, locale: Locale, ns: ELocaleNamespace = ELocaleNamespace.Commands): string {
-    return i18next.t(key, { lng: mapDiscordLocaleToDbdLang(locale), ns });
+export function t(
+    key: string,
+    locale: Locale,
+    ns: ELocaleNamespace = ELocaleNamespace.Commands,
+    variables?: Record<string, string>
+): string {
+    return i18next.t(key, { lng: mapDiscordLocaleToDbdLang(locale), ns, ...variables });
 }
 
 export function commandLocalizationHelper(key: string, ns: ELocaleNamespace = ELocaleNamespace.Commands) {
@@ -39,7 +44,7 @@ export function commandLocalizationHelper(key: string, ns: ELocaleNamespace = EL
     const localizations: { [key: string]: string } = {};
 
     languages.forEach((lang) => {
-        localizations[lang] = getTranslation(key, lang, ns);
+        localizations[lang] = t(key, lang, ns);
     });
 
     return localizations;

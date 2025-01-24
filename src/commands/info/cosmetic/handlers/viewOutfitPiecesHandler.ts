@@ -8,7 +8,7 @@ import {
     combineBaseUrlWithPath,
     extractInteractionId
 } from '@utils/stringUtils';
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import { ELocaleNamespace } from '@tps/enums/ELocaleNamespace';
 import {
     combineImagesIntoGrid,
@@ -28,7 +28,7 @@ export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
     const locale = interaction.locale;
 
     if (!cosmeticId) {
-        const message = getTranslation('info_command.cosmetic_subcommand.button_interaction.invalid_id', locale, ELocaleNamespace.Errors);
+        const message = t('info_command.cosmetic_subcommand.button_interaction.invalid_id', locale, ELocaleNamespace.Errors);
         await sendErrorMessage(interaction, message);
         return;
     }
@@ -37,7 +37,7 @@ export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
     const cosmeticData = cosmeticsData[cosmeticId];
 
     if (!cosmeticData) {
-        const message = getTranslation('info_command.cosmetic_subcommand.button_interaction.error_retrieving_data', locale, ELocaleNamespace.Errors)
+        const message = t('info_command.cosmetic_subcommand.button_interaction.error_retrieving_data', locale, ELocaleNamespace.Errors)
         await sendErrorMessage(interaction, message);
         return;
     }
@@ -47,7 +47,7 @@ export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
     const combinedImageBuffer = await combineImagesIntoGrid(outfitPiecesBuffer);
 
     const embed = new EmbedBuilder()
-        .setTitle(`${getTranslation('info_command.cosmetic_subcommand.button_interaction.outfit_pieces', locale, ELocaleNamespace.Messages)} ${cosmeticData.CosmeticName}`)
+        .setTitle(`${t('info_command.cosmetic_subcommand.button_interaction.outfit_pieces', locale, ELocaleNamespace.Messages)} ${cosmeticData.CosmeticName}`)
         .setColor(interaction.message.embeds[0].color)
         .setImage('attachment://combined-outfit-pieces.png');
 

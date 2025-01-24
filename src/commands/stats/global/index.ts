@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction, } from "discord.js";
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import { getCachedGlobalStats } from "@services/statsService";
 import { GlobalStatTabs, } from "@data/GlobalStatTabs";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
@@ -17,7 +17,7 @@ export async function handleGlobalStatsCommandInteraction(interaction: ChatInput
         const globalStatsData = await getCachedGlobalStats();
 
         if (!globalStatsData || Object.keys(globalStatsData).length === 0) {
-            const message = getTranslation('stats_command.failed_to_fetch_global_stats', locale, ELocaleNamespace.Errors);
+            const message = t('stats_command.failed_to_fetch_global_stats', locale, ELocaleNamespace.Errors);
             await sendErrorMessage(interaction, message);
             return;
         }

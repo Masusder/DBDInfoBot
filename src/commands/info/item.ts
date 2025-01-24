@@ -10,7 +10,7 @@ import {
     combineBaseUrlWithPath,
     formatHtmlToDiscordMarkdown
 } from "@utils/stringUtils";
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import { layerIcons } from "@utils/imageUtils";
 import {
     getItemChoices,
@@ -36,7 +36,7 @@ export async function handleItemCommandInteraction(interaction: ChatInputCommand
         const itemData = await getItemDataById(itemId, locale);
 
         if (!itemData) {
-            const message = getTranslation('info_command.item_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors) + ' ' + getTranslation('general.try_again_later', locale, ELocaleNamespace.Errors);
+            const message = t('info_command.item_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors) + ' ' + t('general.try_again_later', locale, ELocaleNamespace.Errors);
             await sendErrorMessage(interaction, message);
             return;
         }
@@ -57,7 +57,7 @@ export async function handleItemCommandInteraction(interaction: ChatInputCommand
 
         if (characterData) {
             fields.push({
-                name: getTranslation('info_command.item_subcommand.character', locale, ELocaleNamespace.Messages),
+                name: t('info_command.item_subcommand.character', locale, ELocaleNamespace.Messages),
                 value: characterData.Name,
                 inline: true
             });
@@ -65,13 +65,13 @@ export async function handleItemCommandInteraction(interaction: ChatInputCommand
 
         fields.push(
             {
-                name: getTranslation('info_command.item_subcommand.role', locale, ELocaleNamespace.Messages),
-                value: getTranslation(roleData.localizedName, locale, ELocaleNamespace.General),
+                name: t('info_command.item_subcommand.role', locale, ELocaleNamespace.Messages),
+                value: t(roleData.localizedName, locale, ELocaleNamespace.General),
                 inline: true
             },
             {
-                name: getTranslation('info_command.item_subcommand.rarity', locale, ELocaleNamespace.Messages),
-                value: getTranslation(rarityData.localizedName, locale, ELocaleNamespace.General),
+                name: t('info_command.item_subcommand.rarity', locale, ELocaleNamespace.Messages),
+                value: t(rarityData.localizedName, locale, ELocaleNamespace.General),
                 inline: true
             },
         );
@@ -84,7 +84,7 @@ export async function handleItemCommandInteraction(interaction: ChatInputCommand
             .setDescription(formatHtmlToDiscordMarkdown(itemData.Description)) // Field would be preferred but there's 1024 characters limit
             .setThumbnail(`attachment://itemImage_${itemData.ItemId}.png`)
             .setAuthor({
-                name: getTranslation('info_command.item_subcommand.item_information', locale, ELocaleNamespace.Messages),
+                name: t('info_command.item_subcommand.item_information', locale, ELocaleNamespace.Messages),
                 iconURL: combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_items.png')
             });
 

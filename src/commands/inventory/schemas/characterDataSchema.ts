@@ -20,5 +20,4 @@ export const DbdCharacterItemSchema = z.object({
     schemaVersion: z.number()
 });
 
-export type CharacterItem = z.infer<typeof CharacterItemSchema>;
 export type DbdCharacterItem = z.infer<typeof DbdCharacterItemSchema>;

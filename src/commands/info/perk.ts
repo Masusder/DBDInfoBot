@@ -17,7 +17,7 @@ import {
     combineBaseUrlWithPath,
     formatHtmlToDiscordMarkdown
 } from "@utils/stringUtils";
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import { layerIcons } from "@utils/imageUtils";
 import { ELocaleNamespace } from '@tps/enums/ELocaleNamespace';
 import { sendErrorMessage } from "@handlers/errorResponseHandler";
@@ -99,7 +99,7 @@ export async function generatePerkInteractionData(
     let perkData = await getPerkDataById(perkId, locale);
 
     if (!perkData) {
-        const message = getTranslation('info_command.perk_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors) + ' ' + getTranslation('general.try_again_later', locale, ELocaleNamespace.Errors);
+        const message = t('info_command.perk_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors) + ' ' + t('general.try_again_later', locale, ELocaleNamespace.Errors);
         await sendErrorMessage(interaction, message);
         throw new Error(`Perk data not found for ID "${perkId}".`);
     }
@@ -117,10 +117,10 @@ export async function generatePerkInteractionData(
     if (characterData) characterName = characterData.Name;
 
     const perkName = perkData.Name;
-    const title = characterName ? `${perkName} (${characterName})` : `${perkName} (${getTranslation('info_command.perk_subcommand.generic_perk', locale, ELocaleNamespace.Messages)})`;
+    const title = characterName ? `${perkName} (${characterName})` : `${perkName} (${t('info_command.perk_subcommand.generic_perk', locale, ELocaleNamespace.Messages)})`;
 
     const field: APIEmbedField = {
-        name: getTranslation('info_command.perk_subcommand.description', locale, ELocaleNamespace.Messages),
+        name: t('info_command.perk_subcommand.description', locale, ELocaleNamespace.Messages),
         value: formatHtmlToDiscordMarkdown(perkData.Description)
     };
 
@@ -131,7 +131,7 @@ export async function generatePerkInteractionData(
         .setTimestamp()
         .setThumbnail(`attachment://perkImage_${perkData.PerkId}.png`)
         .setAuthor({
-            name: getTranslation('info_command.perk_subcommand.perk_information', locale, ELocaleNamespace.Messages),
+            name: t('info_command.perk_subcommand.perk_information', locale, ELocaleNamespace.Messages),
             iconURL: combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_perks.png')
         });
 

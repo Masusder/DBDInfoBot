@@ -1,8 +1,5 @@
 import { z } from "zod";
-import {
-    DataInventorySchema,
-    InventoryItemSchema
-} from "./inventorySchema";
+import { InventoryItemSchema } from "./inventorySchema";
 import { DbdRatingsItemSchema } from "./ratingsSchema";
 import { DbdCharacterItemSchema } from "./characterDataSchema";
 import { ConsumedCellsDataSchema } from "@commands/inventory/schemas/consumedCellsSchema";
@@ -32,5 +29,3 @@ export const UEParserSchema = z.object({
 
 // Combined schema for both formats - GDPR and directly from API
 export const CombinedSchema = z.union([UEParserSchema, GDPRSchema]);
-
-// export type GDPRData = z.infer<typeof GDPRSchema>;

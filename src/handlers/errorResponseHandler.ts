@@ -7,7 +7,7 @@ import {
     EmbedBuilder,
     StringSelectMenuInteraction
 } from "discord.js";
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { ThemeColors } from "@constants/themeColors";
 
@@ -21,8 +21,8 @@ export async function sendErrorMessage(interaction: ChatInputCommandInteraction 
 
     const embed = new EmbedBuilder()
         .setColor(ThemeColors.ERROR)
-        .setTitle(getTranslation('general.error_occurred', locale, ELocaleNamespace.Errors))
-        .setDescription(`:x: ${getTranslation(inputMessage, locale, ELocaleNamespace.Errors)}`);
+        .setTitle(t('general.error_occurred', locale, ELocaleNamespace.Errors))
+        .setDescription(`:x: ${t(inputMessage, locale, ELocaleNamespace.Errors)}`);
 
     const row = new ActionRowBuilder<ButtonBuilder>();
     if (redirectButtonOptions) {

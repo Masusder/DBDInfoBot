@@ -10,7 +10,7 @@ import {
     combineBaseUrlWithPath,
     formatHtmlToDiscordMarkdown
 } from "@utils/stringUtils";
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import { layerIcons } from "@utils/imageUtils";
 import {
     getAddonChoices,
@@ -33,7 +33,7 @@ export async function handleAddonCommandInteraction(interaction: ChatInputComman
         const addonData = await getAddonDataById(addonId, locale);
 
         if (!addonData) {
-            const message = getTranslation('info_command.addon_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors) + ' ' + getTranslation('general.try_again_later', locale, ELocaleNamespace.Errors);
+            const message = t('info_command.addon_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors) + ' ' + t('general.try_again_later', locale, ELocaleNamespace.Errors);
             await sendErrorMessage(interaction, message);
             return;
         }
@@ -50,17 +50,17 @@ export async function handleAddonCommandInteraction(interaction: ChatInputComman
 
         const fields: APIEmbedField[] = [
             {
-                name: getTranslation('info_command.addon_subcommand.role', locale, ELocaleNamespace.Messages),
-                value: getTranslation(roleData.localizedName, locale, ELocaleNamespace.General),
+                name: t('info_command.addon_subcommand.role', locale, ELocaleNamespace.Messages),
+                value: t(roleData.localizedName, locale, ELocaleNamespace.General),
                 inline: true
             },
             {
-                name: getTranslation('info_command.addon_subcommand.rarity', locale, ELocaleNamespace.Messages),
-                value: getTranslation(rarityData.localizedName, locale, ELocaleNamespace.General),
+                name: t('info_command.addon_subcommand.rarity', locale, ELocaleNamespace.Messages),
+                value: t(rarityData.localizedName, locale, ELocaleNamespace.General),
                 inline: true
             },
             {
-                name: getTranslation('info_command.addon_subcommand.description', locale, ELocaleNamespace.Messages),
+                name: t('info_command.addon_subcommand.description', locale, ELocaleNamespace.Messages),
                 value: formatHtmlToDiscordMarkdown(addonData.Description),
                 inline: false
             }];
@@ -72,7 +72,7 @@ export async function handleAddonCommandInteraction(interaction: ChatInputComman
             .setTimestamp()
             .setThumbnail(`attachment://addonImage_${addonData.AddonId}.png`)
             .setAuthor({
-                name: getTranslation('info_command.addon_subcommand.addon_information', locale, ELocaleNamespace.Messages),
+                name: t('info_command.addon_subcommand.addon_information', locale, ELocaleNamespace.Messages),
                 iconURL: combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_addons.png')
             });
 

@@ -20,11 +20,11 @@ import { Cosmetic } from "@tps/index";
 import { Rarities } from "@data/Rarities";
 import { getCachedCosmetics } from "@services/cosmeticService";
 import {
-    paginationHandler,
-    IPaginationOptions
+    IPaginationOptions,
+    paginationHandler
 } from "@handlers/paginationHandler";
 import { combineImagesIntoGrid } from "@utils/imageUtils";
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { generateStoreCustomizationIcons } from "@commands/info/cosmetic/utils";
 import { sendErrorMessage } from "@handlers/errorResponseHandler";
@@ -45,12 +45,16 @@ export async function handleCollectionCommandInteraction(interaction: ChatInputC
         ])
 
         if (!collectionData || !isValidData(cosmeticData)) {
-            const message = getTranslation('info_command.collection_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors) + ' ' + getTranslation('general.try_again_later', locale, ELocaleNamespace.Errors);
+            const message = t('info_command.collection_subcommand.error_retrieving_data', locale, ELocaleNamespace.Errors) + ' ' + t('general.try_again_later', locale, ELocaleNamespace.Errors);
             await sendErrorMessage(interaction, message);
             return;
         }
 
-        const title = `${collectionData.CollectionTitle} (${getTranslation('info_command.collection_subcommand.total_of_cosmetics.0', locale, ELocaleNamespace.Messages)} ${collectionData.Items.length} ${getTranslation('info_command.collection_subcommand.total_of_cosmetics.1', locale, ELocaleNamespace.Messages)})`;
+        const title = t('info_command.collection_subcommand.total_of_cosmetics', locale, ELocaleNamespace.Messages, {
+            collection_title: collectionData.CollectionTitle,
+            cosmetics_count: collectionData.Items.length.toString()
+        })
+
         const dominantRarity = determineDominantRarity(collectionData.Items, cosmeticData);
 
         const generateEmbed = async(
@@ -77,7 +81,7 @@ export async function handleCollectionCommandInteraction(interaction: ChatInputC
                 day: "numeric"
             });
 
-            const description = `${getTranslation('list_command.cosmetics_subcommand.more_info.0', locale, ELocaleNamespace.Messages)}: \`/${getTranslation('list_command.cosmetics_subcommand.more_info.1', locale, ELocaleNamespace.Messages)}\`\n\n${getTranslation('info_command.collection_subcommand.collection_inclusion_version', locale, ELocaleNamespace.Messages)} ${formatInclusionVersion(collectionData.InclusionVersion, locale)}`;
+            const description = `${t('list_command.cosmetics_subcommand.more_info.0', locale, ELocaleNamespace.Messages)}: \`/${t('list_command.cosmetics_subcommand.more_info.1', locale, ELocaleNamespace.Messages)}\`\n\n${t('info_command.collection_subcommand.collection_inclusion_version', locale, ELocaleNamespace.Messages)} ${formatInclusionVersion(collectionData.InclusionVersion, locale)}`;
 
             const embed = new EmbedBuilder()
                 .setColor(Rarities[dominantRarity].color as ColorResolvable)
@@ -85,14 +89,14 @@ export async function handleCollectionCommandInteraction(interaction: ChatInputC
                 .setDescription(description)
                 .setThumbnail(combineBaseUrlWithPath(collectionData.HeroImage))
                 .setAuthor({
-                    name: getTranslation('info_command.collection_subcommand.collection_info', locale, ELocaleNamespace.Messages),
+                    name: t('info_command.collection_subcommand.collection_info', locale, ELocaleNamespace.Messages),
                     iconURL: combineBaseUrlWithPath('/images/UI/Icons/HelpLoading/iconHelpLoading_info.png')
                 })
                 .addFields(cosmeticFields);
 
             if (collectionData.UpdatedDate !== '0001-01-01T00:00:00Z') {
                 embed.setFooter(
-                    { text: `${getTranslation('info_command.collection_subcommand.collection_last_updated', locale, ELocaleNamespace.Messages)} ${updateDatePretty}` }
+                    { text: `${t('info_command.collection_subcommand.collection_last_updated', locale, ELocaleNamespace.Messages)} ${updateDatePretty}` }
                 );
             }
 

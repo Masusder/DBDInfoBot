@@ -37,7 +37,7 @@ import { combineImagesIntoGrid } from "@utils/imageUtils";
 import { getCachedCosmetics } from "@services/cosmeticService";
 import {
     commandLocalizationHelper,
-    getTranslation
+    t
 } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { paginationHandler } from "@handlers/paginationHandler";
@@ -96,7 +96,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         const newsData: NewsData = await getCachedNews(locale);
 
         if (!isValidData(newsData)) {
-            const message = getTranslation('news_command.error_retrieving_data', locale, ELocaleNamespace.Errors);
+            const message = t('news_command.error_retrieving_data', locale, ELocaleNamespace.Errors);
             await sendErrorMessage(interaction, message);
             return;
         }
@@ -111,13 +111,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         const generateSelectMenu = (pageItems: NewsItem[]): StringSelectMenuBuilder => {
             const selectMenu = new StringSelectMenuBuilder()
                 .setCustomId('select_news_article')
-                .setPlaceholder(getTranslation('news_command.select_news_article', locale, ELocaleNamespace.Messages))
+                .setPlaceholder(t('news_command.select_news_article', locale, ELocaleNamespace.Messages))
                 .setMinValues(1)
                 .setMaxValues(1);
 
             pageItems.forEach((newsItem, index: number) => {
                 const option = new StringSelectMenuOptionBuilder()
-                    .setLabel(newsItem.title || `${getTranslation('news_command.news', locale, ELocaleNamespace.Messages)} ${index + 1}`)
+                    .setLabel(newsItem.title || `${t('news_command.news', locale, ELocaleNamespace.Messages)} ${index + 1}`)
                     .setValue(newsItem.id.toString());
                 selectMenu.addOptions(option);
             });
@@ -131,13 +131,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             totalPages: number
         ): EmbedBuilder => {
             const embed = new EmbedBuilder()
-                .setFooter({ text: `${getTranslation('generic_pagination.page_number.0', locale, ELocaleNamespace.Messages)} ${currentPage} / ${totalPages}` });
+                .setFooter({ text: `${t('generic_pagination.page_number.0', locale, ELocaleNamespace.Messages)} ${currentPage} / ${totalPages}` });
 
             pageItems.forEach((newsItem, index) => {
                 const formattedDate = new Date(adjustForTimezone(newsItem.startDate)).toLocaleDateString();
                 embed.addFields({
                     name: `${index + 1}. ${newsItem.title}`,
-                    value: `${getTranslation('news_command.published_on', locale, ELocaleNamespace.Messages)} ${formattedDate}`,
+                    value: `${t('news_command.published_on', locale, ELocaleNamespace.Messages)} ${formattedDate}`,
                     inline: true
                 });
             });
@@ -170,7 +170,7 @@ export async function handleSelectMenu(interaction: StringSelectMenuInteraction)
     if (selectedNewsItem) {
         await sendNewsContent(selectedNewsItem, interaction, locale);
     } else {
-        const message = getTranslation('news_command.failed_retrieving_article', locale, ELocaleNamespace.Errors);
+        const message = t('news_command.failed_retrieving_article', locale, ELocaleNamespace.Errors);
         await sendErrorMessage(interaction, message);
     }
 }
@@ -196,13 +196,13 @@ async function createNewsEmbed(
 
     if (isSticky) {
         embed.setAuthor({
-            name: getTranslation('news_command.pinned_article', locale, ELocaleNamespace.Messages),
+            name: t('news_command.pinned_article', locale, ELocaleNamespace.Messages),
             iconURL: combineBaseUrlWithPath('/images/News/icon_PinnedMessage.png')
         });
     }
 
     if (isFirstEmbed) {
-        embed.setTitle(newsItem.title || getTranslation('news_command.untitled_news', locale, ELocaleNamespace.Messages))
+        embed.setTitle(newsItem.title || t('news_command.untitled_news', locale, ELocaleNamespace.Messages))
             .setThumbnail(newsDataTable.icon);
     }
 
@@ -226,7 +226,7 @@ function createNewsButton(callToAction: CallToAction, locale: Locale): ActionRow
     if (!link || !link.startsWith('https')) return null;
 
     const button = new ButtonBuilder()
-        .setLabel(callToAction.text || getTranslation('news_command.click_here', locale, ELocaleNamespace.Messages))
+        .setLabel(callToAction.text || t('news_command.click_here', locale, ELocaleNamespace.Messages))
         .setStyle(ButtonStyle.Link)
         .setURL(link);
 
@@ -332,8 +332,8 @@ async function sendNewsContent(newsItem: NewsItem, interactionOrChannel: ChatInp
 
         if (itemShowcaseImage) {
             const embed = new EmbedBuilder()
-                .setTitle(`${newsItem.title} - ${getTranslation('news_command.showcased_items', locale, ELocaleNamespace.Messages)}`)
-                .setDescription(getTranslation('news_command.items_featured_in_article', locale, ELocaleNamespace.Messages))
+                .setTitle(`${newsItem.title} - ${t('news_command.showcased_items', locale, ELocaleNamespace.Messages)}`)
+                .setDescription(t('news_command.items_featured_in_article', locale, ELocaleNamespace.Messages))
                 .setColor(newsDataTable.secondaryColor)
                 .setImage('attachment://news_showcase_items.png');
 

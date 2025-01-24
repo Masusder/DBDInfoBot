@@ -20,7 +20,7 @@ import {
     combineImagesIntroGridAndLayerIcons,
     layerIcons
 } from "@utils/imageUtils";
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { Addon } from "@tps/addon";
 import { Rarities } from "@data/Rarities";
@@ -48,8 +48,8 @@ export async function handleAddonListCommandInteraction(interaction: ChatInputCo
 
         if (addons.length === 0) {
             const message = filterCount > 0
-                ? getTranslation('list_command.addons_subcommand.addons_not_found_filters', locale, ELocaleNamespace.Errors)
-                : getTranslation('list_command.addons_subcommand.addons_not_found', locale, ELocaleNamespace.Errors);
+                ? t('list_command.addons_subcommand.addons_not_found_filters', locale, ELocaleNamespace.Errors)
+                : t('list_command.addons_subcommand.addons_not_found', locale, ELocaleNamespace.Errors);
             await interaction.editReply({ content: message });
             return;
         }
@@ -57,10 +57,10 @@ export async function handleAddonListCommandInteraction(interaction: ChatInputCo
         const { ParentItem, Rarity } = filters;
 
         const generateEmbed = async(pageItems: Addon[]) => {
-            let title = `${getTranslation('list_command.addons_subcommand.found_total.0', locale, ELocaleNamespace.Messages)} ${addons.length} ${getTranslation('list_command.addons_subcommand.found_total.1', locale, ELocaleNamespace.Messages)}`;
+            let title = t('list_command.addons_subcommand.found_total', locale, ELocaleNamespace.Messages, { addons_count: addons.length.toString() });
 
             // Let user know that filters were applied
-            if (filterCount > 0) title += ` (${getTranslation('list_command.addons_subcommand.filters_applied', locale, ELocaleNamespace.Messages)}: ${filterCount})`;
+            if (filterCount > 0) title += ` (${t('list_command.addons_subcommand.filters_applied', locale, ELocaleNamespace.Messages)}: ${filterCount})`;
 
             let embedColor = ThemeColors.PRIMARY;
             if (Rarity) {
@@ -69,11 +69,11 @@ export async function handleAddonListCommandInteraction(interaction: ChatInputCo
 
             const embed = new EmbedBuilder()
                 .setTitle(title)
-                .setDescription(`${getTranslation('list_command.addons_subcommand.more_info.0', locale, ELocaleNamespace.Messages)}: \`/${getTranslation('list_command.addons_subcommand.more_info.1', locale, ELocaleNamespace.Messages)}\``)
+                .setDescription(`${t('list_command.addons_subcommand.more_info.0', locale, ELocaleNamespace.Messages)}: \`/${t('list_command.addons_subcommand.more_info.1', locale, ELocaleNamespace.Messages)}\``)
                 .setColor(embedColor)
                 .setTimestamp()
                 .setAuthor({
-                    name: getTranslation('list_command.addons_subcommand.addons_list', locale, ELocaleNamespace.Messages),
+                    name: t('list_command.addons_subcommand.addons_list', locale, ELocaleNamespace.Messages),
                     iconURL: combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_addons.png')
                 });
 

@@ -2,7 +2,7 @@ import i18next from "i18next";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import {
     commandLocalizationHelper,
-    getTranslation
+    t
 } from "@utils/localizationUtils";
 import {
     AutocompleteInteraction,
@@ -148,7 +148,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
         const embed = new EmbedBuilder()
             .setColor(ThemeColors.PRIMARY)
-            .setTitle(`Character Inventory Overview - ${characterData[characterIndex].Name}`)
+            .setTitle(`${characterData[characterIndex].Name} - Inventory Overview`)
             .setDescription("A detailed summary of the inventory for the selected character.")
             .setTimestamp()
             .setImage(`attachment://dbdInventory.png`)

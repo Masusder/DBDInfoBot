@@ -1,6 +1,6 @@
 import { ButtonInteraction } from "discord.js";
 import { extractMultipleInteractionIds } from "@utils/stringUtils";
-import { getTranslation } from "@utils/localizationUtils";
+import { t } from "@utils/localizationUtils";
 import {
     getTabById,
     GlobalStatTabs,
@@ -25,7 +25,7 @@ export async function globalStatsTabHandler(interaction: ButtonInteraction) {
     }
 
     if (!tabId) {
-        const message = getTranslation('stats_command.invalid_tab_id', locale, ELocaleNamespace.Errors);
+        const message = t('stats_command.invalid_tab_id', locale, ELocaleNamespace.Errors);
         await sendErrorMessage(interaction, message);
         return;
     }
@@ -36,7 +36,7 @@ export async function globalStatsTabHandler(interaction: ButtonInteraction) {
     const globalStatsData = await getCachedGlobalStats();
 
     if (!globalStatsData || Object.keys(globalStatsData).length === 0) {
-        const message = getTranslation('stats_command.failed_to_fetch_global_stats', locale, ELocaleNamespace.Errors);
+        const message = t('stats_command.failed_to_fetch_global_stats', locale, ELocaleNamespace.Errors);
         await sendErrorMessage(interaction, message);
         return;
     }
