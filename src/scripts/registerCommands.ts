@@ -17,17 +17,19 @@ async function registerCommands() {
         // Command imports are lazy loaded
         // Because we need to serialize the commands after i18next initialization
         const { data: infoCommand } = await import('@commands/info');
-        const { data: shrineCommand } = await import('@commands/shrineCommand');
+        const { data: shrineCommand } = await import('@commands/shrine');
         const { data: listCommand } = await import('@commands/list');
-        const { data: newsCommand } = await import('@commands/newsCommand');
+        const { data: newsCommand } = await import('@commands/news');
         const { data: statsCommand } = await import('@commands/stats');
+        const { data: inventoryCommand } = await import('@commands/inventory');
 
         const commands = [
             infoCommand?.toJSON(),
             shrineCommand?.toJSON(),
             listCommand?.toJSON(),
             newsCommand?.toJSON(),
-            statsCommand?.toJSON()
+            statsCommand?.toJSON(),
+            inventoryCommand?.toJSON()
         ];
 
         const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN!);

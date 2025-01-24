@@ -6,8 +6,8 @@ import {
 import {
     findTopKillerStat,
     returnStatValue
-} from "@ui/utils/statUtils";
-import { IPlayerData } from "@ui/types/playerStats";
+} from "@ui/components/StatsSummaryCard/utils/statUtils";
+import { IPlayerData } from "@ui/components/StatsSummaryCard/types/playerStats";
 import { Character } from "@tps/character";
 
 type TopKillerProps = {

@@ -26,7 +26,7 @@ export const Role: IRole = {
         localizedName: "roles.survivor",
         perkBackground: combineBaseUrlWithPath('/images/Other/SurvivorRarity.png'),
         charPortrait: combineBaseUrlWithPath('/images/Other/CharPortraitSurvivor.png'),
-        hexColor: "#1e90ff"
+        hexColor: ThemeColors.SURVIVOR
     },
     Killer: {
         localizedName: "roles.killer",

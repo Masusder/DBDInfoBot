@@ -7,7 +7,7 @@ import cron from "node-cron";
 import { getCachedNews } from "@services/newsService";
 import {
     batchSendNews,
-} from "@commands/newsCommand";
+} from "@commands/news";
 import Constants from "@constants";
 import client from "../client";
 import { NewsData } from "@tps/news";

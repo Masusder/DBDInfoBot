@@ -1,12 +1,12 @@
 import {
     findBestStat,
     returnStatValue
-} from "@ui/utils/statUtils";
+} from "@ui/components/StatsSummaryCard/utils/statUtils";
 import React from "react";
 import {
     IPlayerData,
     IStatSchema
-} from "@ui/types/playerStats";
+} from "@ui/components/StatsSummaryCard/types/playerStats";
 import {
     combineBaseUrlWithPath,
     formatNumber

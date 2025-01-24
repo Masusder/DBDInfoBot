@@ -2,7 +2,7 @@ import UserInfo from "./elements/UserInfo/UserInfo";
 import {
     Delimiter,
     FadingDivider
-} from "./elements/Dividers/Dividers";
+} from "../General/Dividers";
 import GeneralInfo from "./elements/GeneralInfo/GeneralInfo";
 import Maps from "./elements/Maps/ Maps";
 import { RandomStats } from "./elements/Stats/RandomStats";
@@ -11,7 +11,7 @@ import BestStat from "./elements/BestStat/BestStat";
 import React from "react";
 import { Character } from "@tps/character";
 import { Map } from "@tps/map";
-import { IPlayerData } from "@ui/types/playerStats";
+import { IPlayerData } from "@ui/components/StatsSummaryCard/types/playerStats";
 import { User } from "discord.js";
 
 type PlayerStatsProps = {

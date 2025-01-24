@@ -41,13 +41,13 @@ export const Currencies: Record<string, ICurrency> = {
     WinterEventCurrency: {
         localizedName: "currencies.winter_event_currency",
         iconPath: combineBaseUrlWithPath('/images/Currency/WinterEventCurrency_Icon.png'),
-        backgroundPath: "",
+        backgroundPath: combineBaseUrlWithPath('/images/Currency/CurrencyBackground_WinterEventCurrency.png'),
         emojiId: "WinterEventCurrency"
     },
     AnniversaryEventCurrency: {
         localizedName: "currencies.anniversary_event_currency",
         iconPath: combineBaseUrlWithPath('/images/Currency/AnniversaryEventCurrency_Icon.png'),
-        backgroundPath: "",
+        backgroundPath: combineBaseUrlWithPath('/images/Currency/CurrencyBackground_AnniversaryEventCurrency.png'),
         emojiId: "AnniversaryEventCurrency"
     },
     HalloweenEventCurrency: {
@@ -59,20 +59,20 @@ export const Currencies: Record<string, ICurrency> = {
     SpringEventCurrency: {
         localizedName: "currencies.spring_event_currency",
         iconPath: combineBaseUrlWithPath('/images/Currency/SpringEventCurrency_Icon.png'),
-        backgroundPath: "",
+        backgroundPath: combineBaseUrlWithPath('/images/Currency/CurrencyBackground_SpringEventCurrency.png'),
         emojiId: "SpringEventCurrency"
     },
     RiftFragments: {
         localizedName: "currencies.rift_fragments",
         iconPath: combineBaseUrlWithPath('/images/Currency/RiftFragmentsIcon.png'),
-        backgroundPath: "",
+        backgroundPath: combineBaseUrlWithPath('/images/Currency/CurrencyBackground_WinterEventCurrency.png'), // I'm not using this anyway, in case that changes replace with Rift Fragment background
         emojiId: "RiftFragments"
     },
     // This currency is deprecated, devs use HalloweenEventCurrency instead
     PutridSerum: {
         localizedName: "currencies.putrid_serum",
         iconPath: combineBaseUrlWithPath('/images/Currency/PutridSerum_Icon.png'),
-        backgroundPath: "",
+        backgroundPath: combineBaseUrlWithPath('/images/Currency/CurrencyBackground_HalloweenEventCurrency.png'),
         emojiId: "PutridSerum"
     }
 };

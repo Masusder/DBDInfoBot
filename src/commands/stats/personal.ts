@@ -4,16 +4,23 @@ import {
     ButtonStyle,
     ChatInputCommandInteraction,
     EmbedBuilder,
-    Locale
+    Locale,
+    User
 } from "discord.js";
-import { generatePlayerStatsSummary } from "@utils/ssrUtility";
+import { renderBrowserBuffer } from "@utils/ssrUtility";
 import { getCachedPlayerStats } from "@services/statsService";
-import { IPlayerData } from "@ui/types/playerStats";
+import { IPlayerData } from "@ui/components/StatsSummaryCard/types/playerStats";
 import { getTranslation } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
-import { combineBaseUrlWithPath } from "@utils/stringUtils";
+import {
+    combineBaseUrlWithPath,
+    isValidData
+} from "@utils/stringUtils";
 import { sendErrorMessage } from "@handlers/errorResponseHandler";
 import { ThemeColors } from "@constants/themeColors";
+import { getCachedCharacters } from "@services/characterService";
+import { getCachedMaps } from "@services/mapService";
+import PlayerStats from "@ui/components/StatsSummaryCard/PlayerStats";
 
 export async function handlePersonalStatsCommandInteraction(interaction: ChatInputCommandInteraction) {
     const steamId = interaction.options.getString('steam_id');
@@ -113,6 +120,28 @@ function createRedirectButton(steamId: string, locale: Locale): ActionRowBuilder
         .setURL(redirectUrl);
 
     return new ActionRowBuilder<ButtonBuilder>().addComponents(button);
+}
+
+async function generatePlayerStatsSummary(playerData: IPlayerData, user: User): Promise<Buffer | null> {
+    try {
+        const [characterData, mapsData] = await Promise.all([
+            await getCachedCharacters(Locale.EnglishUS),
+            await getCachedMaps(Locale.EnglishUS)
+        ]);
+
+        if (!isValidData(playerData) || !isValidData(characterData) || !isValidData(mapsData)) {
+            console.warn("Data not found. Failed to render player stats summary.");
+            return null;
+        }
+
+        const props = { characterData, mapsData, playerData, user };
+
+        return renderBrowserBuffer(PlayerStats, 'src/ui/components/StatsSummaryCard/PlayerStats.css', 1980, 1149, props);
+    } catch (error) {
+        console.log(error);
+        console.error("Failed generating player stats summary card.");
+        return null;
+    }
 }
 
 // endregion

@@ -1,6 +1,6 @@
-import { returnStatValue } from "../utils/statUtils";
+import { returnStatValue } from "@ui/components/StatsSummaryCard/utils/statUtils";
 import { Map } from '@tps/map';
-import { IPlayerData } from "@ui/types/playerStats";
+import { IPlayerData } from "@ui/components/StatsSummaryCard/types/playerStats";
 
 export interface IMapDetails {
     key: string;

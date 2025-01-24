@@ -2,15 +2,15 @@ import React from "react";
 import {
     formatGrades,
     GradeDetails
-} from "@ui/data/grade";
+} from "@ui/components/StatsSummaryCard/data/grade";
 import {
     returnStatValue
-} from "@ui/utils/statUtils";
-import { FadingDivider } from "../Dividers/Dividers";
+} from "@ui/components/StatsSummaryCard/utils/statUtils";
+import { FadingDivider } from "../../../General/Dividers";
 import {
     IPlayerData,
     IStat
-} from "@ui/types/playerStats";
+} from "@ui/components/StatsSummaryCard/types/playerStats";
 import { combineBaseUrlWithPath } from "@utils/stringUtils";
 
 function UserInfo({ playerData }: { playerData: IPlayerData }) {

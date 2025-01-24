@@ -1,4 +1,4 @@
-import { IStatsSchema } from "@ui/types/playerStats";
+import { IStatsSchema } from "@ui/components/StatsSummaryCard/types/playerStats";
 import {
     GlobalStatTabs,
     IGlobalStatTab

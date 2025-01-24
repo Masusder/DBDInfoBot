@@ -9,6 +9,7 @@ export interface Character {
     Gender: string;
     ParentItem: string;
     DLC: string;
+    DefaultItems: string[];
     Difficulty: string;
     BackStory: string;
     Biography: string;

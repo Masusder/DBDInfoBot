@@ -2,7 +2,7 @@ import {
     IStat,
     IStatSchema,
     IStatsSchema
-} from "@ui/types/playerStats";
+} from "@ui/components/StatsSummaryCard/types/playerStats";
 
 const excludedCategories = ['AdeptsSurvivor', 'AdeptsKiller', 'EscapesSpecific', 'Rank'];
 

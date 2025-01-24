@@ -8,7 +8,7 @@ import {
     compareCustomId,
     generateCustomId
 } from "@utils/stringUtils";
-import { execute as executeShrine } from "@commands/shrineCommand";
+import { execute as executeShrine } from "@commands/shrine";
 import Constants from "@constants";
 import client from "../client";
 

@@ -1,4 +1,4 @@
-import { IPlayerData } from "@ui/types/playerStats";
+import { IPlayerData } from "@ui/components/StatsSummaryCard/types/playerStats";
 
 export interface IAdeptDetails {
     maxAdepts: number;

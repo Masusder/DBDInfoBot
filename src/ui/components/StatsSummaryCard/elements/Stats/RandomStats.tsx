@@ -2,12 +2,12 @@ import React from "react";
 import {
     returnStatValue,
     rollRandomStats
-} from "@ui/utils/statUtils";
-import { FadingDivider } from "../Dividers/Dividers";
+} from "@ui/components/StatsSummaryCard/utils/statUtils";
+import { FadingDivider } from "../../../General/Dividers";
 import {
     IPlayerData,
     IStatSchema
-} from "@ui/types/playerStats";
+} from "@ui/components/StatsSummaryCard/types/playerStats";
 import {
     combineBaseUrlWithPath,
     formatNumber

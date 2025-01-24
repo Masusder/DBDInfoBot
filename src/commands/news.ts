@@ -97,7 +97,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
         if (!isValidData(newsData)) {
             const message = getTranslation('news_command.error_retrieving_data', locale, ELocaleNamespace.Errors);
-            await sendErrorMessage(interaction, message, false);
+            await sendErrorMessage(interaction, message);
             return;
         }
 
@@ -171,7 +171,7 @@ export async function handleSelectMenu(interaction: StringSelectMenuInteraction)
         await sendNewsContent(selectedNewsItem, interaction, locale);
     } else {
         const message = getTranslation('news_command.failed_retrieving_article', locale, ELocaleNamespace.Errors);
-        await sendErrorMessage(interaction, message, false);
+        await sendErrorMessage(interaction, message);
     }
 }
 

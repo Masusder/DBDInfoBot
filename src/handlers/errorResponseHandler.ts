@@ -1,5 +1,8 @@
 import {
+    ActionRowBuilder,
+    ButtonBuilder,
     ButtonInteraction,
+    ButtonStyle,
     ChatInputCommandInteraction,
     EmbedBuilder,
     StringSelectMenuInteraction
@@ -8,20 +11,34 @@ import { getTranslation } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { ThemeColors } from "@constants/themeColors";
 
-export async function sendErrorMessage(interaction: ChatInputCommandInteraction | StringSelectMenuInteraction | ButtonInteraction, inputMessage: string, isLocalized: boolean = true): Promise<void> {
+interface RedirectButtonOptions {
+    url: string;
+    label: string;
+}
+
+export async function sendErrorMessage(interaction: ChatInputCommandInteraction | StringSelectMenuInteraction | ButtonInteraction, inputMessage: string, redirectButtonOptions?: RedirectButtonOptions): Promise<void> {
     const locale = interaction.locale;
 
-    const outputMessage = isLocalized ? getTranslation(inputMessage, locale, ELocaleNamespace.Errors) : inputMessage;
     const embed = new EmbedBuilder()
         .setColor(ThemeColors.ERROR)
         .setTitle(getTranslation('general.error_occurred', locale, ELocaleNamespace.Errors))
-        .setDescription(`:x: ${outputMessage}`);
+        .setDescription(`:x: ${getTranslation(inputMessage, locale, ELocaleNamespace.Errors)}`);
+
+    const row = new ActionRowBuilder<ButtonBuilder>();
+    if (redirectButtonOptions) {
+        const redirectButton = new ButtonBuilder()
+            .setLabel(redirectButtonOptions.label)
+            .setStyle(ButtonStyle.Link)
+            .setURL(redirectButtonOptions.url);
+
+        row.addComponents(redirectButton);
+    }
 
     try {
         if (interaction.replied || interaction.deferred) {
-            await interaction.followUp({ embeds: [embed] });
+            await interaction.followUp({ embeds: [embed], components: row.components.length > 0 ? [row] : [] });
         } else {
-            await interaction.reply({ embeds: [embed] });
+            await interaction.reply({ embeds: [embed], components: row.components.length > 0 ? [row] : [] });
         }
     } catch (error) {
         console.error("Error sending error message:", error);

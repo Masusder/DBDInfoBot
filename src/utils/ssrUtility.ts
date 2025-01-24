@@ -1,42 +1,29 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import puppeteer from 'puppeteer';
-import PlayerStats from "@ui/components/StatsSummaryCard/PlayerStats";
-import { getCachedCharacters } from "@services/characterService";
-import { getCachedMaps } from "@services/mapService";
-import {
-    Locale,
-    User
-} from "discord.js";
-import { IPlayerData } from "@ui/types/playerStats";
 import * as fs from "node:fs";
 import * as path from "node:path";
 
-export const generatePlayerStatsSummary = async(playerData: IPlayerData, user: User): Promise<Buffer | null> => {
+export async function renderBrowserBuffer(
+    Component: React.FunctionComponent<any>,
+    stylesRelativeFilePath: string,
+    width: number,
+    height: number,
+    props: any
+): Promise<Buffer | null> {
     const CHROMIUM_PATH: string | undefined = process.env.CHROMIUM_PATH;
 
     try {
-        const [characterData, mapsData] = await Promise.all([
-            await getCachedCharacters(Locale.EnglishUS),
-            await getCachedMaps(Locale.EnglishUS)
-        ]);
-
-        if (!playerData || !characterData || !mapsData) {
-            console.warn("Data not found. Failed to render player stats summary.");
-            return null;
-        }
-
         const browser = await puppeteer.launch({
             ...(CHROMIUM_PATH ? { executablePath: CHROMIUM_PATH } : {})
         });
+
         const page = await browser.newPage();
 
-        const props = { characterData, mapsData, playerData, user };
+        const html = ReactDOMServer.renderToString(React.createElement(Component, props));
 
-        const html = ReactDOMServer.renderToString(React.createElement(PlayerStats, props));
-
-        const cssFilePath = path.resolve(process.cwd(), 'src/ui/components/StatsSummaryCard/PlayerStats.css');
-        const cssContent = fs.readFileSync(cssFilePath, 'utf-8');
+        const stylesFilePath = path.resolve(process.cwd(), stylesRelativeFilePath);
+        const cssContent = fs.readFileSync(stylesFilePath, 'utf-8');
 
         await page.setContent(`
             <html lang="en">
@@ -50,17 +37,17 @@ export const generatePlayerStatsSummary = async(playerData: IPlayerData, user: U
           `);
 
         await page.setViewport({
-            width: 1980,
-            height: 1149
+            width: width,
+            height: height
         });
 
         const imageBuffer = Buffer.from(await page.screenshot({ omitBackground: true }));
-        await browser.close();
+        await browser.close(); // Dispose
 
         return imageBuffer;
     } catch (error) {
         console.log(error);
-        console.error("Failed generating player stats summary card.");
+        console.error("Failed generating puppeteer buffer.");
         return null;
     }
-};
+}

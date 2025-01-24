@@ -1,10 +1,10 @@
 import React from "react";
-import { FadingDivider } from "../Dividers/Dividers";
+import { FadingDivider } from "../../../General/Dividers";
 import {
     collectMapDetails,
     IMapDetails
-} from "@ui/data/maps";
-import { IPlayerData } from "@ui/types/playerStats";
+} from "@ui/components/StatsSummaryCard/data/maps";
+import { IPlayerData } from "@ui/components/StatsSummaryCard/types/playerStats";
 import { Map } from '@tps/map';
 import { combineBaseUrlWithPath } from "@utils/stringUtils";
 
