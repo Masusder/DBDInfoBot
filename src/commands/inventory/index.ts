@@ -82,7 +82,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
         if (!file) {
             await sendErrorMessage(interaction, t('inventory_command.upload_valid_file', locale, ELocaleNamespace.Errors), {
-                url: Constants.DBDINFO_BASE_URL,
+                url: Constants.DBDLEAKS_DISCORD_URL,
                 label: t('inventory_command.support', locale, ELocaleNamespace.Messages)
             })
             return;
@@ -93,7 +93,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
         if (!validationResult.success) {
             await sendErrorMessage(interaction, t('inventory_command.invalid_data', locale, ELocaleNamespace.Errors), {
-                url: Constants.DBDINFO_BASE_URL,
+                url: Constants.DBDLEAKS_DISCORD_URL,
                 label: t('inventory_command.support', locale, ELocaleNamespace.Messages)
             })
             return;
