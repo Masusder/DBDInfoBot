@@ -64,5 +64,12 @@
     "failed_generating_summary_card": "Nie udało się wygenerować karty podsumowującej statystki.",
     "failed_to_fetch_global_stats": "Nie udało się pobrać globalnych statystyk.",
     "invalid_tab_id": "Nieprawidłowy identyfikator zakładki."
+  },
+  "inventory_command": {
+    "upload_valid_file": "Proszę przesłać poprawny plik JSON. Odwiedź serwer pomocy techniczej, aby dowiedzieć się, jak uzyskać prawidłowe dane.",
+    "invalid_data": "Te dane są nieprawidłowe. Odwiedź serwer pomocy technicznej, aby dowiedzieć się, jak uzyskać prawidłowe dane.",
+    "game_data_not_found": "Nie znaleziono danych gry. Nie udało się wygenerować ekwipunku.",
+    "fatal_error": "Wystąpił błąd krytyczny podczas wykonywania komendy ekwipunku.",
+    "failed_generating": "Nie udało się wygenerować infografiki."
   }
 }

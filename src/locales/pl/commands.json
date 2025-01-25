@@ -158,5 +158,19 @@
         }
       }
     }
+  },
+  "inventory_command": {
+    "name": "ekwipunek",
+    "description": "Sprawdź swój ekwipunek w grze dla danej postaci w postaci infografiki.",
+    "options": {
+      "file": {
+        "name": "plik",
+        "description": "Prześlij plik z ekwipunkiem. Instrukcje jak go uzyskać można znaleźć na serwerze wsparcia."
+      },
+      "character": {
+        "name": "postać",
+        "description": "Wybierz postać, dla której chcesz wygenerować infografikę."
+      }
+    }
   }
 }
