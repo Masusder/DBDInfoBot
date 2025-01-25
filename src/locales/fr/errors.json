@@ -50,6 +50,7 @@
   },
   "general": {
     "unauthorized_title": "Unauthorized",
+    "command_cooldown": "Please wait {{remaining_time}} seconds before using this command again.",
     "unauthorized": "Seule la personne qui a utilisé la commande peut faire cela.",
     "error_occurred": "An error has occurred",
     "try_again_later": "Please try again later."
