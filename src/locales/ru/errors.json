@@ -50,6 +50,7 @@
   },
   "general": {
     "unauthorized_title": "Нет прав",
+    "command_cooldown": "Please wait {{remaining_time}} seconds before using this command again.",
     "unauthorized": "Только тот, кто применил команду, может сделать это.",
     "error_occurred": "Произошла ошибка",
     "try_again_later": "Пожалуйста, повторите попытку позже."
