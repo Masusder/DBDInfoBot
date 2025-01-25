@@ -67,7 +67,6 @@ function MMR({ ratings, character, locale }: MMRProps) {
     return (
         <div className="mmr-container">
             <div style={{ position: "relative" }}>
-                {/* TODO: localize */}
                 <div
                     className="stability-text-stable">{t('dbd_inventory.mmr.stable', locale, ELocaleNamespace.UI)}</div>
                 <div className="mmr-title">{t('dbd_inventory.mmr.mmr_rating', locale, ELocaleNamespace.UI)}</div>
@@ -117,7 +116,6 @@ function MMR({ ratings, character, locale }: MMRProps) {
                 </div>
             </div>
             <div className="mmr-last-update">
-                {/* TODO: localize */}
                 <div className="mmr-last-update-title">{t('dbd_inventory.mmr.last_update', locale, ELocaleNamespace.UI)}</div>
                 <span
                     className="mmr-last-update-date">{new Date(characterRating.data.lastUpdate).toLocaleString()}</span>

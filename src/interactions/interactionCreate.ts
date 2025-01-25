@@ -1,26 +1,29 @@
 import {
-    Interaction,
+    AutocompleteInteraction,
     ChatInputCommandInteraction,
-    AutocompleteInteraction
+    Interaction
 } from 'discord.js';
 import buttonInteractionCreate from './buttonInteractionCreate';
 import menuInteractionCreate from './menuInteractionCreate';
 import {
-    execute as executeInfo,
-    autocomplete as autocompleteInfo
+    autocomplete as autocompleteInfo,
+    execute as executeInfo
 } from "@commands/info";
 import {
-    execute as executeList,
-    autocomplete as autocompleteList
+    autocomplete as autocompleteList,
+    execute as executeList
 } from "@commands/list";
 import { execute as executeShrine } from "@commands/shrine";
 import { execute as executeNews } from "@commands/news";
 import { execute as executeStats } from "@commands/stats";
 import {
-    execute as executeInventory,
-    autocomplete as autocompleteInventory
+    autocomplete as autocompleteInventory,
+    execute as executeInventory
 } from "@commands/inventory";
 import { CooldownManager } from "@utils/cooldown";
+import { sendUnauthorizedMessage } from "@handlers/unauthorizedHandler";
+import { t } from "@utils/localizationUtils";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 
 const cooldownManager = new CooldownManager();
 
@@ -69,7 +72,7 @@ const commandHandlers: Record<string, CommandHandler> = {
         autocomplete: async(interaction: AutocompleteInteraction) => {
             await autocompleteInventory(interaction);
         },
-        cooldown: 15,
+        cooldown: 120,
     }
 };
 
@@ -82,6 +85,7 @@ export default async(interaction: Interaction) => {
 
             if (command) {
                 const userId = interaction.user.id;
+                const locale = interaction.locale;
 
                 // Check cooldown
                 if (command.cooldown && cooldownManager.isOnCooldown(userId, commandName)) {
@@ -89,10 +93,7 @@ export default async(interaction: Interaction) => {
                         cooldownManager.getRemainingCooldown(userId, commandName) / 1000
                     );
 
-                    await interaction.reply({
-                        content: `Please wait ${remainingTime} seconds before using this command again.`, // TODO: localize, use unauthorized handler
-                        ephemeral: true,
-                    });
+                    await sendUnauthorizedMessage(interaction, t('general.command_cooldown', locale, ELocaleNamespace.Errors, { remaining_time: remainingTime.toString() }))
                     return;
                 }
 

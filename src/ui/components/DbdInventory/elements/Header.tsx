@@ -1,5 +1,4 @@
 import React from "react";
-import { combineBaseUrlWithPath } from "@utils/stringUtils";
 import { Role } from "@data/Role";
 import {
     Locale,
@@ -18,7 +17,6 @@ type HeaderProps = {
     user: User;
 }
 
-// TODO: use discord locale
 function Header({ character, playerName, locale, user }: HeaderProps) {
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString(locale, {
@@ -44,7 +42,6 @@ function Header({ character, playerName, locale, user }: HeaderProps) {
                     </div>
                 </div>
                 <div className="inventory-logo-container">
-                    {/* TODO: localize, use base64 icon */}
                     <img src={icons.DBDINFO_LOGO} className="inventory-logo"
                          alt="DBDInfo Logo"/>
                     <div className="inventory-credits">
@@ -52,18 +49,24 @@ function Header({ character, playerName, locale, user }: HeaderProps) {
                     </div>
                 </div>
                 <div className="inventory-generation-container">
-                    {/*  TODO: Use user data  */}
                     <div className="inventory-generation-text-container">
                         <div className="inventory-generation-title">
-                            {/* TODO: localize */}
                             {t('dbd_inventory.header.generated_by', locale, ELocaleNamespace.UI)}
                         </div>
-                        <img
-                            src={user.avatarURL() || ""}
-                            className="inventory-generation-avatar"
-                            alt="Avatar"/>
-                        <div className="inventory-generation-username">
-                            {user.username}
+                        <div style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            flexDirection: "row",
+                            gap: "5px"
+                        }}>
+                            <img
+                                src={user.avatarURL() || ""}
+                                className="inventory-generation-avatar"
+                                alt="Avatar"/>
+                            <div className="inventory-generation-username">
+                                {user.username}
+                            </div>
                         </div>
                     </div>
                     <div className="inventory-generation-date">
