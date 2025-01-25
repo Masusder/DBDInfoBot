@@ -20,6 +20,7 @@ import {
     autocomplete as autocompleteInventory,
     execute as executeInventory
 } from "@commands/inventory";
+import { execute as executeSupport } from "@commands/support";
 import { CooldownManager } from "@utils/cooldown";
 import { sendUnauthorizedMessage } from "@handlers/unauthorizedHandler";
 import { t } from "@utils/localizationUtils";
@@ -63,7 +64,8 @@ const commandHandlers: Record<string, CommandHandler> = {
     stats: {
         execute: async(interaction: ChatInputCommandInteraction) => {
             await executeStats(interaction);
-        }
+        },
+        cooldown: 120,
     },
     inventory: {
         execute: async(interaction: ChatInputCommandInteraction) => {
@@ -73,6 +75,11 @@ const commandHandlers: Record<string, CommandHandler> = {
             await autocompleteInventory(interaction);
         },
         cooldown: 120,
+    },
+    support: {
+        execute: async(interaction: ChatInputCommandInteraction) => {
+            await executeSupport(interaction);
+        },
     }
 };
 
