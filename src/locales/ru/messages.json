@@ -179,5 +179,9 @@
     "support": "Поддержка",
     "inventory_overview": "{{character_name}} - Обзор инвентаря",
     "description": "Подробная сводка инвентаря для выбранного персонажа."
+  },
+  "support_command": {
+    "support": "Support",
+    "join_server": "Join the support server:"
   }
 }
