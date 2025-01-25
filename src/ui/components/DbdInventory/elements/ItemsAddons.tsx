@@ -4,6 +4,8 @@ import { combineBaseUrlWithPath } from "@utils/stringUtils";
 import { GameData } from "@ui/components/DbdInventory/models";
 import { Character } from "@tps/character";
 import { DbdCharacterItem } from "@commands/inventory/schemas/characterDataSchema";
+import { Item } from "@tps/item";
+import { Addon } from "@tps/addon";
 
 const MAX_ITEMS = 18;
 
@@ -22,7 +24,7 @@ function ItemsAddons({ profileCharacterData, gameData, character }: ItemsAddonsP
     const data = role === "Survivor" ? itemData : addonData;
 
     const matchedItems = profileCharacterData.data.characterItems
-        .map((item: any) => {
+        .map((item) => {
             const matched = data[item.itemId];
             if (matched) {
                 const rarity = Rarities[matched.Rarity as keyof typeof Rarities];
@@ -35,20 +37,22 @@ function ItemsAddons({ profileCharacterData, gameData, character }: ItemsAddonsP
             }
             return null;
         })
-        .filter((item: any) => item !== null)
-        .sort((a: any, b: any) => a.priority - b.priority);
+        .filter((item) => item !== null)
+        .sort((a, b) => a.priority - b.priority);
+
+    if (matchedItems.length === 0) return null;
 
     return (
         <div className="items-addons-inventory-container">
-            {matchedItems.map((item: any, index: number) => {
-                const icon = role === "Survivor" ? item.IconFilePathList : item.Image;
+            {matchedItems.map((item, index: number) => {
+                const icon = role === "Survivor" ? (item as Item).IconFilePathList : (item as Addon).Image;
 
                 return (
                     <div key={index}
                          className={`inventory-item ${index === MAX_ITEMS - 1 ? "last-item" : ''} ${index === MAX_ITEMS - 2 ? "second-last-item" : ''}`}>
                         <img className="inventory-item-addon-icon"
                              style={{ backgroundImage: `url(${Rarities[item.rarity as keyof typeof Rarities].itemsAddonsBackgroundPath})`, }}
-                             src={combineBaseUrlWithPath(icon)} alt={item.name}/>
+                             src={combineBaseUrlWithPath(icon)} alt={item.Name}/>
                         <div className="inventory-item-quantity">x{item.quantity}</div>
                     </div>
                 )

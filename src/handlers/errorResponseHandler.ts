@@ -22,7 +22,7 @@ export async function sendErrorMessage(interaction: ChatInputCommandInteraction 
     const embed = new EmbedBuilder()
         .setColor(ThemeColors.ERROR)
         .setTitle(t('general.error_occurred', locale, ELocaleNamespace.Errors))
-        .setDescription(`:x: ${t(inputMessage, locale, ELocaleNamespace.Errors)}`);
+        .setDescription(`:x: ${t(inputMessage, locale, ELocaleNamespace.Errors)}`); // TODO: Is there need to translate it here?
 
     const row = new ActionRowBuilder<ButtonBuilder>();
     if (redirectButtonOptions) {

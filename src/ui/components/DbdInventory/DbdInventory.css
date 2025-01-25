@@ -177,7 +177,7 @@ button:focus-visible {
     font-weight: 900;
     color: #9B9B9B;
     top: 40px;
-    left: 12px;
+    left: 14px;
 }
 
 /* Customization */
@@ -316,7 +316,7 @@ button:focus-visible {
 
 .estimated-value-shards {
     position: absolute;
-    bottom: 8px;
+    bottom: 6px;
     left: 83px;
     font-size: 14px;
     font-weight: 900;
@@ -472,7 +472,7 @@ button:focus-visible {
     color: black;
     font-size: 8px;
     font-weight: 950;
-    bottom: -2px;
+    bottom: -2.5px;
 }
 
 .mmr-split-progressbar-container {
@@ -600,7 +600,7 @@ button:focus-visible {
 
 .additional-items-count {
     position: absolute;
-    bottom: -19px;
+    bottom: -22.5px;
     right: -10px;
     font-size: 30px;
     font-weight: 950;

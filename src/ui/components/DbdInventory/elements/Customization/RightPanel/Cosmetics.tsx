@@ -3,21 +3,28 @@ import { IParsedInventory } from "../../../data/inventory";
 import { compareItemRarityPriority } from "../../../utils";
 import { Rarities } from "@data/Rarities";
 import { combineBaseUrlWithPath } from "@utils/stringUtils";
+import { Cosmetic } from "@tps/cosmetic";
 
 const MAX_ITEMS = 20;
 
-function Cosmetics({ parsedInventory, cosmeticData }: { parsedInventory: IParsedInventory, cosmeticData: any }) {
+type CosmeticsProps = {
+    parsedInventory: IParsedInventory;
+    cosmeticData: Record<string, Cosmetic>;
+}
+function Cosmetics({ parsedInventory, cosmeticData }: CosmeticsProps) {
     // Combine all items and prioritize by rarity and outfit
     const sortedItems = Object.entries(parsedInventory.rarityStats)
-        .flatMap(([rarity, { ownedItems }]: any) =>
+        .flatMap(([rarity, { ownedItems }]) =>
             ownedItems.map((item: string) => ({
                 item,
                 rarity,
-                isOutfit: parsedInventory.categoryStats.outfit.items.includes(item),
+                isOutfit: parsedInventory.categoryStats?.outfit?.items.includes(item) ?? false,
             }))
         )
         .sort(compareItemRarityPriority)
-        .sort((a, b) => b.isOutfit - a.isOutfit);
+        .sort((a, b) => Number(b.isOutfit) - Number(a.isOutfit));
+
+    if (sortedItems.length === 0) return null;
 
     return (
         <div className="cosmetics-container">

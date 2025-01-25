@@ -5,6 +5,9 @@ import {
 } from "../utils";
 import { Character } from "@tps/character";
 import { DbdRatingsItem } from "@commands/inventory/schemas/ratingsSchema";
+import { t } from "@utils/localizationUtils";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import { Locale } from "discord.js";
 
 /**
  * Quick overview of the MMR:
@@ -23,9 +26,10 @@ import { DbdRatingsItem } from "@commands/inventory/schemas/ratingsSchema";
 type MMRProps = {
     ratings: DbdRatingsItem[];
     character: Character;
+    locale: Locale;
 }
 
-function MMR({ ratings, character }: MMRProps) {
+function MMR({ ratings, character, locale }: MMRProps) {
     const characterRating = ratings.find((r) => {
         if (character.Role === "Survivor") {
             return r.objectId === "VE_Camper";
@@ -64,9 +68,11 @@ function MMR({ ratings, character }: MMRProps) {
         <div className="mmr-container">
             <div style={{ position: "relative" }}>
                 {/* TODO: localize */}
-                <div className="stability-text-stable">Stable</div>
-                <div className="mmr-title">Matchmaking Rating (MMR)</div>
-                <div className="stability-text-unstable">Unstable</div>
+                <div
+                    className="stability-text-stable">{t('dbd_inventory.mmr.stable', locale, ELocaleNamespace.UI)}</div>
+                <div className="mmr-title">{t('dbd_inventory.mmr.mmr_rating', locale, ELocaleNamespace.UI)}</div>
+                <div
+                    className="stability-text-unstable">{t('dbd_inventory.mmr.unstable', locale, ELocaleNamespace.UI)}</div>
                 <div className="stability-percentage">{stabilityPercentage.toFixed(2)}%</div>
                 <div
                     className="stability-progressbar-progress"
@@ -82,31 +88,37 @@ function MMR({ ratings, character }: MMRProps) {
                              background: 'radial-gradient(circle, #712c17, #151515)',
                              borderColor: "#FF5722"
                          }}>
-                        <span className="mmr-info-box-text">Compared Rank</span>
+                        <span
+                            className="mmr-info-box-text">{t('dbd_inventory.mmr.compared_rank', locale, ELocaleNamespace.UI)}</span>
                         <span style={{ textTransform: 'uppercase' }}
                               className="mmr-info-box-value">{rank}</span>
                     </div> : null}
                 <div className="mmr-info-box" style={{ background: 'radial-gradient(circle, #18384B, #151515)' }}>
-                    <span className="mmr-info-box-text">Current MMR</span>
+                    <span
+                        className="mmr-info-box-text">{t('dbd_inventory.mmr.current_mmr', locale, ELocaleNamespace.UI)}</span>
                     <span
                         className={`mmr-info-box-value ${mu < 0 ? 'mmr-info-box-value-negative' : 'mmr-info-box-value-positive'}`}>{mu.toFixed(1)}</span>
                 </div>
                 <div className="mmr-info-box"
                      style={{ background: 'radial-gradient(circle, #2C4D32, #151515)', borderColor: "#2DDD62" }}>
-                    <span className="mmr-info-box-text">Peak MMR</span>
+                    <span
+                        className="mmr-info-box-text">{t('dbd_inventory.mmr.peak_mmr', locale, ELocaleNamespace.UI)}</span>
                     <span
                         className={`mmr-info-box-value ${peakMMR < 0 ? 'mmr-info-box-value-negative' : 'mmr-info-box-value-peak'}`}>{peakMMR.toFixed(1)}</span>
                 </div>
                 <div className="mmr-info-box"
                      style={{ background: 'radial-gradient(circle, #474747, #151515)', borderColor: "#9B9B9B" }}>
-                    <span className="mmr-info-box-text">Status</span>
+                    <span
+                        className="mmr-info-box-text">{t('dbd_inventory.mmr.status', locale, ELocaleNamespace.UI)}</span>
                     <span style={{ textTransform: 'uppercase' }}
-                          className="mmr-info-box-value">{characterRating.data.ratingStatus === "Unrated" ? "Unranked" : "Ranked"}</span>
+                          className="mmr-info-box-value">{characterRating.data.ratingStatus === "Unrated"
+                        ? t('dbd_inventory.mmr.unrated', locale, ELocaleNamespace.UI)
+                        : t('dbd_inventory.mmr.rated', locale, ELocaleNamespace.UI)}</span>
                 </div>
             </div>
             <div className="mmr-last-update">
                 {/* TODO: localize */}
-                <div className="mmr-last-update-title">Last Update</div>
+                <div className="mmr-last-update-title">{t('dbd_inventory.mmr.last_update', locale, ELocaleNamespace.UI)}</div>
                 <span
                     className="mmr-last-update-date">{new Date(characterRating.data.lastUpdate).toLocaleString()}</span>
             </div>
@@ -117,8 +129,6 @@ function MMR({ ratings, character }: MMRProps) {
 function SplitProgressbar({ peakMMR, mu }: { peakMMR: number, mu: number }) {
     const sections = peakMMR > 0 ? Math.ceil(peakMMR) : 0;
     const negativeSections = mu < 0 ? Math.ceil(Math.abs(mu)) : 0;
-
-    console.log(sections);
 
     const filledSectionsForMu = Math.floor(mu);
     const filledNegativeSectionsForMu = Math.floor(Math.abs(mu));

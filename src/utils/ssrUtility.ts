@@ -31,6 +31,7 @@ export async function renderBrowserBuffer(
                 <title>DBDInfo</title>
                 <style>${cssContent}</style>
                 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+                <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap" rel="stylesheet">
               </head>
               <body>${html}</body>
             </html>

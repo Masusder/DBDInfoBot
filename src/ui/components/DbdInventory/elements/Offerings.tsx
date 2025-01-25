@@ -39,6 +39,8 @@ function Offerings({ profileCharacterData, gameData }: OfferingsProps) {
         matchedItems.slice(i * (MAX_ITEMS / ROWS), (i + 1) * (MAX_ITEMS / ROWS))
     );
 
+    if (matchedItems.length === 0) return null;
+
     return (
         <div className="offerings-inventory-container">
             {rows.map((row, rowIndex) => (

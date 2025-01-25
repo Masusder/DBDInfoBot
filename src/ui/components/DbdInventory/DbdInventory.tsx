@@ -56,12 +56,12 @@ function DbdInventory({
                 <Customization gameData={gameData} profileCharacterData={profileCharacterData}
                                inventory={inventory} character={character} characterIndex={characterIndex}/>
                 <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-                    {isGDPR ? <MMR ratings={ratings} character={character}/> : null}
+                    {isGDPR ? <MMR ratings={ratings} character={character} locale={locale}/> : null}
                     <ItemsAddons profileCharacterData={profileCharacterData} gameData={gameData} character={character}/>
                     <Offerings profileCharacterData={profileCharacterData} gameData={gameData}/>
                 </div>
             </div>
-            <Footer consumedCells={consumedCells} isGDPR={isGDPR}/>
+            <Footer consumedCells={consumedCells} isGDPR={isGDPR} locale={locale}/>
         </div>
     )
 }

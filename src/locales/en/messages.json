@@ -174,5 +174,10 @@
       "killer_downs": "Killer Downs",
       "killer_specific": "Killer Ability"
     }
+  },
+  "inventory_command": {
+    "support": "Support",
+    "inventory_overview": "{{character_name}} - Inventory Overview",
+    "description": "A detailed summary of the inventory for the selected character."
   }
 }

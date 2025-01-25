@@ -4,13 +4,17 @@ import {
     formatNumber
 } from "@utils/stringUtils";
 import { ConsumedCellsItem } from "@commands/inventory/schemas/consumedCellsSchema";
+import { t } from "@utils/localizationUtils";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import { Locale } from "discord.js";
 
 type FooterProps = {
     consumedCells: ConsumedCellsItem[];
     isGDPR: boolean;
+    locale: Locale;
 }
 
-function Footer({ consumedCells, isGDPR }: FooterProps) {
+function Footer({ consumedCells, isGDPR, locale }: FooterProps) {
     let totalCellsConsumed = 0;
     for (const consumedCell of consumedCells) {
         const amount = consumedCell.data.amount;
@@ -25,8 +29,7 @@ function Footer({ consumedCells, isGDPR }: FooterProps) {
                     <img className="tooltip-info-icon"
                          src={combineBaseUrlWithPath("/images/Other/tooltip_infoIcon.png")} alt="Info"/>
                     {/* TODO: localize */}
-                    Price reflects current cosmetics value, not the original purchase amount. Discounts also don’t
-                    apply.
+                    {t('dbd_inventory.footer.price_disclaimer', locale, ELocaleNamespace.UI)}
                 </div>
             </div>
             {isGDPR ? <div className="total-cells-consumed">
@@ -36,7 +39,9 @@ function Footer({ consumedCells, isGDPR }: FooterProps) {
                     {formatNumber(totalCellsConsumed)}
                 </span>
                 {/* TODO: localize */}
-                <div className="total-cells-consumed-text">Total Auric Cells consumed</div>
+                <div className="total-cells-consumed-text">
+                    {t('dbd_inventory.footer.consumed_cells', locale, ELocaleNamespace.UI)}
+                </div>
             </div> : null}
         </div>
     );

@@ -14,7 +14,7 @@ function CosmeticCounter({ parsedInventory }: CosmeticCounterProps) {
         <div>
             <div className="outfits-count-flex">
                 <img className="outfit-icon" src={CosmeticTypes["outfit"].icon} alt="Outfit Icon"/>
-                <div className="outfit-count">{stats.owned ?? 0} / {stats.max ?? 0}</div>
+                <div className="outfit-count">{stats?.owned ?? 0} / {stats?.max ?? 0}</div>
             </div>
             <PiecesCounter parsedInventory={parsedInventory}/>
         </div>
@@ -46,28 +46,5 @@ function PiecesCounter({ parsedInventory }: CosmeticCounterProps) {
         </div>
     );
 }
-
-// interface FadingDividerProps {
-//     direction?: 'horizontal' | 'vertical';
-//     height?: string;
-//     width?: string;
-//     margin?: string;
-// }
-//
-// // TODO: delete later
-// export const FadingDivider: React.FC<FadingDividerProps> = (
-//     {
-//         direction = 'horizontal',
-//         height = '10px',
-//         width = '100%',
-//         margin = ''
-//     }) => {
-//     return (
-//         <div
-//             className={`dividers-fading-divider dividers-fading-divider-${direction}`}
-//             style={{ height, width, margin }}
-//         />
-//     );
-// };
 
 export default CosmeticCounter;

@@ -17,7 +17,6 @@ import { CombinedSchema } from "@commands/inventory/schemas";
 import { InventoryItem } from "@commands/inventory/schemas/inventorySchema";
 import { DbdRatingsItem } from "@commands/inventory/schemas/ratingsSchema";
 import { DbdCharacterItem } from "@commands/inventory/schemas/characterDataSchema";
-import { ThemeColors } from "@constants/themeColors";
 import {
     combineBaseUrlWithPath,
     isValidData
@@ -36,25 +35,34 @@ import { ConsumedCellsItem } from "@commands/inventory/schemas/consumedCellsSche
 import { GameData } from "@ui/components/DbdInventory/models";
 import { DbdPlayerName } from "@commands/inventory/schemas/playerNameSchema";
 import DbdInventory from "@ui/components/DbdInventory/DbdInventory";
+import Constants from "@constants";
+import { Role } from "@data/Role";
+import { layerIcons } from "@utils/imageUtils";
+import { Character } from "@tps/character";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
-        .setName('inventory') // TODO: localize
-        .setDescription("Check your in-game inventory for given character in form of an infographic.") // TODO: localize
+        .setName('inventory')
+        .setNameLocalizations(commandLocalizationHelper('inventory_command.name'))
+        .setDescription(i18next.t('inventory_command.description', { lng: 'en' }))
+        .setDescriptionLocalizations(commandLocalizationHelper('inventory_command.description'))
         .setContexts([0, 1, 2])
         .setIntegrationTypes([0, 1])
         .addAttachmentOption(option =>
             option
                 .setName("file")
-                .setDescription("Attach your inventory file. You can learn how to obtain it on support server.") // TODO: localize
+                .setNameLocalizations(commandLocalizationHelper('inventory_command.options.file.name'))
+                .setDescription(i18next.t('inventory_command.options.file.description', { lng: 'en' }))
+                .setDescriptionLocalizations(commandLocalizationHelper('inventory_command.options.file.description'))
                 .setRequired(true)
         )
         .addStringOption(option =>
             option
                 .setName('character')
-                .setNameLocalizations(commandLocalizationHelper('list_command.builds_subcommand.options.character.name')) // TODO: localize
-                .setDescription(i18next.t('list_command.builds_subcommand.options.character.description', { lng: 'en' })) // TODO: localize
-                .setDescriptionLocalizations(commandLocalizationHelper('list_command.builds_subcommand.options.character.description')) // TODO: localize
+                .setNameLocalizations(commandLocalizationHelper('inventory_command.options.character.name'))
+                .setDescription(i18next.t('inventory_command.options.character.description', { lng: 'en' }))
+                .setDescriptionLocalizations(commandLocalizationHelper('inventory_command.options.character.description'))
                 .setRequired(true)
                 .setAutocomplete(true)
         )
@@ -72,23 +80,21 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
         const file = interaction.options.getAttachment("file");
 
-        if (!file) return await sendErrorMessage(interaction, "Please upload a valid JSON file.") // TODO: localize
+        if (!file) {
+            await sendErrorMessage(interaction, t('inventory_command.upload_valid_file', locale, ELocaleNamespace.Errors), {
+                url: Constants.DBDINFO_BASE_URL,
+                label: t('inventory_command.support', locale, ELocaleNamespace.Messages)
+            })
+            return;
+        } // TODO: localize
 
         const response = await axios(file.url);
-        // const validationResult = InventoryRootSchema.safeParse(response.data);
         const validationResult = CombinedSchema.safeParse(response.data);
-        console.log(response.data)
-        if (!validationResult.success) {
-            const errors = validationResult.error.errors;
-            console.log(errors)
-            errors.forEach((err) => {
-                console.error(`Path: ${err.path.join('.')}`);
-                console.error(`Expected: ${err.message}`);
-            });
 
-            await sendErrorMessage(interaction, "This data is invalid. Check our support server to learn how to obtain it.", {
-                url: "https://discord.gg/dbdleaks",
-                label: "Support"
+        if (!validationResult.success) {
+            await sendErrorMessage(interaction, t('inventory_command.invalid_data', locale, ELocaleNamespace.Errors), {
+                url: Constants.DBDINFO_BASE_URL,
+                label: t('inventory_command.support', locale, ELocaleNamespace.Messages)
             }) // TODO: localize
             return;
         }
@@ -132,9 +138,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             getCachedItems(locale)
         ]);
 
-        if (!isValidData(characterData) || !isValidData(perkData) || !isValidData(cosmeticData) || !isValidData(offeringData) || !isValidData(addonData) || !isValidData(itemData)) {
-            console.warn("Game data not found. Failed to render dbd inventory.");
-            return null; // TODO: respond with error handler
+        if (!isValidData(characterData) || !isValidData(perkData) || !isValidData(cosmeticData) || !isValidData(offeringData) || !isValidData(addonData) || !isValidData(itemData) || !playerName) {
+            await sendErrorMessage(interaction, t('inventory_command.game_data_not_found', locale, ELocaleNamespace.Errors)) // TODO: localize
+            return;
         }
 
         const gameData: GameData = {
@@ -146,34 +152,45 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             itemData
         }
 
+        const character = characterData[characterIndex]
+
         const embed = new EmbedBuilder()
-            .setColor(ThemeColors.PRIMARY)
-            .setTitle(`${characterData[characterIndex].Name} - Inventory Overview`)
-            .setDescription("A detailed summary of the inventory for the selected character.")
+            .setColor(Role[character.Role].hexColor)
+            .setTitle(t('inventory_command.inventory_overview', locale, ELocaleNamespace.Messages, {
+                character_name: characterData[characterIndex].Name
+            })) // TODO: localize
+            .setDescription(t('inventory_command.description', locale, ELocaleNamespace.Messages)) // TODO: localize
+            .setThumbnail(`attachment://characterImage_${characterIndex}.png`)
             .setTimestamp()
-            .setImage(`attachment://dbdInventory.png`)
-            .setThumbnail(combineBaseUrlWithPath('/images/UI/Icons/Help/iconHelp_DBDlogo.png'))
+            .setImage(`attachment://dbdInventory_${playerName.userId}.png`)
             .setAuthor({
-                name: interaction.user.displayName,
-                iconURL: interaction.user.avatarURL() || '',
+                name: playerName.playerName,
+                iconURL: interaction.user.avatarURL() || ' ',
             });
 
+        const charPortraitBuffer = await generateCharacterPortrait(character);
         const dbdInventoryBuffer = await generateDbdInventory(inventoryItems, userCharacterData, dbdRatings, consumedCells, playerName, characterIndex, isGDPR, gameData, interaction.user, locale);
 
         if (!dbdInventoryBuffer) {
-            return; // TODO: respond with error handler
+            await sendErrorMessage(interaction, t('inventory_command.failed_generating', locale, ELocaleNamespace.Errors)); // TODO: localize
+            return;
         }
 
         await interaction.editReply({
             embeds: [embed],
-            files: [{
-                attachment: dbdInventoryBuffer,
-                name: `dbdInventory.png`
-            }]
+            files: [
+                {
+                    attachment: charPortraitBuffer,
+                    name: `characterImage_${characterIndex}.png`
+                },
+                {
+                    attachment: dbdInventoryBuffer,
+                    name: `dbdInventory_${playerName.userId}.png`
+                }]
         });
     } catch (error) {
         console.error("Error executing inventory command:", error);
-        await sendErrorMessage(interaction, "Fatal error occurred while executing inventory command.") // TODO: localize
+        await sendErrorMessage(interaction, t('inventory_command.fatal_error', locale, ELocaleNamespace.Errors)); // TODO: localize
     }
 }
 
@@ -208,6 +225,16 @@ async function generateDbdInventory(
         console.error("Failed generating dbd inventory infographic.", error);
         return null;
     }
+}
+
+async function generateCharacterPortrait(character: Character) {
+    const role = character.Role as 'Killer' | 'Survivor';
+    const roleData = Role[role];
+
+    const characterBackgroundUrl = roleData.charPortrait;
+    const characterIconUrl = combineBaseUrlWithPath(character.IconFilePath);
+
+    return await layerIcons(characterBackgroundUrl, characterIconUrl) as Buffer;
 }
 
 // region Autocomplete
