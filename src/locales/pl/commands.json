@@ -174,7 +174,7 @@
     }
   },
   "support_command": {
-    "name": "support",
-    "description": "Get a link to the support server."
+    "name": "wsparcie",
+    "description": "Uzyskaj link do serwera pomocy technicznej."
   }
 }
