@@ -34,7 +34,7 @@
     "@types/i18next": "^13.0.0",
     "@types/node": "^22.10.5",
     "@types/node-cron": "^3.0.11",
-    "@types/react": "^19.0.2",
+    "@types/react": "^19.0.7",
     "@types/react-dom": "^19.0.2",
     "@types/ws": "^8.5.13",
     "ts-node": "^10.9.2",
