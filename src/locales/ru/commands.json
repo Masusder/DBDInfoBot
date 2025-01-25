@@ -172,5 +172,9 @@
         "description": "Выберите персонажа, для которого вы хотите создать инфографику."
       }
     }
+  },
+  "support_command": {
+    "name": "support",
+    "description": "Get a link to the support server."
   }
 }
