@@ -179,5 +179,9 @@
     "support": "Pomoc techniczna",
     "inventory_overview": "{{character_name}} - Przegląd ekwipunku",
     "description": "Szczegółowe podsumowanie ekwipunku dla wybranej postaci."
+  },
+  "support_command": {
+    "support": "Support",
+    "join_server": "Join the support server:"
   }
 }
