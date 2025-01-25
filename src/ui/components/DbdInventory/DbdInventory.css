@@ -100,7 +100,7 @@ button:focus-visible {
     justify-content: center;
     align-items: center;
     line-height: 35px;
-    width: 575px;
+    width: 700px;
 }
 
 .inventory-header-title {
@@ -140,25 +140,24 @@ button:focus-visible {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 575px;
+    width: 700px;
 }
 
 .inventory-generation-text-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    gap: 10px;
-    line-height: 35px;
+    line-height: 30px;
 }
 
 .inventory-generation-title {
-    font-size: 40px;
+    font-size: 36px;
     font-weight: 900;
     text-transform: uppercase;
 }
 
 .inventory-generation-username {
-    font-size: 40px;
+    font-size: 36px;
     font-weight: 900;
     background: linear-gradient(155deg, #E3E3E3 0%, #0095FF 200%);
     -webkit-background-clip: text;
@@ -166,18 +165,16 @@ button:focus-visible {
 }
 
 .inventory-generation-avatar {
+    border: 1px solid hsl(0deg 0% 100% / 10%);
     width: auto;
-    height: 40px;
+    height: 32px;
     border-radius: 100%;
 }
 
 .inventory-generation-date {
-    position: absolute;
     font-size: 12px;
     font-weight: 900;
     color: #9B9B9B;
-    top: 40px;
-    left: 14px;
 }
 
 /* Customization */
@@ -307,7 +304,7 @@ button:focus-visible {
 /* Estimated value */
 .estimated-value-cells {
     position: absolute;
-    top: 8px;
+    top: 10px;
     left: 110px;
     font-size: 14px;
     font-weight: 900;
@@ -510,9 +507,9 @@ button:focus-visible {
     align-items: center;
     border: 1px solid dodgerblue;
     border-radius: 4px;
-    width: 70px;
+    width: 85px;
     height: 20px;
-    padding: 5px 8px;
+    padding: 5px;
     line-height: 12px;
 }
 
@@ -674,7 +671,7 @@ button:focus-visible {
     color: #9B9B9B;
     font-size: 10px;
     font-weight: 900;
-    max-width: 280px;
+    max-width: 325px;
     text-indent: 20px;
 }
 

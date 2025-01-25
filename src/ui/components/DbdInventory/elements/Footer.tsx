@@ -28,7 +28,6 @@ function Footer({ consumedCells, isGDPR, locale }: FooterProps) {
                 <div style={{ position: "relative" }}>
                     <img className="tooltip-info-icon"
                          src={combineBaseUrlWithPath("/images/Other/tooltip_infoIcon.png")} alt="Info"/>
-                    {/* TODO: localize */}
                     {t('dbd_inventory.footer.price_disclaimer', locale, ELocaleNamespace.UI)}
                 </div>
             </div>
@@ -38,7 +37,6 @@ function Footer({ consumedCells, isGDPR, locale }: FooterProps) {
                          alt="Cells"/>
                     {formatNumber(totalCellsConsumed)}
                 </span>
-                {/* TODO: localize */}
                 <div className="total-cells-consumed-text">
                     {t('dbd_inventory.footer.consumed_cells', locale, ELocaleNamespace.UI)}
                 </div>

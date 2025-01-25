@@ -53,3 +53,10 @@ export function percentageToColor(percentage: number) {
 
     return `rgb(${Math.min(brightness, red + 50)}, ${Math.min(brightness, green + 50)}, 0)`;
 }
+
+export function shortenText(text: string, maxLength: number = 17): string {
+    if (text.length > maxLength) {
+        return text.slice(0, maxLength) + '...';
+    }
+    return text;
+}

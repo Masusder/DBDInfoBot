@@ -82,20 +82,20 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
         if (!file) {
             await sendErrorMessage(interaction, t('inventory_command.upload_valid_file', locale, ELocaleNamespace.Errors), {
-                url: Constants.DBDINFO_BASE_URL,
+                url: Constants.DBDLEAKS_DISCORD_URL,
                 label: t('inventory_command.support', locale, ELocaleNamespace.Messages)
             })
             return;
-        } // TODO: localize
+        }
 
         const response = await axios(file.url);
         const validationResult = CombinedSchema.safeParse(response.data);
 
         if (!validationResult.success) {
             await sendErrorMessage(interaction, t('inventory_command.invalid_data', locale, ELocaleNamespace.Errors), {
-                url: Constants.DBDINFO_BASE_URL,
+                url: Constants.DBDLEAKS_DISCORD_URL,
                 label: t('inventory_command.support', locale, ELocaleNamespace.Messages)
-            }) // TODO: localize
+            })
             return;
         }
 
@@ -139,7 +139,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         ]);
 
         if (!isValidData(characterData) || !isValidData(perkData) || !isValidData(cosmeticData) || !isValidData(offeringData) || !isValidData(addonData) || !isValidData(itemData) || !playerName) {
-            await sendErrorMessage(interaction, t('inventory_command.game_data_not_found', locale, ELocaleNamespace.Errors)) // TODO: localize
+            await sendErrorMessage(interaction, t('inventory_command.game_data_not_found', locale, ELocaleNamespace.Errors));
             return;
         }
 
@@ -158,8 +158,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             .setColor(Role[character.Role].hexColor)
             .setTitle(t('inventory_command.inventory_overview', locale, ELocaleNamespace.Messages, {
                 character_name: characterData[characterIndex].Name
-            })) // TODO: localize
-            .setDescription(t('inventory_command.description', locale, ELocaleNamespace.Messages)) // TODO: localize
+            }))
+            .setDescription(t('inventory_command.description', locale, ELocaleNamespace.Messages))
             .setThumbnail(`attachment://characterImage_${characterIndex}.png`)
             .setTimestamp()
             .setImage(`attachment://dbdInventory_${playerName.userId}.png`)
@@ -172,7 +172,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         const dbdInventoryBuffer = await generateDbdInventory(inventoryItems, userCharacterData, dbdRatings, consumedCells, playerName, characterIndex, isGDPR, gameData, interaction.user, locale);
 
         if (!dbdInventoryBuffer) {
-            await sendErrorMessage(interaction, t('inventory_command.failed_generating', locale, ELocaleNamespace.Errors)); // TODO: localize
+            await sendErrorMessage(interaction, t('inventory_command.failed_generating', locale, ELocaleNamespace.Errors));
             return;
         }
 
@@ -190,7 +190,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         });
     } catch (error) {
         console.error("Error executing inventory command:", error);
-        await sendErrorMessage(interaction, t('inventory_command.fatal_error', locale, ELocaleNamespace.Errors)); // TODO: localize
+        await sendErrorMessage(interaction, t('inventory_command.fatal_error', locale, ELocaleNamespace.Errors));
     }
 }
 

@@ -50,9 +50,11 @@
   },
   "general": {
     "unauthorized_title": "Unauthorized",
+    "command_cooldown": "Please wait {{remaining_time}} seconds before using this command again.",
     "unauthorized": "Seule la personne qui a utilisé la commande peut faire cela.",
     "error_occurred": "An error has occurred",
-    "try_again_later": "Please try again later."
+    "try_again_later": "Please try again later.",
+    "fatal_error_generic": "Fatal error has occurred while executing command."
   },
   "news_command": {
     "error_retrieving_data": "Failed to retrieve latest news.",
@@ -64,5 +66,12 @@
     "failed_generating_summary_card": "Unable to generate summary card.",
     "failed_to_fetch_global_stats": "Failed to fetch global statistics data.",
     "invalid_tab_id": "Invalid tab ID."
+  },
+  "inventory_command": {
+    "upload_valid_file": "Please upload a valid JSON file. Visit the support server for instructions on how to obtain valid data.",
+    "invalid_data": "This data is invalid. Please visit the support server for instructions on how to obtain valid data.",
+    "game_data_not_found": "Game data not found. Failed to render inventory.",
+    "fatal_error": "Fatal error occurred while executing inventory command.",
+    "failed_generating": "Failed to generate infographic."
   }
 }

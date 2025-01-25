@@ -1,0 +1,25 @@
+{
+  "dbd_inventory": {
+    "header": {
+      "player_inventory": "Ekwipunek gracza",
+      "created_by": "Utworzone przez",
+      "generated_by": "Wygenerowano przez"
+    },
+    "footer": {
+      "price_disclaimer": "Cena odzwierciedla bieżącą wartość kosmetyków, a nie początkową kwotę zakupu. Zniżki również nie mają zastosowania.",
+      "consumed_cells": "Łączna liczba zużytych Złocistych mikrobiomów"
+    },
+    "mmr": {
+      "stable": "Stabilne",
+      "unstable": "Niestabilne",
+      "mmr_rating": "Ocena meczów (MMR)",
+      "compared_rank": "Porównanie Rangi",
+      "current_mmr": "Bieżący MMR",
+      "peak_mmr": "Max MMR",
+      "status": "Status",
+      "unrated": "Bez oceny",
+      "rated": "Oceniony",
+      "last_update": "Ostatnia aktualizacja"
+    }
+  }
+}

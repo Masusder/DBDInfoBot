@@ -1,6 +1,9 @@
 import React from "react";
 import { IParsedInventory } from "../../../data/inventory";
-import { compareItemRarityPriority } from "../../../utils";
+import {
+    compareItemRarityPriority,
+    shortenText
+} from "../../../utils";
 import { Rarities } from "@data/Rarities";
 import { combineBaseUrlWithPath } from "@utils/stringUtils";
 import { Cosmetic } from "@tps/cosmetic";
@@ -68,7 +71,7 @@ function CosmeticItem({ cosmetic, index }: { cosmetic: any, index: number }) {
                 fontWeight: "900",
                 color: Rarities[rarity].color,
                 textShadow: "0px 0px 4px rgba(0, 0, 0, 0.8)"
-            }}>{cosmetic.CosmeticName}</span>
+            }}>{shortenText(cosmetic.CosmeticName)}</span>
         </div>
     )
 }

@@ -33,11 +33,11 @@
     "bloodpoints": "Очки Крови",
     "shards": "Радужные Осколки",
     "auric_cells": "Золотые Клетки",
-    "rift_fragments": "Rift Fragments",
-    "halloween_event_currency": "Dark Trinkets",
-    "winter_event_currency": "Frosty Trinkets",
-    "spring_event_currency": "Blood Trinkets",
-    "anniversary_event_currency": "Gilded Trinkets"
+    "rift_fragments": "Фрагменты разрыва",
+    "halloween_event_currency": "Мрачные безделицы",
+    "winter_event_currency": "Ледяные безделицы",
+    "spring_event_currency": "Тромбозные безделицы",
+    "anniversary_event_currency": "Позолоченные безделицы"
   },
   "cosmetic_types": {
     "outfit": "Набор Одежды",
@@ -51,18 +51,18 @@
     "badge": "Значок",
     "banner": "Баннер",
     "power": "Сила",
-    "killer_power": "Killer's Power",
-    "killer_arm": "Killer's Arm",
-    "killer_mask": "Mask",
-    "killer_upper_body": "Killer's Upper Body",
-    "killer_lower_body": "Killer's Lower Body",
-    "survivor_hand": "Survivor's Hand"
+    "killer_power": "Сила Убийцы",
+    "killer_arm": "Рука Убийцы",
+    "killer_mask": "Маска",
+    "killer_upper_body": "Торс Убийцы",
+    "killer_lower_body": "Нижняя часть тела Убийцы",
+    "survivor_hand": "Рука Выжившего"
   },
   "build_categories": {
     "fun": "Забавный",
     "tome_challenge": "Испытание Компендиума",
     "competitive": "Соревновательный",
-    "beginner": "Początkujący",
+    "beginner": "Начинающий",
     "intermediate": "Промежуточный",
     "advanced": "Продвинутый",
     "other": "Другой"

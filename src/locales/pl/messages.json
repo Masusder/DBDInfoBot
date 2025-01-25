@@ -78,36 +78,27 @@
       "any_offering": "Dowolny dar",
       "desc_not_provided": "Opis dla tego ekwipunku nie został podany.",
       "build_info": "Informacje o ekwipunku",
-      "created_by": [
-        "Utworzony przez",
-        "dnia"
-      ]
+      "created_by": "Utworzone przez {{username}}, dnia {{date}}"
     },
     "collection_subcommand": {
-      "total_of_cosmetics": [
-        "Łącznie",
-        "kosmetyków"
-      ],
+      "total_of_cosmetics": "{{collection_title}} (Suma kosmetyków {{cosmetics_count}})",
       "collection_inclusion_version": "Ta kolekcja została wprowadzona w wersji:",
       "collection_info": "Informacje o kolekcji",
       "collection_last_updated": "Ostatnia aktualizacja kolekcji miała miejsce"
     },
     "rift_subcommand": {
       "tier": "Poziom",
-      "rift_ends": "Szczelina zamyka się za:",
-      "rift_active": [
-        "Szczelina jest aktywna od",
-        "do"
-      ],
-      "to_progress": "Aby awansować o jeden poziom, musisz zdobyć:"
+      "rift_ends_active": "Szczelina zamyka się za:",
+      "rift_ends_expired": "Szczelina zamknęła się:",
+      "rift_active": "Szczelina jest aktywna od <t:{{start_date}}> do <t:{{end_date}}>",
+      "rift_expired": "Szczelina była aktywna od <t:{{start_date}}> do <t:{{end_date}}>",
+      "to_progress_active": "Aby awansować o jeden poziom, musisz zdobyć:",
+      "to_progress_expired": "Aby awansować o jeden poziom, musiałeś/aś zdobyć:"
     }
   },
   "list_command": {
     "cosmetics_subcommand": {
-      "found_total": [
-        "Znaleziono łącznie",
-        "kosmetyków"
-      ],
+      "found_total": "Znaleziono łącznie {{cosmetics_count}} kosmetyków",
       "filters_applied": "Zastosowano filtry",
       "cosmetics_list": "Lista kosmetyków",
       "more_info": [
@@ -116,10 +107,7 @@
       ]
     },
     "builds_subcommand": {
-      "builds_list_page": [
-        "Strona",
-        "z"
-      ],
+      "builds_list_page": "Strona {{current_page}} z {{total_pages}}",
       "create_your_own_build": "Stwórz swój ekwipunek",
       "builds_matching_filters": "Oto ekwipunki pasujące do Twoich filtrów:",
       "builds_list": "Lista ekwipunków",
@@ -130,10 +118,7 @@
     },
     "addons_subcommand": {
       "addons_list": "Lista dodatków",
-      "found_total": [
-        "Znaleziono łącznie",
-        "dodatki"
-      ],
+      "found_total": "Znaleziono łącznie {{addons_count}} dodatków",
       "filters_applied": "Zastosowano filtry",
       "more_info": [
         "Aby uzyskać więcej informacji o konkretnym dodatku, użyj polecenia",
@@ -153,10 +138,7 @@
   "generic_pagination": {
     "first": "Pierwsza",
     "previous": "Poprzednia",
-    "page_number": [
-      "Strona",
-      "z"
-    ],
+    "page_number": "Strona {{current_page}} z {{total_pages}}",
     "next": "Następna",
     "last": "Ostatnia"
   },
@@ -174,14 +156,8 @@
     "player_stats_overview": "Statystyki gracza",
     "summary_desc": "Infografika podsumowująca statystyki gracza.",
     "full_stats": "Pełne statystyki",
-    "global_stats_title": [
-      "Globalne statystyki Steam dla kategorii",
-      " "
-    ],
-    "data_collected_from": [
-      "Dane zgromadzone od ponad",
-      "graczy"
-    ],
+    "global_stats_title": "Globalne statystyki Steam w kategorii \"{{category}}\"",
+    "data_collected_from": "Dane zebrane od ponad **{{player_count}}** graczy.",
     "global_stat_tabs": {
       "other": "Inne",
       "bloodweb": "Krwista sieć",
@@ -198,5 +174,14 @@
       "killer_downs": "Powalenia zabójców",
       "killer_specific": "Umiejętność zabójców"
     }
+  },
+  "inventory_command": {
+    "support": "Pomoc techniczna",
+    "inventory_overview": "{{character_name}} - Przegląd ekwipunku",
+    "description": "Szczegółowe podsumowanie ekwipunku dla wybranej postaci."
+  },
+  "support_command": {
+    "support": "Wsparcie",
+    "join_server": "Dołącz do serwera wsparcia technicznego:"
   }
 }

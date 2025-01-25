@@ -11,7 +11,6 @@ dotenv.config();
 async function registerCommands() {
     try {
         console.log('Loaded translations:', i18next.store.data);
-
         console.log('Started refreshing application (/) commands.');
 
         // Command imports are lazy loaded
@@ -22,6 +21,7 @@ async function registerCommands() {
         const { data: newsCommand } = await import('@commands/news');
         const { data: statsCommand } = await import('@commands/stats');
         const { data: inventoryCommand } = await import('@commands/inventory');
+        const { data: supportCommand } = await import('@commands/support');
 
         const commands = [
             infoCommand?.toJSON(),
@@ -29,7 +29,8 @@ async function registerCommands() {
             listCommand?.toJSON(),
             newsCommand?.toJSON(),
             statsCommand?.toJSON(),
-            inventoryCommand?.toJSON()
+            inventoryCommand?.toJSON(),
+            supportCommand?.toJSON(),
         ];
 
         const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN!);
