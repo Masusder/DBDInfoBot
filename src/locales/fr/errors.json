@@ -50,9 +50,11 @@
   },
   "general": {
     "unauthorized_title": "Unauthorized",
+    "command_cooldown": "Please wait {{remaining_time}} seconds before using this command again.",
     "unauthorized": "Seule la personne qui a utilisé la commande peut faire cela.",
     "error_occurred": "An error has occurred",
-    "try_again_later": "Please try again later."
+    "try_again_later": "Please try again later.",
+    "fatal_error_generic": "Fatal error has occurred while executing command."
   },
   "news_command": {
     "error_retrieving_data": "Failed to retrieve latest news.",

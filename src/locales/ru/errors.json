@@ -50,9 +50,11 @@
   },
   "general": {
     "unauthorized_title": "Нет прав",
+    "command_cooldown": "Пожалуйста, дождитесь {{remaining_time}} сек., прежде чем снова использовать эту команду.",
     "unauthorized": "Только тот, кто применил команду, может сделать это.",
     "error_occurred": "Произошла ошибка",
-    "try_again_later": "Пожалуйста, повторите попытку позже."
+    "try_again_later": "Пожалуйста, повторите попытку позже.",
+    "fatal_error_generic": "Fatal error has occurred while executing command."
   },
   "news_command": {
     "error_retrieving_data": "Не удалось получить последние новости.",
@@ -66,10 +68,10 @@
     "invalid_tab_id": "Неверный ID вкладки."
   },
   "inventory_command": {
-    "upload_valid_file": "Please upload a valid JSON file. Visit the support server for instructions on how to obtain valid data.",
-    "invalid_data": "This data is invalid. Please visit the support server for instructions on how to obtain valid data.",
-    "game_data_not_found": "Game data not found. Failed to render inventory.",
-    "fatal_error": "Fatal error occurred while executing inventory command.",
-    "failed_generating": "Failed to generate infographic."
+    "upload_valid_file": "Загрузите корректный JSON-файл. Посетите сервер поддержки, чтобы узнать как получить корректные данные.",
+    "invalid_data": "Данные недействительны. Посетите сервер поддержки, чтобы узнать как получить действующие данные.",
+    "game_data_not_found": "Данные не найдены. Не удалось отрисовать инвентарь.",
+    "fatal_error": "При выполнении команды инветарь произошла фатальная ошибка.",
+    "failed_generating": "Не удалось сгенерировать инфографику."
   }
 }

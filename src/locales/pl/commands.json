@@ -172,5 +172,9 @@
         "description": "Wybierz postać, dla której chcesz wygenerować infografikę."
       }
     }
+  },
+  "support_command": {
+    "name": "wsparcie",
+    "description": "Uzyskaj link do serwera pomocy technicznej."
   }
 }

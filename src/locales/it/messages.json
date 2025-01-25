@@ -179,5 +179,9 @@
     "support": "Support",
     "inventory_overview": "{{character_name}} - Inventory Overview",
     "description": "A detailed summary of the inventory for the selected character."
+  },
+  "support_command": {
+    "support": "Support",
+    "join_server": "Join the support server:"
   }
 }
