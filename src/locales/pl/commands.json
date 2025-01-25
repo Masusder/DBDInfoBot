@@ -160,16 +160,16 @@
     }
   },
   "inventory_command": {
-    "name": "inventory",
-    "description": "View your in-game inventory for given character in form of an infographic.",
+    "name": "ekwipunek",
+    "description": "Sprawdź swój ekwipunek w grze dla danej postaci w postaci infografiki.",
     "options": {
       "file": {
-        "name": "file",
-        "description": "Upload your inventory file. Instructions on how to obtain it can be found on the support server."
+        "name": "plik",
+        "description": "Prześlij plik z ekwipunkiem. Instrukcje jak go uzyskać można znaleźć na serwerze wsparcia."
       },
       "character": {
-        "name": "character",
-        "description": "Select character you want to generate infographic for."
+        "name": "postać",
+        "description": "Wybierz postać, dla której chcesz wygenerować infografikę."
       }
     }
   }
