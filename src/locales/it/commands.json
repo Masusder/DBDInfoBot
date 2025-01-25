@@ -172,5 +172,9 @@
         "description": "Select character you want to generate infographic for."
       }
     }
+  },
+  "support_command": {
+    "name": "support",
+    "description": "Get a link to the support server."
   }
 }
