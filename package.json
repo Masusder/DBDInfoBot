@@ -19,11 +19,11 @@
     "canvas": "^3.0.1",
     "discord.js": "^14.17.2",
     "dotenv": "^16.4.7",
-    "i18next": "^24.2.0",
+    "i18next": "^24.2.2",
     "i18next-fs-backend": "^2.6.0",
     "node-cache": "^5.1.2",
     "node-cron": "^3.0.3",
-    "puppeteer": "^23.11.1",
+    "puppeteer": "^24.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sharp": "^0.33.5",
@@ -34,12 +34,12 @@
     "@types/i18next": "^13.0.0",
     "@types/node": "^22.10.5",
     "@types/node-cron": "^3.0.11",
-    "@types/react": "^19.0.2",
-    "@types/react-dom": "^19.0.2",
+    "@types/react": "^19.0.7",
+    "@types/react-dom": "^19.0.3",
     "@types/ws": "^8.5.13",
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.10",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.3"
   }
 }
