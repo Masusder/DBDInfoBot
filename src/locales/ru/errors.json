@@ -12,25 +12,25 @@
     },
     "character_subcommand": {
       "invalid_index": "Неверный индекс персонажа.",
-      "error_retrieving_data": "There was a problem retrieving character data."
+      "error_retrieving_data": "Возникла проблема с получением данных о персонаже."
     },
     "collection_subcommand": {
-      "error_retrieving_data": "There was a problem retrieving collections or cosmetics data."
+      "error_retrieving_data": "Возникла проблема с получением данных о коллекциях или косметических предметах."
     },
     "perk_subcommand": {
-      "error_retrieving_data": "There was a problem retrieving perks."
+      "error_retrieving_data": "Возникла проблема с получением навыков."
     },
     "offering_subcommand": {
-      "error_retrieving_data": "There was a problem retrieving offerings."
+      "error_retrieving_data": "Возникла проблема с получением подношений."
     },
     "item_subcommand": {
-      "error_retrieving_data": "There was a problem retrieving items."
+      "error_retrieving_data": "Возникла проблема с получением предметов."
     },
     "addon_subcommand": {
-      "error_retrieving_data": "There was a problem retrieving add-ons."
+      "error_retrieving_data": "Возникла проблема с получением улучшений."
     },
     "rift_subcommand": {
-      "error_retrieving_data": "There was a problem retrieving rift or cosmetics data."
+      "error_retrieving_data": "Возникла проблема с получением данных о разрывах или косметических предметах."
     }
   },
   "list_command": {
@@ -44,25 +44,25 @@
       "builds_not_found_filters": "Не найдено сборок по указанным фильтрам."
     },
     "addons_subcommand": {
-      "addons_not_found": "No add-ons found.",
-      "addons_not_found_filters": "No add-ons found for the applied filters."
+      "addons_not_found": "Не удалось найти улучшения.",
+      "addons_not_found_filters": "Не найдено улучшений по указанным фильтрам."
     }
   },
   "general": {
-    "unauthorized_title": "Unauthorized",
+    "unauthorized_title": "Нет прав",
     "unauthorized": "Только тот, кто применил команду, может сделать это.",
-    "error_occurred": "An error has occurred",
-    "try_again_later": "Please try again later."
+    "error_occurred": "Произошла ошибка",
+    "try_again_later": "Пожалуйста, повторите попытку позже."
   },
   "news_command": {
-    "error_retrieving_data": "Failed to retrieve latest news.",
-    "failed_retrieving_article": "Failed to retrieve the selected news article."
+    "error_retrieving_data": "Не удалось получить последние новости.",
+    "failed_retrieving_article": "Не удалось получить выбранную новость."
   },
   "stats_command": {
-    "missing_steam_id": "Steam ID field is required to view player stats.",
-    "not_found_player_data": "Unable to fetch player data. Ensure your Steam profile and game details are public.",
-    "failed_generating_summary_card": "Unable to generate summary card.",
-    "failed_to_fetch_global_stats": "Failed to fetch global statistics data.",
-    "invalid_tab_id": "Invalid tab ID."
+    "missing_steam_id": "Поле Steam ID необходимо для просмотра статистики игрока.",
+    "not_found_player_data": "Невозможно получить данные игрока. Убедитесь, что ваш профиль Steam и данные об игре публичны.",
+    "failed_generating_summary_card": "Невозможно сгенерировать сводную карточку.",
+    "failed_to_fetch_global_stats": "Не удалось получить глобальную статистику.",
+    "invalid_tab_id": "Неверный ID вкладки."
   }
 }
