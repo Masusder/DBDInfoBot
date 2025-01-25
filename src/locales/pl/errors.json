@@ -50,7 +50,7 @@
   },
   "general": {
     "unauthorized_title": "Brak autoryzacji",
-    "command_cooldown": "Please wait {{remaining_time}} seconds before using this command again.",
+    "command_cooldown": "Proszę odczekać {{remaining_time}} sekund przed ponownym użyciem tej komendy.",
     "unauthorized": "Tylko osoba, która użyła polecenia, może to zrobić.",
     "error_occurred": "Wystąpił błąd",
     "try_again_later": "Spróbuj ponownie później."
