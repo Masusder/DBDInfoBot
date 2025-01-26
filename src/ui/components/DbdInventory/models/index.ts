@@ -4,12 +4,14 @@ import { Item } from "@tps/item";
 import { Perk } from "@tps/perk";
 import { Cosmetic } from "@tps/cosmetic";
 import { Character } from "@tps/character";
+import { DLC } from "@tps/dlc";
 
 export interface GameData {
     addonData: Record<string, Addon>;
     offeringData: Record<string, Offering>;
     itemData: Record<string, Item>;
     perkData: Record<string, Perk>;
-    cosmeticData: Record<string, Cosmetic>;
+    cosmeticData: any;
     characterData: Record<string, Character>;
+    dlcData: Record<string, DLC>;
 }

@@ -40,6 +40,11 @@ import { Role } from "@data/Role";
 import { layerIcons } from "@utils/imageUtils";
 import { Character } from "@tps/character";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import {
+    DbdApiEntitlements,
+    DbdEntitlements
+} from "@commands/inventory/schemas/entitlementsSchema";
+import { getCachedDlcs } from "@services/dlcService";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -92,6 +97,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         const validationResult = CombinedSchema.safeParse(response.data);
 
         if (!validationResult.success) {
+            console.log(validationResult.error)
             await sendErrorMessage(interaction, t('inventory_command.invalid_data', locale, ELocaleNamespace.Errors), {
                 url: Constants.DBDLEAKS_DISCORD_URL,
                 label: t('inventory_command.support', locale, ELocaleNamespace.Messages)
@@ -106,6 +112,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         let userCharacterData: DbdCharacterItem[] = [];
         let consumedCells: ConsumedCellsItem[] = [];
         let playerName: DbdPlayerName | null = null;
+        let entitlements: any = null;
 
         let isGDPR = false;
 
@@ -114,6 +121,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             inventoryItems = UEParserData.playerInventory;
 
             userCharacterData = UEParserData.splinteredState?.dbd_character_data || [];
+            entitlements = UEParserData.splinteredState?.["dbd-entitlements"] || null;
             playerName = UEParserData.playerName;
         } else if ("gdpr" in validatedData) {
             const gdprData = validatedData.gdpr;
@@ -123,19 +131,21 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 dbdRatings = gdprData.splinteredState["dbd-ratings"] || [];
                 userCharacterData = gdprData.splinteredState["dbd_character_data"] || [];
                 consumedCells = gdprData.splinteredState["dbd-consume-cells"] || [];
+                entitlements = gdprData.splinteredState["dbd-entitlements"] || [];
                 playerName = gdprData.playerName;
 
                 isGDPR = true;
             }
         }
 
-        const [characterData, perkData, cosmeticData, offeringData, addonData, itemData] = await Promise.all([
+        const [characterData, perkData, cosmeticData, offeringData, addonData, itemData, dlcData] = await Promise.all([
             getCachedCharacters(locale),
             getCachedPerks(locale),
             getCachedCosmetics(locale),
             getCachedOfferings(locale),
             getCachedAddons(locale),
-            getCachedItems(locale)
+            getCachedItems(locale),
+            getCachedDlcs(locale)
         ]);
 
         if (!isValidData(characterData) || !isValidData(perkData) || !isValidData(cosmeticData) || !isValidData(offeringData) || !isValidData(addonData) || !isValidData(itemData) || !playerName) {
@@ -149,7 +159,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             cosmeticData,
             offeringData,
             addonData,
-            itemData
+            itemData,
+            dlcData
         }
 
         const character = characterData[characterIndex]
@@ -169,7 +180,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             });
 
         const charPortraitBuffer = await generateCharacterPortrait(character);
-        const dbdInventoryBuffer = await generateDbdInventory(inventoryItems, userCharacterData, dbdRatings, consumedCells, playerName, characterIndex, isGDPR, gameData, interaction.user, locale);
+        const dbdInventoryBuffer = await generateDbdInventory(inventoryItems, userCharacterData, dbdRatings, consumedCells, playerName, characterIndex, isGDPR, gameData, interaction.user, locale, entitlements);
 
         if (!dbdInventoryBuffer) {
             await sendErrorMessage(interaction, t('inventory_command.failed_generating', locale, ELocaleNamespace.Errors));
@@ -204,7 +215,8 @@ async function generateDbdInventory(
     isGDPR: boolean,
     gameData: GameData,
     user: User,
-    locale: Locale
+    locale: Locale,
+    entitlements: DbdEntitlements[] | DbdApiEntitlements | null
 ): Promise<Buffer | null> {
     try {
         const props = {
@@ -217,7 +229,8 @@ async function generateDbdInventory(
             playerName,
             isGDPR,
             locale,
-            user
+            user,
+            entitlements
         };
 
         return renderBrowserBuffer(DbdInventory, 'src/ui/components/DbdInventory/DbdInventory.css', 1634, 899, props);
