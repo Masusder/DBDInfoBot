@@ -181,7 +181,7 @@
     "description": "Подробная сводка инвентаря для выбранного персонажа."
   },
   "support_command": {
-    "support": "Support",
-    "join_server": "Join the support server:"
+    "support": "Поддержка",
+    "join_server": "Присоединитесь к серверу поддержки:"
   }
 }
