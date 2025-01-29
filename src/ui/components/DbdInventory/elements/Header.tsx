@@ -49,6 +49,9 @@ function Header({ character, playerName, locale, user }: HeaderProps) {
                     </div>
                 </div>
                 <div className="inventory-generation-container">
+                    <div className="inventory-generation-date">
+                        {formattedDate}
+                    </div>
                     <div className="inventory-generation-text-container">
                         <div className="inventory-generation-title">
                             {t('dbd_inventory.header.generated_by', locale, ELocaleNamespace.UI)}
@@ -68,9 +71,6 @@ function Header({ character, playerName, locale, user }: HeaderProps) {
                                 {user.username}
                             </div>
                         </div>
-                    </div>
-                    <div className="inventory-generation-date">
-                        {formattedDate}
                     </div>
                 </div>
             </div>

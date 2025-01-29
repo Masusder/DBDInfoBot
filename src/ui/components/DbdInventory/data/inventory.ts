@@ -43,26 +43,40 @@ export function parseInventoryData(
     const estimatedValue = { Cells: 0, Shards: 0 };
 
     const { cosmeticData, dlcData } = gameData;
+    const ownedItems = new Set(inventory.map((item) => item.objectId));
 
-    for (const defaultItemId of character.DefaultItems) {
+    const updateStats = (cosmetic: Cosmetic, id: string) => {
+        const { Rarity, Category } = cosmetic;
+        ensureStat(rarityStats, Rarity);
+        ensureStat(categoryStats, Category);
+        rarityStats[Rarity].owned++;
+        rarityStats[Rarity].ownedItems.push(id);
+        categoryStats[Category].owned++;
+        categoryStats[Category].ownedItems.push(id);
+    };
+
+    const updateEstimatedValue = (prices?: Record<string, number>[]) => {
+        if (!prices) return;
+        for (const price of prices) {
+            for (const [key, value] of Object.entries(price)) {
+                if (key in estimatedValue) {
+                    estimatedValue[key as "Cells" | "Shards"] += value as number;
+                }
+            }
+        }
+    };
+
+    character.DefaultItems.forEach((defaultItemId) => {
         const defaultItem = cosmeticData[defaultItemId];
         if (defaultItem) {
-            const { Rarity, Category } = defaultItem;
-
-            ensureStat(rarityStats, Rarity);
-            ensureStat(categoryStats, Category);
-
-            rarityStats[Rarity].owned++;
-            rarityStats[Rarity].ownedItems.push(defaultItemId);
-
-            categoryStats[Category].owned++;
-            categoryStats[Category].ownedItems.push(defaultItemId);
+            ownedItems.add(defaultItemId); // Default items aren't in inventory
+            updateStats(defaultItem, defaultItemId);
         }
-    }
+    });
 
     const dlcIdToCosmeticIdMap: Record<string, string[]> = {};
-    for (const [key, cosmetic] of Object.entries(cosmeticData)) {
-        if ((cosmetic as Cosmetic).Character.toString() !== characterIndex) continue;
+    Object.entries(cosmeticData).forEach(([id, cosmetic]) => {
+        if ((cosmetic as Cosmetic).Character.toString() !== characterIndex) return;
 
         const { Rarity, Category, DlcId } = cosmetic as Cosmetic;
 
@@ -70,120 +84,67 @@ export function parseInventoryData(
         ensureStat(categoryStats, Category);
 
         rarityStats[Rarity].max++;
-        rarityStats[Rarity].items.push(key);
+        rarityStats[Rarity].items.push(id);
 
         categoryStats[Category].max++;
-        categoryStats[Category].items.push(key);
+        categoryStats[Category].items.push(id);
 
         if (!dlcIdToCosmeticIdMap[DlcId]) {
             dlcIdToCosmeticIdMap[DlcId] = [];
         }
 
-        dlcIdToCosmeticIdMap[DlcId].push(key);
-    }
+        dlcIdToCosmeticIdMap[DlcId].push(id);
+    });
 
-    const ownedDlcCosmeticIds: string[] = [];
-    if (!isGDPR && entitlements && (entitlements as DbdApiEntitlements).entitlements) {
-        (entitlements as DbdApiEntitlements).entitlements.forEach((entitlementId) => {
+    const ownedDlcCosmeticIds = new Set<string>();
+    if (!isGDPR && entitlements) {
+        let entitlementList: string[];
+        if (Array.isArray(entitlements)) {
+            entitlementList = entitlements.flatMap((e) =>
+                e.objectId === "ownedEntitlements"
+                    ? Object.values(e.data).flatMap((platform) =>
+                        platform?.entitlements?.filter((ent) => ent.isEntitled).map((ent) => ent.productId) || []
+                    )
+                    : []
+            );
+        } else {
+            entitlementList = (entitlements as DbdApiEntitlements).entitlements;
+        }
+
+        entitlementList.forEach((entitlementId) => {
             const dlc = findDlcByEntitlementId(dlcData, entitlementId);
-
             if (dlc) {
-                const dlcCosmeticIds = dlcIdToCosmeticIdMap[dlc.DlcId];
-
-                if (dlcCosmeticIds && dlcCosmeticIds.length > 0) {
-                    ownedDlcCosmeticIds.push(...dlcCosmeticIds);
-                }
+                dlcIdToCosmeticIdMap[dlc.DlcId]?.forEach((id) => ownedDlcCosmeticIds.add(id));
             }
         });
-    } else if (entitlements && Array.isArray(entitlements)) {
-        entitlements.forEach((entitlementType) => {
-            if (entitlementType.objectId === "ownedEntitlements") {
-                Object.values(entitlementType.data).forEach((platformEntitlementData) => {
-                    if (platformEntitlementData && Array.isArray(platformEntitlementData.entitlements)) {
-                        platformEntitlementData.entitlements.forEach((entitlement) => {
-                            if (entitlement.isEntitled) {
-                                const dlc = findDlcByEntitlementId(dlcData, entitlement.productId);
-
-                                if (dlc) {
-                                    const dlcCosmeticIds = dlcIdToCosmeticIdMap[dlc.DlcId];
-
-                                    if (dlcCosmeticIds && dlcCosmeticIds.length > 0) {
-                                        ownedDlcCosmeticIds.push(...dlcCosmeticIds);
-                                    }
-                                }
-                            }
-                        });
-                    }
-                });
-            }
-        })
     }
 
-    const ownedItems = new Set(inventory.map((item) => item.objectId));
-
-    for (const { objectId: id } of inventory) {
+    inventory.forEach(({ objectId: id }) => {
         const cosmetic = cosmeticData[id];
-        if (!cosmetic || cosmetic.Character.toString() !== characterIndex) continue;
-
-        const { Rarity, Category, Prices } = cosmetic;
-
-        rarityStats[Rarity].owned++;
-        rarityStats[Rarity].ownedItems.push(id);
-
-        categoryStats[Category].owned++;
-        categoryStats[Category].ownedItems.push(id);
-
-        if (Prices) {
-            for (const price of Prices) {
-                for (const [key, value] of Object.entries(price)) {
-                    if (key in estimatedValue) {
-                        estimatedValue[key as "Cells" | "Shards"] += value as number;
-                    }
-                }
-            }
-        }
-    }
+        if (!cosmetic || cosmetic.Character.toString() !== characterIndex) return;
+        updateStats(cosmetic, id);
+        updateEstimatedValue(cosmetic.Prices);
+    });
 
     ownedDlcCosmeticIds.forEach((id) => {
-        const cosmetic = cosmeticData[id];
-
-        if (!cosmetic || cosmetic.Character.toString() !== characterIndex) return;
-
-        const { Rarity, Category, Prices } = cosmetic;
-
-        ensureStat(rarityStats, Rarity);
-        rarityStats[Rarity].owned++;
-        rarityStats[Rarity].ownedItems.push(id);
-
-        ensureStat(categoryStats, Category);
-        categoryStats[Category].owned++;
-        categoryStats[Category].ownedItems.push(id);
-
-        if (Prices) {
-            for (const price of Prices) {
-                for (const [key, value] of Object.entries(price)) {
-                    if (key in estimatedValue) {
-                        estimatedValue[key as "Cells" | "Shards"] += value as number;
-                    }
-                }
+        if (!ownedItems.has(id)) {
+            const cosmetic = cosmeticData[id];
+            if (cosmetic && cosmetic.Character.toString() === characterIndex) {
+                ownedItems.add(id); // Items we got via DLC won't appear in your inventory, add it explicitly
+                updateStats(cosmetic, id);
+                updateEstimatedValue(cosmetic.Prices);
             }
         }
     });
 
-    const outfitStats = categoryStats['outfit'];
-    if (outfitStats && outfitStats.items.length > 0) {
-        for (const outfitId of outfitStats.items) {
+    const outfitStats = categoryStats["outfit"];
+    if (outfitStats) {
+        outfitStats.items.forEach((outfitId) => {
             const outfit = cosmeticData[outfitId];
-            const { OutfitItems, Category, Rarity } = outfit;
-
-            if (OutfitItems.every((itemId: string) => ownedItems.has(itemId))) {
-                rarityStats[Rarity].owned++;
-                rarityStats[Rarity].ownedItems.push(outfitId);
-
-                categoryStats[Category].owned++;
-                categoryStats[Category].ownedItems.push(outfitId);
+            if (outfit.OutfitItems.every((itemId: string) => ownedItems.has(itemId))) {
+                updateStats(outfit, outfitId);
             }
-        }
+        });
     }
 
     return {

@@ -11,7 +11,7 @@ export interface GameData {
     offeringData: Record<string, Offering>;
     itemData: Record<string, Item>;
     perkData: Record<string, Perk>;
-    cosmeticData: any;
+    cosmeticData: Record<string, Cosmetic>;
     characterData: Record<string, Character>;
     dlcData: Record<string, DLC>;
 }

@@ -147,7 +147,7 @@ button:focus-visible {
     display: flex;
     flex-direction: column;
     align-items: center;
-    line-height: 35px;
+    line-height: 36px;
 }
 
 .inventory-generation-title {
@@ -157,7 +157,7 @@ button:focus-visible {
 }
 
 .inventory-generation-username {
-    font-size: 36px;
+    font-size: 32px;
     font-weight: 900;
     background: linear-gradient(155deg, #E3E3E3 0%, #0095FF 200%);
     -webkit-background-clip: text;
@@ -167,7 +167,7 @@ button:focus-visible {
 .inventory-generation-avatar {
     border: 1px solid hsl(0deg 0% 100% / 10%);
     width: auto;
-    height: 32px;
+    height: 28px;
     border-radius: 100%;
 }
 
@@ -190,7 +190,7 @@ button:focus-visible {
     flex-direction: column;
     gap: 2px;
     height: 635px;
-    background: #1c1c1c;
+    background: linear-gradient(to bottom, #000000 -90%, #1c1c1c);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 16px 0 0 16px;
     padding: 10px;
@@ -432,7 +432,7 @@ button:focus-visible {
 
 .stability-progressbar {
     width: 400px;
-    height: 8px;
+    height: 10px;
     background: #D9D9D9;
     border-radius: 1000px;
 }
@@ -440,7 +440,7 @@ button:focus-visible {
 .stability-progressbar-progress {
     position: absolute;
     max-width: 400px;
-    height: 8px;
+    height: 10px;
     border-radius: 1000px;
 }
 
@@ -462,14 +462,15 @@ button:focus-visible {
 }
 
 .stability-percentage {
+    display: flex;
+    width: 100%;
     position: absolute;
     z-index: 1;
-    left: 50%;
-    transform: translateX(-50%);
     color: black;
     font-size: 8px;
     font-weight: 950;
-    bottom: -2.5px;
+    justify-content: center;
+    align-items: center;
 }
 
 .mmr-split-progressbar-container {
@@ -568,7 +569,7 @@ button:focus-visible {
     justify-items: center;
     padding: 10px;
     width: auto;
-    height: 235px;
+    height: auto;
     align-items: center;
     background: rgba(22, 22, 22, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.1);
