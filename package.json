@@ -14,7 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@the-convocation/twitter-scraper": "^0.14.1",
+    "@the-convocation/twitter-scraper": "^0.15.1",
     "axios": "^1.7.9",
     "canvas": "^3.0.1",
     "discord.js": "^14.17.3",
