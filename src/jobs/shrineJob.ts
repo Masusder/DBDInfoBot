@@ -1,4 +1,5 @@
 import {
+    ChannelType,
     Client,
     TextChannel
 } from "discord.js";
@@ -72,8 +73,17 @@ async function isShrineMessageSent(currentShrine: any, client: Client): Promise<
 }
 
 async function sendShrine(client: Client) {
-    const channel = client.channels.cache.get(Constants.DBDLEAKS_SHRINE_CHANNEL_ID) as TextChannel;
-    if (!channel) return;
+    const channel = client.channels.cache.get(Constants.DBDLEAKS_SHRINE_CHANNEL_ID);
+
+    if (!channel) {
+        console.error("Not found Shrine channel.");
+        return;
+    }
+
+    if (channel.type !== ChannelType.GuildAnnouncement) {
+        console.error("Shrine: Invalid channel type. Only Announcement Channel is supported.")
+        return;
+    }
 
     await executeShrine({} as any, channel);
 }

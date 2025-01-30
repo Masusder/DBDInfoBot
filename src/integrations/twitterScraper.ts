@@ -1,10 +1,14 @@
-import { TextChannel } from "discord.js";
+import {
+    ChannelType,
+    NewsChannel
+} from "discord.js";
 import {
     Scraper,
     Tweet
 } from '@the-convocation/twitter-scraper';
 import Constants from "@constants";
 import client from "../client";
+import publishMessage from "@utils/discord/publishMessage";
 
 const scraper = new Scraper();
 
@@ -45,13 +49,13 @@ export async function loginToTwitter() {
  * Checks if a tweet URL has already been posted in the specified Discord channel.
  *
  * @async
- * @param {TextChannel} channel - The Discord channel where the check is performed.
+ * @param {NewsChannel} channel - The Discord channel where the check is performed.
  * @param {string} tweetUrl - The tweet URL to check for in the channel.
  * @returns {Promise<boolean>} - A promise that resolves to `true` if the URL has been posted, `false` otherwise.
  * @throws {Error} If there is an error fetching the channel messages.
  *
  */
-async function hasUrlBeenPosted(channel: TextChannel, tweetUrl: string): Promise<boolean> {
+async function hasUrlBeenPosted(channel: NewsChannel, tweetUrl: string): Promise<boolean> {
     try {
         const messages = await channel.messages.fetch({ limit: 10 });
         const urlsInMessages = messages
@@ -123,42 +127,61 @@ export async function getLatestTweetLink() {
 
     try {
         const isLoggedIn = await ensureLoggedIn();
-        const tweetsAsyncGenerator: AsyncGenerator<Tweet> = scraper.getTweets('DeadbyDaylight', 1);
-
-        const { value: latestTweet, done } = await tweetsAsyncGenerator.next();
-
-        if (!done && latestTweet && isLoggedIn) {
-            const tweetUrl = latestTweet.permanentUrl;
-
-            if (!tweetUrl) {
-                console.error("Tweet URL was undefined. Skipping this tweet.");
-                return;
-            }
-
-            const vxTweetUrl: string = convertToVxTwitter(tweetUrl);
-            if (vxTweetUrl !== latestTweetLink) {
-                latestTweetLink = vxTweetUrl;
-                const channel = client.channels.cache.get(Constants.DBDLEAKS_DBD_NEWS_CHANNEL_ID) as TextChannel;
-                if (channel) {
-                    const urlAlreadyPosted: boolean = await hasUrlBeenPosted(channel, vxTweetUrl);
-
-                    if (!urlAlreadyPosted) {
-                        const message = `<@&${Constants.DBDLEAKS_NEWS_NOTIFICATION_ROLE}>\n${vxTweetUrl}`;
-                        await channel.send(message);
-                    } else {
-                        console.log('This Tweet has already been posted.');
-                    }
-                } else {
-                    console.error('Not found specified text channel. Unable to send tweet.');
-                }
-            } else {
-                console.log('All good. Tweet URL remains the same.');
-            }
-        } else {
-            console.error('No new tweets found.');
+        if (!isLoggedIn) {
+            console.error("Not logged in. Cannot fetch tweets.");
+            return;
         }
+
+        const tweetsAsyncGenerator: AsyncGenerator<Tweet> = scraper.getTweets('DeadbyDaylight', 1);
+        const tweetResult = await tweetsAsyncGenerator.next();
+
+        if (!tweetResult || tweetResult.done || !tweetResult.value) {
+            console.log('No new tweets found.');
+            return;
+        }
+
+        const latestTweet = tweetResult.value;
+        const tweetUrl = latestTweet.permanentUrl;
+
+        if (!tweetUrl) {
+            console.warn("Tweet URL is undefined. Skipping this tweet.");
+            return;
+        }
+
+        const vxTweetUrl = convertToVxTwitter(tweetUrl);
+
+        if (vxTweetUrl === latestTweetLink) {
+            console.log('No new tweets found. URL remains the same.');
+            return;
+        }
+
+        const channel = client.channels.cache.get(Constants.DBDLEAKS_DBD_NEWS_CHANNEL_ID) as NewsChannel;
+        if (!channel) {
+            console.error('Text channel not found. Unable to send tweet.');
+            return;
+        }
+
+        if (channel.type !== ChannelType.GuildAnnouncement) {
+            console.error('Twitter News: Invalid channel type. Only Announcement Channel is supported.');
+            return;
+        }
+
+        const urlAlreadyPosted = await hasUrlBeenPosted(channel, vxTweetUrl);
+        if (urlAlreadyPosted) {
+            console.log('This Tweet has already been posted.');
+            return;
+        }
+
+        latestTweetLink = vxTweetUrl;
+
+        const content = `<@&${Constants.DBDLEAKS_NEWS_NOTIFICATION_ROLE}>\n${vxTweetUrl}`;
+        const message = await channel.send(content);
+
+        await publishMessage(message, channel);
+
+        console.log('New tweet posted successfully.');
     } catch (error) {
-        console.error('Error fetching tweets:', error);
+        console.error('Error fetching or posting tweets:', error);
     } finally {
         isFetchingTweets = false;
     }

@@ -381,8 +381,9 @@ button:focus-visible {
 .cosmetic-icon {
     background-size: contain;
     background-position: center;
+    clip-path: inset(0 12px 0px 11px);
     position: relative;
-    width: 80%;
+    width: 86%; /* Exact % to match of in-game bounds */
     height: auto;
     object-fit: contain;
     left: 50%;
@@ -395,6 +396,14 @@ button:focus-visible {
     width: 26px;
     left: 22px;
     top: 8px;
+    opacity: 0.85;
+}
+
+.visceral-overlay {
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 128px;
 }
 
 .additional-cosmetics-count {
