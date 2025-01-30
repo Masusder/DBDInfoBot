@@ -17,6 +17,10 @@ import { GameData } from "@ui/components/DbdInventory/models";
 import { DbdCharacterItem } from "@commands/inventory/schemas/characterDataSchema";
 import { Character } from "@tps/character";
 import { InventoryItem } from "@commands/inventory/schemas/inventorySchema";
+import {
+    DbdApiEntitlements,
+    DbdEntitlements
+} from "@commands/inventory/schemas/entitlementsSchema";
 
 type CustomizationProps = {
     gameData: GameData;
@@ -24,6 +28,8 @@ type CustomizationProps = {
     inventory: InventoryItem[];
     character: Character;
     characterIndex: string;
+    entitlements: DbdEntitlements[] | DbdApiEntitlements | null
+    isGDPR: boolean;
 }
 
 function Customization({
@@ -32,8 +38,10 @@ function Customization({
     inventory,
     character,
     characterIndex,
+    entitlements,
+    isGDPR
 }: CustomizationProps) {
-    const parsedInventory = parseInventoryData(gameData.cosmeticData, inventory, characterIndex, character);
+    const parsedInventory = parseInventoryData(gameData, inventory, characterIndex, character, entitlements, isGDPR);
 
     const dominantRarity = calculateDominantRarity(parsedInventory.rarityStats);
 

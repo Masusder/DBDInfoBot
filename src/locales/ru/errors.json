@@ -54,7 +54,7 @@
     "unauthorized": "Только тот, кто применил команду, может сделать это.",
     "error_occurred": "Произошла ошибка",
     "try_again_later": "Пожалуйста, повторите попытку позже.",
-    "fatal_error_generic": "Fatal error has occurred while executing command."
+    "fatal_error_generic": "При выполнении команды произошла критическая ошибка."
   },
   "news_command": {
     "error_retrieving_data": "Не удалось получить последние новости.",

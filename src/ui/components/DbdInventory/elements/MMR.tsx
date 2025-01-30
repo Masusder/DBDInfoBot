@@ -72,12 +72,14 @@ function MMR({ ratings, character, locale }: MMRProps) {
                 <div className="mmr-title">{t('dbd_inventory.mmr.mmr_rating', locale, ELocaleNamespace.UI)}</div>
                 <div
                     className="stability-text-unstable">{t('dbd_inventory.mmr.unstable', locale, ELocaleNamespace.UI)}</div>
-                <div className="stability-percentage">{stabilityPercentage.toFixed(2)}%</div>
-                <div
-                    className="stability-progressbar-progress"
-                    style={{ background: percentageToColor(stabilityPercentage), width: stabilityPercentage + '%' }}
-                ></div>
-                <div className="stability-progressbar"></div>
+                <div style={{ position: "relative" }}>
+                    <div className="stability-percentage">{stabilityPercentage.toFixed(2)}%</div>
+                    <div
+                        className="stability-progressbar-progress"
+                        style={{ background: percentageToColor(stabilityPercentage), width: stabilityPercentage + '%' }}
+                    ></div>
+                    <div className="stability-progressbar"></div>
+                </div>
             </div>
             <SplitProgressbar peakMMR={peakMMR} mu={mu}/>
             <div style={{ display: "flex", flexDirection: "row", marginTop: '10px', gap: "5px" }}>
@@ -116,7 +118,8 @@ function MMR({ ratings, character, locale }: MMRProps) {
                 </div>
             </div>
             <div className="mmr-last-update">
-                <div className="mmr-last-update-title">{t('dbd_inventory.mmr.last_update', locale, ELocaleNamespace.UI)}</div>
+                <div
+                    className="mmr-last-update-title">{t('dbd_inventory.mmr.last_update', locale, ELocaleNamespace.UI)}</div>
                 <span
                     className="mmr-last-update-date">{new Date(characterRating.data.lastUpdate).toLocaleString()}</span>
             </div>

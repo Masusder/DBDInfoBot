@@ -18,6 +18,10 @@ import {
     User
 } from "discord.js";
 import { DbdPlayerName } from "@commands/inventory/schemas/playerNameSchema";
+import {
+    DbdApiEntitlements,
+    DbdEntitlements
+} from "@commands/inventory/schemas/entitlementsSchema";
 
 type DbdInventoryProps = {
     inventory: InventoryItem[];
@@ -30,6 +34,7 @@ type DbdInventoryProps = {
     isGDPR: boolean;
     locale: Locale;
     user: User;
+    entitlements: DbdEntitlements[] | DbdApiEntitlements | null
 }
 
 function DbdInventory({
@@ -42,7 +47,8 @@ function DbdInventory({
     playerName,
     isGDPR,
     locale,
-    user
+    user,
+    entitlements
 }: DbdInventoryProps) {
     const { characterData } = gameData;
 
@@ -54,8 +60,9 @@ function DbdInventory({
             <Header character={character} playerName={playerName} locale={locale} user={user}/>
             <div className="inventory-content">
                 <Customization gameData={gameData} profileCharacterData={profileCharacterData}
-                               inventory={inventory} character={character} characterIndex={characterIndex}/>
-                <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+                               inventory={inventory} character={character} characterIndex={characterIndex}
+                               entitlements={entitlements} isGDPR={isGDPR}/>
+                <div style={{ display: "flex", flexDirection: "column", gap: "15px", justifyContent: "center" }}>
                     {isGDPR ? <MMR ratings={ratings} character={character} locale={locale}/> : null}
                     <ItemsAddons profileCharacterData={profileCharacterData} gameData={gameData} character={character}/>
                     <Offerings profileCharacterData={profileCharacterData} gameData={gameData}/>

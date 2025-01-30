@@ -34,6 +34,7 @@ export interface Cosmetic {
     Rarity: string;
     Prefix?: string | null;
     TomeId?: string | null;
+    DlcId: string;
     OutfitItems: string[];
     DiscountPercentage: number;
     IsDiscounted: boolean;

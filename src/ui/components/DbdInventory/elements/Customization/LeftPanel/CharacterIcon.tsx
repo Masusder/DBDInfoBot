@@ -14,16 +14,17 @@ function CharacterIcon({ character, profileCharacterData }: CharacterIconProps) 
     const hasLegacyPrestige = profileCharacterData?.data?.legacyPrestigeLevel !== undefined &&
         profileCharacterData.data.legacyPrestigeLevel >= 3;
 
+    const prestigeLevel = profileCharacterData?.data.prestigeLevel;
+
     return (
         <div style={{ position: "relative" }}>
             <img className="character-icon"
                  style={{ backgroundImage: `url(${hasLegacyPrestige ? combineBaseUrlWithPath('/images/Other/CharPortrait_Legacy.png') : Role[role].charPortrait})` }}
                  src={combineBaseUrlWithPath(character.IconFilePath)} alt="" width="200px"/>
 
-                <img className="prestige-icon"
-                     src={combineBaseUrlWithPath("/images/Prestige/PrestigeIcon_" + profileCharacterData?.data.prestigeLevel + ".png")}
-                     alt="Prestige Icon"/>
-
+            {prestigeLevel && prestigeLevel > 0 && prestigeLevel <= 100 ? <img className="prestige-icon"
+                 src={combineBaseUrlWithPath("/images/Prestige/PrestigeIcon_" + prestigeLevel + ".png")}
+                 alt="Prestige Icon"/> : null}
         </div>
     );
 }

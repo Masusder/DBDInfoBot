@@ -7,6 +7,7 @@ import {
 import { Rarities } from "@data/Rarities";
 import { combineBaseUrlWithPath } from "@utils/stringUtils";
 import { Cosmetic } from "@tps/cosmetic";
+import icons from "@resources/base64Icons.json";
 
 const MAX_ITEMS = 20;
 
@@ -60,6 +61,9 @@ function CosmeticItem({ cosmetic, index }: { cosmetic: any, index: number }) {
                 <img
                     className="cosmetic-icon"
                     src={combineBaseUrlWithPath(cosmetic.IconFilePathList)} alt=""/>
+                {cosmetic.Prefix === "Visceral" ?
+                    <img className="visceral-overlay" src={icons.VISCERAL_OVERLAY} alt="Visceral overlay"/>
+                    : null}
                 {cosmetic.Unbreakable ?
                     <img className="linked-set-icon" src={combineBaseUrlWithPath("/images/Other/CosmeticSetIcon.png")}
                          alt=""/>

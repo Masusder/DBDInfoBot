@@ -9,7 +9,7 @@ import {
     EmbedBuilder,
     Locale,
     Message,
-    TextChannel
+    NewsChannel
 } from 'discord.js';
 import i18next from "i18next";
 import { getCachedShrine } from "@services/shrineService";
@@ -46,6 +46,7 @@ import {
 import { ELocaleNamespace } from '@tps/enums/ELocaleNamespace';
 import { ThemeColors } from "@constants/themeColors";
 import { Currencies } from "@data/Currencies";
+import publishMessage from "@utils/discord/publishMessage";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -61,7 +62,7 @@ type CorrectlyCasedPerkData = {
     [key: string]: { bloodpoints: number; shards: number[] };
 };
 
-export async function execute(interaction: ChatInputCommandInteraction | Message, channel?: TextChannel) {
+export async function execute(interaction: ChatInputCommandInteraction | Message, channel?: NewsChannel) {
     const locale = interaction instanceof ChatInputCommandInteraction ? interaction.locale : Locale.EnglishUS;
 
     try {
@@ -180,8 +181,8 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
                 }],
                 components: [row]
             });
-        } else {
-            await channel?.send({
+        } else if (channel) {
+            const message = await channel.send({
                 content: `<@&${Constants.DBDLEAKS_SHRINE_NOTIFICATION_ROLE}>`,
                 embeds: [embed],
                 files: [{
@@ -190,6 +191,8 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
                 }],
                 components: [row]
             });
+
+            await publishMessage(message, channel);
         }
     } catch (error) {
         console.error("Error executing shrine command:", error);

@@ -9,5 +9,6 @@ export enum EGameData {
     NewsData = 'newsData',
     MapsData = 'mapsData',
     SpecialEventData = 'specialEventData',
-    RiftData = 'riftData'
+    RiftData = 'riftData',
+    DlcData = 'dlcData',
 }
