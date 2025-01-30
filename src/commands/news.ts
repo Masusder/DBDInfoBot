@@ -49,8 +49,8 @@ export const data = i18next.isInitialized
         .setNameLocalizations(commandLocalizationHelper('news_command.name'))
         .setDescription(i18next.t('news_command.description', { lng: 'en' }))
         .setDescriptionLocalizations(commandLocalizationHelper('news_command.description'))
-        .setContexts([0,1,2])
-        .setIntegrationTypes([0,1])
+        .setContexts([0, 1, 2])
+        .setIntegrationTypes([0, 1])
     : undefined;
 
 interface INewsDataTable {
@@ -131,7 +131,12 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             totalPages: number
         ): EmbedBuilder => {
             const embed = new EmbedBuilder()
-                .setFooter({ text: `${t('generic_pagination.page_number.0', locale, ELocaleNamespace.Messages)} ${currentPage} / ${totalPages}` });
+                .setFooter({
+                    text: t('generic_pagination.page_number', locale, ELocaleNamespace.Messages, {
+                        current_page: currentPage.toString(),
+                        total_pages: totalPages.toString()
+                    })
+                });
 
             pageItems.forEach((newsItem, index) => {
                 const formattedDate = new Date(adjustForTimezone(newsItem.startDate)).toLocaleDateString();
@@ -187,7 +192,8 @@ async function createNewsEmbed(
     isLastChunk: boolean = false,
     locale: Locale,
     newsDataTable: INewsDataTable,
-    isSticky: boolean) {
+    isSticky: boolean
+) {
 
     const embed = new EmbedBuilder()
         .setDescription(textContent)
@@ -233,7 +239,11 @@ function createNewsButton(callToAction: CallToAction, locale: Locale): ActionRow
     return new ActionRowBuilder<ButtonBuilder>().addComponents(button);
 }
 
-async function sendNewsContent(newsItem: NewsItem, interactionOrChannel: ChatInputCommandInteraction | StringSelectMenuInteraction | TextChannel | NewsChannel, locale: Locale) {
+async function sendNewsContent(
+    newsItem: NewsItem,
+    interactionOrChannel: ChatInputCommandInteraction | StringSelectMenuInteraction | TextChannel | NewsChannel,
+    locale: Locale
+) {
     const formattedText = newsItem.newsContent?.content
         .map(content => content.text ? formatHtmlToDiscordMarkdown(content.text) : "")
         .join("\n\n");
@@ -371,7 +381,11 @@ async function sendNewsContent(newsItem: NewsItem, interactionOrChannel: ChatInp
     }
 }
 
-export async function batchSendNews(channel: TextChannel | NewsChannel, dispatchedNewsIds: string[], newsData: NewsData) {
+export async function batchSendNews(
+    channel: TextChannel | NewsChannel,
+    dispatchedNewsIds: string[],
+    newsData: NewsData
+) {
     try {
         const newsList = newsData.news;
 

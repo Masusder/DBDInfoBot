@@ -18,8 +18,7 @@ let cachedNewsIds: Set<string> = new Set();
 export async function startNewsJob() {
     // No need to check more frequent than 10 minutes
     // as news are cached for exactly that long
-    // 5 additional minutes just in case
-    cron.schedule('*/15 * * * *', async() => {
+    cron.schedule('*/10 * * * *', async() => {
         await resolveNewsArticles();
     });
 }
