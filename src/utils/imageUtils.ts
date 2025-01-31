@@ -87,7 +87,7 @@ export async function createStoreCustomizationIcons(storeCustomizationItems: ISt
 
         const [bgImage, iconImg] = await Promise.all([backgroundImage, iconImage]);
 
-        const canvas = createCanvas(bgImage.width, bgImage.height);
+        const canvas = createCanvas(512, 512);
         const ctx = canvas.getContext('2d');
 
         ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
