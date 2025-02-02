@@ -1,59 +1,59 @@
 {
   "info_command": {
-    "name": "info",
-    "description": "Retrieve detailed information about game features.",
+    "name": "Info",
+    "description": "Erhalte detaillierte Informationen über Spielfunktionen.",
     "options": {
       "type": {
-        "name": "type",
-        "description": "Specify the type of game feature you want information about.",
+        "name": "Art",
+        "description": "Gib die Art der Spielfunktion an, zu der Du Informationen möchtest.",
         "choices": {
-          "perk": "Perk",
+          "perk": "Talent",
           "addon": "Add-on",
-          "item": "Item",
-          "offering": "Offering",
-          "character": "Character",
+          "item": "Gegenstand",
+          "offering": "Opfergabe",
+          "character": "Charakter",
           "cosmetic": "Cosmetic",
           "build": "Build",
-          "collection": "Collection",
-          "rift": "Rift"
+          "collection": "Sammlung",
+          "rift": "Spalt"
         }
       },
       "name": {
-        "name": "name",
-        "description": "Specify the name of the game feature you want information about."
+        "name": "Name",
+        "description": "Gib den Namen der Spielfunktion an, zu der Du Informationen möchtest."
       }
     }
   },
   "shrine_command": {
-    "name": "shrine",
-    "description": "Check weekly Shrine of Secrets."
+    "name": "Schrein",
+    "description": "Überprüfe den wöchentlichen Schrein der Geheimnisse."
   },
   "list_command": {
-    "name": "list",
-    "description": "Retrieve list of specified game feature items.",
+    "name": "Liste",
+    "description": "Erhalte eine Liste der angegebenen Spielfunktionsgegenstände.",
     "cosmetics_subcommand": {
-      "name": "cosmetics",
-      "description": "Retrieve list of cosmetics.",
+      "name": "kosmetische Gegenstände",
+      "description": "Erhalte eine List der kosmetischen Gegenstände.",
       "options": {
         "character": {
-          "name": "character",
-          "description": "Name of the character."
+          "name": "Charakter",
+          "description": "Name des Charakters."
         },
         "purchasable": {
-          "name": "purchasable",
-          "description": "Specify whether cosmetic should be available for purchase or not."
+          "name": "käuflich",
+          "description": "Gib an, ob der kosmetische Gegenstand käuflich ist oder nicht."
         },
         "linked": {
           "name": "linked",
           "description": "Specify whether cosmetic should be a linked set or not."
         },
         "rarity": {
-          "name": "rarity",
-          "description": "Specify rarity of the cosmetic."
+          "name": "Seltenheit",
+          "description": "Gib die Seltenheit des kosmetischen Gegenstandes an."
         },
         "type": {
-          "name": "type",
-          "description": "Specify type of the cosmetic."
+          "name": "Typ",
+          "description": "Gib den Typ des kosmetischen Gegenstandes an."
         },
         "inclusion_version": {
           "name": "inclusion_version",
@@ -64,16 +64,16 @@
           "description": "Specify role cosmetic belongs to."
         },
         "on_sale": {
-          "name": "on_sale",
-          "description": "Specify whether cosmetic should be currently on sale."
+          "name": "im_Angebot",
+          "description": "Gib an, ob der kosmetische Gegenstand im Angebot ist."
         },
         "limited": {
-          "name": "limited",
-          "description": "Specify whether cosmetic is available for purchase for a limited time."
+          "name": "limitiert",
+          "description": "Gib an, ob der kosmetische Gegenstand zeitlich begrenzt erwerbbar ist."
         },
         "search": {
-          "name": "search",
-          "description": "Search for cosmetic by its name/description/collection."
+          "name": "suchen",
+          "description": "Suche kosmetische Gegenstände nach name/Beschreibung/Kollektion."
         }
       }
     },
@@ -82,19 +82,19 @@
       "description": "Retrieve list of builds.",
       "options": {
         "role": {
-          "name": "role",
+          "name": "Rolle",
           "description": "Role for the build.",
           "choices": {
             "killer": "Killer",
-            "survivor": "Survivor"
+            "survivor": "Überlebender"
           }
         },
         "page": {
-          "name": "page",
-          "description": "Page number (default is 1)."
+          "name": "Seite",
+          "description": "Seitenzahl"
         },
         "title": {
-          "name": "title",
+          "name": "Titel",
           "description": "Title of the build."
         },
         "category": {
@@ -139,7 +139,7 @@
   },
   "news_command": {
     "name": "Neuigkeiten",
-    "description": "Erhalte aktuelle in-game Nachrichten."
+    "description": "Erhalte aktuelle Ingame-Nachrichten."
   },
   "stats_command": {
     "name": "Statistiken",
