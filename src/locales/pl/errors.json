@@ -54,7 +54,8 @@
     "unauthorized": "Tylko osoba, która użyła polecenia, może to zrobić.",
     "error_occurred": "Wystąpił błąd",
     "try_again_later": "Spróbuj ponownie później.",
-    "fatal_error_generic": "Wystąpił krytyczny błąd podczas wykonywania polecenia."
+    "fatal_error_generic": "Wystąpił krytyczny błąd podczas wykonywania polecenia.",
+    "failed_load_game_data": "Failed to load game data."
   },
   "news_command": {
     "error_retrieving_data": "Nie udało się pobrać najnowszych wiadomości.",
