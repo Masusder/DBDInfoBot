@@ -54,7 +54,8 @@
     "unauthorized": "Nur die Person, die den Befehlt genutzt hat, kann dies tun.",
     "error_occurred": "Es ist ein Fehler aufgetreten",
     "try_again_later": "Bitte versuche es später nochmal.",
-    "fatal_error_generic": "Beim Ausführen des Befehls ist ein schwerer Fehler aufgetreten."
+    "fatal_error_generic": "Beim Ausführen des Befehls ist ein schwerer Fehler aufgetreten.",
+    "failed_load_game_data": "Failed to load game data."
   },
   "news_command": {
     "error_retrieving_data": "Fehler beim Abrufen der neuesten Nachrichten.",
