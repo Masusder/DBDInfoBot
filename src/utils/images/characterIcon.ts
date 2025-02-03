@@ -10,7 +10,7 @@ import { Locale } from "discord.js";
 import { Role } from "@data/Role";
 import { combineBaseUrlWithPath } from "@utils/stringUtils";
 
-async function createCharacterIcons(characterIndexes: string[], locale: Locale): Promise<Buffer[]> {
+async function generateCharacterIcons(characterIndexes: string[], locale: Locale): Promise<Buffer[]> {
     const characterData = await getCachedCharacters(locale);
 
     const layerPromises = characterIndexes.map(async(characterIndex) => {
@@ -41,4 +41,4 @@ async function createCharacterIcons(characterIndexes: string[], locale: Locale):
     return layeredIcons.filter(icon => icon !== null);
 }
 
-export default createCharacterIcons;
+export default generateCharacterIcons;

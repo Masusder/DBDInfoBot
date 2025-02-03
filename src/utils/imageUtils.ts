@@ -16,7 +16,6 @@ import { getCachedPerks } from "@services/perkService";
 import { getCachedAddons } from "@services/addonService";
 import { getCachedOfferings } from "@services/offeringService";
 import { getCachedItems } from "@services/itemService";
-import * as icons from '../resources/base64Icons.json';
 
 export const fetchAndResizeImage = async(imageUrl: string, width: number | null, height: number | null) => {
     const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
@@ -68,96 +67,15 @@ export async function layerIcons(
 
 export interface IStoreCustomizationItem {
     icon: string;
+    text: string;
+    includeText: boolean;
     background: string;
     prefix: string | null | undefined;
     isLinked: boolean;
     isLimited: boolean;
     isOnSale: boolean;
     isKillSwitched: boolean;
-}
-
-export async function createStoreCustomizationIcons(storeCustomizationItems: IStoreCustomizationItem[]): Promise<Buffer[]> {
-    const items = Array.isArray(storeCustomizationItems) ? storeCustomizationItems : [storeCustomizationItems];
-
-    const layerPromises = items.map(async(item) => {
-        const { icon, background, prefix, isLinked, isLimited, isOnSale, isKillSwitched } = item;
-
-        let backgroundImage = backgroundCache[background] ?? (backgroundCache[background] = loadImage(background));
-        let iconImage = loadImage(icon);
-
-        const [bgImage, iconImg] = await Promise.all([backgroundImage, iconImage]);
-
-        const canvas = createCanvas(512, 512);
-        const ctx = canvas.getContext('2d');
-
-        ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
-
-        if (prefix && prefix === 'Visceral') {
-            const visceralIcon = new Image();
-            visceralIcon.src = icons.VISCERAL_OVERLAY;
-
-            const visceralIconSize = Math.min(canvas.width, canvas.height);
-            ctx.drawImage(visceralIcon, 0, 0, visceralIconSize, visceralIconSize);
-        }
-
-        const iconSize = Math.min(canvas.width, canvas.height) * 0.9;
-        const x = (canvas.width - iconSize) / 2;
-        const y = (canvas.height - iconSize) / 2;
-
-        const clipLeft = 110;
-        const clipRight = 585;
-        const clipTop = 50;
-
-        ctx.save();
-
-        // In-game icons are bounded to specific area, we need to consider that
-        ctx.beginPath();
-        ctx.rect(clipLeft, clipTop, clipRight - clipLeft, canvas.height);
-        ctx.clip();
-
-        ctx.drawImage(iconImg, x, y, iconSize, iconSize);
-
-        ctx.restore();
-
-        if (isLinked) {
-            const setIcon = new Image();
-            setIcon.src = icons.LINKED_SET;
-
-            const setIconSize = Math.min(canvas.width, canvas.height) * 0.15;
-            ctx.drawImage(setIcon, 125, 45, setIconSize, setIconSize);
-        }
-
-        if (isLimited) {
-            const limitedFlag = new Image();
-            limitedFlag.src = icons.LIMITED_FLAG;
-
-            ctx.drawImage(limitedFlag, 540, 75, limitedFlag.width, limitedFlag.height);
-        }
-
-        if (isOnSale) {
-            const onSaleFlag = new Image();
-            onSaleFlag.src = icons.SALE_FLAG;
-
-            ctx.drawImage(onSaleFlag, 540, 138, onSaleFlag.width, onSaleFlag.height);
-        }
-
-        if (isKillSwitched) {
-            const killSwitchedOverlay = new Image();
-            killSwitchedOverlay.src = icons.KILLSWITCH_OVERLAY_COSMETIC;
-
-            ctx.drawImage(killSwitchedOverlay, 0, 0, killSwitchedOverlay.width, killSwitchedOverlay.height);
-        }
-
-        return canvas.toBuffer();
-    });
-
-    const layeredIcons = await Promise.all(layerPromises);
-
-    if (layeredIcons.length === 1) {
-        return [layeredIcons[0]];
-    }
-
-    return layeredIcons.filter(icon => icon !== null);
+    color: string;
 }
 
 function calculateDimensions(image: { width: number; height: number }, maxWidth: number): {

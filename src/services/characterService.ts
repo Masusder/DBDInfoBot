@@ -138,6 +138,25 @@ export async function getCharacterIndexById(id: string, locale: Locale): Promise
     return undefined;
 }
 
+/**
+ * Retrieves the character data by its id.
+ *
+ * @param id - The id of the character to search for.
+ * @param locale - The locale to fetch the character data for.
+ * @returns {Promise<string | undefined>} A promise that resolves to the character index if found, or undefined if not.
+ */
+export async function getCharacterDataById(id: string, locale: Locale): Promise<CharacterExtended | undefined> {
+    const cachedCharacters = await getCachedCharacters(locale);
+
+    for (const [key, character] of Object.entries(cachedCharacters)) {
+        if (character.Id === id) {
+            return { CharacterIndex: key, ...character };
+        }
+    }
+
+    return undefined;
+}
+
 // noinspection JSUnusedGlobalSymbols
 /**
  * Retrieves the index of a character by its name.

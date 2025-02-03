@@ -1,0 +1,103 @@
+import {
+    AutocompleteInteraction,
+    ChatInputCommandInteraction,
+    Locale,
+    NewsChannel
+} from "discord.js";
+import {
+    getBundleChoices,
+    getBundleDataById,
+} from "@services/bundleService";
+import { Bundle } from "@tps/bundle";
+import { generateBundleInteractionData } from "@commands/info/bundle/interactionData";
+import { getCachedCosmetics } from "@services/cosmeticService";
+import { isValidData } from "@utils/stringUtils";
+import { t } from "@utils/localizationUtils";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import { sendErrorMessage } from "@handlers/errorResponseHandler";
+import publishMessage from "@utils/discord/publishMessage";
+
+// region Interaction Handlers
+export async function handleBundleCommandInteraction(interaction: ChatInputCommandInteraction) {
+    const bundleId = interaction.options.getString('name');
+    const locale = interaction.locale;
+
+    if (!bundleId) return;
+
+    try {
+        await interaction.deferReply();
+
+        const [bundle, cosmeticData] = await Promise.all([
+            getBundleDataById(bundleId, locale),
+            getCachedCosmetics(locale)
+        ]);
+
+        if (!bundle || !isValidData(cosmeticData)) {
+            const message = t('general.failed_load_game_data', locale, ELocaleNamespace.Errors);
+            await sendErrorMessage(interaction, message);
+            return;
+        }
+
+        const {
+            embed,
+            attachments
+        } = await generateBundleInteractionData(bundle, cosmeticData, locale);
+
+        await interaction.editReply({
+            embeds: [embed],
+            files: attachments
+        });
+    } catch (error) {
+        console.error("Error executing bundle subcommand:", error);
+    }
+}
+
+export async function handleBatchSendBundlesToChannel(
+    bundleData: Record<string, Bundle>,
+    bundleIdsToDispatch: string[],
+    channel: NewsChannel
+) {
+    try {
+        const cosmeticData = await getCachedCosmetics(Locale.EnglishUS);
+
+        for (const bundleId of bundleIdsToDispatch) {
+            const bundle = bundleData[bundleId];
+
+            const {
+                embed,
+                attachments
+            } = await generateBundleInteractionData(bundle, cosmeticData, Locale.EnglishUS);
+
+            const message = await channel.send({
+                embeds: [embed],
+                files: attachments
+            });
+
+            await publishMessage(message, channel);
+        }
+    } catch (error) {
+        console.error("Failed batch sending bundles:", error);
+    }
+}
+
+// endregion
+
+// region Autocomplete
+export async function handleBundleCommandAutocompleteInteraction(interaction: AutocompleteInteraction) {
+    try {
+        const locale = interaction.locale;
+        const focusedValue = interaction.options.getFocused().toLowerCase();
+        const choices = await getBundleChoices(focusedValue, locale);
+
+        const options = choices.slice(0, 25).map(bundle => ({
+            name: `${bundle.SpecialPackTitle} (ID: ${bundle.Id})`, // Bundle names can repeat
+            value: bundle.Id
+        }));
+
+        await interaction.respond(options);
+    } catch (error) {
+        console.error("Error handling autocomplete bundle interaction:", error);
+    }
+}
+
+// endregion

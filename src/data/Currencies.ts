@@ -65,7 +65,7 @@ export const Currencies: Record<string, ICurrency> = {
     RiftFragments: {
         localizedName: "currencies.rift_fragments",
         iconPath: combineBaseUrlWithPath('/images/Currency/RiftFragmentsIcon.png'),
-        backgroundPath: combineBaseUrlWithPath('/images/Currency/CurrencyBackground_WinterEventCurrency.png'), // I'm not using this anyway, in case that changes replace with Rift Fragment background
+        backgroundPath: combineBaseUrlWithPath('/images/Currency/CurrencyBackground_RiftFragment.png'),
         emojiId: "RiftFragments"
     },
     // This currency is deprecated, devs use HalloweenEventCurrency instead

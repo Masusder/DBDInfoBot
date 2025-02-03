@@ -8,7 +8,7 @@ import { combineImagesIntoGrid } from "@utils/imageUtils";
 import { INewsDataTable } from "../types";
 import { NewsDataTable } from "../data";
 import { getCharacterIndexById } from "@services/characterService";
-import createCharacterIcons from "@utils/images/characterIcon";
+import generateCharacterIcons from "@utils/images/characterIcon";
 
 // Devs introduced internal routes with release of revamped news section
 // internal routes start with "dbd://" prefix
@@ -69,7 +69,7 @@ export async function createItemShowcaseImage(content: ContentItem[], locale: Lo
     if (cosmeticIds.length === 0 && characterIndexes.length === 0) return null;
 
     const customizationBuffers = await generateStoreCustomizationIcons(cosmeticIds, cosmeticData) as Buffer[];
-    const characterBuffers = await createCharacterIcons(characterIndexes, locale);
+    const characterBuffers = await generateCharacterIcons(characterIndexes, locale);
 
     return await combineImagesIntoGrid([...customizationBuffers, ...characterBuffers], 5, 10);
 }

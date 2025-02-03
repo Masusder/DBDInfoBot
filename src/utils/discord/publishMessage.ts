@@ -13,7 +13,7 @@ import {
 async function publishMessage(message: Message, channel: NewsChannel): Promise<boolean> {
     try {
         await message.crosspost();
-        console.log(`Published message: "${message.content}" in ${channel.name}`);
+        console.log(`Published message in ${channel.name}`);
         return true;
     } catch (error) {
         console.error('Failed to publish message:', error);

@@ -1,14 +1,11 @@
 import { Events } from 'discord.js';
 import { registerFont } from "canvas";
-import {
-    startTweetJob,
-    startShrineJob,
-    startNewsJob
-} from "./jobs/";
 import interactionCreate from "./interactions/interactionCreate";
+import initializeCronJobs from "./jobs";
 import initI18next from "./locales/i18n";
 import client from './client';
 import dotenv from 'dotenv';
+import { startBundleJob } from "./jobs/bundleJob";
 
 dotenv.config();
 
@@ -30,15 +27,7 @@ async function initializeClient() {
     client.once(Events.ClientReady, async(readyClient) => {
         console.log(`Logged in as ${readyClient.user.tag}`);
 
-        // Don't run during development
-        if (process.env.BRANCH !== 'dev') {
-            // Check for new tweets every 60 seconds
-            await startTweetJob();
-            // Check for new Shrine
-            await startShrineJob();
-            // Check for in-game news
-            await startNewsJob();
-        }
+        await initializeCronJobs();
     });
 
     // Handle interactions

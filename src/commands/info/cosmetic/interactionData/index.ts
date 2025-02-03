@@ -34,7 +34,6 @@ import {
     isCosmeticOnSale
 } from "@commands/info/cosmetic/utils";
 import {
-    createStoreCustomizationIcons,
     IStoreCustomizationItem,
     layerIcons
 } from "@utils/imageUtils";
@@ -51,6 +50,8 @@ import { SpecialEvent } from "@tps/specialEvent";
 import { Rift } from "@tps/rift";
 import { CosmeticTypes } from "@data/CosmeticTypes";
 import { sendErrorMessage } from "@handlers/errorResponseHandler";
+import createStoreCustomizationIcons from "@utils/images/createStoreCustomizationIcons";
+
 
 export default async function generateCosmeticInteractionData(
     cosmeticId: string,
@@ -112,12 +113,15 @@ function prepareStoreCustomizationItem(cosmeticData: Cosmetic) {
 
     const storeCustomizationItem: IStoreCustomizationItem = {
         icon: combineBaseUrlWithPath(cosmeticData.IconFilePathList),
+        text: cosmeticData.CosmeticName,
+        includeText: false,
         background: Rarities[cosmeticRarity].storeCustomizationPath,
         prefix: cosmeticData.Prefix,
         isLinked: cosmeticData.Unbreakable,
         isLimited: isCosmeticLimited(cosmeticData),
         isOnSale: isCosmeticOnSale(cosmeticData).isOnSale,
         isKillSwitched: !!cosmeticData?.KillSwitched,
+        color: Rarities[cosmeticRarity].color,
     };
     return storeCustomizationItem;
 }
