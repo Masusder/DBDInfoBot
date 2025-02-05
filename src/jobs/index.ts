@@ -4,7 +4,6 @@ import { startNewsJob } from "./newsJob";
 import { startBundleJob } from "./bundleJob";
 
 async function initializeCronJobs() {
-    await startBundleJob();
     // Don't run during development
     if (process.env.BRANCH !== 'dev') {
         // Check for new tweets every 60 seconds

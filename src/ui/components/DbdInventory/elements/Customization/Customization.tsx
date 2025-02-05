@@ -58,7 +58,7 @@ function Customization({
                 <Perks perkData={gameData.perkData} characterIndex={characterIndex}/>
             </div>
             <div className="inventory-customization-right-panel"
-                 style={{ background: `radial-gradient(circle 500px at 100% -10%, ${hexToRgba(Rarities[dominantRarity as keyof typeof Rarities].color, 0.25)}, #161616)` }}
+                 style={{ background: `radial-gradient(circle 400px at 50% -10%, ${hexToRgba(Rarities[dominantRarity as keyof typeof Rarities].color, 0.25)}, #161616)` }}
             >
                 <img className="character-background" src={combineBaseUrlWithPath(character.BackgroundImagePath)}
                      alt=""/>

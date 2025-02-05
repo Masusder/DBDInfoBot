@@ -32,6 +32,15 @@ function RarityCircle({ parsedInventory }: RarityCircleProps) {
 
                 const isFlipped = textAngle > 90 && textAngle < 270;
 
+                const ignoreAngles = [0, 180];
+
+                let downwardsShift = 0;
+                if (textAngle >= 225 && textAngle <= 315 && !ignoreAngles.includes(textAngle)) {
+                    downwardsShift = -2;
+                } else if (!ignoreAngles.includes(textAngle)) {
+                    downwardsShift = 2;
+                }
+
                 return (
                     <div key={rarity} className="rarity-circle" style={{
                         position: 'absolute',
@@ -44,7 +53,7 @@ function RarityCircle({ parsedInventory }: RarityCircleProps) {
                             style={{
                                 position: 'absolute',
                                 left: '50%',
-                                transform: `translateX(-50%) rotate(${textAngle}deg) translate(35px) ${isFlipped && stats ? "scale(-1)" : ''}`,
+                                transform: `translateX(-50%) rotate(${textAngle}deg) translate(35px) translate(${downwardsShift}px) ${isFlipped && stats ? "scale(-1)" : ''}`,
                                 color: rarityDetails.color,
                                 fontSize: '10px',
                                 fontWeight: 900,
