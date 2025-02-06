@@ -55,7 +55,7 @@
     "error_occurred": "Произошла ошибка",
     "try_again_later": "Пожалуйста, повторите попытку позже.",
     "fatal_error_generic": "При выполнении команды произошла критическая ошибка.",
-    "failed_load_game_data": "Failed to load game data."
+    "failed_load_game_data": "Не удалось загрузить игровые данные."
   },
   "news_command": {
     "error_retrieving_data": "Не удалось получить последние новости.",
