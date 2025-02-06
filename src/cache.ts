@@ -6,8 +6,9 @@ import {
     localizeCacheKey,
     mapDiscordLocaleToDbdLang
 } from "@utils/localizationUtils";
+import client from "./client";
 
-const globalCache = new NodeCache({ stdTTL: 14_400 });
+const globalCache = new NodeCache({ stdTTL: 14_400, checkperiod: 600 });
 const processedKeys = new Set<string>();
 
 export function setCache<T>(key: string, data: T, ttl: number = 3600): void {
@@ -23,7 +24,12 @@ export function getCache<T>(key: string): T | undefined {
     return cachedData;
 }
 
-export async function initializeGameDataCache<T>(endpoint: string, cacheKey: EGameData, locale: Locale, ttl: number = 3600): Promise<void> {
+export async function initializeGameDataCache<T>(
+    endpoint: string,
+    cacheKey: EGameData,
+    locale: Locale,
+    ttl: number = 3600
+): Promise<void> {
     if (!Object.values(EGameData).includes(cacheKey)) {
         throw new Error(`Caching is not allowed for the key: ${cacheKey}.`);
     }
@@ -57,7 +63,11 @@ export async function initializeGameDataCache<T>(endpoint: string, cacheKey: EGa
     }
 }
 
-export async function getCachedGameData<T>(cacheKey: string, locale: Locale, initializer: () => Promise<void>): Promise<{ [key: string]: T }> {
+export async function getCachedGameData<T>(
+    cacheKey: string,
+    locale: Locale,
+    initializer: () => Promise<void>
+): Promise<{ [key: string]: T }> {
     const localizedCacheKey = localizeCacheKey(cacheKey, locale);
     let cachedData = getCache<{ [key: string]: T }>(localizedCacheKey);
 
@@ -70,21 +80,38 @@ export async function getCachedGameData<T>(cacheKey: string, locale: Locale, ini
     return cachedData;
 }
 
-// noinspection JSUnusedGlobalSymbols
-export function debugCache(): void {
-    if (process.env.BRANCH !== 'dev') {
-        throw Error("You're only allowed to use debug cache method on development branch.")
-    }
+function debugCache(): void {
+    console.log("🔵 DiscordJS cache:");
+    console.log(` 🔹 Guilds: ${client.guilds.cache.size}`);
+    console.log(` 🔹 Channels: ${client.channels.cache.size}`);
+    console.log(` 🔹 Users: ${client.users.cache.size}`);
+    console.log('');
 
-    const keys = globalCache.keys();
-    console.log(`Cache contains ${keys.length} items.`);
+    const allCacheData = globalCache.data;
+    const totalSize = Buffer.byteLength(JSON.stringify(allCacheData), 'utf8');
 
-    keys.forEach((key) => {
-        const ttl = globalCache.getTtl(key);
-        const expirationTime = ttl ? new Date(ttl) : 'Expired';
+    console.log("🔴 Node-Cache:");
+    console.log(` 🔺 Cache contains ${Object.keys(allCacheData).length} items.`);
+    console.log(` 🔺 Total cache size: ${(totalSize / 1024 / 1024).toFixed(2)} MB`);
+    console.log('');
 
-        console.log(`Key: ${key}, Expiration Time: ${expirationTime}`);
-    });
+    const memoryUsage = process.memoryUsage();
+    console.log("🔶 Memory Usage:");
+    console.log(` 🔸 RSS: ${(memoryUsage.rss / 1024 / 1024).toFixed(2)} MB`);
+    console.log(` 🔸 Heap total: ${(memoryUsage.heapTotal / 1024 / 1024).toFixed(2)} MB`);
+    console.log(` 🔸 Heap used: ${(memoryUsage.heapUsed / 1024 / 1024).toFixed(2)} MB`);
+    console.log(` 🔸 External: ${(memoryUsage.external / 1024 / 1024).toFixed(2)} MB`);
+    console.log('');
+}
+
+export function startCacheAnalytics() {
+    setInterval(() => {
+        try {
+            debugCache();
+        } catch (error) {
+            console.error("Failed to log cache info:", error);
+        }
+    }, 3600 * 1000);
 }
 
 // export function clearCache(key: string): void {

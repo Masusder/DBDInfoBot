@@ -6,6 +6,7 @@ import initI18next from "./locales/i18n";
 import client from './client';
 import dotenv from 'dotenv';
 import { startBundleJob } from "./jobs/bundleJob";
+import { startCacheAnalytics } from "./cache";
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ async function initializeClient() {
         console.log(`Logged in as ${readyClient.user.tag}`);
 
         await initializeCronJobs();
+        startCacheAnalytics();
     });
 
     // Handle interactions
