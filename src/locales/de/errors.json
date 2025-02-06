@@ -1,10 +1,10 @@
 {
   "info_command": {
     "cosmetic_subcommand": {
-      "cosmetic_not_found": "No cosmetic found for",
+      "cosmetic_not_found": "Kein kosmetischer Gegenstand gefunden für",
       "button_interaction": {
-        "invalid_id": "Invalid cosmetic ID.",
-        "error_retrieving_data": "Error retrieving cosmetic data."
+        "invalid_id": "Ungültige Gegenstands-ID.",
+        "error_retrieving_data": "Fehler beim Erhalten der Daten des kosmetischen Gegenstands."
       }
     },
     "build_subcommand": {
@@ -12,66 +12,67 @@
     },
     "character_subcommand": {
       "invalid_index": "Invalid character index.",
-      "error_retrieving_data": "There was a problem retrieving character data."
+      "error_retrieving_data": "Beim Abrufen der Charakter Details ist ein Problem aufgetreten."
     },
     "collection_subcommand": {
-      "error_retrieving_data": "There was a problem retrieving collections or cosmetics data."
+      "error_retrieving_data": "Es gab ein Problem beim Abrufen der Daten von Sammlungen oder kosmetischen Gegenständen."
     },
     "perk_subcommand": {
-      "error_retrieving_data": "There was a problem retrieving perks."
+      "error_retrieving_data": "Es gab ein Problem beim Abrufen der Talente."
     },
     "offering_subcommand": {
-      "error_retrieving_data": "There was a problem retrieving offerings."
+      "error_retrieving_data": "Es gab ein Problem beim Abrufen der Opfergaben."
     },
     "item_subcommand": {
-      "error_retrieving_data": "There was a problem retrieving items."
+      "error_retrieving_data": "Es gab ein Problem beim Abrufen der Gegenstände."
     },
     "addon_subcommand": {
-      "error_retrieving_data": "There was a problem retrieving add-ons."
+      "error_retrieving_data": "Es gab ein Problem beim Abrufen der Add-ons."
     },
     "rift_subcommand": {
-      "error_retrieving_data": "There was a problem retrieving rift or cosmetics data."
+      "error_retrieving_data": "Es gab ein Problem beim Abrufen der Daten des Spalts oder kosmetischer Gegenstände."
     }
   },
   "list_command": {
-    "unknown_subcommand": "Unknown subcommand.",
+    "unknown_subcommand": "Unbekannter Unterbefehl.",
     "cosmetics_subcommand": {
-      "cosmetics_not_found": "No cosmetics found.",
-      "cosmetics_not_found_filters": "No cosmetics found for the applied filters."
+      "cosmetics_not_found": "Keine kosmetischen Gegenstände gefunden.",
+      "cosmetics_not_found_filters": "Keine kosmetischen Gegenstände für den ausgewählten Filter gefunden."
     },
     "builds_subcommand": {
       "error_retrieving_data": "Failed to retrieve builds data.",
       "builds_not_found_filters": "No builds found with the specified filters."
     },
     "addons_subcommand": {
-      "addons_not_found": "No add-ons found.",
-      "addons_not_found_filters": "No add-ons found for the applied filters."
+      "addons_not_found": "Keine Add-ons gefunden.",
+      "addons_not_found_filters": "Keine Add-ons für den ausgewählten Filter gefunden."
     }
   },
   "general": {
-    "unauthorized_title": "Unauthorized",
-    "command_cooldown": "Please wait {{remaining_time}} seconds before using this command again.",
-    "unauthorized": "Only the person who used the command can do that.",
-    "error_occurred": "An error has occurred",
-    "try_again_later": "Please try again later.",
-    "fatal_error_generic": "Fatal error has occurred while executing command."
+    "unauthorized_title": "Unautorisiert.",
+    "command_cooldown": "Bitte warte  {{remaining_time}} bevor Du den Befehl erneut benutzt.",
+    "unauthorized": "Nur die Person, die den Befehlt genutzt hat, kann dies tun.",
+    "error_occurred": "Es ist ein Fehler aufgetreten",
+    "try_again_later": "Bitte versuche es später nochmal.",
+    "fatal_error_generic": "Beim Ausführen des Befehls ist ein schwerer Fehler aufgetreten.",
+    "failed_load_game_data": "Failed to load game data."
   },
   "news_command": {
-    "error_retrieving_data": "Failed to retrieve latest news.",
-    "failed_retrieving_article": "Failed to retrieve the selected news article."
+    "error_retrieving_data": "Fehler beim Abrufen der neuesten Nachrichten.",
+    "failed_retrieving_article": "Fehler beim Abrufen des ausgewählten Nachrichten-Artikels."
   },
   "stats_command": {
-    "missing_steam_id": "Steam ID field is required to view player stats.",
-    "not_found_player_data": "Unable to fetch player data. Ensure your Steam profile and game details are public.",
-    "failed_generating_summary_card": "Unable to generate summary card.",
-    "failed_to_fetch_global_stats": "Failed to fetch global statistics data.",
+    "missing_steam_id": "Steam-ID-Feld wird benötigt, um Spielerstatistiken anzuzeigen.",
+    "not_found_player_data": "Spieler-Daten konnten nicht abgerufen werden. Stelle sicher, dass dein Steam-Profil und deine Spieldetails öffentlich sind.",
+    "failed_generating_summary_card": "Zusammenfassungskarte konnte nicht generiert werden.",
+    "failed_to_fetch_global_stats": "Fehler beim Abrufen der globalen Statistikdaten.",
     "invalid_tab_id": "Invalid tab ID."
   },
   "inventory_command": {
-    "upload_valid_file": "Please upload a valid JSON file. Visit the support server for instructions on how to obtain valid data.",
-    "invalid_data": "This data is invalid. Please visit the support server for instructions on how to obtain valid data.",
-    "game_data_not_found": "Game data not found. Failed to render inventory.",
-    "fatal_error": "Fatal error occurred while executing inventory command.",
-    "failed_generating": "Failed to generate infographic."
+    "upload_valid_file": "Bitte lade eine gültige JSON-Datei hoch. Besuche den Support-Server für Anweisungen zum Erhalten gültiger Daten.",
+    "invalid_data": "Diese Daten sind ungültig. Bitte besuche den Support-Server für Anweisungen zum Erhalten gültiger Daten.",
+    "game_data_not_found": "Spieldaten nicht gefunden. Inventar konnte nicht gerendert werden.",
+    "fatal_error": "Beim Ausführen des Inventar-Befehls ist ein schwerer Fehler aufgetreten.",
+    "failed_generating": "Fehler beim Generieren der Infografik."
   }
 }
