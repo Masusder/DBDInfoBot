@@ -54,7 +54,10 @@ export async function prepareBundleContentDescription(bundle: Bundle, locale: Lo
     if (hasStartDate) {
         const adjustedStartDate = adjustForTimezone(bundle.StartDate!);
         const startDateUnix = Math.floor(adjustedStartDate / 1000);
-        description += `Bundle released on <t:${startDateUnix}:F>.\n`; // TODO: localize
+        description += t('info_command.bundle_subcommand.bundle_released', locale, ELocaleNamespace.Messages, {
+            bundle_start_unix: startDateUnix.toString()
+        });
+        description += '\n';
     }
 
     if (hasEndDate) {
@@ -62,12 +65,19 @@ export async function prepareBundleContentDescription(bundle: Bundle, locale: Lo
         const adjustedEndDateUnix = Math.floor(adjustedEndDate / 1000);
 
         if (adjustedEndDate < now) {
-            description += `This bundle has expired <t:${adjustedEndDateUnix}:R>.\n`; // TODO: localize
+            description += t('info_command.bundle_subcommand.bundle_expired', locale, ELocaleNamespace.Messages, {
+                bundle_expired_unix: adjustedEndDateUnix.toString()
+            });
+            description += '\n';
         } else {
-            description += `Bundle expires <t:${adjustedEndDateUnix}:R>.\n`; // TODO: localize
+            description += t('info_command.bundle_subcommand.bundle_expires_in', locale, ELocaleNamespace.Messages, {
+                bundle_expires_in_unix: adjustedEndDateUnix.toString()
+            });
+            description += '\n';
         }
     } else {
-        description += `This bundle has no expiration date.\n`; // TODO: localize
+        description += t('info_command.bundle_subcommand.no_expiration', locale, ELocaleNamespace.Messages);
+        description += '\n';
     }
 
     return description;

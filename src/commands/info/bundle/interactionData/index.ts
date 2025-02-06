@@ -27,6 +27,8 @@ import {
     IRiftCurrency
 } from "@data/Currencies";
 import { generateCurrencyImage } from "@utils/images/currencyImage";
+import { t } from "@utils/localizationUtils";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 
 export async function generateBundleInteractionData(
     bundle: Bundle,
@@ -40,7 +42,10 @@ export async function generateBundleInteractionData(
 }
 
 async function buildBundleContentEmbed(bundle: Bundle, cosmeticData: Record<string, Cosmetic>, locale: Locale) {
-    const title = `${bundle.SpecialPackTitle} (Total of ${bundle.ConsumptionRewards.length} items)`; // TODO: localize
+    const title = t('info_command.bundle_subcommand.special_pack_title', locale, ELocaleNamespace.Messages, {
+        special_pack_title: bundle.SpecialPackTitle,
+        rewards_count: bundle.ConsumptionRewards.length.toString()
+    });
 
     const description = await prepareBundleContentDescription(bundle, locale);
 
@@ -48,7 +53,11 @@ async function buildBundleContentEmbed(bundle: Bundle, cosmeticData: Record<stri
         .setColor(ThemeColors.PRIMARY)
         .setTitle(title)
         .setImage(`attachment://bundle_${bundle.Id}.png`)
-        .setFooter({ text: `You need at least ${bundle.MinNumberOfUnownedForPurchase} unowned item to purchase this bundle.` }) // TODO: localize
+        .setFooter({
+            text: t('info_command.bundle_subcommand.unowned_items', locale, ELocaleNamespace.Messages, {
+                unowned_items: bundle.MinNumberOfUnownedForPurchase.toString()
+            })
+        })
         .setDescription(description);
 
     if (bundle.StartDate) {
