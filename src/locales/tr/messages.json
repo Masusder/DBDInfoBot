@@ -120,7 +120,7 @@
       "builds_matching_filters": "Here are the builds matching your filters:",
       "builds_list": "Builds List",
       "created_by": "Created by:",
-      "unknown_perk": "Bilinmeyen Avantaj",
+      "unknown_perk": "Unknown Perk",
       "any_perks": "Any Perks",
       "select_for_details": "Select a build to view details."
     },
@@ -163,7 +163,7 @@
   "stats_command": {
     "player_stats_overview": "Player Statistics Overview",
     "summary_desc": "A quick infographic summary of the player's stats.",
-    "full_stats": "Tam İstatistikler",
+    "full_stats": "Full Stats",
     "global_stats_title": "Global Steam Statistics in \"{{category}}\" category",
     "data_collected_from": "Data collected from over **{{player_count}}** players.",
     "global_stat_tabs": {
