@@ -94,6 +94,14 @@
       "rift_expired": "Szczelina była aktywna od <t:{{start_date}}> do <t:{{end_date}}>",
       "to_progress_active": "Aby awansować o jeden poziom, musisz zdobyć:",
       "to_progress_expired": "Aby awansować o jeden poziom, musiałeś/aś zdobyć:"
+    },
+    "bundle_subcommand": {
+      "special_pack_title": "{{special_pack_title}} (Total of {{rewards_count}} items)",
+      "unowned_items": "You need at least {{unowned_items}} unowned item to purchase this bundle.",
+      "bundle_released": "Bundle released on <t:{{bundle_start_unix}}:F>.",
+      "bundle_expired": "This bundle has expired <t:{{bundle_expired_unix}}:R>.",
+      "bundle_expires_in": "Bundle expires <t:{{bundle_expires_in_unix}}:R>.",
+      "no_expiration": "This bundle has no expiration date."
     }
   },
   "list_command": {
