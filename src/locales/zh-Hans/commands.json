@@ -15,7 +15,8 @@
           "cosmetic": "Cosmetic",
           "build": "Build",
           "collection": "Collection",
-          "rift": "Rift"
+          "rift": "Rift",
+          "bundle": "Bundle"
         }
       },
       "name": {
