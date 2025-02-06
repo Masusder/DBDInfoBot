@@ -1,60 +1,60 @@
 {
   "info_command": {
-    "name": "Info",
-    "description": "Erhalte detaillierte Informationen über Spielfunktionen.",
+    "name": "info",
+    "description": "Retrieve detailed information about game features.",
     "options": {
       "type": {
-        "name": "Art",
-        "description": "Gib die Art der Spielfunktion an, zu der Du Informationen möchtest.",
+        "name": "type",
+        "description": "Specify the type of game feature you want information about.",
         "choices": {
-          "perk": "Talent",
+          "perk": "Perk",
           "addon": "Add-on",
-          "item": "Gegenstand",
-          "offering": "Opfergabe",
-          "character": "Charakter",
+          "item": "Item",
+          "offering": "Offering",
+          "character": "Character",
           "cosmetic": "Cosmetic",
           "build": "Build",
-          "collection": "Sammlung",
-          "rift": "Spalt",
+          "collection": "Collection",
+          "rift": "Rift",
           "bundle": "Bundle"
         }
       },
       "name": {
-        "name": "Name",
-        "description": "Gib den Namen der Spielfunktion an, zu der Du Informationen möchtest."
+        "name": "name",
+        "description": "Specify the name of the game feature you want information about."
       }
     }
   },
   "shrine_command": {
-    "name": "Schrein",
-    "description": "Überprüfe den wöchentlichen Schrein der Geheimnisse."
+    "name": "shrine",
+    "description": "Check weekly Shrine of Secrets."
   },
   "list_command": {
-    "name": "Liste",
-    "description": "Erhalte eine Liste der angegebenen Spielfunktionsgegenstände.",
+    "name": "list",
+    "description": "Retrieve list of specified game feature items.",
     "cosmetics_subcommand": {
-      "name": "kosmetische Gegenstände",
-      "description": "Erhalte eine List der kosmetischen Gegenstände.",
+      "name": "cosmetics",
+      "description": "Retrieve list of cosmetics.",
       "options": {
         "character": {
-          "name": "Charakter",
-          "description": "Name des Charakters."
+          "name": "character",
+          "description": "Name of the character."
         },
         "purchasable": {
-          "name": "käuflich",
-          "description": "Gib an, ob der kosmetische Gegenstand käuflich ist oder nicht."
+          "name": "purchasable",
+          "description": "Specify whether cosmetic should be available for purchase or not."
         },
         "linked": {
           "name": "linked",
           "description": "Specify whether cosmetic should be a linked set or not."
         },
         "rarity": {
-          "name": "Seltenheit",
-          "description": "Gib die Seltenheit des kosmetischen Gegenstandes an."
+          "name": "rarity",
+          "description": "Specify rarity of the cosmetic."
         },
         "type": {
-          "name": "Typ",
-          "description": "Gib den Typ des kosmetischen Gegenstandes an."
+          "name": "type",
+          "description": "Specify type of the cosmetic."
         },
         "inclusion_version": {
           "name": "inclusion_version",
@@ -65,16 +65,16 @@
           "description": "Specify role cosmetic belongs to."
         },
         "on_sale": {
-          "name": "im_Angebot",
-          "description": "Gib an, ob der kosmetische Gegenstand im Angebot ist."
+          "name": "on_sale",
+          "description": "Specify whether cosmetic should be currently on sale."
         },
         "limited": {
-          "name": "limitiert",
-          "description": "Gib an, ob der kosmetische Gegenstand zeitlich begrenzt erwerbbar ist."
+          "name": "limited",
+          "description": "Specify whether cosmetic is available for purchase for a limited time."
         },
         "search": {
-          "name": "suchen",
-          "description": "Suche kosmetische Gegenstände nach name/Beschreibung/Kollektion."
+          "name": "search",
+          "description": "Search for cosmetic by its name/description/collection."
         }
       }
     },
@@ -83,99 +83,99 @@
       "description": "Retrieve list of builds.",
       "options": {
         "role": {
-          "name": "Rolle",
+          "name": "role",
           "description": "Role for the build.",
           "choices": {
             "killer": "Killer",
-            "survivor": "Überlebender"
+            "survivor": "Survivor"
           }
         },
         "page": {
-          "name": "Seite",
-          "description": "Seitenzahl"
+          "name": "page",
+          "description": "Page number (default is 1)."
         },
         "title": {
-          "name": "Titel",
+          "name": "title",
           "description": "Title of the build."
         },
         "category": {
-          "name": "Kategorie",
+          "name": "category",
           "description": "Category of the build."
         },
         "character": {
-          "name": "Charakter",
+          "name": "character",
           "description": "Character for the build."
         },
         "version": {
-          "name": "Version",
+          "name": "version",
           "description": "Game version for the build."
         },
         "rating": {
-          "name": "Bewertung",
+          "name": "rating",
           "description": "Minimum rating for the build.",
           "choices": {
-            "one_star": "Ein Stern",
-            "two_stars": "Zwei Sterne",
-            "three_stars": "Drei Sterne",
-            "four_stars": "Vier Sterne",
-            "five_stars": "Fünf Sterne"
+            "one_star": "One Star",
+            "two_stars": "Two Stars",
+            "three_stars": "Three Stars",
+            "four_stars": "Four Stars",
+            "five_stars": "Five Stars"
           }
         }
       }
     },
     "addons_subcommand": {
-      "name": "Add-ons",
-      "description": "Erhalte eine List der Add-ons.",
+      "name": "add-ons",
+      "description": "Retrieve list of add-ons.",
       "options": {
         "character": {
-          "name": "Charakter",
-          "description": "Name des Charakters."
+          "name": "character",
+          "description": "Name of the character."
         },
         "rarity": {
-          "name": "Seltenheit",
-          "description": "Gib die Seltenheit des Add-ons an."
+          "name": "rarity",
+          "description": "Specify rarity of the add-ons."
         }
       }
     }
   },
   "news_command": {
-    "name": "Neuigkeiten",
-    "description": "Erhalte aktuelle Ingame-Nachrichten."
+    "name": "news",
+    "description": "Retrieve latest in-game news."
   },
   "stats_command": {
-    "name": "Statistiken",
-    "description": "Zeige Steam Statistiken (global und persönlich).",
+    "name": "stats",
+    "description": "View Steam statistics (global or personal).",
     "global_subcommand": {
       "name": "global",
-      "description": "Zeige globale Statistiken."
+      "description": "View global statistics."
     },
     "personal_subcommand": {
-      "name": "persönlich",
-      "description": "Zeige eine zusammengefasste Info-Grafik von Spieler-Statistiken.",
+      "name": "personal",
+      "description": "View a summarized infographic of player statistics.",
       "options": {
         "steam_id": {
           "name": "steam_id",
-          "description": "Die Steam ID, Benutzername oder Profil-URL des Spielers, dessen Statistiken Du sehen möchtest."
+          "description": "The Steam ID, username, or profile URL of the player whose statistics you want to view."
         }
       }
     }
   },
   "inventory_command": {
-    "name": "Inventar",
-    "description": "Zeige Dein Inventar im Spiel für den angezeigten Charakter der Infografik an.",
+    "name": "inventory",
+    "description": "View your in-game inventory for given character in form of an infographic.",
     "options": {
       "file": {
-        "name": "Datei",
-        "description": "Lade Deine Inventar-Datei hoch. Anweisungen zum Erhalten der Datei findest Du auf dem Support Server."
+        "name": "file",
+        "description": "Upload your inventory file. Instructions on how to obtain it can be found on the support server."
       },
       "character": {
-        "name": "Charakter",
-        "description": "Wähle den Charakter aus, für den Du eine Infografik generieren möchtest."
+        "name": "character",
+        "description": "Select character you want to generate infographic for."
       }
     }
   },
   "support_command": {
-    "name": "Support",
-    "description": "Erhalte einen Link zum Support Server."
+    "name": "support",
+    "description": "Get a link to the support server."
   }
 }
