@@ -177,7 +177,9 @@ export async function getLatestTweetLink() {
         const content = `<@&${Constants.DBDLEAKS_NEWS_NOTIFICATION_ROLE}>\n${vxTweetUrl}`;
         const message = await channel.send(content);
 
-        await publishMessage(message, channel);
+        publishMessage(message, channel).catch(error => {
+            console.error(`Failed to publish message:`, error);
+        });
 
         console.log('New tweet posted successfully.');
     } catch (error) {

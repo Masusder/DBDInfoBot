@@ -132,7 +132,9 @@ export async function sendNewsContent(
             }
 
             if (interactionOrChannel instanceof NewsChannel) {
-                await publishMessage(message, interactionOrChannel);
+                publishMessage(message, interactionOrChannel).catch(error => {
+                    console.error(`Failed to publish message:`, error);
+                });
             }
         } else {
             await interactionOrChannel.followUp({
@@ -162,7 +164,9 @@ export async function sendNewsContent(
                 });
 
                 if (interactionOrChannel instanceof NewsChannel) {
-                    await publishMessage(message, interactionOrChannel);
+                    publishMessage(message, interactionOrChannel).catch(error => {
+                        console.error(`Failed to publish message:`, error);
+                    });
                 }
             } else {
                 await interactionOrChannel.followUp({
@@ -194,7 +198,9 @@ export async function sendNewsContent(
                 });
 
                 if (interactionOrChannel instanceof NewsChannel) {
-                    await publishMessage(message, interactionOrChannel);
+                    publishMessage(message, interactionOrChannel).catch(error => {
+                        console.error(`Failed to publish message:`, error);
+                    });
                 }
             } else {
                 await interactionOrChannel.followUp({

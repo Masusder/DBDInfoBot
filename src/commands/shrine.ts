@@ -192,7 +192,9 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
                 components: [row]
             });
 
-            await publishMessage(message, channel);
+            publishMessage(message, channel).catch(error => {
+                console.error(`Failed to publish message:`, error);
+            });
         }
     } catch (error) {
         console.error("Error executing shrine command:", error);
