@@ -12,7 +12,6 @@ import { t } from "@utils/localizationUtils";
 import { ELocaleNamespace } from '@tps/enums/ELocaleNamespace';
 import {
     combineImagesIntoGrid,
-    createStoreCustomizationIcons,
     IStoreCustomizationItem
 } from "@utils/imageUtils";
 import { Rarities } from "@data/Rarities";
@@ -22,6 +21,7 @@ import {
     isCosmeticOnSale
 } from "@commands/info/cosmetic/utils";
 import { sendErrorMessage } from "@handlers/errorResponseHandler";
+import createStoreCustomizationIcons from "@utils/images/createStoreCustomizationIcons";
 
 export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
     const cosmeticId = extractInteractionId(interaction.customId);
@@ -78,12 +78,15 @@ async function getCosmeticPiecesCombinedImage(cosmeticPieces: string[], cosmetic
         if (cosmeticPieceData) {
             const model: IStoreCustomizationItem = {
                 icon: combineBaseUrlWithPath(cosmeticPieceData.IconFilePathList),
+                text: cosmeticPieceData.CosmeticName,
+                includeText: false,
                 background: Rarities[cosmeticPieceData.Rarity].storeCustomizationPath,
                 prefix: cosmeticPieceData.Prefix,
                 isLinked: cosmeticPieceData.Unbreakable,
                 isLimited: isCosmeticLimited(cosmeticPieceData),
                 isOnSale,
                 isKillSwitched: !!cosmeticPieceData?.KillSwitched,
+                color: Rarities[cosmeticPieceData.Rarity].color
             };
 
             imageSources.push(model);

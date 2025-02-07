@@ -3,8 +3,10 @@ import { t } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { Cosmetic } from "@tps/cosmetic";
 import { adjustForTimezone, combineBaseUrlWithPath } from "@utils/stringUtils";
-import { createStoreCustomizationIcons, IStoreCustomizationItem } from "@utils/imageUtils";
+import { IStoreCustomizationItem } from "@utils/imageUtils";
 import { Rarities } from "@data/Rarities";
+import createStoreCustomizationIcons from "@utils/images/createStoreCustomizationIcons";
+
 
 export function formatEmbedTitle(cosmeticName: string, isUnbreakable: boolean, locale: Locale): string {
     if (isUnbreakable) {
@@ -77,10 +79,11 @@ export function formatReleaseDate(releaseDate: string) {
  *
  * @param cosmeticItems - An array of cosmetic IDs (strings) or an array of cosmetic objects.
  * @param cosmeticData - A record containing all the cosmetic data indexed by cosmetic IDs.
+ * @param includeText - Boolean, indicating whether we want to include text or not.
  *
  * @returns A Promise that resolves to an array of Buffers representing the generated store customization icons.
  */
-export async function generateStoreCustomizationIcons(cosmeticItems: (string[] | Cosmetic[]), cosmeticData?: Record<string, Cosmetic>): Promise<Buffer[]> {
+export async function generateStoreCustomizationIcons(cosmeticItems: (string[] | Cosmetic[]), cosmeticData?: Record<string, Cosmetic>, includeText: boolean = false): Promise<Buffer[]> {
     const imageSources: IStoreCustomizationItem[] = [];
 
     const isCosmeticIdsArray = Array.isArray(cosmeticItems) && typeof cosmeticItems[0] === 'string';
@@ -99,12 +102,15 @@ export async function generateStoreCustomizationIcons(cosmeticItems: (string[] |
 
         const model: IStoreCustomizationItem = {
             icon: combineBaseUrlWithPath(cosmetic.IconFilePathList),
+            text: cosmetic.CosmeticName,
+            includeText,
             background: Rarities[cosmetic.Rarity].storeCustomizationPath,
             prefix: cosmetic.Prefix,
             isLinked: cosmetic.Unbreakable,
             isLimited: isCosmeticLimited(cosmetic),
             isOnSale,
-            isKillSwitched: !!cosmetic?.KillSwitched
+            isKillSwitched: !!cosmetic?.KillSwitched,
+            color: Rarities[cosmetic.Rarity].color,
         };
 
         imageSources.push(model);

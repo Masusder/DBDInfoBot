@@ -54,7 +54,8 @@
     "unauthorized": "Solo la persona che ha utilizzato il comando può farlo.",
     "error_occurred": "An error has occurred",
     "try_again_later": "Please try again later.",
-    "fatal_error_generic": "Fatal error has occurred while executing command."
+    "fatal_error_generic": "Fatal error has occurred while executing command.",
+    "failed_load_game_data": "Failed to load game data."
   },
   "news_command": {
     "error_retrieving_data": "Failed to retrieve latest news.",

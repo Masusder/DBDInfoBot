@@ -1,8 +1,7 @@
 import {
-
     StringSelectMenuInteraction
 } from 'discord.js';
-import { handleSelectMenu } from "@commands/news";
+import { handleSelectMenu } from "@commands/news/handlers/selectMenuHandler";
 
 
 export default async(interaction: StringSelectMenuInteraction) => {

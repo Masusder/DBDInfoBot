@@ -5,21 +5,18 @@ import {
 } from "discord.js";
 import cron from "node-cron";
 import { getCachedNews } from "@services/newsService";
-import {
-    batchSendNews,
-} from "@commands/news";
 import Constants from "@constants";
 import client from "../client";
 import { NewsData } from "@tps/news";
 import { isValidData } from "@utils/stringUtils";
+import { batchSendNews } from "@commands/news/interactionData";
 
 let cachedNewsIds: Set<string> = new Set();
 
 export async function startNewsJob() {
     // No need to check more frequent than 10 minutes
     // as news are cached for exactly that long
-    // 5 additional minutes just in case
-    cron.schedule('*/15 * * * *', async() => {
+    cron.schedule('*/10 * * * *', async() => {
         await resolveNewsArticles();
     });
 }

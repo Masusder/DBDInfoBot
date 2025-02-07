@@ -11,4 +11,5 @@ export enum EGameData {
     SpecialEventData = 'specialEventData',
     RiftData = 'riftData',
     DlcData = 'dlcData',
+    BundleData = 'bundleData',
 }

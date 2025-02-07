@@ -154,3 +154,11 @@ export function splitTextIntoChunksBySentence(text: string, maxLength: number) {
 export function isValidData(data: Record<string, any> | null | undefined): data is Record<string, any> {
     return data !== null && data !== undefined && Object.keys(data).length > 0;
 }
+
+export function truncateString(input: string, trimLength: number): string {
+    if (input.length > trimLength) {
+        return input.substring(0, trimLength).trimEnd() + '..';
+    } else {
+        return input;
+    }
+}
