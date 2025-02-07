@@ -11,7 +11,7 @@ import path from "path";
 import fs from "fs/promises";
 import { handleBatchSendBundlesToChannel } from "@commands/info/bundle";
 
-const DATA_DIR = path.join(process.env.APPDATA || process.env.HOME || ".", "DBDInfoBot");
+const DATA_DIR = path.join(process.env.APPDATA || process.env.HOME || ".", "DBDInfoBotCache");
 const BUNDLE_CACHE_FILE = path.join(DATA_DIR, "dispatchedBundles.json");
 let cachedBundleIds: Set<string> = new Set();
 export async function startBundleJob() {
