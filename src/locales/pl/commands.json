@@ -15,7 +15,8 @@
           "cosmetic": "Kosmetyk",
           "build": "Ekwipunek",
           "collection": "Kolekcja",
-          "rift": "Szczelina"
+          "rift": "Szczelina",
+          "bundle": "Pakiet"
         }
       },
       "name": {
