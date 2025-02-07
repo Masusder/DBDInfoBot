@@ -1,7 +1,7 @@
 import cron from "node-cron";
 import {
+    ChannelType,
     Locale,
-    NewsChannel,
 } from "discord.js";
 import { getCachedBundles } from "@services/bundleService";
 import { isValidData } from "@utils/stringUtils";
@@ -51,7 +51,7 @@ async function dispatchBundles() {
         }
 
         const channel = client.channels.cache.get(Constants.DBDLEAKS_BUNDLES_CHANNEL_ID);
-        if (!channel || !(channel instanceof NewsChannel)) {
+        if (!channel || channel.type !== ChannelType.GuildAnnouncement) {
             console.warn(`No bundles channel found with id ${Constants.DBDLEAKS_BUNDLES_CHANNEL_ID}, or it's not announcement channel.`);
             return [];
         }

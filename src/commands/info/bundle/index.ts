@@ -61,19 +61,25 @@ export async function handleBatchSendBundlesToChannel(
         const cosmeticData = await getCachedCosmetics(Locale.EnglishUS);
 
         for (const bundleId of bundleIdsToDispatch) {
-            const bundle = bundleData[bundleId];
+            try {
+                const bundle = bundleData[bundleId];
 
-            const {
-                embed,
-                attachments
-            } = await generateBundleInteractionData(bundle, cosmeticData, Locale.EnglishUS);
+                const {
+                    embed,
+                    attachments
+                } = await generateBundleInteractionData(bundle, cosmeticData, Locale.EnglishUS);
 
-            const message = await channel.send({
-                embeds: [embed],
-                files: attachments
-            });
+                const message = await channel.send({
+                    embeds: [embed],
+                    files: attachments
+                });
 
-            await publishMessage(message, channel);
+                publishMessage(message, channel).catch(error => {
+                    console.error(`Failed to publish message for bundle ${bundleId}:`, error);
+                });
+            } catch (error) {
+                console.error(`Failed to send bundle ${bundleId}:`, error);
+            }
         }
     } catch (error) {
         console.error("Failed batch sending bundles:", error);
