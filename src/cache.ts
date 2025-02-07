@@ -100,7 +100,7 @@ function debugCache(): void {
     console.log(` 🔸 RSS: ${(memoryUsage.rss / 1024 / 1024).toFixed(2)} MB`);
     console.log(` 🔸 Heap total: ${(memoryUsage.heapTotal / 1024 / 1024).toFixed(2)} MB`);
     console.log(` 🔸 Heap used: ${(memoryUsage.heapUsed / 1024 / 1024).toFixed(2)} MB`);
-    console.log(` 🔸 External: ${(memoryUsage.external / 1024 / 1024).toFixed(2)} MB`);
+    console.log(` 🔸 External: ${(memoryUsage.arrayBuffers / 1024 / 1024).toFixed(2)} MB`);
     console.log('');
 }
 

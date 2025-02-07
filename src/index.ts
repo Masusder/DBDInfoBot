@@ -1,12 +1,11 @@
 import { Events } from 'discord.js';
 import { registerFont } from "canvas";
+import { startCacheAnalytics } from "./cache";
 import interactionCreate from "./interactions/interactionCreate";
 import initializeCronJobs from "./jobs";
 import initI18next from "./locales/i18n";
 import client from './client';
 import dotenv from 'dotenv';
-import { startBundleJob } from "./jobs/bundleJob";
-import { startCacheAnalytics } from "./cache";
 
 dotenv.config();
 
