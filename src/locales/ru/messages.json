@@ -96,7 +96,7 @@
       "to_progress_expired": "Для продвижения на один уровень, нужно было заработать:"
     },
     "bundle_subcommand": {
-      "special_pack_title": "{{special_pack_title}} (Total of {{rewards_count}} items)",
+      "special_pack_title": "{{- special_pack_title}} (Total of {{rewards_count}} items)",
       "unowned_items": "You need at least {{unowned_items}} unowned item to purchase this bundle.",
       "bundle_released": "Bundle released on <t:{{bundle_start_unix}}:F>.",
       "bundle_expired": "This bundle has expired <t:{{bundle_expired_unix}}:R>.",
