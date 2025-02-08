@@ -13,7 +13,7 @@ import { EGameData } from "@tps/enums/EGameData";
  * @returns {Promise<void>} A promise that resolves once the news cache is initialized.
  */
 async function initializeNewsCache(locale: Locale): Promise<void> {
-    await initializeGameDataCache('/api/newsV2', EGameData.NewsData, locale, 900); // Cached for 15 minutes
+    await initializeGameDataCache('/api/newsV2', EGameData.NewsData, locale, 600); // Cached for 10 minutes
 }
 
 // region Helpers
