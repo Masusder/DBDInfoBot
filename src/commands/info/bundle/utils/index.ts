@@ -1,4 +1,7 @@
-import { adjustForTimezone, } from "@utils/stringUtils";
+import {
+    adjustForTimezone,
+    formatNumber,
+} from "@utils/stringUtils";
 import {
     Bundle,
     FullPrice
@@ -46,10 +49,7 @@ export function determineDominantRarity(
 export async function prepareBundleContentDescription(bundle: Bundle, locale: Locale): Promise<string> {
     let description = '';
 
-    const now = Date.now();
-
     const hasStartDate = Boolean(bundle.StartDate);
-    const hasEndDate = Boolean(bundle.EndDate);
 
     if (hasStartDate) {
         const adjustedStartDate = adjustForTimezone(bundle.StartDate!);
@@ -60,25 +60,10 @@ export async function prepareBundleContentDescription(bundle: Bundle, locale: Lo
         description += '\n';
     }
 
-    if (hasEndDate) {
-        const adjustedEndDate = adjustForTimezone(bundle.EndDate!);
-        const adjustedEndDateUnix = Math.floor(adjustedEndDate / 1000);
-
-        if (adjustedEndDate < now) {
-            description += t('info_command.bundle_subcommand.bundle_expired', locale, ELocaleNamespace.Messages, {
-                bundle_expired_unix: adjustedEndDateUnix.toString()
-            });
-            description += '\n';
-        } else {
-            description += t('info_command.bundle_subcommand.bundle_expires_in', locale, ELocaleNamespace.Messages, {
-                bundle_expires_in_unix: adjustedEndDateUnix.toString()
-            });
-            description += '\n';
-        }
-    } else {
-        description += t('info_command.bundle_subcommand.no_expiration', locale, ELocaleNamespace.Messages);
-        description += '\n';
-    }
+    description += '-# ';
+    description += t('info_command.bundle_subcommand.unowned_items', locale, ELocaleNamespace.Messages, {
+        unowned_items: bundle.MinNumberOfUnownedForPurchase.toString()
+    })
 
     return description;
 }
@@ -99,7 +84,7 @@ export async function getCurrencyField(
     let price: string = fullPrice.Price.toString();
     if (bundle.Discount > 0.0) {
         const discountedPrice = Math.round(fullPrice.Price - (fullPrice.Price * bundle.Discount));
-        price = `~~${price}~~ ${discountedPrice}`;
+        price = `~~${formatNumber(price)}~~ ${formatNumber(discountedPrice)}`;
     }
 
     if (emoji) {

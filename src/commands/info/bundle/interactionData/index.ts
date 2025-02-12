@@ -53,11 +53,6 @@ async function buildBundleContentEmbed(bundle: Bundle, cosmeticData: Record<stri
         .setColor(ThemeColors.PRIMARY)
         .setTitle(title)
         .setImage(`attachment://bundle_${bundle.Id}.png`)
-        .setFooter({
-            text: t('info_command.bundle_subcommand.unowned_items', locale, ELocaleNamespace.Messages, {
-                unowned_items: bundle.MinNumberOfUnownedForPurchase.toString()
-            })
-        })
         .setDescription(description);
 
     if (bundle.StartDate) {
@@ -107,6 +102,24 @@ async function setEmbedFields(bundle: Bundle, embed: EmbedBuilder, locale: Local
             }
         }
     }
+
+    const hasEndDate = Boolean(bundle.EndDate);
+
+    let expirationDescription;
+    if (hasEndDate) {
+        const adjustedEndDate = adjustForTimezone(bundle.EndDate!);
+        const adjustedEndDateUnix = Math.floor(adjustedEndDate / 1000);
+
+        expirationDescription = `<t:${adjustedEndDateUnix}:R>`;
+    } else {
+        expirationDescription = t('info_command.bundle_subcommand.no_expiration', locale, ELocaleNamespace.Messages);
+    }
+
+    embed.addFields({
+        name: t('info_command.bundle_subcommand.expiration', locale, ELocaleNamespace.Messages),
+        value: expirationDescription,
+        inline: true
+    });
 }
 
 async function prepareAttachments(
@@ -172,7 +185,12 @@ async function prepareAttachments(
         return [];
     }
 
-    const bundleContentImage = await combineImagesIntoGrid(imagesToCombine, 5, 10);
+    let imagesPerRow = 5;
+    if (imagesToCombine.length >= 40) {
+        imagesPerRow = 10;
+    }
+
+    const bundleContentImage = await combineImagesIntoGrid(imagesToCombine, imagesPerRow, 20);
 
     return [
         new AttachmentBuilder(bundleContentImage, { name: `bundle_${bundle.Id}.png` })

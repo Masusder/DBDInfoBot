@@ -69,7 +69,7 @@ export async function handleAddonListCommandInteraction(interaction: ChatInputCo
 
             const embed = new EmbedBuilder()
                 .setTitle(title)
-                .setDescription(`${t('list_command.addons_subcommand.more_info.0', locale, ELocaleNamespace.Messages)}: \`/${t('list_command.addons_subcommand.more_info.1', locale, ELocaleNamespace.Messages)}\``)
+                .setDescription(t('list_command.addons_subcommand.more_info', locale, ELocaleNamespace.Messages))
                 .setColor(embedColor)
                 .setTimestamp()
                 .setAuthor({

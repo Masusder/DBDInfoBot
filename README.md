@@ -1,5 +1,5 @@
 # DBDInfoBot
-![Version](https://img.shields.io/badge/version-1.3.0-blue)
+![Version](https://img.shields.io/badge/version-1.3.3-blue)
 [![License](https://img.shields.io/badge/license-MIT-green)](https://opensource.org/license/mit)
 [![Crowdin](https://badges.crowdin.net/dbdinfo-discord-bot/localized.svg)](https://crowdin.com/project/dbdinfo-discord-bot)
 [![Discord](https://discordapp.com/api/guilds/637265123144237061/widget.png?style=shield)](https://discord.gg/dbdleaks)

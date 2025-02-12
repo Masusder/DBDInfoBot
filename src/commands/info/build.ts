@@ -136,17 +136,15 @@ export async function handleBuildCommandInteraction(interaction: ChatInputComman
             });
         }
 
-        const voteText = ratingCount !== 1
-            ? t('info_command.build_subcommand.votes', locale, ELocaleNamespace.Messages)
-            : t('info_command.build_subcommand.vote', locale, ELocaleNamespace.Messages);
-
-        const averageRating = Math.round(buildData.averageRating);
-        const stars = '⭐'.repeat(averageRating) + '☆'.repeat(5 - averageRating);
-        fields.push({
-            name: t('info_command.build_subcommand.rating', locale, ELocaleNamespace.Messages),
-            value: `${stars} ${t('info_command.build_subcommand.rating_desc', locale, ELocaleNamespace.Messages)} ${ratingCount} ${voteText}`,
-            inline: false
-        });
+        if (ratingCount !== undefined) {
+            const averageRating = Math.round(buildData.averageRating);
+            const stars = '⭐'.repeat(averageRating) + '☆'.repeat(5 - averageRating);
+            fields.push({
+                name: t('info_command.build_subcommand.rating', locale, ELocaleNamespace.Messages),
+                value: `${stars} ${t('info_command.build_subcommand.rating_desc', locale, ELocaleNamespace.Messages, { votes_count: ratingCount?.toString() })}`,
+                inline: false
+            });
+        }
 
         const creationDatePretty = new Date(adjustForTimezone(createdAt)).toLocaleDateString(locale, {
             weekday: "long",

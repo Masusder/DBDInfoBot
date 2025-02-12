@@ -1,5 +1,6 @@
 import { combineBaseUrlWithPath } from "@utils/stringUtils";
 import { ThemeColors } from "@constants/themeColors";
+import { Cosmetic } from "@tps/cosmetic";
 
 interface IRarities {
     localizedName: string;
@@ -92,3 +93,22 @@ export const Rarities: Record<string, IRarities> = {
         priority: -1
     }
 };
+
+/**
+ * Compares the priority of two cosmetic items based on their rarity.
+ *
+ * @param {Cosmetic} itemA - The first cosmetic item.
+ * @param {Cosmetic} itemB - The second cosmetic item.
+ * @returns {number} A negative value if `itemA` has a higher rarity priority,
+ *                   a positive value if `itemB` has a higher rarity priority,
+ *                   or 0 if they have the same priority.
+ */
+export function compareItemRarityPriority(itemA: Cosmetic, itemB: Cosmetic): number {
+    const rarityA = itemA.Rarity as keyof typeof Rarities;
+    const rarityB = itemB.Rarity as keyof typeof Rarities;
+
+    const priorityA = Rarities[rarityA]?.priority ?? Infinity;
+    const priorityB = Rarities[rarityB]?.priority ?? Infinity;
+
+    return priorityA - priorityB;
+}

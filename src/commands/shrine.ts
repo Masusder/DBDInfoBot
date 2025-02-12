@@ -152,7 +152,8 @@ export async function execute(interaction: ChatInputCommandInteraction | Message
         const startDateUnix = Math.floor(adjustedStartDate / 1000);
         const adjustedEndDateUnix = Math.floor(adjustedEndDate / 1000);
 
-        const description = `**${t('shrine_command.time_left', locale, ELocaleNamespace.Messages)}** <t:${adjustedEndDateUnix}:R>\n**${t('shrine_command.shrine_active.0', locale, ELocaleNamespace.Messages)}** <t:${startDateUnix}> ${t('shrine_command.shrine_active.1', locale, ELocaleNamespace.Messages)} <t:${adjustedEndDateUnix}>`;
+        let description = `**${t('shrine_command.time_left', locale, ELocaleNamespace.Messages)}** <t:${adjustedEndDateUnix}:R>`;
+        description += `\n${t('shrine_command.shrine_active', locale, ELocaleNamespace.Messages, {start_date: startDateUnix.toString(), end_date: adjustedEndDateUnix.toString()})}`
 
         const customId = generateCustomId(currentShrine.endDate);
 

@@ -81,7 +81,7 @@ export async function handleCollectionCommandInteraction(interaction: ChatInputC
                 day: "numeric"
             });
 
-            const description = `${t('list_command.cosmetics_subcommand.more_info.0', locale, ELocaleNamespace.Messages)}: \`/${t('list_command.cosmetics_subcommand.more_info.1', locale, ELocaleNamespace.Messages)}\`\n\n${t('info_command.collection_subcommand.collection_inclusion_version', locale, ELocaleNamespace.Messages)} ${formatInclusionVersion(collectionData.InclusionVersion, locale)}`;
+            const description = `${t('list_command.cosmetics_subcommand.more_info', locale, ELocaleNamespace.Messages)}\n\n${t('info_command.collection_subcommand.collection_inclusion_version', locale, ELocaleNamespace.Messages, { inclusion_version: formatInclusionVersion(collectionData.InclusionVersion, locale) })}`;
 
             const embed = new EmbedBuilder()
                 .setColor(Rarities[dominantRarity].color as ColorResolvable)
@@ -96,7 +96,11 @@ export async function handleCollectionCommandInteraction(interaction: ChatInputC
 
             if (collectionData.UpdatedDate !== '0001-01-01T00:00:00Z') {
                 embed.setFooter(
-                    { text: `${t('info_command.collection_subcommand.collection_last_updated', locale, ELocaleNamespace.Messages)} ${updateDatePretty}` }
+                    {
+                        text: t('info_command.collection_subcommand.collection_last_updated', locale, ELocaleNamespace.Messages, {
+                            update_date: updateDatePretty
+                        })
+                    }
                 );
             }
 

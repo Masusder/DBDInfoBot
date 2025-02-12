@@ -63,14 +63,25 @@ export async function characterHintsHandler(interaction: ButtonInteraction) {
     await paginationHandler(paginationOptions);
 }
 
-function createEmbed(description: string, iconPath: string, title: string, role: ERole, characterName: string, locale: Locale) {
+function createEmbed(
+    description: string,
+    iconPath: string,
+    title: string,
+    role: ERole,
+    characterName: string,
+    locale: Locale
+) {
     return new EmbedBuilder()
         .setTitle(title)
         .setThumbnail(iconPath)
         .setDescription(description)
         .setColor(Role[role].hexColor)
         .setTimestamp()
-        .setFooter({text: `${t('info_command.character_subcommand.hint_for', locale, ELocaleNamespace.Messages)} ${characterName}`});
+        .setFooter({
+            text: t('info_command.character_subcommand.hint_for', locale, ELocaleNamespace.Messages, {
+                character_name: characterName
+            })
+        });
 }
 
 function createEmbeds(hints: Hint[], characterName: string, locale: Locale) {

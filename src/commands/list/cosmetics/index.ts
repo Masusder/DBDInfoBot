@@ -57,7 +57,7 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
         }
 
         const generateEmbed = async(pageItems: Cosmetic[]) => {
-            let title = t('list_command.cosmetics_subcommand.found_total', locale, ELocaleNamespace.Messages, {cosmetics_count: cosmetics.length.toString() })
+            let title = t('list_command.cosmetics_subcommand.found_total', locale, ELocaleNamespace.Messages, { cosmetics_count: cosmetics.length.toString() })
 
             // Let user know that filters were applied
             if (filterCount > 0) title += ` (${t('list_command.cosmetics_subcommand.filters_applied', locale, ELocaleNamespace.Messages)}: ${filterCount})`;
@@ -71,7 +71,7 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
 
             const embed = new EmbedBuilder()
                 .setTitle(title)
-                .setDescription(`${t('list_command.cosmetics_subcommand.more_info.0', locale, ELocaleNamespace.Messages)}: \`/${t('list_command.cosmetics_subcommand.more_info.1', locale, ELocaleNamespace.Messages)}\``)
+                .setDescription(t('list_command.cosmetics_subcommand.more_info', locale, ELocaleNamespace.Messages))
                 .setColor(embedColor as ColorResolvable)
                 .setTimestamp()
                 .setAuthor({

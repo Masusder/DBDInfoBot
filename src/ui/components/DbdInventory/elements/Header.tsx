@@ -45,7 +45,9 @@ function Header({ character, playerName, locale, user }: HeaderProps) {
                     <img src={icons.DBDINFO_LOGO} className="inventory-logo"
                          alt="DBDInfo Logo"/>
                     <div className="inventory-credits">
-                        {t('dbd_inventory.header.created_by', locale, ELocaleNamespace.UI)} Masusder
+                        {t('dbd_inventory.header.created_by', locale, ELocaleNamespace.UI, {
+                            masusder: "Masusder"
+                        })}
                     </div>
                 </div>
                 <div className="inventory-generation-container">
