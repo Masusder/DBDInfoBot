@@ -34,7 +34,7 @@
       "backstory": "Histoire :",
       "read_backstory": "Lire l'Histoire",
       "character_backstory": "Histoire du Personnage",
-      "hint_for": "Hint for",
+      "hint_for": "Hint for {{character_name}}",
       "check_hints": "Check Hints",
       "perks": "Perks"
     },
@@ -56,7 +56,7 @@
       "kill_switch": "Kill Switch",
       "kill_switch_desc": "This cosmetic has been disabled and is currently unavailable for use.",
       "button_interaction": {
-        "outfit_pieces": "Pièces de la Tenue pour"
+        "outfit_pieces": "Outfit Pieces for '{{cosmetic_name}}'"
       }
     },
     "build_subcommand": {
@@ -69,9 +69,7 @@
       "category": "Catégorie",
       "character": "Personnage",
       "rating": "Notation",
-      "rating_desc": "à partir d'un total de",
-      "vote": "vote",
-      "votes": "votes",
+      "rating_desc": "from a total of {{votes_count}} vote(s)",
       "any_perks": "N'importe quelle Compétence",
       "any_item": "N'importe quel Objet",
       "any_power": "N'importe quel Pouvoir",
@@ -82,9 +80,9 @@
     },
     "collection_subcommand": {
       "total_of_cosmetics": "{{collection_title}} (Total of {{cosmetics_count}} cosmetics)",
-      "collection_inclusion_version": "Cette collection a été introduite dans la version :",
+      "collection_inclusion_version": "This collection was introduced in version '{{inclusion_version}}'",
       "collection_info": "Informations sur la Collection",
-      "collection_last_updated": "La Collection a été mise à jour pour la dernière fois le"
+      "collection_last_updated": "The collection was last updated on {{update_date}}"
     },
     "rift_subcommand": {
       "tier": "Tier",
@@ -99,9 +97,8 @@
       "special_pack_title": "{{- special_pack_title}} (Total of {{rewards_count}} items)",
       "unowned_items": "You need at least {{unowned_items}} unowned item to purchase this bundle.",
       "bundle_released": "Bundle released on <t:{{bundle_start_unix}}:F>.",
-      "bundle_expired": "This bundle has expired <t:{{bundle_expired_unix}}:R>.",
-      "bundle_expires_in": "Bundle expires <t:{{bundle_expires_in_unix}}:R>.",
-      "no_expiration": "This bundle has no expiration date."
+      "no_expiration": "This bundle has no expiration date.",
+      "expiration": "Expiration"
     }
   },
   "list_command": {
@@ -109,10 +106,7 @@
       "found_total": "Found a total of {{cosmetics_count}} cosmetics",
       "filters_applied": "Filtres appliqués",
       "cosmetics_list": "List of Cosmetics",
-      "more_info": [
-        "To learn more about a specific cosmetic, use the command",
-        "info Cosmétique <cosmetic_name>"
-      ]
+      "more_info": "To learn more about a specific cosmetic, use the command: `/info Cosmetic <cosmetic_name>`"
     },
     "builds_subcommand": {
       "builds_list_page": "Page {{current_page}} of {{total_pages}}",
@@ -128,20 +122,14 @@
       "addons_list": "List of Add-ons",
       "found_total": "Found a total of {{addons_count}} add-ons",
       "filters_applied": "Filters applied",
-      "more_info": [
-        "To learn more about a specific add-on, use the command",
-        "info Add-on <addon_name>"
-      ]
+      "more_info": "To learn more about a specific add-on, use the command: `/info Add-on <addon_name>`"
     }
   },
   "shrine_command": {
     "author_title": "Le Temple des Secrets de cette semaine",
     "character": "Personnage",
-    "time_left": "Rafraîchissement du Temple :",
-    "shrine_active": [
-      "Temple actif du",
-      "au"
-    ]
+    "time_left": "Time left to refresh:",
+    "shrine_active": "**Shrine is active from** <t:{{start_date}}> **to** <t:{{end_date}}>."
   },
   "generic_pagination": {
     "first": "Première",
