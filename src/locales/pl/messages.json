@@ -34,7 +34,7 @@
       "backstory": "Historia -",
       "read_backstory": "Przeczytaj historię",
       "character_backstory": "Historia postaci",
-      "hint_for": "Wskazówka dla",
+      "hint_for": "Hint for {{character_name}}",
       "check_hints": "Sprawdź wskazówki",
       "perks": "Umiejętności"
     },
@@ -56,7 +56,7 @@
       "kill_switch": "Wyłącznik awaryjny",
       "kill_switch_desc": "Ten kosmetyk został wyłączony i jest obecnie niedostępny do użytku.",
       "button_interaction": {
-        "outfit_pieces": "Elementy stroju dla"
+        "outfit_pieces": "Outfit Pieces for '{{cosmetic_name}}'"
       }
     },
     "build_subcommand": {
@@ -69,9 +69,7 @@
       "category": "Kategoria",
       "character": "Postać",
       "rating": "Ocena",
-      "rating_desc": "z łącznej ilości",
-      "vote": "głosu",
-      "votes": "głosów",
+      "rating_desc": "from a total of {{votes_count}} vote(s)",
       "any_perks": "Dowolne umiejętności",
       "any_item": "Dowolny przedmiot",
       "any_power": "Dowolna moc",
@@ -82,9 +80,9 @@
     },
     "collection_subcommand": {
       "total_of_cosmetics": "{{collection_title}} (Suma kosmetyków {{cosmetics_count}})",
-      "collection_inclusion_version": "Ta kolekcja została wprowadzona w wersji:",
+      "collection_inclusion_version": "This collection was introduced in version '{{inclusion_version}}'",
       "collection_info": "Informacje o kolekcji",
-      "collection_last_updated": "Ostatnia aktualizacja kolekcji miała miejsce"
+      "collection_last_updated": "The collection was last updated on {{update_date}}"
     },
     "rift_subcommand": {
       "tier": "Poziom",
@@ -99,9 +97,8 @@
       "special_pack_title": "{{- special_pack_title}} (Total of {{rewards_count}} items)",
       "unowned_items": "Aby kupić ten pakiet, nie możesz posiadać przynajmniej {{unowned_items}} przedmiotu(ów).",
       "bundle_released": "Pakiet został wydany <t:{{bundle_start_unix}}:F>.",
-      "bundle_expired": "Ten pakiet zakończył się <t:{{bundle_expired_unix}}:R>.",
-      "bundle_expires_in": "Pakiet wygasa <t:{{bundle_expires_in_unix}}:R>.",
-      "no_expiration": "Ten pakiet nie ma daty wygaśnięcia."
+      "no_expiration": "Ten pakiet nie ma daty wygaśnięcia.",
+      "expiration": "Expiration"
     }
   },
   "list_command": {
@@ -109,10 +106,7 @@
       "found_total": "Znaleziono łącznie {{cosmetics_count}} kosmetyków",
       "filters_applied": "Zastosowano filtry",
       "cosmetics_list": "Lista kosmetyków",
-      "more_info": [
-        "Aby uzyskać więcej informacji o konkretnym kosmetyku, użyj polecenia",
-        "info Kosmetyk <nazwa_kosmetyku>"
-      ]
+      "more_info": "To learn more about a specific cosmetic, use the command: `/info Cosmetic <cosmetic_name>`"
     },
     "builds_subcommand": {
       "builds_list_page": "Strona {{current_page}} z {{total_pages}}",
@@ -128,20 +122,14 @@
       "addons_list": "Lista dodatków",
       "found_total": "Znaleziono łącznie {{addons_count}} dodatków",
       "filters_applied": "Zastosowano filtry",
-      "more_info": [
-        "Aby uzyskać więcej informacji o konkretnym dodatku, użyj polecenia",
-        "info Dodatek <nazwa_dodatku>"
-      ]
+      "more_info": "To learn more about a specific add-on, use the command: `/info Add-on <addon_name>`"
     }
   },
   "shrine_command": {
     "author_title": "Sanktuarium Tajemnic tego tygodnia",
     "character": "Postać",
-    "time_left": "Pozostały czas na odświeżenie:",
-    "shrine_active": [
-      "Sanktuarium aktywne od",
-      "do"
-    ]
+    "time_left": "Time left to refresh:",
+    "shrine_active": "**Shrine is active from** <t:{{start_date}}> **to** <t:{{end_date}}>."
   },
   "generic_pagination": {
     "first": "Pierwsza",
