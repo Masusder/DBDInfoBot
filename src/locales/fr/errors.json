@@ -1,7 +1,7 @@
 {
   "info_command": {
     "cosmetic_subcommand": {
-      "cosmetic_not_found": "Aucun cosmétique n'a été trouvé pour",
+      "cosmetic_not_found": "No cosmetic found for \"{{cosmetic_name}}\".",
       "button_interaction": {
         "invalid_id": "ID du cosmétique non valide.",
         "error_retrieving_data": "Erreur dans la récupération des données cosmétiques."
