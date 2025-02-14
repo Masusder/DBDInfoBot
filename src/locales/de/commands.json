@@ -62,120 +62,120 @@
         },
         "role": {
           "name": "rolle",
-          "description": "Specify role cosmetic belongs to."
+          "description": "Gib an, zu welcher Rolle der kosmetische Gegenstand gehört."
         },
         "on_sale": {
-          "name": "on_sale",
-          "description": "Specify whether cosmetic should be currently on sale."
+          "name": "im_Angebot",
+          "description": "Gib an, ob der kosmetische Gegenstand im Angebot ist."
         },
         "limited": {
-          "name": "limited",
-          "description": "Specify whether cosmetic is available for purchase for a limited time."
+          "name": "limitiert",
+          "description": "Gib an, ob der kosmetische Gegenstand zeitlich begrenzt erwerbbar ist."
         },
         "search": {
-          "name": "search",
-          "description": "Search for cosmetic by its name/description/collection."
+          "name": "suchen",
+          "description": "Suche kosmetische Gegenstände nach name/Beschreibung/Kollektion."
         }
       }
     },
     "builds_subcommand": {
       "name": "builds",
-      "description": "Retrieve list of builds.",
+      "description": "Erhalte eine Liste der Builds.",
       "options": {
         "role": {
-          "name": "role",
-          "description": "Role for the build.",
+          "name": "Rolle",
+          "description": "Rolle für den Build.",
           "choices": {
             "killer": "Killer",
-            "survivor": "Survivor"
+            "survivor": "Überlebender"
           }
         },
         "page": {
-          "name": "page",
-          "description": "Page number (default is 1)."
+          "name": "Seite",
+          "description": "Seitenzahl"
         },
         "title": {
-          "name": "title",
-          "description": "Title of the build."
+          "name": "Titel",
+          "description": "Titel des Builds."
         },
         "category": {
-          "name": "category",
-          "description": "Category of the build."
+          "name": "Kategorie",
+          "description": "Kategorie des Builds."
         },
         "character": {
-          "name": "character",
-          "description": "Character for the build."
+          "name": "Charakter",
+          "description": "Charakter für den Build."
         },
         "version": {
-          "name": "version",
-          "description": "Game version for the build."
+          "name": "Version",
+          "description": "Spielversion für den Build."
         },
         "rating": {
-          "name": "rating",
-          "description": "Minimum rating for the build.",
+          "name": "Bewertung",
+          "description": "Mindestbewertung für den Build.",
           "choices": {
-            "one_star": "One Star",
-            "two_stars": "Two Stars",
-            "three_stars": "Three Stars",
-            "four_stars": "Four Stars",
-            "five_stars": "Five Stars"
+            "one_star": "Ein Stern",
+            "two_stars": "Zwei Sterne",
+            "three_stars": "Drei Sterne",
+            "four_stars": "Vier Sterne",
+            "five_stars": "Fünf Sterne"
           }
         }
       }
     },
     "addons_subcommand": {
-      "name": "add-ons",
-      "description": "Retrieve list of add-ons.",
+      "name": "Add-ons",
+      "description": "Erhalte eine List der Add-ons.",
       "options": {
         "character": {
-          "name": "character",
-          "description": "Name of the character."
+          "name": "Charakter",
+          "description": "Name des Charakters."
         },
         "rarity": {
-          "name": "rarity",
-          "description": "Specify rarity of the add-ons."
+          "name": "Seltenheit",
+          "description": "Gib die Seltenheit des Add-ons an."
         }
       }
     }
   },
   "news_command": {
-    "name": "news",
-    "description": "Retrieve latest in-game news."
+    "name": "Neuigkeiten",
+    "description": "Erhalte aktuelle Ingame-Nachrichten."
   },
   "stats_command": {
-    "name": "stats",
-    "description": "View Steam statistics (global or personal).",
+    "name": "Statistiken",
+    "description": "Zeige Steam Statistiken (global und persönlich).",
     "global_subcommand": {
       "name": "global",
-      "description": "View global statistics."
+      "description": "Zeige globale Statistiken."
     },
     "personal_subcommand": {
-      "name": "personal",
-      "description": "View a summarized infographic of player statistics.",
+      "name": "persönlich",
+      "description": "Zeige eine zusammengefasste Info-Grafik von Spieler-Statistiken.",
       "options": {
         "steam_id": {
           "name": "steam_id",
-          "description": "The Steam ID, username, or profile URL of the player whose statistics you want to view."
+          "description": "Die Steam ID, Benutzername oder Profil-URL des Spielers, dessen Statistiken Du sehen möchtest."
         }
       }
     }
   },
   "inventory_command": {
-    "name": "inventory",
-    "description": "View your in-game inventory for given character in form of an infographic.",
+    "name": "Inventar",
+    "description": "Zeige Dein Inventar im Spiel für den angezeigten Charakter der Infografik an.",
     "options": {
       "file": {
-        "name": "file",
-        "description": "Upload your inventory file. Instructions on how to obtain it can be found on the support server."
+        "name": "Datei",
+        "description": "Lade Deine Inventar-Datei hoch. Anweisungen zum Erhalten der Datei findest Du auf dem Support Server."
       },
       "character": {
-        "name": "character",
-        "description": "Select character you want to generate infographic for."
+        "name": "Charakter",
+        "description": "Wähle den Charakter aus, für den Du eine Infografik generieren möchtest."
       }
     }
   },
   "support_command": {
-    "name": "support",
-    "description": "Get a link to the support server."
+    "name": "Support",
+    "description": "Erhalte einen Link zum Support Server."
   }
 }
