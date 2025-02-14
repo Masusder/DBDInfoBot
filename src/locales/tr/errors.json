@@ -73,6 +73,7 @@
     "invalid_data": "Bu veri geçersizdir. Geçerli verilerin nasıl elde edileceğine ilişkin talimatlar için lütfen destek sunucusunu ziyaret edin.",
     "game_data_not_found": "Oyun verileri bulunamadı. Envanter oluşturma işlemi başarısız.",
     "fatal_error": "Envanter komutu yürütülürken kritik hata oluştu.",
-    "failed_generating": "İnfografik oluşturma işlemi başarısız."
+    "failed_generating": "İnfografik oluşturma işlemi başarısız.",
+    "invalid_character": "The input \"{{user_input}}\" is invalid. Please select valid character from available options."
   }
 }
