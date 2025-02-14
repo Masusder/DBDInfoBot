@@ -1,7 +1,7 @@
 {
   "info_command": {
     "cosmetic_subcommand": {
-      "cosmetic_not_found": "Не найдено косметических предметов для",
+      "cosmetic_not_found": "No cosmetic found for \"{{cosmetic_name}}\".",
       "button_interaction": {
         "invalid_id": "Неверный ID косметического предмета.",
         "error_retrieving_data": "Не удалось получить информацию о косметическом предмете."
@@ -73,6 +73,7 @@
     "invalid_data": "Данные недействительны. Посетите сервер поддержки, чтобы узнать как получить действующие данные.",
     "game_data_not_found": "Игровые данные не найдены. Не удалось отобразить инвентарь.",
     "fatal_error": "При выполнении команды инвентарь произошла критическая ошибка.",
-    "failed_generating": "Не удалось сгенерировать инфографику."
+    "failed_generating": "Не удалось сгенерировать инфографику.",
+    "invalid_character": "The input \"{{user_input}}\" is invalid. Please select valid character from available options."
   }
 }

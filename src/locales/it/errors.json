@@ -1,7 +1,7 @@
 {
   "info_command": {
     "cosmetic_subcommand": {
-      "cosmetic_not_found": "Nessun cosmetico trovato per",
+      "cosmetic_not_found": "No cosmetic found for \"{{cosmetic_name}}\".",
       "button_interaction": {
         "invalid_id": "ID del cosmetico non trovato.",
         "error_retrieving_data": "Errore durante il recupero di dati dei cosmetici."
@@ -73,6 +73,7 @@
     "invalid_data": "This data is invalid. Please visit the support server for instructions on how to obtain valid data.",
     "game_data_not_found": "Game data not found. Failed to render inventory.",
     "fatal_error": "Fatal error occurred while executing inventory command.",
-    "failed_generating": "Failed to generate infographic."
+    "failed_generating": "Failed to generate infographic.",
+    "invalid_character": "The input \"{{user_input}}\" is invalid. Please select valid character from available options."
   }
 }

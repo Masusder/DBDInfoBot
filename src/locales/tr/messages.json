@@ -1,195 +1,183 @@
 {
   "info_command": {
     "perk_subcommand": {
-      "perk_information": "Perk Information",
-      "generic_perk": "Generic Perk",
-      "description": "Description"
+      "perk_information": "Avantaj Bilgisi",
+      "generic_perk": "Genel Avantaj",
+      "description": "Açıklama"
     },
     "addon_subcommand": {
-      "addon_information": "Add-on Information",
-      "description": "Description",
-      "rarity": "Rarity",
-      "role": "Role"
+      "addon_information": "Eklenti Bilgisi",
+      "description": "Açıklama",
+      "rarity": "Nadirlik",
+      "role": "Rol"
     },
     "item_subcommand": {
-      "item_information": "Item Information",
-      "description": "Description",
-      "character": "Character",
-      "rarity": "Rarity",
-      "role": "Role"
+      "item_information": "Eşya Bilgisi",
+      "description": "Açıklama",
+      "character": "Karakter",
+      "rarity": "Nadirlik",
+      "role": "Rol"
     },
     "offering_subcommand": {
-      "offering_information": "Offering Information",
-      "description": "Description",
-      "rarity": "Rarity",
-      "role": "Role",
-      "retired": "This offering has been retired."
+      "offering_information": "Adak Bilgisi",
+      "description": "Açıklama",
+      "rarity": "Nadirlik",
+      "role": "Rol",
+      "retired": "Bu adak kullanımdan kaldırılmıştır."
     },
     "character_subcommand": {
-      "character_information": "Character Information",
-      "description": "Description",
-      "role": "Role",
-      "gender": "Gender",
-      "difficulty": "Difficulty",
-      "backstory": "Backstory of",
-      "read_backstory": "Read Backstory",
-      "character_backstory": "Character backstory",
-      "hint_for": "Hint for",
-      "check_hints": "Check Hints",
-      "perks": "Perks"
+      "character_information": "Karakter Bilgisi",
+      "description": "Açıklamt",
+      "role": "Rol",
+      "gender": "Cinsiyet",
+      "difficulty": "Zorluk",
+      "backstory": "Hikaye -",
+      "read_backstory": "Hikayesini Oku",
+      "character_backstory": "Karakter hikayesi",
+      "hint_for": "{{character_name}} için İpucu",
+      "check_hints": "İpuçlarına Göz At",
+      "perks": "Avantajlar"
     },
     "cosmetic_subcommand": {
-      "character": "Character",
-      "collection": "Collection",
-      "rarity": "Rarity",
-      "inclusion_version": "Inclusion Version",
-      "type": "Type",
-      "release_date": "Shop Release Date",
-      "sale": "Sale Ends",
-      "more_info": "More Info",
-      "view_pieces": "View Outfit Pieces",
-      "linked_cosmetic": "Linked Cosmetic",
-      "limited_until": "Limited Until",
-      "view_3d_model": "View 3D Model",
-      "special_event": "Special Event",
-      "released_with_tome": "Released with Tome",
-      "kill_switch": "Kill Switch",
-      "kill_switch_desc": "This cosmetic has been disabled and is currently unavailable for use.",
+      "character": "Karakter",
+      "collection": "Koleksiyon",
+      "rarity": "Nadirlik",
+      "inclusion_version": "Kapsayan Sürüm",
+      "type": "Tür",
+      "release_date": "Mağazaya Çıkış Tarihi",
+      "sale": "İndirim Sonu",
+      "more_info": "Daha Fazla Bilgi",
+      "view_pieces": "Kıyafet Parçalarını Görüntüle",
+      "linked_cosmetic": "Bağlı Kozmetik",
+      "limited_until": "Şu Zamana Kadar Alınabilir",
+      "view_3d_model": "3D Modeli Görüntüle",
+      "special_event": "Etkinlik",
+      "released_with_tome": "Kitap ile birlikte çıktı",
+      "kill_switch": "Devre Dışı",
+      "kill_switch_desc": "Bu kozmetik devre dışı bırakılmıştır ve şu anda kullanılamamaktadır.",
       "button_interaction": {
-        "outfit_pieces": "Outfit Pieces for"
+        "outfit_pieces": "'{{cosmetic_name}} için Kıyafet Parçaları"
       }
     },
     "build_subcommand": {
-      "unknown_perk": "Unknown Perk",
-      "unknown_addon": "Unknown Add-on",
-      "perks": "Perks",
-      "item_addons": "Item + Add-ons",
-      "power_addons": "Power + Add-ons",
-      "offering": "Offering",
-      "category": "Category",
-      "character": "Character",
-      "rating": "Rating",
-      "rating_desc": "from a total of",
-      "vote": "vote",
-      "votes": "votes",
-      "any_perks": "Any perks",
-      "any_item": "Any item",
-      "any_power": "Any power",
-      "any_offering": "Any offering",
-      "desc_not_provided": "Description for this build wasn't provided.",
-      "build_info": "Build Information",
-      "created_by": "Created by {{username}} on {{date}}"
+      "unknown_perk": "Bilinmeyen Avantaj",
+      "unknown_addon": "Bilinmeyen Eklenti",
+      "perks": "Avantajlar",
+      "item_addons": "Eşya + Eklentiler",
+      "power_addons": "Güç + Eklentiler",
+      "offering": "Adak",
+      "category": "Kategori",
+      "character": "Karakter",
+      "rating": "Derecelendirme",
+      "rating_desc": "toplam {{votes_count}} oy içerisinden",
+      "any_perks": "Herhangi bir avantaj",
+      "any_item": "Herhangi bir eklenti",
+      "any_power": "Herhangi bir güç",
+      "any_offering": "Herhangi bir adak",
+      "desc_not_provided": "Bu dizilim için açıklama bulunmuyor.",
+      "build_info": "Dizilim Bilgisi",
+      "created_by": "{{username}} tarafından {{date}} tarihinde oluşturuldu"
     },
     "collection_subcommand": {
-      "total_of_cosmetics": "{{collection_title}} (Total of {{cosmetics_count}} cosmetics)",
-      "collection_inclusion_version": "This collection was introduced in version:",
-      "collection_info": "Collection Information",
-      "collection_last_updated": "The collection was last updated on"
+      "total_of_cosmetics": "{{collection_title}} (Toplam {{cosmetics_count}} kozmetik)",
+      "collection_inclusion_version": "Bu koleksiyon '{{inclusion_version}}' sürümünde çıkmıştır",
+      "collection_info": "Koleksiyon Bilgisi",
+      "collection_last_updated": "Koleksiyon en son {{update_date}} tarihinde güncellenmiştir"
     },
     "rift_subcommand": {
-      "tier": "Tier",
-      "rift_ends_active": "Rift ends in:",
-      "rift_ends_expired": "Rift ended:",
-      "rift_active": "Rift is active from <t:{{start_date}}> to <t:{{end_date}}>",
-      "rift_expired": "Rift was active from <t:{{start_date}}> to <t:{{end_date}}>",
-      "to_progress_active": "To progress by one tier you need to earn:",
-      "to_progress_expired": "To progress by one tier you had to earn:"
+      "tier": "Aşama",
+      "rift_ends_active": "Yarık'ın kapanmasına:",
+      "rift_ends_expired": "Yarık kapandı:",
+      "rift_active": "Yarık, <t:{{start_date}}> ile <t:{{end_date}}> tarihleri arasında aktif",
+      "rift_expired": "Yarık, <t:{{start_date}}> ile <t:{{end_date}}> tarihleri arasında aktifti",
+      "to_progress_active": "Bir aşama ilerlemek için kazanmanız gerekir:",
+      "to_progress_expired": "Bir aşama ilerlemek için kazanmanız gerekiyordu:"
     },
     "bundle_subcommand": {
-      "special_pack_title": "{{special_pack_title}} (Total of {{rewards_count}} items)",
-      "unowned_items": "You need at least {{unowned_items}} unowned item to purchase this bundle.",
-      "bundle_released": "Bundle released on <t:{{bundle_start_unix}}:F>.",
-      "bundle_expired": "This bundle has expired <t:{{bundle_expired_unix}}:R>.",
-      "bundle_expires_in": "Bundle expires <t:{{bundle_expires_in_unix}}:R>.",
-      "no_expiration": "This bundle has no expiration date."
+      "special_pack_title": "{{- special_pack_title}} (Toplam {{rewards_count}} öge)",
+      "unowned_items": "Bu paketi satın almak için en az {{unowned_items}} adet sahip olmadığın ögeye ihtiyacın var.",
+      "bundle_released": "Paket <t:{{bundle_start_unix}}:F> tarihinde satışa sunuldu.",
+      "no_expiration": "Bu paketin sona erme tarihi yoktur.",
+      "expiration": "Sona Erme"
     }
   },
   "list_command": {
     "cosmetics_subcommand": {
-      "found_total": "Found a total of {{cosmetics_count}} cosmetics",
-      "filters_applied": "Filters applied",
-      "cosmetics_list": "List of Cosmetics",
-      "more_info": [
-        "To learn more about a specific cosmetic, use the command",
-        "info Cosmetic <cosmetic_name>"
-      ]
+      "found_total": "Toplam {{cosmetics_count}} kozmetik bulundu",
+      "filters_applied": "Uygulanan filtreler",
+      "cosmetics_list": "Kozmetik Listesi",
+      "more_info": "Belirli bir kozmetik hakkında daha fazla bilgi edinmek için şu komutu kullanın: `/bilgi Kozmetik <kozmetik_ismi>`"
     },
     "builds_subcommand": {
-      "builds_list_page": "Page {{current_page}} of {{total_pages}}",
-      "create_your_own_build": "Create your Build here!",
-      "builds_matching_filters": "Here are the builds matching your filters:",
-      "builds_list": "Builds List",
-      "created_by": "Created by:",
-      "unknown_perk": "Unknown Perk",
-      "any_perks": "Any Perks",
-      "select_for_details": "Select a build to view details."
+      "builds_list_page": "Sayfa {{current_page}}/{{total_pages}}",
+      "create_your_own_build": "Dizilimini burada oluştur!",
+      "builds_matching_filters": "İşte filtrelerinizle eşleşen dizilimler:",
+      "builds_list": "Dizilim Listesi",
+      "created_by": "Oluşturan:",
+      "unknown_perk": "Bilinmeyen Avantaj",
+      "any_perks": "Herhangi bir Avantaj",
+      "select_for_details": "Detayları görüntülemek için bir dizilim seçin."
     },
     "addons_subcommand": {
-      "addons_list": "List of Add-ons",
-      "found_total": "Found a total of {{addons_count}} add-ons",
-      "filters_applied": "Filters applied",
-      "more_info": [
-        "To learn more about a specific add-on, use the command",
-        "info Add-on <addon_name>"
-      ]
+      "addons_list": "Eklenti Listesi",
+      "found_total": "Toplam {{addons_count}} eklenti bulundu",
+      "filters_applied": "Uygulanan filtreler",
+      "more_info": "Belirli bir eklendi hakkında daha fazla bilgi edinmek için şu komutu kullanın: `/bilgi Eklenti <eklenti_ismi>`"
     }
   },
   "shrine_command": {
-    "author_title": "This week's Shrine of Secrets",
-    "character": "Character",
-    "time_left": "Time Left to Refresh:",
-    "shrine_active": [
-      "Shrine Active from",
-      "to"
-    ]
+    "author_title": "Bu haftanın Sırlar Mabedi",
+    "character": "Karakter",
+    "time_left": "Yenilenmesine kalan süre:",
+    "shrine_active": "Mabet <t:{{start_date}}> ile <t:{{end_date}}> arasında aktiftir."
   },
   "generic_pagination": {
-    "first": "First",
-    "previous": "Previous",
-    "page_number": "Page {{current_page}} of {{total_pages}}",
-    "next": "Next",
-    "last": "Last"
+    "first": "İlk",
+    "previous": "Önceki",
+    "page_number": "Sayfa {{current_page}}/{{total_pages}}",
+    "next": "Sonraki",
+    "last": "Son"
   },
   "news_command": {
-    "select_news_article": "Select a news article.",
-    "news": "News",
-    "published_on": "Published on:",
-    "untitled_news": "Untitled News",
-    "click_here": "Click here",
-    "showcased_items": "Showcased Items",
-    "items_featured_in_article": "These items are featured in the associated news article:",
-    "pinned_article": "This news article is pinned"
+    "select_news_article": "Bir haber makalesi seçin.",
+    "news": "Haberler",
+    "published_on": "Yayınlanma Tarihi:",
+    "untitled_news": "Başlıksız Haberler",
+    "click_here": "Buraya tıklayın",
+    "showcased_items": "Sergilenen Ögeler",
+    "items_featured_in_article": "Bu ögeler ilgili haber makalesinde yer almaktadır:",
+    "pinned_article": "Bu haber makalesi sabitlenmiştir"
   },
   "stats_command": {
-    "player_stats_overview": "Player Statistics Overview",
-    "summary_desc": "A quick infographic summary of the player's stats.",
-    "full_stats": "Full Stats",
-    "global_stats_title": "Global Steam Statistics in \"{{category}}\" category",
-    "data_collected_from": "Data collected from over **{{player_count}}** players.",
+    "player_stats_overview": "Oyuncu İstatistiklerine Genel Bakış",
+    "summary_desc": "Oyuncunun istatistiklerinin hızlı bir infografik özeti.",
+    "full_stats": "Tüm İstatistikler",
+    "global_stats_title": "“{{category}}” kategorisindeki Genel Steam İstatistikleri",
+    "data_collected_from": "Veriler **{{player_count}}+** oyuncudan toplanmıştır.",
     "global_stat_tabs": {
-      "other": "Other",
-      "bloodweb": "Bloodweb",
-      "wins": "Wins",
-      "loadout": "Loadout",
-      "trial_survivor": "Survivor Trial Actions",
-      "healing": "Healing",
-      "chase": "Chases",
-      "escapes": "Escapes",
-      "kills": "Kills",
-      "hooks": "Hooks",
-      "trial_killer": "Killer Trial Actions",
-      "downs": "Downs",
-      "killer_downs": "Killer Downs",
-      "killer_specific": "Killer Ability"
+      "other": "Diğer",
+      "bloodweb": "Kan Ağı",
+      "wins": "Galibiyetler",
+      "loadout": "Dizilim",
+      "trial_survivor": "Kurban Mücadele Eylemleri",
+      "healing": "İyileştirme",
+      "chase": "Kovalamalar",
+      "escapes": "Kaçışlar",
+      "kills": "Öldürmeler",
+      "hooks": "Kancalar",
+      "trial_killer": "Katil Mücadele Eylemleri",
+      "downs": "Düşürmeler",
+      "killer_downs": "Katil Düşürmeleri",
+      "killer_specific": "Katil Yeteneği"
     }
   },
   "inventory_command": {
-    "support": "Support",
-    "inventory_overview": "{{character_name}} - Inventory Overview",
-    "description": "A detailed summary of the inventory for the selected character."
+    "support": "Destek",
+    "inventory_overview": "{{character_name}} - Envantere Genel Bakış",
+    "description": "Seçilen karakter için envanterin ayrıntılı bir özeti."
   },
   "support_command": {
-    "support": "Support",
-    "join_server": "Join the support server:"
+    "support": "Destek",
+    "join_server": "Destek sunucusuna katılın:"
   }
 }

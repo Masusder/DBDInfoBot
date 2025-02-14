@@ -34,7 +34,7 @@
       "backstory": "Предыстория -",
       "read_backstory": "Прочитать предысторию",
       "character_backstory": "Предыстория персонажа",
-      "hint_for": "Подсказка",
+      "hint_for": "Hint for {{character_name}}",
       "check_hints": "Подсказки",
       "perks": "Навыки"
     },
@@ -56,7 +56,7 @@
       "kill_switch": "Аварийный выключатель",
       "kill_switch_desc": "Этот косметический предмет был отключен и в настоящее время недоступен для использования.",
       "button_interaction": {
-        "outfit_pieces": "Элементы набора"
+        "outfit_pieces": "Outfit Pieces for '{{cosmetic_name}}'"
       }
     },
     "build_subcommand": {
@@ -69,9 +69,7 @@
       "category": "Категория",
       "character": "Персонаж",
       "rating": "Оценка",
-      "rating_desc": "на основании",
-      "vote": "голоса",
-      "votes": "голосов",
+      "rating_desc": "from a total of {{votes_count}} vote(s)",
       "any_perks": "Любые навыки",
       "any_item": "Любой предмет",
       "any_power": "Любая сила",
@@ -82,9 +80,9 @@
     },
     "collection_subcommand": {
       "total_of_cosmetics": "{{collection_title}} (Всего {{cosmetics_count}} косметики)",
-      "collection_inclusion_version": "Эта коллекция была представлена в версии:",
+      "collection_inclusion_version": "This collection was introduced in version '{{inclusion_version}}'",
       "collection_info": "Информация о коллекции",
-      "collection_last_updated": "Последнее обновление коллекции:"
+      "collection_last_updated": "The collection was last updated on {{update_date}}"
     },
     "rift_subcommand": {
       "tier": "Уровень",
@@ -96,12 +94,11 @@
       "to_progress_expired": "Для продвижения на один уровень, нужно было заработать:"
     },
     "bundle_subcommand": {
-      "special_pack_title": "{{special_pack_title}} (Total of {{rewards_count}} items)",
+      "special_pack_title": "{{- special_pack_title}} (Total of {{rewards_count}} items)",
       "unowned_items": "You need at least {{unowned_items}} unowned item to purchase this bundle.",
       "bundle_released": "Bundle released on <t:{{bundle_start_unix}}:F>.",
-      "bundle_expired": "This bundle has expired <t:{{bundle_expired_unix}}:R>.",
-      "bundle_expires_in": "Bundle expires <t:{{bundle_expires_in_unix}}:R>.",
-      "no_expiration": "This bundle has no expiration date."
+      "no_expiration": "This bundle has no expiration date.",
+      "expiration": "Expiration"
     }
   },
   "list_command": {
@@ -109,10 +106,7 @@
       "found_total": "Найдено {{cosmetics_count}} косметических предметов",
       "filters_applied": "Фильтры применены",
       "cosmetics_list": "Список косметических предметов",
-      "more_info": [
-        "Чтобы узнать больше о конкретном косметическом предмете, используйте команду",
-        "информация Косметический предмет <cosmetic_name>"
-      ]
+      "more_info": "To learn more about a specific cosmetic, use the command: `/info Cosmetic <cosmetic_name>`"
     },
     "builds_subcommand": {
       "builds_list_page": "Страница {{current_page}} из {{total_pages}}",
@@ -128,20 +122,14 @@
       "addons_list": "Список Улучшений",
       "found_total": "Найдено {{addons_count}} Улучшений",
       "filters_applied": "Фильтры применены",
-      "more_info": [
-        "Чтобы узнать больше о конкретном улучшении, используйте команду",
-        "информация Улучшение <название_улучшения>"
-      ]
+      "more_info": "To learn more about a specific add-on, use the command: `/info Add-on <addon_name>`"
     }
   },
   "shrine_command": {
     "author_title": "Храм Тайн на этой неделе",
     "character": "Персонаж",
-    "time_left": "До Обновления:",
-    "shrine_active": [
-      "Храм Тайн активен с",
-      "до"
-    ]
+    "time_left": "Time left to refresh:",
+    "shrine_active": "**Shrine is active from** <t:{{start_date}}> **to** <t:{{end_date}}>."
   },
   "generic_pagination": {
     "first": "Первая",

@@ -1,7 +1,7 @@
 {
   "info_command": {
     "cosmetic_subcommand": {
-      "cosmetic_not_found": "Nie znaleziono kosmetyku dla",
+      "cosmetic_not_found": "Nie znaleziono podanego kosmetyku - \"{{cosmetic_name}}\".",
       "button_interaction": {
         "invalid_id": "Nieprawidłowy identyfikator kosmetyku.",
         "error_retrieving_data": "Błąd podczas pobierania danych kosmetyków."
@@ -73,6 +73,7 @@
     "invalid_data": "Te dane są nieprawidłowe. Odwiedź serwer pomocy technicznej, aby dowiedzieć się, jak uzyskać prawidłowe dane.",
     "game_data_not_found": "Nie znaleziono danych gry. Nie udało się wygenerować ekwipunku.",
     "fatal_error": "Wystąpił błąd krytyczny podczas wykonywania komendy ekwipunku.",
-    "failed_generating": "Nie udało się wygenerować infografiki."
+    "failed_generating": "Nie udało się wygenerować infografiki.",
+    "invalid_character": "The input \"{{user_input}}\" is invalid. Please select valid character from available options."
   }
 }
