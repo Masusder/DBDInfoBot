@@ -153,6 +153,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             return;
         }
 
+        if (!Object.keys(characterData).includes(characterIndex)) {
+            await sendErrorMessage(interaction, t('inventory_command.invalid_character', locale, ELocaleNamespace.Errors, {
+                user_input: characterIndex
+            }))
+            return;
+        }
+
         const gameData: GameData = {
             characterData,
             perkData,
