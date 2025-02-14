@@ -1,67 +1,67 @@
 {
   "info_command": {
     "name": "info",
-    "description": "Retrieve detailed information about game features.",
+    "description": "Erhalte detaillierte Informationen über Spielfunktionen.",
     "options": {
       "type": {
-        "name": "type",
-        "description": "Specify the type of game feature you want information about.",
+        "name": "typ",
+        "description": "Gib die Art der Spielfunktion an, zu der Du Informationen möchtest.",
         "choices": {
-          "perk": "Perk",
+          "perk": "Talent",
           "addon": "Add-on",
-          "item": "Item",
-          "offering": "Offering",
-          "character": "Character",
+          "item": "Gegenstand",
+          "offering": "Opfergabe",
+          "character": "Charakter",
           "cosmetic": "Cosmetic",
           "build": "Build",
-          "collection": "Collection",
-          "rift": "Rift",
-          "bundle": "Bundle"
+          "collection": "Sammlung",
+          "rift": "Spalt",
+          "bundle": "Paket"
         }
       },
       "name": {
         "name": "name",
-        "description": "Specify the name of the game feature you want information about."
+        "description": "Gib den Namen der Spielfunktion an, zu der Du Informationen möchtest."
       }
     }
   },
   "shrine_command": {
-    "name": "shrine",
-    "description": "Check weekly Shrine of Secrets."
+    "name": "schrein",
+    "description": "Überprüfe den wöchentlichen Schrein der Geheimnisse."
   },
   "list_command": {
-    "name": "list",
-    "description": "Retrieve list of specified game feature items.",
+    "name": "liste",
+    "description": "Erhalte eine Liste der angegebenen Spielfunktionsgegenstände.",
     "cosmetics_subcommand": {
       "name": "cosmetics",
-      "description": "Retrieve list of cosmetics.",
+      "description": "Erhalte eine List der kosmetischen Gegenstände.",
       "options": {
         "character": {
-          "name": "character",
-          "description": "Name of the character."
+          "name": "charakter",
+          "description": "Name des Charakters."
         },
         "purchasable": {
-          "name": "purchasable",
-          "description": "Specify whether cosmetic should be available for purchase or not."
+          "name": "käuflich",
+          "description": "Gib an, ob der kosmetische Gegenstand käuflich ist oder nicht."
         },
         "linked": {
           "name": "linked",
           "description": "Specify whether cosmetic should be a linked set or not."
         },
         "rarity": {
-          "name": "rarity",
-          "description": "Specify rarity of the cosmetic."
+          "name": "seltenheit",
+          "description": "Gib die Seltenheit des kosmetischen Gegenstandes an."
         },
         "type": {
-          "name": "type",
-          "description": "Specify type of the cosmetic."
+          "name": "typ",
+          "description": "Gib den Typ des kosmetischen Gegenstandes an."
         },
         "inclusion_version": {
           "name": "inclusion_version",
           "description": "Specify inclusion version of the cosmetic."
         },
         "role": {
-          "name": "role",
+          "name": "rolle",
           "description": "Specify role cosmetic belongs to."
         },
         "on_sale": {
