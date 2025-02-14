@@ -166,7 +166,7 @@
     "options": {
       "file": {
         "name": "dosya",
-        "description": "Envanter dosyanızı yükleyin. Alma talimatları destek sunucusunda."
+        "description": "Envanter dosyanızı yükleyin. Nasıl elde edileceğine ilişkin talimatlar destek sunucusunda."
       },
       "character": {
         "name": "karakter",
