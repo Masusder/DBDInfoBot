@@ -1,39 +1,39 @@
 {
   "rarities": {
-    "common": "Common",
-    "uncommon": "Uncommon",
-    "rare": "Rare",
-    "very_rare": "Very Rare",
-    "ultra_rare": "Ultra Rare",
-    "legendary": "Legendary",
-    "special_event": "Special Event",
-    "artifact": "Artifact",
-    "limited": "Limited",
-    "unknown": "N/A"
+    "common": "Gewöhnlich",
+    "uncommon": "Ungewöhnlich",
+    "rare": "Selten",
+    "very_rare": "Sehr selten",
+    "ultra_rare": "Äußerst selten",
+    "legendary": "Legendär",
+    "special_event": "Besonderes Event",
+    "artifact": "Relikt",
+    "limited": "Limitiert",
+    "unknown": "Nicht verfügbar"
   },
   "roles": {
     "killer": "Killer",
-    "survivor": "Survivor",
-    "none": "Universal"
+    "survivor": "Überlebender",
+    "none": "Universell"
   },
   "difficulties": {
-    "easy": "Easy",
-    "intermediate": "Intermediate",
-    "hard": "Hard",
-    "very_hard": "Very Hard",
-    "none": "None"
+    "easy": "Einfach",
+    "intermediate": "Fortgeschritten",
+    "hard": "Schwer",
+    "very_hard": "Sehr schwer",
+    "none": "Keine"
   },
   "genders": {
-    "male": "Male",
-    "female": "Female",
+    "male": "Männlich",
+    "female": "Weiblich",
     "not_human": "Monster",
-    "multiple": "Multiple"
+    "multiple": "Mehrere"
   },
   "currencies": {
-    "bloodpoints": "Bloodpoints",
-    "shards": "Shards",
-    "auric_cells": "Auric Cells",
-    "rift_fragments": "Rift Fragments",
+    "bloodpoints": "Blutpunkte",
+    "shards": "Scherben",
+    "auric_cells": "Aurazellen",
+    "rift_fragments": "Spaltfragmente",
     "halloween_event_currency": "Dark Trinkets",
     "winter_event_currency": "Frosty Trinkets",
     "spring_event_currency": "Blood Trinkets",
@@ -41,31 +41,31 @@
   },
   "cosmetic_types": {
     "outfit": "Outfit",
-    "survivor_head": "Survivor's Head",
-    "survivor_torso": "Survivor's Torso",
-    "survivor_legs": "Survivor's Legs",
-    "killer_head": "Killer's Head",
-    "killer_body": "Killer's Body",
-    "killer_weapon": "Killer's Weapon",
-    "charm": "Charm",
-    "badge": "Badge",
+    "survivor_head": "Kopf des Überlebenden",
+    "survivor_torso": "Torso des Überlebenden",
+    "survivor_legs": "Beine des Überlebenden",
+    "killer_head": "Kopf des Killers",
+    "killer_body": "Körper des Killers",
+    "killer_weapon": "Waffe des Killers",
+    "charm": "Glücksbringer",
+    "badge": "Abzeichen",
     "banner": "Banner",
-    "power": "Power",
-    "killer_power": "Killer's Power",
-    "killer_arm": "Killer's Arm",
-    "killer_mask": "Mask",
-    "killer_upper_body": "Killer's Upper Body",
-    "killer_lower_body": "Killer's Lower Body",
-    "survivor_hand": "Survivor's Hand"
+    "power": "Stärke",
+    "killer_power": "Killer Stärke",
+    "killer_arm": "Arm des Killers",
+    "killer_mask": "Maske",
+    "killer_upper_body": "Oberkörper des Killers",
+    "killer_lower_body": "Unterkörper des Killers",
+    "survivor_hand": "Hand des Überlebenden"
   },
   "build_categories": {
-    "fun": "Fun",
-    "tome_challenge": "Tome Challenge",
-    "competitive": "Competitive",
-    "beginner": "Beginner",
-    "intermediate": "Intermediate",
-    "advanced": "Advanced",
-    "other": "Other"
+    "fun": "Spaß",
+    "tome_challenge": "Foliant Herausforderung",
+    "competitive": "Kompetitiv",
+    "beginner": "Anfänger",
+    "intermediate": "Fortgeschritten",
+    "advanced": "Erfahren",
+    "other": "Sonstige"
   },
-  "legacy": "Before 5.5.0"
+  "legacy": "Vor 5.5.0"
 }
