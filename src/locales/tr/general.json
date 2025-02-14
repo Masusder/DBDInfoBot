@@ -1,71 +1,71 @@
 {
   "rarities": {
-    "common": "Common",
-    "uncommon": "Uncommon",
-    "rare": "Rare",
-    "very_rare": "Very Rare",
-    "ultra_rare": "Ultra Rare",
-    "legendary": "Legendary",
-    "special_event": "Special Event",
-    "artifact": "Artifact",
-    "limited": "Limited",
-    "unknown": "N/A"
+    "common": "Yaygın",
+    "uncommon": "Sıradışı",
+    "rare": "Nadir",
+    "very_rare": "Nadide",
+    "ultra_rare": "Ultra Nadir",
+    "legendary": "Efsanevi",
+    "special_event": "Etkinlik",
+    "artifact": "Eser",
+    "limited": "Sınırlı",
+    "unknown": "Yok"
   },
   "roles": {
-    "killer": "Killer",
-    "survivor": "Survivor",
-    "none": "Universal"
+    "killer": "Katil",
+    "survivor": "Kurban",
+    "none": "Genel"
   },
   "difficulties": {
-    "easy": "Easy",
-    "intermediate": "Intermediate",
-    "hard": "Hard",
-    "very_hard": "Very Hard",
-    "none": "None"
+    "easy": "Kolay",
+    "intermediate": "Orta Seviye",
+    "hard": "Zor",
+    "very_hard": "Çok Zor",
+    "none": "Yok"
   },
   "genders": {
-    "male": "Male",
-    "female": "Female",
-    "not_human": "Monster",
-    "multiple": "Multiple"
+    "male": "Erkek",
+    "female": "Kadın",
+    "not_human": "Canavar",
+    "multiple": "Birden çok"
   },
   "currencies": {
-    "bloodpoints": "Bloodpoints",
-    "shards": "Shards",
-    "auric_cells": "Auric Cells",
-    "rift_fragments": "Rift Fragments",
-    "halloween_event_currency": "Dark Trinkets",
-    "winter_event_currency": "Frosty Trinkets",
-    "spring_event_currency": "Blood Trinkets",
-    "anniversary_event_currency": "Gilded Trinkets"
+    "bloodpoints": "Kan Puanı",
+    "shards": "Parıltılı Kristal",
+    "auric_cells": "Altın Hücre",
+    "rift_fragments": "Yarık Parçacığı",
+    "halloween_event_currency": "Karanlık Eşyalar",
+    "winter_event_currency": "Kar Boncukları",
+    "spring_event_currency": "Kan Eşyaları",
+    "anniversary_event_currency": "Yaldızlı Eşyalar"
   },
   "cosmetic_types": {
-    "outfit": "Outfit",
-    "survivor_head": "Survivor's Head",
-    "survivor_torso": "Survivor's Torso",
-    "survivor_legs": "Survivor's Legs",
-    "killer_head": "Killer's Head",
-    "killer_body": "Killer's Body",
-    "killer_weapon": "Killer's Weapon",
-    "charm": "Charm",
-    "badge": "Badge",
-    "banner": "Banner",
-    "power": "Power",
-    "killer_power": "Killer's Power",
-    "killer_arm": "Killer's Arm",
-    "killer_mask": "Mask",
-    "killer_upper_body": "Killer's Upper Body",
-    "killer_lower_body": "Killer's Lower Body",
-    "survivor_hand": "Survivor's Hand"
+    "outfit": "Kıyafet",
+    "survivor_head": "Kurban'ın Başı",
+    "survivor_torso": "Kurban'ın Gövdesi",
+    "survivor_legs": "Kurban'ın Bacağı",
+    "killer_head": "Katil'in Başı",
+    "killer_body": "Katil'in Gövdesi",
+    "killer_weapon": "Katil'in Silahı",
+    "charm": "Muska",
+    "badge": "Rozet",
+    "banner": "Sancak",
+    "power": "Güç",
+    "killer_power": "Katil'in Gücü",
+    "killer_arm": "Katil'in Kolu",
+    "killer_mask": "Maske",
+    "killer_upper_body": "Katil'in Üst Gövdesi",
+    "killer_lower_body": "Katil'in Alt Gövdesi",
+    "survivor_hand": "Kurban'ın Eli"
   },
   "build_categories": {
-    "fun": "Fun",
-    "tome_challenge": "Tome Challenge",
-    "competitive": "Competitive",
-    "beginner": "Beginner",
-    "intermediate": "Intermediate",
-    "advanced": "Advanced",
-    "other": "Other"
+    "fun": "Eğlence",
+    "tome_challenge": "Meydan Okuma",
+    "competitive": "Rekabetçi",
+    "beginner": "Yeni Başlayan",
+    "intermediate": "Orta Düzey",
+    "advanced": "İleri Düzey",
+    "other": "Diğer"
   },
-  "legacy": "Before 5.5.0"
+  "legacy": "5.5.0'dan Önce"
 }
