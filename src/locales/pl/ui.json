@@ -2,7 +2,7 @@
   "dbd_inventory": {
     "header": {
       "player_inventory": "Ekwipunek gracza",
-      "created_by": "Created by {{masusder}}",
+      "created_by": "Utworzone przez {{masusder}}",
       "generated_by": "Wygenerowano przez"
     },
     "footer": {
