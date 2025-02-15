@@ -75,5 +75,8 @@
     "fatal_error": "Envanter komutu yürütülürken kritik hata oluştu.",
     "failed_generating": "İnfografik oluşturma işlemi başarısız.",
     "invalid_character": "The input \"{{user_input}}\" is invalid. Please select valid character from available options."
+  },
+  "shrine_command": {
+    "failed_generating_content": "Failed to generate Shrine content."
   }
 }
