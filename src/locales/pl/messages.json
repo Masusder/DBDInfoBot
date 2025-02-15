@@ -98,7 +98,7 @@
       "unowned_items": "Aby kupić ten pakiet, nie możesz posiadać przynajmniej {{unowned_items}} przedmiotu(ów).",
       "no_expiration": "Ten pakiet nie ma daty wygaśnięcia.",
       "expiration": "Data wygaśnięcia",
-      "release_date": "Release Date"
+      "release_date": "Data wydania"
     }
   },
   "list_command": {
