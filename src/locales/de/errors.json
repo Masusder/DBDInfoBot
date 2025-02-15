@@ -75,5 +75,8 @@
     "fatal_error": "Beim Ausführen des Inventar-Befehls ist ein schwerer Fehler aufgetreten.",
     "failed_generating": "Fehler beim Generieren der Infografik.",
     "invalid_character": "The input \"{{user_input}}\" is invalid. Please select valid character from available options."
+  },
+  "shrine_command": {
+    "failed_generating_content": "Failed to generate Shrine content."
   }
 }

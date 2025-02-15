@@ -74,6 +74,9 @@
     "game_data_not_found": "Nie znaleziono danych gry. Nie udało się wygenerować ekwipunku.",
     "fatal_error": "Wystąpił błąd krytyczny podczas wykonywania komendy ekwipunku.",
     "failed_generating": "Nie udało się wygenerować infografiki.",
-    "invalid_character": "The input \"{{user_input}}\" is invalid. Please select valid character from available options."
+    "invalid_character": "Wprowadzony tekst \"{{user_input}}\" jest nieprawidłowy. Proszę wybrać prawidłową postać z dostępnych opcji."
+  },
+  "shrine_command": {
+    "failed_generating_content": "Nie udało się wygenerować zawartości Sanktuarium Tajemnic."
   }
 }

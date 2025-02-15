@@ -41,7 +41,7 @@
           "description": "Karakterin adı."
         },
         "purchasable": {
-          "name": "satın alınabilir",
+          "name": "satın_alınabilir",
           "description": "Kozmetiğin satın alınabilir olup olmayacağını belirtin."
         },
         "linked": {
@@ -166,7 +166,7 @@
     "options": {
       "file": {
         "name": "dosya",
-        "description": "Envanter dosyanızı yükleyin. Nasıl elde edileceğine ilişkin talimatlar destek sunucusunda bulunabilir."
+        "description": "Envanter dosyanızı yükleyin. Nasıl elde edileceğine ilişkin talimatlar destek sunucusunda."
       },
       "character": {
         "name": "karakter",

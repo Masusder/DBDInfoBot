@@ -65,7 +65,7 @@
           "description": "Gib an, zu welcher Rolle der kosmetische Gegenstand gehört."
         },
         "on_sale": {
-          "name": "im_Angebot",
+          "name": "im_angebot",
           "description": "Gib an, ob der kosmetische Gegenstand im Angebot ist."
         },
         "limited": {
@@ -83,7 +83,7 @@
       "description": "Erhalte eine Liste der Builds.",
       "options": {
         "role": {
-          "name": "Rolle",
+          "name": "rolle",
           "description": "Rolle für den Build.",
           "choices": {
             "killer": "Killer",
@@ -91,27 +91,27 @@
           }
         },
         "page": {
-          "name": "Seite",
+          "name": "seite",
           "description": "Seitenzahl"
         },
         "title": {
-          "name": "Titel",
+          "name": "titel",
           "description": "Titel des Builds."
         },
         "category": {
-          "name": "Kategorie",
+          "name": "kategorie",
           "description": "Kategorie des Builds."
         },
         "character": {
-          "name": "Charakter",
+          "name": "charakter",
           "description": "Charakter für den Build."
         },
         "version": {
-          "name": "Version",
+          "name": "version",
           "description": "Spielversion für den Build."
         },
         "rating": {
-          "name": "Bewertung",
+          "name": "bewertung",
           "description": "Mindestbewertung für den Build.",
           "choices": {
             "one_star": "Ein Stern",
@@ -124,26 +124,26 @@
       }
     },
     "addons_subcommand": {
-      "name": "Add-ons",
+      "name": "add-ons",
       "description": "Erhalte eine List der Add-ons.",
       "options": {
         "character": {
-          "name": "Charakter",
+          "name": "charakter",
           "description": "Name des Charakters."
         },
         "rarity": {
-          "name": "Seltenheit",
+          "name": "seltenheit",
           "description": "Gib die Seltenheit des Add-ons an."
         }
       }
     }
   },
   "news_command": {
-    "name": "Neuigkeiten",
+    "name": "neuigkeiten",
     "description": "Erhalte aktuelle Ingame-Nachrichten."
   },
   "stats_command": {
-    "name": "Statistiken",
+    "name": "statistiken",
     "description": "Zeige Steam Statistiken (global und persönlich).",
     "global_subcommand": {
       "name": "global",
@@ -161,21 +161,21 @@
     }
   },
   "inventory_command": {
-    "name": "Inventar",
+    "name": "inventar",
     "description": "Zeige Dein Inventar im Spiel für den angezeigten Charakter der Infografik an.",
     "options": {
       "file": {
-        "name": "Datei",
-        "description": "Lade Deine Inventar-Datei hoch. Anweisungen zum Erhalten der Datei findest Du auf dem Support Server."
+        "name": "datei",
+        "description": "Lade Deine Inventar-Datei hoch. Anleitung zum Erhalt findest Du auf dem Support-Server."
       },
       "character": {
-        "name": "Charakter",
+        "name": "charakter",
         "description": "Wähle den Charakter aus, für den Du eine Infografik generieren möchtest."
       }
     }
   },
   "support_command": {
-    "name": "Support",
+    "name": "support",
     "description": "Erhalte einen Link zum Support Server."
   }
 }

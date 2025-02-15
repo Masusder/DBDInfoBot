@@ -96,9 +96,9 @@
     "bundle_subcommand": {
       "special_pack_title": "{{- special_pack_title}} (Toplam {{rewards_count}} öge)",
       "unowned_items": "Bu paketi satın almak için en az {{unowned_items}} adet sahip olmadığın ögeye ihtiyacın var.",
-      "bundle_released": "Paket <t:{{bundle_start_unix}}:F> tarihinde satışa sunuldu.",
       "no_expiration": "Bu paketin sona erme tarihi yoktur.",
-      "expiration": "Sona Erme"
+      "expiration": "Sona Erme",
+      "release_date": "Release Date"
     }
   },
   "list_command": {

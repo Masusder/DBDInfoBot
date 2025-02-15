@@ -75,5 +75,8 @@
     "fatal_error": "Fatal error occurred while executing inventory command.",
     "failed_generating": "Failed to generate infographic.",
     "invalid_character": "The input \"{{user_input}}\" is invalid. Please select valid character from available options."
+  },
+  "shrine_command": {
+    "failed_generating_content": "Failed to generate Shrine content."
   }
 }
