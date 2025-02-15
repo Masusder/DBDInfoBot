@@ -26,7 +26,7 @@ function Header({ character, playerName, locale, user }: HeaderProps) {
         year: 'numeric',
     });
 
-    const userColor = user.accentColor ? user.hexAccentColor : "#0095FF";
+    const userColor = user.hexAccentColor ? user.hexAccentColor : "#0095FF";
 
     return (
         <div className="inventory-header">
