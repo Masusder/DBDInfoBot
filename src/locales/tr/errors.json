@@ -74,7 +74,7 @@
     "game_data_not_found": "Oyun verileri bulunamadı. Envanter oluşturma işlemi başarısız.",
     "fatal_error": "Envanter komutu yürütülürken kritik hata oluştu.",
     "failed_generating": "İnfografik oluşturma işlemi başarısız.",
-    "invalid_character": "The input \"{{user_input}}\" is invalid. Please select valid character from available options."
+    "invalid_character": "\"{{user_input}}\" girdisi geçersiz. Lütfen mevcut seçeneklerden geçerli karakteri seçin."
   },
   "shrine_command": {
     "failed_generating_content": "Failed to generate Shrine content."
