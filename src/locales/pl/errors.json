@@ -77,6 +77,6 @@
     "invalid_character": "Wprowadzony tekst \"{{user_input}}\" jest nieprawidłowy. Proszę wybrać prawidłową postać z dostępnych opcji."
   },
   "shrine_command": {
-    "failed_generating_content": "Failed to generate Shrine content."
+    "failed_generating_content": "Nie udało się wygenerować zawartości Sanktuarium Tajemnic."
   }
 }
