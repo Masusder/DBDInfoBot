@@ -1,6 +1,7 @@
 import { combineBaseUrlWithPath } from "@utils/stringUtils";
 import { INewsDataTable } from "../types";
 
+// UI_InboxMenuSkin_DataTable.uasset
 export const NewsDataTable: Record<string, INewsDataTable> = {
     News: {
         icon: combineBaseUrlWithPath("/images/News/icon_News.png"),

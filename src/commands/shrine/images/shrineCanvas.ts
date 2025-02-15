@@ -1,6 +1,5 @@
 import { Perk } from "@tps/perk";
 import {
-    CanvasRenderingContext2D,
     createCanvas,
     loadImage
 } from "canvas";
