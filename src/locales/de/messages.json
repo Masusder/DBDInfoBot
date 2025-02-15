@@ -96,9 +96,9 @@
     "bundle_subcommand": {
       "special_pack_title": "{{- special_pack_title}} ( {{rewards_count}} Gegenstände insgesamt)",
       "unowned_items": "You need at least {{unowned_items}} unowned item to purchase this bundle.",
-      "bundle_released": "Paket wurde am <t:{{bundle_start_unix}}:F> veröffentlicht.",
       "no_expiration": "Dieses Paket hat kein Ablaufdatum.",
-      "expiration": "Expiration"
+      "expiration": "Expiration",
+      "release_date": "Release Date"
     }
   },
   "list_command": {
