@@ -128,7 +128,9 @@ export async function sendNewsContent(
 
             // If pinning or publish fails that doesn't really matter
             if (isSticky) {
-                await pinMessage(message);
+                pinMessage(message).catch(error => {
+                    console.error(`Failed to pin message:`, error);
+                });
             }
 
             if (interactionOrChannel instanceof NewsChannel) {

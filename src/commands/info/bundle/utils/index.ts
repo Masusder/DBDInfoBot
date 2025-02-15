@@ -49,17 +49,6 @@ export function determineDominantRarity(
 export async function prepareBundleContentDescription(bundle: Bundle, locale: Locale): Promise<string> {
     let description = '';
 
-    const hasStartDate = Boolean(bundle.StartDate);
-
-    if (hasStartDate) {
-        const adjustedStartDate = adjustForTimezone(bundle.StartDate!);
-        const startDateUnix = Math.floor(adjustedStartDate / 1000);
-        description += t('info_command.bundle_subcommand.bundle_released', locale, ELocaleNamespace.Messages, {
-            bundle_start_unix: startDateUnix.toString()
-        });
-        description += '\n';
-    }
-
     description += '-# ';
     description += t('info_command.bundle_subcommand.unowned_items', locale, ELocaleNamespace.Messages, {
         unowned_items: bundle.MinNumberOfUnownedForPurchase.toString()

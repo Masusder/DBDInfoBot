@@ -3,6 +3,10 @@ import {
     ChatInputCommandInteraction,
     Interaction
 } from 'discord.js';
+import { CooldownManager } from "@utils/cooldown";
+import { sendUnauthorizedMessage } from "@handlers/unauthorizedHandler";
+import { t } from "@utils/localizationUtils";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import buttonInteractionCreate from './buttonInteractionCreate';
 import menuInteractionCreate from './menuInteractionCreate';
 import {
@@ -13,7 +17,6 @@ import {
     autocomplete as autocompleteList,
     execute as executeList
 } from "@commands/list";
-import { execute as executeShrine } from "@commands/shrine";
 import { execute as executeNews } from "@commands/news";
 import { execute as executeStats } from "@commands/stats";
 import {
@@ -21,10 +24,7 @@ import {
     execute as executeInventory
 } from "@commands/inventory";
 import { execute as executeSupport } from "@commands/support";
-import { CooldownManager } from "@utils/cooldown";
-import { sendUnauthorizedMessage } from "@handlers/unauthorizedHandler";
-import { t } from "@utils/localizationUtils";
-import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import { handleShrineCommandInteraction } from "@commands/shrine";
 
 const cooldownManager = new CooldownManager();
 
@@ -53,7 +53,7 @@ const commandHandlers: Record<string, CommandHandler> = {
     },
     shrine: {
         execute: async(interaction: ChatInputCommandInteraction) => {
-            await executeShrine(interaction);
+            await handleShrineCommandInteraction(interaction);
         }
     },
     news: {

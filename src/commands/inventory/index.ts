@@ -138,17 +138,18 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             }
         }
 
-        const [characterData, perkData, cosmeticData, offeringData, addonData, itemData, dlcData] = await Promise.all([
+        const [characterData, perkData, cosmeticData, offeringData, addonData, itemData, dlcData, user] = await Promise.all([
             getCachedCharacters(locale),
             getCachedPerks(locale),
             getCachedCosmetics(locale),
             getCachedOfferings(locale),
             getCachedAddons(locale),
             getCachedItems(locale),
-            getCachedDlcs(locale)
+            getCachedDlcs(locale),
+            interaction.user.fetch() // The user must be force fetched for color property to be present
         ]);
 
-        if (!isValidData(characterData) || !isValidData(perkData) || !isValidData(cosmeticData) || !isValidData(offeringData) || !isValidData(addonData) || !isValidData(itemData) || !playerName) {
+        if (!isValidData(characterData) || !isValidData(perkData) || !isValidData(cosmeticData) || !isValidData(offeringData) || !isValidData(addonData) || !isValidData(itemData) || !playerName || !user) {
             await sendErrorMessage(interaction, t('inventory_command.game_data_not_found', locale, ELocaleNamespace.Errors));
             return;
         }
@@ -187,7 +188,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             });
 
         const charPortraitBuffer = await generateCharacterPortrait(character);
-        const dbdInventoryBuffer = await generateDbdInventory(inventoryItems, userCharacterData, dbdRatings, consumedCells, playerName, characterIndex, isGDPR, gameData, interaction.user, locale, entitlements);
+        const dbdInventoryBuffer = await generateDbdInventory(inventoryItems, userCharacterData, dbdRatings, consumedCells, playerName, characterIndex, isGDPR, gameData, user, locale, entitlements);
 
         if (!dbdInventoryBuffer) {
             await sendErrorMessage(interaction, t('inventory_command.failed_generating', locale, ELocaleNamespace.Errors));

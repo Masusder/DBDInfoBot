@@ -9,7 +9,7 @@ import {
     compareCustomId,
     generateCustomId
 } from "@utils/stringUtils";
-import { execute as executeShrine } from "@commands/shrine";
+import { sendShrineToChannel } from "@commands/shrine";
 import Constants from "@constants";
 import client from "../client";
 
@@ -85,5 +85,5 @@ async function sendShrine(client: Client) {
         return;
     }
 
-    await executeShrine({} as any, channel);
+    await sendShrineToChannel(channel);
 }

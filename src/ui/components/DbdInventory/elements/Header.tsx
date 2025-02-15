@@ -26,6 +26,8 @@ function Header({ character, playerName, locale, user }: HeaderProps) {
         year: 'numeric',
     });
 
+    const userColor = user.accentColor ? user.hexAccentColor : "#0095FF";
+
     return (
         <div className="inventory-header">
             <div className="inventory-header-flex">
@@ -66,10 +68,15 @@ function Header({ character, playerName, locale, user }: HeaderProps) {
                             gap: "5px"
                         }}>
                             <img
-                                src={user.avatarURL() || ""}
+                                src={user.displayAvatarURL()}
                                 className="inventory-generation-avatar"
                                 alt="Avatar"/>
-                            <div className="inventory-generation-username">
+                            <div className="inventory-generation-username"
+                                 style={{
+                                     background: `linear-gradient(155deg, #E3E3E3 0%, ${userColor} 200%)`,
+                                     WebkitBackgroundClip: 'text',
+                                     WebkitTextFillColor: 'transparent',
+                                 }}>
                                 {user.username}
                             </div>
                         </div>

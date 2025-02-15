@@ -98,12 +98,16 @@ async function setEmbedFields(bundle: Bundle, embed: EmbedBuilder, locale: Local
             const currencyField = await getCurrencyField(fullPrice.CurrencyId, bundle, fullPrice, locale);
 
             if (currencyField) {
-                embed.addFields({ name: currencyField.title, value: currencyField.value, inline: true });
+                embed.addFields({
+                    name: currencyField.title,
+                    value: currencyField.value, inline: true
+                });
             }
         }
     }
 
     const hasEndDate = Boolean(bundle.EndDate);
+    const hasStartDate = Boolean(bundle.StartDate);
 
     let expirationDescription;
     if (hasEndDate) {
@@ -113,6 +117,17 @@ async function setEmbedFields(bundle: Bundle, embed: EmbedBuilder, locale: Local
         expirationDescription = `<t:${adjustedEndDateUnix}:R>`;
     } else {
         expirationDescription = t('info_command.bundle_subcommand.no_expiration', locale, ELocaleNamespace.Messages);
+    }
+
+    if (hasStartDate) {
+        const adjustedStartDate = adjustForTimezone(bundle.StartDate!);
+        const startDateUnix = Math.floor(adjustedStartDate / 1000);
+
+        embed.addFields({
+            name: t('info_command.bundle_subcommand.release_date', locale, ELocaleNamespace.Messages),
+            value: `<t:${startDateUnix}>`,
+            inline: true
+        });
     }
 
     embed.addFields({
