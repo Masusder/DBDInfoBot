@@ -75,5 +75,8 @@
     "fatal_error": "При выполнении команды инвентарь произошла критическая ошибка.",
     "failed_generating": "Не удалось сгенерировать инфографику.",
     "invalid_character": "The input \"{{user_input}}\" is invalid. Please select valid character from available options."
+  },
+  "shrine_command": {
+    "failed_generating_content": "Failed to generate Shrine content."
   }
 }
