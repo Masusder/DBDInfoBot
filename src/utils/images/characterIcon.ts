@@ -9,8 +9,13 @@ import { getCachedCharacters } from "@services/characterService";
 import { Locale } from "discord.js";
 import { Role } from "@data/Role";
 import { combineBaseUrlWithPath } from "@utils/stringUtils";
+import sharp from "sharp";
 
-async function generateCharacterIcons(characterIndexes: string[], locale: Locale): Promise<Buffer[]> {
+async function generateCharacterIcons(
+    characterIndexes: string[],
+    locale: Locale,
+    compressImages: boolean = false
+): Promise<Buffer[]> {
     const characterData = await getCachedCharacters(locale);
 
     const layerPromises = characterIndexes.map(async(characterIndex) => {
@@ -33,7 +38,15 @@ async function generateCharacterIcons(characterIndexes: string[], locale: Locale
 
         ctx.drawImage(iconImg, x, y, iconSize, iconSize);
 
-        return canvas.toBuffer();
+        let buffer = canvas.toBuffer();
+
+        if (compressImages) {
+            buffer = await sharp(buffer)
+                .resize({ width: 64, height: 64, fit: 'inside' })
+                .toBuffer();
+        }
+
+        return buffer;
     });
 
     const layeredIcons = await Promise.all(layerPromises);

@@ -4,7 +4,10 @@ import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { Cosmetic } from "@tps/cosmetic";
 import { adjustForTimezone, combineBaseUrlWithPath } from "@utils/stringUtils";
 import { IStoreCustomizationItem } from "@utils/imageUtils";
-import { Rarities } from "@data/Rarities";
+import {
+    compareItemRarityPriority,
+    Rarities
+} from "@data/Rarities";
 import createStoreCustomizationIcons from "@utils/images/createStoreCustomizationIcons";
 
 
@@ -96,6 +99,8 @@ export async function generateStoreCustomizationIcons(cosmeticItems: (string[] |
     } else {
         items = cosmeticItems as Cosmetic[];
     }
+
+    items.sort(compareItemRarityPriority);
 
     items.forEach((cosmetic: Cosmetic) => {
         const { isOnSale } = isCosmeticOnSale(cosmetic);

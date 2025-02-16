@@ -53,11 +53,6 @@ async function buildBundleContentEmbed(bundle: Bundle, cosmeticData: Record<stri
         .setColor(ThemeColors.PRIMARY)
         .setTitle(title)
         .setImage(`attachment://bundle_${bundle.Id}.png`)
-        .setFooter({
-            text: t('info_command.bundle_subcommand.unowned_items', locale, ELocaleNamespace.Messages, {
-                unowned_items: bundle.MinNumberOfUnownedForPurchase.toString()
-            })
-        })
         .setDescription(description);
 
     if (bundle.StartDate) {
@@ -103,10 +98,43 @@ async function setEmbedFields(bundle: Bundle, embed: EmbedBuilder, locale: Local
             const currencyField = await getCurrencyField(fullPrice.CurrencyId, bundle, fullPrice, locale);
 
             if (currencyField) {
-                embed.addFields({ name: currencyField.title, value: currencyField.value, inline: true });
+                embed.addFields({
+                    name: currencyField.title,
+                    value: currencyField.value, inline: true
+                });
             }
         }
     }
+
+    const hasEndDate = Boolean(bundle.EndDate);
+    const hasStartDate = Boolean(bundle.StartDate);
+
+    let expirationDescription;
+    if (hasEndDate) {
+        const adjustedEndDate = adjustForTimezone(bundle.EndDate!);
+        const adjustedEndDateUnix = Math.floor(adjustedEndDate / 1000);
+
+        expirationDescription = `<t:${adjustedEndDateUnix}:R>`;
+    } else {
+        expirationDescription = t('info_command.bundle_subcommand.no_expiration', locale, ELocaleNamespace.Messages);
+    }
+
+    if (hasStartDate) {
+        const adjustedStartDate = adjustForTimezone(bundle.StartDate!);
+        const startDateUnix = Math.floor(adjustedStartDate / 1000);
+
+        embed.addFields({
+            name: t('info_command.bundle_subcommand.release_date', locale, ELocaleNamespace.Messages),
+            value: `<t:${startDateUnix}>`,
+            inline: true
+        });
+    }
+
+    embed.addFields({
+        name: t('info_command.bundle_subcommand.expiration', locale, ELocaleNamespace.Messages),
+        value: expirationDescription,
+        inline: true
+    });
 }
 
 async function prepareAttachments(
@@ -172,7 +200,12 @@ async function prepareAttachments(
         return [];
     }
 
-    const bundleContentImage = await combineImagesIntoGrid(imagesToCombine, 5, 10);
+    let imagesPerRow = 5;
+    if (imagesToCombine.length >= 40) {
+        imagesPerRow = 10;
+    }
+
+    const bundleContentImage = await combineImagesIntoGrid(imagesToCombine, imagesPerRow, 20);
 
     return [
         new AttachmentBuilder(bundleContentImage, { name: `bundle_${bundle.Id}.png` })

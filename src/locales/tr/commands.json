@@ -1,181 +1,181 @@
 {
   "info_command": {
-    "name": "info",
-    "description": "Retrieve detailed information about game features.",
+    "name": "bilgi",
+    "description": "Oyun özellikleri hakkında detaylı bilgiye erişin.",
     "options": {
       "type": {
-        "name": "type",
-        "description": "Specify the type of game feature you want information about.",
+        "name": "tür",
+        "description": "Hakkında bilgi almak istediğiniz oyun özelliğinin türünü belirtin.",
         "choices": {
-          "perk": "Perk",
-          "addon": "Add-on",
-          "item": "Item",
-          "offering": "Offering",
-          "character": "Character",
-          "cosmetic": "Cosmetic",
-          "build": "Build",
-          "collection": "Collection",
-          "rift": "Rift",
-          "bundle": "Bundle"
+          "perk": "Avantaj",
+          "addon": "Eklenti",
+          "item": "Eşya",
+          "offering": "Adak",
+          "character": "Karakter",
+          "cosmetic": "Kozmetik",
+          "build": "Dizilim",
+          "collection": "Koleksiyon",
+          "rift": "Yarık",
+          "bundle": "Paket"
         }
       },
       "name": {
-        "name": "name",
-        "description": "Specify the name of the game feature you want information about."
+        "name": "isim",
+        "description": "Hakkında bilgi almak istediğiniz oyun özelliğinin adını belirtin."
       }
     }
   },
   "shrine_command": {
-    "name": "shrine",
-    "description": "Check weekly Shrine of Secrets."
+    "name": "mabet",
+    "description": "Haftalık Sırlar Mabedi'ne göz atın."
   },
   "list_command": {
-    "name": "list",
-    "description": "Retrieve list of specified game feature items.",
+    "name": "listele",
+    "description": "Belirtilen oyun özelliği ögelerinin listesine erişin.",
     "cosmetics_subcommand": {
-      "name": "cosmetics",
-      "description": "Retrieve list of cosmetics.",
+      "name": "kozmetikler",
+      "description": "Kozmetiklerin listesine erişin.",
       "options": {
         "character": {
-          "name": "character",
-          "description": "Name of the character."
+          "name": "karakter",
+          "description": "Karakterin adı."
         },
         "purchasable": {
-          "name": "purchasable",
-          "description": "Specify whether cosmetic should be available for purchase or not."
+          "name": "satın_alınabilir",
+          "description": "Kozmetiğin satın alınabilir olup olmayacağını belirtin."
         },
         "linked": {
-          "name": "linked",
-          "description": "Specify whether cosmetic should be a linked set or not."
+          "name": "set",
+          "description": "Kozmetiğin bir set olup olmayacağını belirtin."
         },
         "rarity": {
-          "name": "rarity",
-          "description": "Specify rarity of the cosmetic."
+          "name": "nadirlik",
+          "description": "Kozmetiğin nadirliğini belirtin."
         },
         "type": {
-          "name": "type",
-          "description": "Specify type of the cosmetic."
+          "name": "tür",
+          "description": "Kozmetiğin türünü belirtin."
         },
         "inclusion_version": {
-          "name": "inclusion_version",
-          "description": "Specify inclusion version of the cosmetic."
+          "name": "kapsanan_sürüm",
+          "description": "Kozmetiğin dahil edildiği sürümü belirtin."
         },
         "role": {
-          "name": "role",
-          "description": "Specify role cosmetic belongs to."
+          "name": "rol",
+          "description": "Kozmetiğin ait olduğu rolü belirtin."
         },
         "on_sale": {
-          "name": "on_sale",
-          "description": "Specify whether cosmetic should be currently on sale."
+          "name": "indirimde",
+          "description": "Kozmetiğin şu anda indirimde olup olmayacağını belirtin."
         },
         "limited": {
-          "name": "limited",
-          "description": "Specify whether cosmetic is available for purchase for a limited time."
+          "name": "sınırlı",
+          "description": "Kozmetiğin sınırlı bir süre için satın alınıp alınamayacağını belirtin."
         },
         "search": {
-          "name": "search",
-          "description": "Search for cosmetic by its name/description/collection."
+          "name": "ara",
+          "description": "İsmine/açıklamasına/koleksiyonuna göre kozmetik arayın."
         }
       }
     },
     "builds_subcommand": {
-      "name": "builds",
-      "description": "Retrieve list of builds.",
+      "name": "dizilimler",
+      "description": "Dizilimlerin listesine erişin.",
       "options": {
         "role": {
-          "name": "role",
-          "description": "Role for the build.",
+          "name": "rol",
+          "description": "Dizilim için rol.",
           "choices": {
-            "killer": "Killer",
-            "survivor": "Survivor"
+            "killer": "Katil",
+            "survivor": "Kurban"
           }
         },
         "page": {
-          "name": "page",
-          "description": "Page number (default is 1)."
+          "name": "sayfa",
+          "description": "Sayfa numarası (varsayılan 1)."
         },
         "title": {
-          "name": "title",
-          "description": "Title of the build."
+          "name": "başlık",
+          "description": "Dizilimin başlığı."
         },
         "category": {
-          "name": "category",
-          "description": "Category of the build."
+          "name": "kategori",
+          "description": "Dizilimin kategorisi."
         },
         "character": {
-          "name": "character",
-          "description": "Character for the build."
+          "name": "karakter",
+          "description": "Dizilim için karakter."
         },
         "version": {
-          "name": "version",
-          "description": "Game version for the build."
+          "name": "sürüm",
+          "description": "Dizilim için oyun sürümü."
         },
         "rating": {
-          "name": "rating",
-          "description": "Minimum rating for the build.",
+          "name": "derece",
+          "description": "Dizilim için minimum derecelendirme.",
           "choices": {
-            "one_star": "One Star",
-            "two_stars": "Two Stars",
-            "three_stars": "Three Stars",
-            "four_stars": "Four Stars",
-            "five_stars": "Five Stars"
+            "one_star": "Bir Yıldız",
+            "two_stars": "İki Yıldız",
+            "three_stars": "Üç Yıldız",
+            "four_stars": "Dört Yıldız",
+            "five_stars": "Beş Yıldız"
           }
         }
       }
     },
     "addons_subcommand": {
-      "name": "add-ons",
-      "description": "Retrieve list of add-ons.",
+      "name": "eklentiler",
+      "description": "Eklentilerin listesine erişin.",
       "options": {
         "character": {
-          "name": "character",
-          "description": "Name of the character."
+          "name": "karakter",
+          "description": "Karakterin adı."
         },
         "rarity": {
-          "name": "rarity",
-          "description": "Specify rarity of the add-ons."
+          "name": "nadirlik",
+          "description": "Eklentilerin nadirliğini belirtin."
         }
       }
     }
   },
   "news_command": {
-    "name": "news",
-    "description": "Retrieve latest in-game news."
+    "name": "haberler",
+    "description": "Oyun içi güncel haberlere erişin."
   },
   "stats_command": {
-    "name": "stats",
-    "description": "View Steam statistics (global or personal).",
+    "name": "istatistikler",
+    "description": "Steam istatistiklerini görüntüleyin (genel veya kişisel).",
     "global_subcommand": {
-      "name": "global",
-      "description": "View global statistics."
+      "name": "genel",
+      "description": "Genel istatistikleri görüntüleyin."
     },
     "personal_subcommand": {
-      "name": "personal",
-      "description": "View a summarized infographic of player statistics.",
+      "name": "kişisel",
+      "description": "Oyuncu istatistiklerinin özetlenmiş bir infografiğini görüntüleyin.",
       "options": {
         "steam_id": {
           "name": "steam_id",
-          "description": "The Steam ID, username, or profile URL of the player whose statistics you want to view."
+          "description": "İstatistiklerini görüntülemek istediğiniz oyuncunun Steam ID'si, kullanıcı adı veya profil URL'si."
         }
       }
     }
   },
   "inventory_command": {
-    "name": "inventory",
-    "description": "View your in-game inventory for given character in form of an infographic.",
+    "name": "envanter",
+    "description": "Belirli bir karakter için oyun içi envanterinizi bir infografik şeklinde görüntüleyin.",
     "options": {
       "file": {
-        "name": "file",
-        "description": "Upload your inventory file. Instructions on how to obtain it can be found on the support server."
+        "name": "dosya",
+        "description": "Envanter dosyanızı yükleyin. Nasıl elde edileceğine ilişkin talimatlar destek sunucusunda."
       },
       "character": {
-        "name": "character",
-        "description": "Select character you want to generate infographic for."
+        "name": "karakter",
+        "description": "İnfografiğini oluşturmak istediğiniz karakteri seçin."
       }
     }
   },
   "support_command": {
-    "name": "support",
-    "description": "Get a link to the support server."
+    "name": "destek",
+    "description": "Destek sunucusunun bir bağlantısını edinin."
   }
 }

@@ -2,7 +2,7 @@
   "dbd_inventory": {
     "header": {
       "player_inventory": "Инвентарь Игрока",
-      "created_by": "Создано",
+      "created_by": "Created by {{masusder}}",
       "generated_by": "Сгенерировано"
     },
     "footer": {

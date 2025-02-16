@@ -65,7 +65,9 @@ export default async function generateCosmeticInteractionData(
     ]);
 
     if (!cosmeticData || !isValidData(specialEventData) || !isValidData(riftData)) {
-        const message = `${t('info_command.cosmetic_subcommand.cosmetic_not_found', locale, ELocaleNamespace.Errors)} "${cosmeticId}".`;
+        const message = t('info_command.cosmetic_subcommand.cosmetic_not_found', locale, ELocaleNamespace.Errors, {
+            cosmetic_name: cosmeticId
+        });
         await sendErrorMessage(interaction, message);
         throw new Error(`Cosmetic data not found for ID "${cosmeticId}".`);
     }

@@ -47,7 +47,9 @@ export async function viewOutfitPiecesHandler(interaction: ButtonInteraction) {
     const combinedImageBuffer = await combineImagesIntoGrid(outfitPiecesBuffer);
 
     const embed = new EmbedBuilder()
-        .setTitle(`${t('info_command.cosmetic_subcommand.button_interaction.outfit_pieces', locale, ELocaleNamespace.Messages)} ${cosmeticData.CosmeticName}`)
+        .setTitle(t('info_command.cosmetic_subcommand.button_interaction.outfit_pieces', locale, ELocaleNamespace.Messages, {
+            cosmetic_name: cosmeticData.CosmeticName
+        }))
         .setColor(interaction.message.embeds[0].color)
         .setImage('attachment://combined-outfit-pieces.png');
 
