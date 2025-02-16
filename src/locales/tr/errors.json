@@ -77,6 +77,6 @@
     "invalid_character": "\"{{user_input}}\" girdisi geçersiz. Lütfen mevcut seçeneklerden geçerli karakteri seçin."
   },
   "shrine_command": {
-    "failed_generating_content": "Failed to generate Shrine content."
+    "failed_generating_content": "Mabet içeriği oluşturma işlemi başarısız."
   }
 }

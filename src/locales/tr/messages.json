@@ -98,7 +98,7 @@
       "unowned_items": "Bu paketi satın almak için en az {{unowned_items}} adet sahip olmadığın ögeye ihtiyacın var.",
       "no_expiration": "Bu paketin sona erme tarihi yoktur.",
       "expiration": "Sona Erme",
-      "release_date": "Release Date"
+      "release_date": "Çıkış Tarihi"
     }
   },
   "list_command": {
