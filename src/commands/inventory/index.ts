@@ -154,7 +154,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             return;
         }
 
-        if (!Object.keys(characterData).includes(characterIndex)) {
+        if (!(characterIndex in characterData)) {
             await sendErrorMessage(interaction, t('inventory_command.invalid_character', locale, ELocaleNamespace.Errors, {
                 user_input: characterIndex
             }))
