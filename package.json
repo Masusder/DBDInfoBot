@@ -35,7 +35,7 @@
     "@types/node": "^22.13.1",
     "@types/node-cron": "^3.0.11",
     "@types/react": "^19.0.8",
-    "@types/react-dom": "^19.0.3",
+    "@types/react-dom": "^19.0.4",
     "@types/ws": "^8.5.14",
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.10",
