@@ -88,8 +88,9 @@ async function handleShrineCommand(locale: Locale) {
     if (!shrineData || !shrineData.currentShrine || !perkData) return null;
 
     const correctlyCasedPerkData = getCorrectlyCasedPerkData(shrineData.currentShrine.perks, perkData);
-    const [shrineCanvasBuffer, embedData, buttons] = await Promise.all([
-        createShrineCanvas(correctlyCasedPerkData, perkData),
+    // Shrine canvas creation saves the emojis, so don't parallelize with rest of the promises
+    const shrineCanvasBuffer = await createShrineCanvas(correctlyCasedPerkData, perkData);
+    const [embedData, buttons] = await Promise.all([
         generateShrineEmbed(locale, shrineData.currentShrine, correctlyCasedPerkData, perkData),
         generatePerkButtons(correctlyCasedPerkData, perkData)
     ]);
