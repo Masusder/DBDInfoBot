@@ -8,7 +8,10 @@ import { getCachedNews } from "@services/newsService";
 import Constants from "@constants";
 import client from "../client";
 import { NewsData } from "@tps/news";
-import { isValidData } from "@utils/stringUtils";
+import {
+    generateCustomId,
+    isValidData
+} from "@utils/stringUtils";
 import { batchSendNews } from "@commands/news/interactionData";
 
 let cachedNewsIds: Set<string> = new Set();
@@ -32,7 +35,9 @@ export async function resolveNewsArticles() {
         }
 
         const articleIds = newsData.news.map((article) => article.id);
-        const newArticleIds = articleIds.filter(id => !cachedNewsIds.has(id));
+        const inboxIds = newsData.messages.map((inboxItem) => generateCustomId(inboxItem.received.toString()));
+
+        const newArticleIds = [...articleIds, ...inboxIds].filter(id => !cachedNewsIds.has(id));
 
         if (newArticleIds.length === 0) {
             console.log("No new articles to dispatch.");

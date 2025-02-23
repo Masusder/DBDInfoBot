@@ -72,8 +72,14 @@ export function formatNumber(number: number | string | undefined = 0): string {
         .replace(/\B(?=(\d{3})+(?!\d))/g, " "); // Format number with spaces as thousands separator
 }
 
-export function adjustForTimezone(dateString: string | Date): number {
-    const date = dateString instanceof Date ? dateString : new Date(dateString);
+export function adjustForTimezone(dateString: string | Date | number): number {
+    let date: Date;
+    if (dateString instanceof Date) {
+        date = dateString;
+    } else {
+        date = new Date(dateString);
+    }
+
     const timezoneOffset = date.getTimezoneOffset() * 60000;
     return date.getTime() - timezoneOffset;
 }

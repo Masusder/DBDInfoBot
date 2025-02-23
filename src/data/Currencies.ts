@@ -7,7 +7,7 @@ interface ICurrency {
     emojiId: string;
 }
 
-export interface IRiftCurrency extends ICurrency {
+export interface ICurrencyAmount extends ICurrency {
     amount: number;
 }
 

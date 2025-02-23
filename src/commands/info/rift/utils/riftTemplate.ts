@@ -2,7 +2,7 @@ import { TierInfo, TierInfoItem } from "@tps/rift";
 import { loadResourceImage } from "@utils/imageUtils";
 import { CanvasRenderingContext2D, Image, createCanvas, loadImage } from "canvas";
 import { Cosmetic } from "@tps/cosmetic";
-import { Currencies, IRiftCurrency } from "@data/Currencies";
+import { Currencies, ICurrencyAmount } from "@data/Currencies";
 import { generateCurrencyImage } from "@utils/images/currencyImage";
 import { AC_CURRENCY_PACKS } from "@commands/info/rift";
 import { generateStoreCustomizationIcons } from "@commands/info/cosmetic/utils";
@@ -63,7 +63,7 @@ function drawTierNumbers(ctx: CanvasRenderingContext2D, riftChunk: TierInfo[]) {
 }
 
 async function drawTrackItems(cosmeticData: Record<string, Cosmetic>, trackItems: TierInfoItem[], ctx: CanvasRenderingContext2D, trackY: number, index: number) {
-    let currencies: IRiftCurrency[] = []
+    let currencies: ICurrencyAmount[] = []
     let cosmetics: Cosmetic[] = [];
 
     trackItems.forEach((trackItem: TierInfoItem) => {
@@ -73,14 +73,14 @@ async function drawTrackItems(cosmeticData: Record<string, Cosmetic>, trackItems
                 cosmetics.push(cosmetic);
             }
         } else if (AC_CURRENCY_PACKS.includes(trackItem.Id)) {
-            let currency = Currencies["Cells"] as IRiftCurrency;
+            let currency = Currencies["Cells"] as ICurrencyAmount;
 
             const amount = trackItem.Id.split("_")[1]
             currency.amount = parseInt(amount);
 
             currencies.push(currency);
         } else if (trackItem.Type === "currency") {
-            let currency = Currencies[trackItem.Id] as IRiftCurrency;
+            let currency = Currencies[trackItem.Id] as ICurrencyAmount;
 
             if (currency) {
                 currency.amount = trackItem.Amount;

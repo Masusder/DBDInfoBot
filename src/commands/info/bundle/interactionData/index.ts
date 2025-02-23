@@ -24,7 +24,7 @@ import {
 import { Rarities } from "@data/Rarities";
 import {
     Currencies,
-    IRiftCurrency
+    ICurrencyAmount
 } from "@data/Currencies";
 import { generateCurrencyImage } from "@utils/images/currencyImage";
 import { t } from "@utils/localizationUtils";
@@ -144,7 +144,7 @@ async function prepareAttachments(
 ) {
     let characterIndexes: string[] = [];
     let riftPassIconBuffer: Buffer | null = null;
-    let currencies: IRiftCurrency[] = [];
+    let currencies: ICurrencyAmount[] = [];
     const cosmeticIdsSet = new Set<string>();
     for (const consumption of bundle.ConsumptionRewards) {
         const id = consumption.Id;
@@ -166,7 +166,7 @@ async function prepareAttachments(
         }
 
         if (consumption.GameSpecificData.Type === "RiftTier") {
-            const currency = Currencies["RiftFragments"] as IRiftCurrency;
+            const currency = Currencies["RiftFragments"] as ICurrencyAmount;
 
             currency.amount = consumption.Amount;
             currencies.push(currency);

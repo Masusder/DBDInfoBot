@@ -1,9 +1,9 @@
 import { createCanvas, loadImage } from "canvas";
 import { backgroundCache } from "@utils/imageUtils";
-import { IRiftCurrency } from "@data/Currencies";
+import { ICurrencyAmount } from "@data/Currencies";
 import { formatNumber } from "@utils/stringUtils";
 
-export async function generateCurrencyImage(currencies: IRiftCurrency[]): Promise<Buffer[]> {
+export async function generateCurrencyImage(currencies: ICurrencyAmount[]): Promise<Buffer[]> {
     const layerPromises = currencies.map(async(item) => {
         const { iconPath, backgroundPath, amount } = item;
 

@@ -1,5 +1,7 @@
 import {
     CallToAction,
+    InboxItem,
+    MessageBody,
     NewsData,
     NewsItem
 } from "@tps/news";
@@ -16,61 +18,24 @@ import {
     TextChannel
 } from "discord.js";
 import {
-    adjustForTimezone,
     checkExistingImageUrl,
-    combineBaseUrlWithPath,
     formatHtmlToDiscordMarkdown,
+    generateCustomId,
     splitTextIntoChunksBySentence,
     transformPackagedPath
 } from "@utils/stringUtils";
 import { t } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
-import { INewsDataTable } from "../types";
-import { createItemShowcaseImage, formatNewsLink, matchToEvent } from "../utils";
+import {
+    createInboxShowcaseImage,
+    createItemShowcaseImage,
+    formatNewsLink,
+    matchToEvent
+} from "../utils";
 import publishMessage from "@utils/discord/publishMessage";
 import pinMessage from "@utils/discord/pinMessage";
-
-export async function createNewsEmbed(
-    newsItem: NewsItem,
-    textContent: string,
-    imageUrl: string | null,
-    isIdNeeded: boolean,
-    isFirstEmbed: boolean = false,
-    isLastChunk: boolean = false,
-    locale: Locale,
-    newsDataTable: INewsDataTable,
-    isSticky: boolean
-) {
-
-    const embed = new EmbedBuilder()
-        .setDescription(textContent)
-        .setColor(newsDataTable.primaryColor)
-        .setTimestamp(new Date(adjustForTimezone(newsItem.startDate)));
-
-    if (isSticky) {
-        embed.setAuthor({
-            name: t('news_command.pinned_article', locale, ELocaleNamespace.Messages),
-            iconURL: combineBaseUrlWithPath('/images/News/icon_PinnedMessage.png')
-        });
-    }
-
-    if (isFirstEmbed) {
-        embed.setTitle(newsItem.title || t('news_command.untitled_news', locale, ELocaleNamespace.Messages))
-            .setThumbnail(newsDataTable.icon);
-    }
-
-    if (isIdNeeded && isLastChunk) {
-        embed.setFooter({
-            text: `ID: ${newsItem.id}`
-        });
-    }
-
-    if (imageUrl) {
-        embed.setImage(imageUrl);
-    }
-
-    return embed;
-}
+import createNewsEmbed from "@commands/news/interactionData/news/embed";
+import createInboxEmbed from "@commands/news/interactionData/inbox/embed";
 
 export function createNewsButton(callToAction: CallToAction, locale: Locale): ActionRowBuilder<ButtonBuilder> | null {
     let link = callToAction.link;
@@ -220,6 +185,35 @@ export async function sendNewsContent(
     }
 }
 
+async function sendInboxContent(
+    inboxItem: InboxItem,
+    channel: TextChannel | NewsChannel,
+    locale: Locale
+): Promise<void> {
+    const messageBody: MessageBody = JSON.parse(inboxItem.message.body);
+
+    const embed = createInboxEmbed(inboxItem, messageBody);
+
+    const inboxShowcaseImage = await createInboxShowcaseImage(messageBody.sections, locale);
+
+    const actionRow = messageBody.callToAction ? createNewsButton(messageBody.callToAction, locale) : null;
+
+    const message = await channel.send({
+        embeds: [embed],
+        files: inboxShowcaseImage ? [{
+            attachment: inboxShowcaseImage,
+            name: 'inbox_showcase_items.png'
+        }] : [],
+        components: actionRow ? [actionRow] : []
+    });
+
+    if (channel instanceof NewsChannel) {
+        publishMessage(message, channel).catch(error => {
+            console.error(`Failed to publish message:`, error);
+        });
+    }
+}
+
 export async function batchSendNews(
     channel: TextChannel | NewsChannel,
     dispatchedNewsIds: string[],
@@ -227,9 +221,14 @@ export async function batchSendNews(
 ) {
     try {
         const newsList = newsData.news;
+        const inboxList = newsData.messages;
 
         for (const newsItem of newsList.filter(news => !dispatchedNewsIds.includes(news.id))) {
             await sendNewsContent(newsItem, channel, Locale.EnglishUS);
+        }
+
+        for (const inboxItem of inboxList.filter(inbox => !dispatchedNewsIds.includes(generateCustomId(inbox.received.toString())))) {
+            await sendInboxContent(inboxItem, channel, Locale.EnglishUS);
         }
     } catch (error) {
         console.error("Error executing batch news command:", error);
