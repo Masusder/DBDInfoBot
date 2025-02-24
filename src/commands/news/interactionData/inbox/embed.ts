@@ -1,17 +1,14 @@
-import {
-    EmbedBuilder,
-    Locale
-} from "discord.js";
+import { EmbedBuilder } from "discord.js";
 import {
     adjustForTimezone,
     formatHtmlToDiscordMarkdown,
     generateCustomId
 } from "@utils/stringUtils";
-import { ThemeColors } from "@constants/themeColors";
 import {
     InboxItem,
     MessageBody
 } from "@tps/news";
+import { NewsDataTable } from "@commands/news/data";
 
 function createInboxEmbed(inboxItem: InboxItem, messageBody: MessageBody) {
     const textContent = messageBody.sections
@@ -22,11 +19,12 @@ function createInboxEmbed(inboxItem: InboxItem, messageBody: MessageBody) {
     const embed = new EmbedBuilder()
         .setTitle(inboxItem.message.title)
         .setDescription(formatHtmlToDiscordMarkdown(textContent) || "Description not available.")
-        .setColor(ThemeColors.PRIMARY_LIGHT)
+        .setColor(NewsDataTable.Inbox.primaryColor)
         .setTimestamp(new Date(adjustForTimezone(inboxItem.received)))
         .setImage('attachment://inbox_showcase_items.png')
+        .setThumbnail(NewsDataTable.Inbox.icon)
         .addFields({
-            name: 'Expires',
+            name: 'Expiration',
             value: `<t:${inboxItem.expireAt}:R>`,
             inline: true,
         });
