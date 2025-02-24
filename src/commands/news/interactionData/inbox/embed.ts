@@ -22,7 +22,7 @@ function createInboxEmbed(inboxItem: InboxItem, messageBody: MessageBody) {
     const embed = new EmbedBuilder()
         .setTitle(inboxItem.message.title)
         .setDescription(formatHtmlToDiscordMarkdown(textContent) || "Description not available.")
-        .setColor(ThemeColors.ACCENT)
+        .setColor(ThemeColors.PRIMARY_LIGHT)
         .setTimestamp(new Date(adjustForTimezone(inboxItem.received)))
         .setImage('attachment://inbox_showcase_items.png')
         .addFields({
