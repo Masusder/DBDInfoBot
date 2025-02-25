@@ -92,3 +92,31 @@ export async function fetchImageBuffer(url: string): Promise<Buffer | null> {
         return null;
     }
 }
+
+export function getCosmeticIds(
+    bundle: Bundle,
+    cosmeticData: Record<string, Cosmetic>
+): Set<string> {
+    const cosmeticIdsSet = new Set<string>();
+
+    for (const consumption of bundle.ConsumptionRewards) {
+        const id = consumption.Id;
+        if (consumption.GameSpecificData.Type === "Customization" && cosmeticData[id]) {
+            cosmeticIdsSet.add(consumption.Id);
+        }
+    }
+
+    for (const cosmetic of Object.values(cosmeticData)) {
+        if (cosmetic.Type === "outfit") {
+            if (cosmetic.OutfitItems.every(itemId => cosmeticIdsSet.has(itemId))) {
+                for (const itemId of cosmetic.OutfitItems) {
+                    cosmeticIdsSet.delete(itemId);
+                }
+
+                cosmeticIdsSet.add(cosmetic.CosmeticId);
+            }
+        }
+    }
+
+    return cosmeticIdsSet;
+}

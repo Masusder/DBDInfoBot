@@ -9,13 +9,13 @@ import {
     getBundleDataById,
 } from "@services/bundleService";
 import { Bundle } from "@tps/bundle";
-import { generateBundleInteractionData } from "@commands/info/bundle/interactionData";
 import { getCachedCosmetics } from "@services/cosmeticService";
 import { isValidData } from "@utils/stringUtils";
 import { t } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { sendErrorMessage } from "@handlers/errorResponseHandler";
 import publishMessage from "@utils/discord/publishMessage";
+import generateBundleInteractionData from "@commands/info/bundle/interactionData";
 
 // region Interaction Handlers
 export async function handleBundleCommandInteraction(interaction: ChatInputCommandInteraction) {
@@ -40,12 +40,14 @@ export async function handleBundleCommandInteraction(interaction: ChatInputComma
 
         const {
             embed,
-            attachments
+            attachments,
+            buttons
         } = await generateBundleInteractionData(bundle, cosmeticData, locale);
 
         await interaction.editReply({
             embeds: [embed],
-            files: attachments
+            files: attachments,
+            components: buttons
         });
     } catch (error) {
         console.error("Error executing bundle subcommand:", error);
@@ -66,12 +68,14 @@ export async function handleBatchSendBundlesToChannel(
 
                 const {
                     embed,
-                    attachments
+                    attachments,
+                    buttons
                 } = await generateBundleInteractionData(bundle, cosmeticData, Locale.EnglishUS);
 
                 const message = await channel.send({
                     embeds: [embed],
-                    files: attachments
+                    files: attachments,
+                    components: buttons
                 });
 
                 publishMessage(message, channel).catch(error => {
