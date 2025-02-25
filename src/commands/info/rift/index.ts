@@ -22,6 +22,7 @@ import { generateRiftTemplate } from "./utils/riftTemplate";
 import { isValidData } from "@utils/stringUtils";
 import { t } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import splitButtonsIntoRows from "@utils/discord/splitButtons";
 
 // region Interaction Handlers
 const TIERS_PER_PAGE = 8;
@@ -66,42 +67,29 @@ export async function handleRiftCommandInteraction(interaction: ChatInputCommand
 
         const generateAdditionalButtons = (_pageItems: any, currentPage: number) => {
             const tiersChunk = tiersDivided[currentPage - 1];
-            const actionRows: ActionRowBuilder<ButtonBuilder>[] = [];
-            let currentActionRow = new ActionRowBuilder<ButtonBuilder>();
 
-            tiersChunk.forEach((tierInfo, index) => {
+            const buttons: ButtonBuilder[] = tiersChunk.map((tierInfo, index) => {
                 let cosmeticIds: string[] = [];
 
                 ["Free", "Premium"].forEach((type) => {
-                    if (currentActionRow.components.length === 5) {
-                        actionRows.push(currentActionRow);
-                        currentActionRow = new ActionRowBuilder<ButtonBuilder>();
-                    }
-
                     const tierInfoItem = tierInfo[type as 'Free' | 'Premium'];
                     if (tierInfoItem) {
-                        tierInfoItem.forEach((tierInfoItem) => {
-                            if (tierInfoItem.Type === "inventory" && !AC_CURRENCY_PACKS.includes(tierInfoItem.Id)) {
-                                cosmeticIds.push(tierInfoItem.Id);
+                        tierInfoItem.forEach((item) => {
+                            if (item.Type === "inventory" && !AC_CURRENCY_PACKS.includes(item.Id)) {
+                                cosmeticIds.push(item.Id);
                             }
-                        })
+                        });
                     }
                 });
 
-                currentActionRow.addComponents(
-                    new ButtonBuilder()
-                        .setCustomId(`rift_tier::${cosmeticIds.join(",")}::${index}`)
-                        .setLabel(`${t('info_command.rift_subcommand.tier', locale, ELocaleNamespace.Messages)} ${tierInfo.TierId}`)
-                        .setStyle(ButtonStyle.Primary)
-                        .setDisabled(cosmeticIds.length === 0)
-                );
+                return new ButtonBuilder()
+                    .setCustomId(`rift_tier::${cosmeticIds.join(",")}::${index}`)
+                    .setLabel(`${t('info_command.rift_subcommand.tier', locale, ELocaleNamespace.Messages)} ${tierInfo.TierId}`)
+                    .setStyle(ButtonStyle.Primary)
+                    .setDisabled(cosmeticIds.length === 0);
             });
 
-            if (currentActionRow.components.length > 0) {
-                actionRows.push(currentActionRow);
-            }
-
-            return actionRows;
+            return splitButtonsIntoRows(buttons);
         };
 
         await paginationHandler({

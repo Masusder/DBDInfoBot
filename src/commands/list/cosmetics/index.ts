@@ -34,6 +34,7 @@ import { Role } from "@data/Role";
 import { CosmeticTypes } from "@data/CosmeticTypes";
 import { generateStoreCustomizationIcons } from "@commands/info/cosmetic/utils";
 import { constructFilters } from "./utils";
+import splitButtonsIntoRows from "@utils/discord/splitButtons";
 
 const COSMETICS_PER_PAGE = 6;
 
@@ -121,28 +122,14 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
         };
 
         const generateAdditionalButtons = (pageItems: Cosmetic[]) => {
-            const actionRows: ActionRowBuilder<ButtonBuilder>[] = [];
-            let currentRow = new ActionRowBuilder<ButtonBuilder>();
+            const buttons = pageItems.map(cosmetic =>
+                new ButtonBuilder()
+                    .setCustomId(`cosmetic_item::${cosmetic.CosmeticId}`)
+                    .setLabel(cosmetic.CosmeticName)
+                    .setStyle(ButtonStyle.Primary)
+            );
 
-            for (const cosmetic of pageItems) {
-                if (currentRow.components.length >= 3) {
-                    actionRows.push(currentRow);
-                    currentRow = new ActionRowBuilder<ButtonBuilder>();
-                }
-
-                currentRow.addComponents(
-                    new ButtonBuilder()
-                        .setCustomId(`cosmetic_item::${cosmetic.CosmeticId}`)
-                        .setLabel(cosmetic.CosmeticName)
-                        .setStyle(ButtonStyle.Primary)
-                );
-            }
-
-            if (currentRow.components.length > 0) {
-                actionRows.push(currentRow);
-            }
-
-            return actionRows;
+            return splitButtonsIntoRows(buttons, 3);
         };
 
 
