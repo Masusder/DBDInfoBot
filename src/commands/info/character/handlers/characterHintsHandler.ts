@@ -50,7 +50,7 @@ export async function characterHintsHandler(interaction: ButtonInteraction) {
 
     const embeds = createEmbeds(characterData.Hints, characterData.Name, locale);
 
-    const paginationOptions: IPaginationOptions = {
+    const paginationOptions: IPaginationOptions<EmbedBuilder> = {
         items: embeds,
         itemsPerPage: 1,
         generateEmbed: (pageItems) => pageItems[0],

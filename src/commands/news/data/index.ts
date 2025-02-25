@@ -6,8 +6,8 @@ import { ThemeColors } from "@constants/themeColors";
 export const NewsDataTable: Record<string, INewsDataTable> = {
     Inbox: {
         icon: combineBaseUrlWithPath("/images/News/icon_Messages.png"),
-        primaryColor: ThemeColors.PRIMARY_LIGHT,
-        secondaryColor: ThemeColors.PRIMARY_LIGHT,
+        primaryColor: ThemeColors.PRIMARY_DARK,
+        secondaryColor: ThemeColors.PRIMARY_DARK,
     },
     News: {
         icon: combineBaseUrlWithPath("/images/News/icon_News.png"),

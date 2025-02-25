@@ -64,7 +64,7 @@ export async function handleRiftCommandInteraction(interaction: ChatInputCommand
             return await generateRiftTemplate(tiersDivided, cosmeticData, currentPage)
         }
 
-        const generateAdditionalButtons = (currentPage: number) => {
+        const generateAdditionalButtons = (_pageItems: any, currentPage: number) => {
             const tiersChunk = tiersDivided[currentPage - 1];
             const actionRows: ActionRowBuilder<ButtonBuilder>[] = [];
             let currentActionRow = new ActionRowBuilder<ButtonBuilder>();

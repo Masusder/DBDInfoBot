@@ -113,7 +113,7 @@ export async function handleCollectionCommandInteraction(interaction: ChatInputC
             return await combineImagesIntoGrid(customizationBuffers, 5, 10);
         };
 
-        const paginationOptions: IPaginationOptions = {
+        const paginationOptions: IPaginationOptions<string> = {
             items: collectionData.Items,
             itemsPerPage: 9,
             generateEmbed,

@@ -1,5 +1,8 @@
 import {
+    ActionRowBuilder,
     AutocompleteInteraction,
+    ButtonBuilder,
+    ButtonStyle,
     ChatInputCommandInteraction,
     ColorResolvable,
     EmbedBuilder
@@ -71,7 +74,7 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
 
             const embed = new EmbedBuilder()
                 .setTitle(title)
-                .setDescription(t('list_command.cosmetics_subcommand.more_info', locale, ELocaleNamespace.Messages))
+                // .setDescription(t('list_command.cosmetics_subcommand.more_info', locale, ELocaleNamespace.Messages))
                 .setColor(embedColor as ColorResolvable)
                 .setTimestamp()
                 .setAuthor({
@@ -117,6 +120,32 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
             return null;
         };
 
+        const generateAdditionalButtons = (pageItems: Cosmetic[]) => {
+            const actionRows: ActionRowBuilder<ButtonBuilder>[] = [];
+            let currentRow = new ActionRowBuilder<ButtonBuilder>();
+
+            for (const cosmetic of pageItems) {
+                if (currentRow.components.length >= 3) {
+                    actionRows.push(currentRow);
+                    currentRow = new ActionRowBuilder<ButtonBuilder>();
+                }
+
+                currentRow.addComponents(
+                    new ButtonBuilder()
+                        .setCustomId(`cosmetic_item::${cosmetic.CosmeticId}`)
+                        .setLabel(cosmetic.CosmeticName)
+                        .setStyle(ButtonStyle.Primary)
+                );
+            }
+
+            if (currentRow.components.length > 0) {
+                actionRows.push(currentRow);
+            }
+
+            return actionRows;
+        };
+
+
         const generateImage = async(pageItems: Cosmetic[]) => {
             const customizationBuffers = await generateStoreCustomizationIcons(pageItems) as Buffer[];
 
@@ -132,7 +161,8 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
             interactionReply: interaction,
             locale,
             generatedThumbnail: await generateThumbnail(),
-            timeout: 120_000
+            timeout: 120_000,
+            generateAdditionalButtons
         });
     } catch (error) {
         console.error("Error executing cosmetics list subcommand:", error);

@@ -17,6 +17,7 @@ import { handleBatchSendBundlesToChannel } from "@commands/info/bundle";
 const DATA_DIR = path.join(process.env.APPDATA || process.env.HOME || ".", "DBDInfoBotCache");
 const BUNDLE_CACHE_FILE = path.join(DATA_DIR, "dispatchedBundles.json");
 let cachedBundleIds: Set<string> = new Set();
+
 export async function startBundleJob() {
     await loadDispatchedBundles();
     // No need to check more frequent than 10 minutes
@@ -102,4 +103,5 @@ async function saveDispatchedBundles() {
         console.error("Failed to save dispatched bundle IDs:", error);
     }
 }
+
 // endregion

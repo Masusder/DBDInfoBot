@@ -5,6 +5,7 @@ import { globalStatsTabHandler } from "@commands/stats/global/handlers/globalSta
 import { characterHintsHandler } from "@commands/info/character/handlers/characterHintsHandler";
 import { riftTierHandler } from "@commands/info/rift/handlers/riftTierHandler";
 import { handlePerkButtonInteraction, } from "@commands/info/perk";
+import { cosmeticHandler } from "@commands/info/cosmetic/handlers/cosmeticHandler";
 
 export default async(interaction: ButtonInteraction) => {
     if (!interaction.deferred) await interaction.deferUpdate();
@@ -29,6 +30,9 @@ export default async(interaction: ButtonInteraction) => {
             break;
         case 'rift_tier':
             await riftTierHandler(interaction);
+            break;
+        case 'cosmetic_item':
+            await cosmeticHandler(interaction);
             break;
         default:
             console.warn(`Unhandled interaction type: ${interaction.customId}`);

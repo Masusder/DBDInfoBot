@@ -125,7 +125,7 @@ export async function handleAddonListCommandInteraction(interaction: ChatInputCo
             return null;
         };
 
-        const paginationOptions: IPaginationOptions = {
+        const paginationOptions: IPaginationOptions<Addon> = {
             items: addons,
             itemsPerPage: ADDONS_PER_PAGE,
             generateEmbed,

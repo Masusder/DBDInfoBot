@@ -54,7 +54,7 @@ export async function showCharacterBackstoryHandler(interaction: ButtonInteracti
 
     const embeds = createBackstoryEmbeds(backstory, characterName, color, locale);
 
-    const paginationOptions: IPaginationOptions = {
+    const paginationOptions: IPaginationOptions<EmbedBuilder> = {
         items: embeds,
         itemsPerPage: 1,
         generateEmbed: (pageItems) => pageItems[0],

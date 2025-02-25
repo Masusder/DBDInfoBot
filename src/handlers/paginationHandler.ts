@@ -12,19 +12,19 @@ import { t } from "@utils/localizationUtils";
 import { sendUnauthorizedMessage } from "./unauthorizedHandler";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 
-export interface IPaginationOptions {
-    items: any[];
+export interface IPaginationOptions<T> {
+    items: T[];
     itemsPerPage: number;
-    generateEmbed: (pageItems: any[], currentPage: number, totalPages: number) => EmbedBuilder | Promise<EmbedBuilder>;
-    generateImage?: (pageItems: any[], currentPage: number) => Promise<Buffer>;
+    generateEmbed: (pageItems: T[], currentPage: number, totalPages: number) => EmbedBuilder | Promise<EmbedBuilder>;
+    generateImage?: (pageItems: T[], currentPage: number) => Promise<Buffer>;
     interactionUserId: string;
     interactionReply: ChatInputCommandInteraction | ButtonInteraction;
     timeout?: number;
     locale: Locale;
     showPageNumbers?: boolean;
-    generateSelectMenu?: (pageItems: any[]) => StringSelectMenuBuilder;
+    generateSelectMenu?: (pageItems: T[]) => StringSelectMenuBuilder;
     generatedThumbnail?: { attachment: Buffer | string; name: string } | null;
-    generateAdditionalButtons?: (currentPage: number) => ActionRowBuilder<ButtonBuilder>[];
+    generateAdditionalButtons?: (pageItems: T[], currentPage: number) => ActionRowBuilder<ButtonBuilder>[];
 }
 
 export const generatePaginationButtons = (
@@ -126,7 +126,7 @@ export function determineNewPage(
     }
 }
 
-export async function paginationHandler(options: IPaginationOptions) {
+export async function paginationHandler<T>(options: IPaginationOptions<T>) {
     const {
         items,
         itemsPerPage,
@@ -161,7 +161,7 @@ export async function paginationHandler(options: IPaginationOptions) {
 
         let additionalButtons: ActionRowBuilder<ButtonBuilder>[] = [];
         if (generateAdditionalButtons) {
-            additionalButtons = generateAdditionalButtons(currentPage);
+            additionalButtons = generateAdditionalButtons(itemsForPage, currentPage);
         }
 
         let files: { attachment: Buffer | string; name: string }[] = [];
