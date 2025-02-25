@@ -4,7 +4,10 @@ import {
     Locale,
 } from "discord.js";
 import { getCachedBundles } from "@services/bundleService";
-import { isValidData } from "@utils/stringUtils";
+import {
+    adjustForTimezone,
+    isValidData
+} from "@utils/stringUtils";
 import client from "../client";
 import Constants from "@constants";
 import path from "path";
@@ -37,7 +40,7 @@ async function dispatchBundles() {
         const validBundles = Object.values(bundleData).filter((bundle) => {
             const isNotChapterBundle = !bundle.IsChapterBundle; // Don't post chapter bundles
             const isPurchasable = bundle.Purchasable; // Bundle needs to be purchasable
-            const isBundleActive = bundle.StartDate && bundle.EndDate ? (new Date(bundle.StartDate) < currentTime) && (new Date(bundle.EndDate) > currentTime) : true; // Bundle needs to be active
+            const isBundleActive = bundle.StartDate && bundle.EndDate ? (new Date(adjustForTimezone(bundle.StartDate)) < currentTime) && (new Date(adjustForTimezone(bundle.EndDate)) > currentTime) : true; // Bundle needs to be active
 
             return isNotChapterBundle && isPurchasable && isBundleActive;
         });
