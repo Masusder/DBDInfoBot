@@ -12,6 +12,8 @@ import {
  * @returns An array of `ActionRowBuilder<ButtonBuilder>` instances containing the buttons.
  */
 function splitButtonsIntoRows(buttons: ButtonBuilder[], maxPerRow = 5): ActionRowBuilder<ButtonBuilder>[] {
+    maxPerRow = Math.max(1, Math.min(maxPerRow, 5)); // Guard maxPerRow value, just in case
+
     return buttons.reduce<ActionRowBuilder<ButtonBuilder>[]>((rows, button, index) => {
         if (index % maxPerRow === 0) {
             rows.push(new ActionRowBuilder<ButtonBuilder>());

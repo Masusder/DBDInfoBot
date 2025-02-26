@@ -1,6 +1,12 @@
-import { Locale } from "discord.js";
 import {
-    ContentItem,
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    Locale,
+} from "discord.js";
+import {
+    CallToAction,
+    NewsContentItem,
     Section,
 } from "@tps/news";
 import { combineBaseUrlWithPath } from "@utils/stringUtils";
@@ -17,6 +23,9 @@ import {
     ICurrencyAmount
 } from "@data/Currencies";
 import { generateCurrencyImage } from "@utils/images/currencyImage";
+import { t } from "@utils/localizationUtils";
+import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import { Cosmetic } from "@tps/cosmetic";
 
 // Devs introduced internal routes with release of revamped news section
 // internal routes start with "dbd://" prefix
@@ -45,9 +54,7 @@ export function formatNewsLink(link: string): string {
     return link;
 }
 
-export async function createItemShowcaseImage(content: ContentItem[], locale: Locale): Promise<Buffer | null> {
-    const cosmeticData = await getCachedCosmetics(locale);
-
+export async function createItemShowcaseImage(content: NewsContentItem[], cosmeticData: Record<string, Cosmetic>, locale: Locale): Promise<Buffer | null> {
     let cosmeticIds: string[] = [];
     let characterIndexes: string[] = [];
     for (const item of content) {
@@ -131,7 +138,6 @@ export async function createInboxShowcaseImage(sections: Section[], locale: Loca
     return await combineImagesIntoGrid([...customizationBuffers, ...characterBuffers, ...currencyBuffers], 5, 20);
 }
 
-
 export function matchToEvent(eventId: string | null): INewsDataTable {
     if (!eventId) {
         return NewsDataTable.News;
@@ -149,4 +155,18 @@ export function matchToEvent(eventId: string | null): INewsDataTable {
         default:
             return NewsDataTable.News;
     }
+}
+
+export function createNewsButton(callToAction: CallToAction, locale: Locale): ActionRowBuilder<ButtonBuilder> | null {
+    let link = callToAction.link;
+    link = formatNewsLink(link);
+
+    if (!link || !link.startsWith('https')) return null;
+
+    const button = new ButtonBuilder()
+        .setLabel(callToAction.text || t('news_command.click_here', locale, ELocaleNamespace.Messages))
+        .setStyle(ButtonStyle.Link)
+        .setURL(link);
+
+    return new ActionRowBuilder<ButtonBuilder>().addComponents(button);
 }

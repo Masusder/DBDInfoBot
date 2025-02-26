@@ -12,7 +12,7 @@ import {
     generateCustomId,
     isValidData
 } from "@utils/stringUtils";
-import { batchSendNews } from "@commands/news/interactionData";
+import { batchSendNews } from "@commands/news";
 
 let cachedNewsIds: Set<string> = new Set();
 

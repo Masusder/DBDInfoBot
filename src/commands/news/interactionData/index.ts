@@ -1,14 +1,9 @@
 import {
-    CallToAction,
     InboxItem,
     MessageBody,
-    NewsData,
     NewsItem
 } from "@tps/news";
 import {
-    ActionRowBuilder,
-    ButtonBuilder,
-    ButtonStyle,
     ChatInputCommandInteraction,
     EmbedBuilder,
     Locale,
@@ -20,7 +15,6 @@ import {
 import {
     checkExistingImageUrl,
     formatHtmlToDiscordMarkdown,
-    generateCustomId,
     splitTextIntoChunksBySentence,
     transformPackagedPath
 } from "@utils/stringUtils";
@@ -29,33 +23,23 @@ import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import {
     createInboxShowcaseImage,
     createItemShowcaseImage,
-    formatNewsLink,
+    createNewsButton,
     matchToEvent
 } from "../utils";
 import publishMessage from "@utils/discord/publishMessage";
 import pinMessage from "@utils/discord/pinMessage";
 import createNewsEmbed from "@commands/news/interactionData/news/embed";
 import createInboxEmbed from "@commands/news/interactionData/inbox/embed";
-
-export function createNewsButton(callToAction: CallToAction, locale: Locale): ActionRowBuilder<ButtonBuilder> | null {
-    let link = callToAction.link;
-    link = formatNewsLink(link);
-
-    if (!link || !link.startsWith('https')) return null;
-
-    const button = new ButtonBuilder()
-        .setLabel(callToAction.text || t('news_command.click_here', locale, ELocaleNamespace.Messages))
-        .setStyle(ButtonStyle.Link)
-        .setURL(link);
-
-    return new ActionRowBuilder<ButtonBuilder>().addComponents(button);
-}
+import createShowcaseButtons from "@commands/news/interactionData/news/buttons";
+import { getCachedCosmetics } from "@services/cosmeticService";
 
 export async function sendNewsContent(
     newsItem: NewsItem,
     interactionOrChannel: ChatInputCommandInteraction | StringSelectMenuInteraction | TextChannel | NewsChannel,
     locale: Locale
 ) {
+    const cosmeticData = await getCachedCosmetics(locale);
+
     const formattedText = newsItem.newsContent?.content
         .map(content => content.text ? formatHtmlToDiscordMarkdown(content.text) : "")
         .join("\n\n");
@@ -144,7 +128,7 @@ export async function sendNewsContent(
             }
         }
 
-        const itemShowcaseImage = await createItemShowcaseImage(newsItem.newsContent.content, locale);
+        const itemShowcaseImage = await createItemShowcaseImage(newsItem.newsContent.content, cosmeticData, locale);
 
         if (itemShowcaseImage) {
             const embed = new EmbedBuilder()
@@ -154,6 +138,7 @@ export async function sendNewsContent(
                 .setImage('attachment://news_showcase_items.png');
 
             if (interactionOrChannel instanceof TextChannel || interactionOrChannel instanceof NewsChannel) {
+                const buttons = createShowcaseButtons(newsItem.newsContent.content, cosmeticData);
                 const message = await interactionOrChannel.send({
                     embeds: [embed],
                     files: [
@@ -161,7 +146,8 @@ export async function sendNewsContent(
                             attachment: itemShowcaseImage,
                             name: 'news_showcase_items.png'
                         }
-                    ]
+                    ],
+                    components: buttons
                 });
 
                 if (interactionOrChannel instanceof NewsChannel) {
@@ -185,7 +171,7 @@ export async function sendNewsContent(
     }
 }
 
-async function sendInboxContent(
+export async function sendInboxContent(
     inboxItem: InboxItem,
     channel: TextChannel | NewsChannel,
     locale: Locale
@@ -211,26 +197,5 @@ async function sendInboxContent(
         publishMessage(message, channel).catch(error => {
             console.error(`Failed to publish message:`, error);
         });
-    }
-}
-
-export async function batchSendNews(
-    channel: TextChannel | NewsChannel,
-    dispatchedNewsIds: string[],
-    newsData: NewsData
-) {
-    try {
-        const newsList = newsData.news;
-        const inboxList = newsData.messages;
-
-        for (const newsItem of newsList.filter(news => !dispatchedNewsIds.includes(news.id))) {
-            await sendNewsContent(newsItem, channel, Locale.EnglishUS);
-        }
-
-        for (const inboxItem of inboxList.filter(inbox => !dispatchedNewsIds.includes(generateCustomId(inbox.received.toString())))) {
-            await sendInboxContent(inboxItem, channel, Locale.EnglishUS);
-        }
-    } catch (error) {
-        console.error("Error executing batch news command:", error);
     }
 }

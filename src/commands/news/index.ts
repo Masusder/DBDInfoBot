@@ -3,13 +3,17 @@ import { SlashCommandBuilder } from "@discordjs/builders";
 import {
     ChatInputCommandInteraction,
     EmbedBuilder,
+    Locale,
+    NewsChannel,
     StringSelectMenuBuilder,
     StringSelectMenuOptionBuilder,
+    TextChannel,
 } from "discord.js";
 import { getCachedNews } from "@services/newsService";
 import { sendErrorMessage } from "@handlers/errorResponseHandler";
 import {
     adjustForTimezone,
+    generateCustomId,
     isValidData,
 } from "@utils/stringUtils";
 import {
@@ -22,6 +26,10 @@ import {
 } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { paginationHandler } from "@handlers/paginationHandler";
+import {
+    sendInboxContent,
+    sendNewsContent
+} from "@commands/news/interactionData";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -107,5 +115,26 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         });
     } catch (error) {
         console.error("Error executing news command:", error);
+    }
+}
+
+export async function batchSendNews(
+    channel: TextChannel | NewsChannel,
+    dispatchedNewsIds: string[],
+    newsData: NewsData
+) {
+    try {
+        const newsList = newsData.news;
+        const inboxList = newsData.messages;
+
+        for (const newsItem of newsList.filter(news => !dispatchedNewsIds.includes(news.id))) {
+            await sendNewsContent(newsItem, channel, Locale.EnglishUS);
+        }
+
+        for (const inboxItem of inboxList.filter(inbox => !dispatchedNewsIds.includes(generateCustomId(inbox.received.toString())))) {
+            await sendInboxContent(inboxItem, channel, Locale.EnglishUS);
+        }
+    } catch (error) {
+        console.error("Error executing batch news command:", error);
     }
 }

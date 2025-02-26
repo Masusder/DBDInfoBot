@@ -75,7 +75,7 @@ interface MetaData {
 
 interface NewsContent {
     callToAction: CallToAction;
-    content: ContentItem[];
+    content: NewsContentItem[];
     id: string;
     image: ImageContent;
     title: string;
@@ -88,7 +88,7 @@ export interface CallToAction {
     text: string;
 }
 
-export interface ContentItem {
+export interface NewsContentItem {
     text?: string;
     showcasedItem?: ShowcasedItem[];
     type: string;
