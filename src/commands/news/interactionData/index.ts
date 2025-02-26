@@ -138,8 +138,9 @@ export async function sendNewsContent(
                 .setColor(newsDataTable.secondaryColor)
                 .setImage('attachment://news_showcase_items.png');
 
+            const buttons = createShowcaseButtons(newsItem.newsContent.content, cosmeticData);
+
             if (interactionOrChannel instanceof TextChannel || interactionOrChannel instanceof NewsChannel) {
-                const buttons = createShowcaseButtons(newsItem.newsContent.content, cosmeticData);
                 const message = await interactionOrChannel.send({
                     embeds: [embed],
                     files: [
@@ -165,6 +166,7 @@ export async function sendNewsContent(
                             name: 'news_showcase_items.png'
                         }
                     ],
+                    components: buttons,
                     flags: MessageFlags.Ephemeral
                 });
             }
