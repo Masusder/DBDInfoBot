@@ -13,6 +13,7 @@ import Constants from "@constants";
 import path from "path";
 import fs from "fs/promises";
 import { handleBatchSendBundlesToChannel } from "@commands/info/bundle";
+import logger from "@logger";
 
 const DATA_DIR = path.join(process.env.APPDATA || process.env.HOME || ".", "DBDInfoBotCache");
 const BUNDLE_CACHE_FILE = path.join(DATA_DIR, "dispatchedBundles.json");
@@ -29,11 +30,11 @@ export async function startBundleJob() {
 
 async function dispatchBundles() {
     try {
-        console.log('Checking Bundles...');
+        logger.info('Checking Bundles...');
         const bundleData = await getCachedBundles(Locale.EnglishUS);
 
         if (!isValidData(bundleData)) {
-            console.log("Not found Bundle data.");
+            logger.info("Not found Bundle data.");
             return;
         }
 
@@ -50,7 +51,7 @@ async function dispatchBundles() {
         const newBundleIds = bundleIds.filter(id => !cachedBundleIds.has(id));
 
         if (newBundleIds.length === 0) {
-            console.log("No new bundles to dispatch.");
+            logger.info("No new bundles to dispatch.");
             return;
         }
 
@@ -65,9 +66,9 @@ async function dispatchBundles() {
         newBundleIds.forEach(id => cachedBundleIds.add(id));
         await saveDispatchedBundles();
 
-        console.log("New bundles dispatched.");
+        logger.info("New bundles dispatched.");
     } catch (error) {
-        console.error('Error checking for Bundles:', error);
+        logger.error('Error checking for Bundles:', error);
     }
 }
 
@@ -76,7 +77,7 @@ async function ensureDataDir() {
     try {
         await fs.mkdir(DATA_DIR, { recursive: true });
     } catch (error) {
-        console.error("Failed to create data directory:", error);
+        logger.error("Failed to create data directory:", error);
     }
 }
 
@@ -88,7 +89,7 @@ async function loadDispatchedBundles() {
         if (Array.isArray(ids)) {
             cachedBundleIds = new Set(ids);
         }
-        console.log("Loaded dispatched bundle IDs.");
+        logger.info("Loaded dispatched bundle IDs.");
     } catch (error) {
         console.warn("No dispatched bundle IDs found or failed to load.");
     }
@@ -98,9 +99,9 @@ async function saveDispatchedBundles() {
     try {
         await ensureDataDir();
         await fs.writeFile(BUNDLE_CACHE_FILE, JSON.stringify([...cachedBundleIds], null, 2));
-        console.log("Dispatched bundle IDs saved.");
+        logger.info("Dispatched bundle IDs saved.");
     } catch (error) {
-        console.error("Failed to save dispatched bundle IDs:", error);
+        logger.error("Failed to save dispatched bundle IDs:", error);
     }
 }
 

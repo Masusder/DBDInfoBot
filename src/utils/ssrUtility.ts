@@ -3,6 +3,7 @@ import ReactDOMServer from 'react-dom/server';
 import puppeteer from 'puppeteer';
 import * as fs from "node:fs";
 import * as path from "node:path";
+import logger from "@logger";
 
 export async function renderBrowserBuffer(
     Component: React.FunctionComponent<any>,
@@ -47,8 +48,7 @@ export async function renderBrowserBuffer(
 
         return imageBuffer;
     } catch (error) {
-        console.log(error);
-        console.error("Failed generating puppeteer buffer.");
+        logger.error("Failed generating puppeteer buffer.", error);
         return null;
     }
 }

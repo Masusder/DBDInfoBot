@@ -16,6 +16,7 @@ import { getCachedPerks } from "@services/perkService";
 import { getCachedAddons } from "@services/addonService";
 import { getCachedOfferings } from "@services/offeringService";
 import { getCachedItems } from "@services/itemService";
+import logger from "@logger";
 
 export const fetchAndResizeImage = async(imageUrl: string, width: number | null, height: number | null) => {
     const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
@@ -101,7 +102,7 @@ async function drawImage(imageSrc: string | Buffer, position: Position, maxWidth
         const { width, height } = calculateDimensions(buffer, maxWidth);
         ctx.drawImage(buffer, position.x, position.y, width, height);
     } catch (error) {
-        console.error("Error loading image:", error);
+        logger.error("Error loading image:", error);
     }
 }
 

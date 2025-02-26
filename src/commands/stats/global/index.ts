@@ -8,6 +8,7 @@ import {
     createGlobalStatsEmbed,
     createTabButtons
 } from "./utils";
+import logger from "@logger";
 
 export async function handleGlobalStatsCommandInteraction(interaction: ChatInputCommandInteraction) {
     const locale = interaction.locale;
@@ -33,6 +34,6 @@ export async function handleGlobalStatsCommandInteraction(interaction: ChatInput
             components: buttonRows
         });
     } catch (error) {
-        console.error("Error executing global stats subcommand:", error);
+        logger.error("Error executing global stats subcommand:", error);
     }
 }

@@ -13,6 +13,7 @@ import {
     isValidData
 } from "@utils/stringUtils";
 import { batchSendNews } from "@commands/news";
+import logger from "@logger";
 
 let cachedNewsIds: Set<string> = new Set();
 
@@ -26,11 +27,11 @@ export async function startNewsJob() {
 
 export async function resolveNewsArticles() {
     try {
-        console.log('Checking News...');
+        logger.info('Checking News...');
         const newsData: NewsData = await getCachedNews(Locale.EnglishUS)
 
         if (!isValidData(newsData)) {
-            console.log("Not found News data.");
+            logger.info("Not found News data.");
             return;
         }
 
@@ -40,7 +41,7 @@ export async function resolveNewsArticles() {
         const newArticleIds = [...articleIds, ...inboxIds].filter(id => !cachedNewsIds.has(id));
 
         if (newArticleIds.length === 0) {
-            console.log("No new articles to dispatch.");
+            logger.info("No new articles to dispatch.");
             return;
         }
 
@@ -54,7 +55,7 @@ export async function resolveNewsArticles() {
 
         await batchSendNews(channel, ids, newsData);
     } catch (error) {
-        console.error('Error checking for News:', error);
+        logger.error('Error checking for News:', error);
     }
 }
 

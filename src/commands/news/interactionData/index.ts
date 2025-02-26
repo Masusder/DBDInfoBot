@@ -32,6 +32,7 @@ import createNewsEmbed from "@commands/news/interactionData/news/embed";
 import createInboxEmbed from "@commands/news/interactionData/inbox/embed";
 import createShowcaseButtons from "@commands/news/interactionData/news/buttons";
 import { getCachedCosmetics } from "@services/cosmeticService";
+import logger from "@logger";
 
 export async function sendNewsContent(
     newsItem: NewsItem,
@@ -78,13 +79,13 @@ export async function sendNewsContent(
             // If pinning or publish fails that doesn't really matter
             if (isSticky) {
                 pinMessage(message).catch(error => {
-                    console.error(`Failed to pin message:`, error);
+                    logger.error(`Failed to pin message:`, error);
                 });
             }
 
             if (interactionOrChannel instanceof NewsChannel) {
                 publishMessage(message, interactionOrChannel).catch(error => {
-                    console.error(`Failed to publish message:`, error);
+                    logger.error(`Failed to publish message:`, error);
                 });
             }
         } else {
@@ -116,7 +117,7 @@ export async function sendNewsContent(
 
                 if (interactionOrChannel instanceof NewsChannel) {
                     publishMessage(message, interactionOrChannel).catch(error => {
-                        console.error(`Failed to publish message:`, error);
+                        logger.error(`Failed to publish message:`, error);
                     });
                 }
             } else {
@@ -152,7 +153,7 @@ export async function sendNewsContent(
 
                 if (interactionOrChannel instanceof NewsChannel) {
                     publishMessage(message, interactionOrChannel).catch(error => {
-                        console.error(`Failed to publish message:`, error);
+                        logger.error(`Failed to publish message:`, error);
                     });
                 }
             } else {
@@ -195,7 +196,7 @@ export async function sendInboxContent(
 
     if (channel instanceof NewsChannel) {
         publishMessage(message, channel).catch(error => {
-            console.error(`Failed to publish message:`, error);
+            logger.error(`Failed to publish message:`, error);
         });
     }
 }

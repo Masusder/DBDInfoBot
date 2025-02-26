@@ -43,7 +43,7 @@ export async function initializeDlcCache(locale: Locale): Promise<void> {
  *
  * @example
  * const dlc = findDlcByEntitlementId(dlcData, "SteamId123");
- * console.log(dlc.DlcId); // The unique key for the matched DLC.
+ * logger.info(dlc.DlcId); // The unique key for the matched DLC.
  */
 export function findDlcByEntitlementId(
     dlcData: Record<string, DLC>,

@@ -19,6 +19,7 @@ import {
 import { Rarities } from "@data/Rarities";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { sendErrorMessage } from "@handlers/errorResponseHandler";
+import logger from "@logger";
 
 // region Interaction Handlers
 export async function handleOfferingCommandInteraction(interaction: ChatInputCommandInteraction) {
@@ -89,7 +90,7 @@ export async function handleOfferingCommandInteraction(interaction: ChatInputCom
             }]
         });
     } catch (error) {
-        console.error("Error executing offering subcommand:", error);
+        logger.error("Error executing offering subcommand:", error);
     }
 }
 
@@ -109,7 +110,7 @@ export async function handleOfferingCommandAutocompleteInteraction(interaction: 
 
         await interaction.respond(options);
     } catch (error) {
-        console.error("Error handling autocomplete interaction:", error);
+        logger.error("Error handling autocomplete interaction:", error);
     }
 }
 

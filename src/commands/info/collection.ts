@@ -28,6 +28,7 @@ import { t } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { generateStoreCustomizationIcons } from "@commands/info/cosmetic/utils";
 import { sendErrorMessage } from "@handlers/errorResponseHandler";
+import logger from "@logger";
 
 // region Interaction Handlers
 export async function handleCollectionCommandInteraction(interaction: ChatInputCommandInteraction) {
@@ -127,7 +128,7 @@ export async function handleCollectionCommandInteraction(interaction: ChatInputC
 
         await paginationHandler(paginationOptions);
     } catch (error) {
-        console.error("Error executing collection subcommand:", error);
+        logger.error("Error executing collection subcommand:", error);
     }
 }
 
@@ -147,7 +148,7 @@ export async function handleCollectionCommandAutocompleteInteraction(interaction
 
         await interaction.respond(options);
     } catch (error) {
-        console.error("Error handling autocomplete interaction:", error);
+        logger.error("Error handling autocomplete interaction:", error);
     }
 }
 

@@ -14,6 +14,7 @@ import {
 import { sendErrorMessage } from "@handlers/errorResponseHandler";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import Constants from "@constants";
+import logger from "@logger";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -42,7 +43,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             flags: MessageFlags.Ephemeral
         });
     } catch (error) {
-        console.error("Error executing support command:", error);
+        logger.error("Error executing support command:", error);
         await sendErrorMessage(interaction, t('general.fatal_error_generic', locale, ELocaleNamespace.Errors));
     }
 }

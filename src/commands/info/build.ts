@@ -25,6 +25,7 @@ import { getCachedOfferings } from "@services/offeringService";
 import { getCachedCharacters } from "@services/characterService";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { sendErrorMessage } from "@handlers/errorResponseHandler";
+import logger from "@logger";
 
 // region Interaction Handlers
 export async function handleBuildCommandInteraction(interaction: ChatInputCommandInteraction | StringSelectMenuInteraction) {
@@ -219,7 +220,7 @@ export async function handleBuildCommandInteraction(interaction: ChatInputComman
             });
         }
     } catch (error) {
-        console.error("Error executing build subcommand:", error);
+        logger.error("Error executing build subcommand:", error);
     }
 }
 
@@ -230,7 +231,7 @@ export async function handleBuildCommandAutocompleteInteraction(interaction: Aut
     try {
         await interaction.respond([]); // We just let user input the ID
     } catch (error) {
-        console.error("Error handling autocomplete interaction:", error);
+        logger.error("Error handling autocomplete interaction:", error);
     }
 }
 

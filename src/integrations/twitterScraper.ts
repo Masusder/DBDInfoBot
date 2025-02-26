@@ -9,6 +9,7 @@ import {
 import Constants from "@constants";
 import client from "../client";
 import publishMessage from "@utils/discord/publishMessage";
+import logger from "@logger";
 
 const scraper = new Scraper();
 
@@ -25,8 +26,8 @@ let isFetchingTweets = false;
  *
  * @example
  * loginToTwitter()
- *    .then(() => console.log('Logged in successfully'))
- *    .catch(error => console.error('Login failed:', error));
+ *    .then(() => logger.info('Logged in successfully'))
+ *    .catch(error => logger.error('Login failed:', error));
  */
 export async function loginToTwitter() {
     const username = process.env['TWITTER_USERNAME'] as string;
@@ -39,9 +40,9 @@ export async function loginToTwitter() {
 
     try {
         await scraper.login(username, password, email);
-        console.log('Login to Twitter was successful.');
+        logger.info('Login to Twitter was successful.');
     } catch (error) {
-        console.error('Error logging to Twitter:', error);
+        logger.error('Error logging to Twitter:', error);
     }
 }
 
@@ -67,7 +68,7 @@ async function hasUrlBeenPosted(channel: NewsChannel, tweetUrl: string): Promise
 
         return urlsInMessages.includes(tweetUrl);
     } catch (error) {
-        console.error('Error fetching channel messages:', error);
+        logger.error('Error fetching channel messages:', error);
         return false;
     }
 }
@@ -116,10 +117,10 @@ function convertToVxTwitter(url: string): string {
  * // This will check for new tweets every 60 seconds.
  */
 export async function getLatestTweetLink() {
-    console.log(`Checking for new Tweets - ${new Date()}`);
+    logger.info(`Checking for new Tweets - ${new Date()}`);
 
     if (isFetchingTweets) {
-        console.log('Skipping execution: Tweet fetching is already in progress.');
+        logger.info('Skipping execution: Tweet fetching is already in progress.');
         return;
     }
 
@@ -128,7 +129,7 @@ export async function getLatestTweetLink() {
     try {
         const isLoggedIn = await ensureLoggedIn();
         if (!isLoggedIn) {
-            console.error("Not logged in. Cannot fetch tweets.");
+            logger.error("Not logged in. Cannot fetch tweets.");
             return;
         }
 
@@ -136,7 +137,7 @@ export async function getLatestTweetLink() {
         const tweetResult = await tweetsAsyncGenerator.next();
 
         if (!tweetResult || tweetResult.done || !tweetResult.value) {
-            console.log('No new tweets found.');
+            logger.info('No new tweets found.');
             return;
         }
 
@@ -151,24 +152,24 @@ export async function getLatestTweetLink() {
         const vxTweetUrl = convertToVxTwitter(tweetUrl);
 
         if (vxTweetUrl === latestTweetLink) {
-            console.log('No new tweets found. URL remains the same.');
+            logger.info('No new tweets found. URL remains the same.');
             return;
         }
 
         const channel = client.channels.cache.get(Constants.DBDLEAKS_DBD_NEWS_CHANNEL_ID) as NewsChannel;
         if (!channel) {
-            console.error('Text channel not found. Unable to send tweet.');
+            logger.error('Text channel not found. Unable to send tweet.');
             return;
         }
 
         if (channel.type !== ChannelType.GuildAnnouncement) {
-            console.error('Twitter News: Invalid channel type. Only Announcement Channel is supported.');
+            logger.error('Twitter News: Invalid channel type. Only Announcement Channel is supported.');
             return;
         }
 
         const urlAlreadyPosted = await hasUrlBeenPosted(channel, vxTweetUrl);
         if (urlAlreadyPosted) {
-            console.log('This Tweet has already been posted.');
+            logger.info('This Tweet has already been posted.');
             return;
         }
 
@@ -178,12 +179,12 @@ export async function getLatestTweetLink() {
         const message = await channel.send(content);
 
         publishMessage(message, channel).catch(error => {
-            console.error(`Failed to publish message:`, error);
+            logger.error(`Failed to publish message:`, error);
         });
 
-        console.log('New tweet posted successfully.');
+        logger.info('New tweet posted successfully.');
     } catch (error) {
-        console.error('Error fetching or posting tweets:', error);
+        logger.error('Error fetching or posting tweets:', error);
     } finally {
         isFetchingTweets = false;
     }

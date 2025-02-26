@@ -116,7 +116,7 @@ export async function checkExistingImageUrl(url1: string | null, url2: string | 
             const response = await axios.head(url);
             return response.status === 200;
         } catch (error) {
-            //console.error(`Error checking URL ${url}:`, error);
+            //logger.error(`Error checking URL ${url}:`, error);
             return false;
         }
     };

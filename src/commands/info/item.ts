@@ -22,6 +22,7 @@ import {
 } from "@services/characterService";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { sendErrorMessage } from "@handlers/errorResponseHandler";
+import logger from "@logger";
 
 // region Interaction Handlers
 export async function handleItemCommandInteraction(interaction: ChatInputCommandInteraction) {
@@ -96,7 +97,7 @@ export async function handleItemCommandInteraction(interaction: ChatInputCommand
             }]
         });
     } catch (error) {
-        console.error("Error executing item subcommand:", error);
+        logger.error("Error executing item subcommand:", error);
     }
 }
 
@@ -116,7 +117,7 @@ export async function handleItemCommandAutocompleteInteraction(interaction: Auto
 
         await interaction.respond(options);
     } catch (error) {
-        console.error("Error handling autocomplete interaction:", error);
+        logger.error("Error handling autocomplete interaction:", error);
     }
 }
 

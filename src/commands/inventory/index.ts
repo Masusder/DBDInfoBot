@@ -45,6 +45,7 @@ import {
     DbdEntitlements
 } from "@commands/inventory/schemas/entitlementsSchema";
 import { getCachedDlcs } from "@services/dlcService";
+import logger from "@logger";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -97,7 +98,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         const validationResult = CombinedSchema.safeParse(response.data);
 
         if (!validationResult.success) {
-            console.log(validationResult.error)
+            logger.warn(validationResult.error)
             await sendErrorMessage(interaction, t('inventory_command.invalid_data', locale, ELocaleNamespace.Errors), {
                 url: Constants.DBDLEAKS_DISCORD_URL,
                 label: t('inventory_command.support', locale, ELocaleNamespace.Messages)
@@ -208,7 +209,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 }]
         });
     } catch (error) {
-        console.error("Error executing inventory command:", error);
+        logger.error("Error executing inventory command:", error);
         await sendErrorMessage(interaction, t('inventory_command.fatal_error', locale, ELocaleNamespace.Errors));
     }
 }
@@ -243,7 +244,7 @@ async function generateDbdInventory(
 
         return renderBrowserBuffer(DbdInventory, 'src/ui/components/DbdInventory/DbdInventory.css', 1634, 899, props);
     } catch (error) {
-        console.error("Failed generating dbd inventory infographic.", error);
+        logger.error("Failed generating dbd inventory infographic.", error);
         return null;
     }
 }
@@ -272,7 +273,7 @@ export async function autocomplete(interaction: AutocompleteInteraction) {
 
         await interaction.respond(options);
     } catch (error) {
-        console.error("Error handling autocomplete interaction:", error);
+        logger.error("Error handling autocomplete interaction:", error);
     }
 }
 

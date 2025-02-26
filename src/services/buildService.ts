@@ -8,6 +8,7 @@ import {
     getCache,
     setCache
 } from "../cache";
+import logger from "@logger";
 
 /**
  * Fetches a list of builds from the API based on the provided filters.
@@ -22,10 +23,10 @@ export async function retrieveBuilds(filters: IBuildFilters): Promise<IBuildsRes
         if (response.data.success) {
             return response.data.data;
         } else {
-            console.error("Failed to fetch builds: API responded with success = false");
+            logger.error("Failed to fetch builds: API responded with success = false");
         }
     } catch (error) {
-        console.error('Error fetching builds:', error);
+        logger.error('Error fetching builds:', error);
     }
 }
 
@@ -41,10 +42,10 @@ export async function retrieveBuildById(id: string): Promise<IBuild | undefined>
         if (response.data.success) {
             return response.data.data;
         } else {
-            console.error("Failed to fetch builds: API responded with success = false");
+            logger.error("Failed to fetch builds: API responded with success = false");
         }
     } catch (error) {
-        console.error('Error fetching builds:', error);
+        logger.error('Error fetching builds:', error);
     }
 }
 

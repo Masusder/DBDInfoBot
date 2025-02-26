@@ -35,6 +35,7 @@ import { CosmeticTypes } from "@data/CosmeticTypes";
 import { generateStoreCustomizationIcons } from "@commands/info/cosmetic/utils";
 import { constructFilters } from "./utils";
 import splitButtonsIntoRows from "@utils/discord/splitButtons";
+import logger from "@logger";
 
 const COSMETICS_PER_PAGE = 6;
 
@@ -152,7 +153,7 @@ export async function handleCosmeticListCommandInteraction(interaction: ChatInpu
             generateAdditionalButtons
         });
     } catch (error) {
-        console.error("Error executing cosmetics list subcommand:", error);
+        logger.error("Error executing cosmetics list subcommand:", error);
     }
 }
 
@@ -173,7 +174,7 @@ export async function handleCosmeticListCommandAutocompleteInteraction(interacti
                 break;
         }
     } catch (error) {
-        console.error("Error handling cosmetic list autocomplete interaction:", error);
+        logger.error("Error handling cosmetic list autocomplete interaction:", error);
     }
 }
 

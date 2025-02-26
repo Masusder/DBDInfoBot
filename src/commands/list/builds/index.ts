@@ -25,6 +25,7 @@ import {
     createLinkButton,
     createStringMenu
 } from "./utils";
+import logger from "@logger";
 
 // region Interaction Handlers
 export async function handleBuildsListCommandInteraction(interaction: ChatInputCommandInteraction) {
@@ -115,7 +116,7 @@ export async function handleBuildsListCommandInteraction(interaction: ChatInputC
                     await handleBuildCommandInteraction(i);
                 }
             } catch (error) {
-                console.error("Error handling pagination:", error);
+                logger.error("Error handling pagination:", error);
             }
         });
 
@@ -123,11 +124,11 @@ export async function handleBuildsListCommandInteraction(interaction: ChatInputC
             try {
                 await replyMessage.edit({ components: [linkButton] });
             } catch (error) {
-                console.error("Error handling pagination ('end' event):", error);
+                logger.error("Error handling pagination ('end' event):", error);
             }
         });
     } catch (error) {
-        console.error("Error executing builds list subcommand:", error);
+        logger.error("Error executing builds list subcommand:", error);
     }
 }
 
@@ -146,7 +147,7 @@ export async function handleBuildsListCommandAutocompleteInteraction(interaction
                 break;
         }
     } catch (error) {
-        console.error("Error handling cosmetic list autocomplete interaction:", error);
+        logger.error("Error handling cosmetic list autocomplete interaction:", error);
     }
 }
 
@@ -168,7 +169,7 @@ export async function autocompleteCharacter(interaction: AutocompleteInteraction
 
         await interaction.respond(options);
     } catch (error) {
-        console.error("Error handling autocomplete interaction:", error);
+        logger.error("Error handling autocomplete interaction:", error);
     }
 }
 
@@ -186,7 +187,7 @@ export async function autocompleteInclusionVersion(interaction: AutocompleteInte
 
         await interaction.respond(options);
     } catch (error) {
-        console.error("Error handling autocomplete interaction:", error);
+        logger.error("Error handling autocomplete interaction:", error);
     }
 }
 

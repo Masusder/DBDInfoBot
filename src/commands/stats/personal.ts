@@ -21,6 +21,7 @@ import { ThemeColors } from "@constants/themeColors";
 import { getCachedCharacters } from "@services/characterService";
 import { getCachedMaps } from "@services/mapService";
 import PlayerStats from "@ui/components/StatsSummaryCard/PlayerStats";
+import logger from "@logger";
 
 export async function handlePersonalStatsCommandInteraction(interaction: ChatInputCommandInteraction) {
     const steamId = interaction.options.getString('steam_id');
@@ -77,7 +78,7 @@ export async function handlePersonalStatsCommandInteraction(interaction: ChatInp
             }]
         });
     } catch (error) {
-        console.error("Error executing player stats subcommand:", error);
+        logger.error("Error executing player stats subcommand:", error);
     }
 }
 
@@ -138,8 +139,7 @@ async function generatePlayerStatsSummary(playerData: IPlayerData, user: User): 
 
         return renderBrowserBuffer(PlayerStats, 'src/ui/components/StatsSummaryCard/PlayerStats.css', 1980, 1149, props);
     } catch (error) {
-        console.log(error);
-        console.error("Failed generating player stats summary card.");
+        logger.error("Failed generating player stats summary card.", error);
         return null;
     }
 }

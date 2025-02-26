@@ -12,6 +12,7 @@ import {
 import { sendShrineToChannel } from "@commands/shrine";
 import Constants from "@constants";
 import client from "../client";
+import logger from "@logger";
 
 export async function startShrineJob() {
     await checkAndScheduleShrine();
@@ -19,11 +20,11 @@ export async function startShrineJob() {
 
 async function checkAndScheduleShrine() {
     try {
-        console.log('Checking Shrine...');
+        logger.info('Checking Shrine...');
         const shrineData = await getCachedShrine();
 
         if (!shrineData?.currentShrine) {
-            console.log("No current Shrine data found. Scheduling next check in 5 minutes.");
+            logger.info("No current Shrine data found. Scheduling next check in 5 minutes.");
             setTimeout(() => checkAndScheduleShrine(), 5 * 60 * 1000); // Retry in 5 minutes
             return;
         }
@@ -35,16 +36,16 @@ async function checkAndScheduleShrine() {
         if (!shrineMessageSent) {
             await sendShrine(client);
         } else {
-            console.log("This week's Shrine has already been sent.");
+            logger.info("This week's Shrine has already been sent.");
         }
 
         // Schedule the next check after the current shrine's end date
         const timeUntilNextCheck = adjustForTimezone(currentShrine.endDate) - Date.now();
         const nextCheckDate = new Date(Date.now() + timeUntilNextCheck);
-        console.log(`Next Shrine check scheduled for: ${nextCheckDate.toLocaleString()}`);
+        logger.info(`Next Shrine check scheduled for: ${nextCheckDate.toLocaleString()}`);
         setTimeout(() => checkAndScheduleShrine(), timeUntilNextCheck);
     } catch (error) {
-        console.error('Error checking Shrine:', error);
+        logger.error('Error checking Shrine:', error);
         // Retry after 1 hour if an error occurs
         setTimeout(() => checkAndScheduleShrine(), 60 * 60 * 1000);
     }
@@ -76,12 +77,12 @@ async function sendShrine(client: Client) {
     const channel = client.channels.cache.get(Constants.DBDLEAKS_SHRINE_CHANNEL_ID);
 
     if (!channel) {
-        console.error("Not found Shrine channel.");
+        logger.error("Not found Shrine channel.");
         return;
     }
 
     if (channel.type !== ChannelType.GuildAnnouncement) {
-        console.error("Shrine: Invalid channel type. Only Announcement Channel is supported.")
+        logger.error("Shrine: Invalid channel type. Only Announcement Channel is supported.")
         return;
     }
 

@@ -21,6 +21,7 @@ import { t } from "@utils/localizationUtils";
 import { layerIcons } from "@utils/imageUtils";
 import { ELocaleNamespace } from '@tps/enums/ELocaleNamespace';
 import { sendErrorMessage } from "@handlers/errorResponseHandler";
+import logger from "@logger";
 
 // region Interaction Handlers
 export async function handlePerkCommandInteraction(interaction: ChatInputCommandInteraction) {
@@ -42,7 +43,7 @@ export async function handlePerkCommandInteraction(interaction: ChatInputCommand
             files: attachments
         });
     } catch (error) {
-        console.error("Error executing perk subcommand:", error);
+        logger.error("Error executing perk subcommand:", error);
     }
 }
 
@@ -64,7 +65,7 @@ export async function handlePerkButtonInteraction(interaction: ButtonInteraction
             flags: MessageFlags.Ephemeral
         });
     } catch (error) {
-        console.error("Error handling perk button interaction:", error);
+        logger.error("Error handling perk button interaction:", error);
     }
 }
 
@@ -84,7 +85,7 @@ export async function handlePerkCommandAutocompleteInteraction(interaction: Auto
 
         await interaction.respond(options);
     } catch (error) {
-        console.error("Error handling autocomplete interaction:", error);
+        logger.error("Error handling autocomplete interaction:", error);
     }
 }
 

@@ -11,6 +11,7 @@ import {
 import { t } from "@utils/localizationUtils";
 import { sendUnauthorizedMessage } from "./unauthorizedHandler";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import logger from "@logger";
 
 export interface IPaginationOptions<T> {
     items: T[];
@@ -193,7 +194,7 @@ export async function paginationHandler<T>(options: IPaginationOptions<T>) {
                     updated = true;
                 }
             } catch (error) {
-                console.error("Error generating image:", error);
+                logger.error("Error generating image:", error);
             }
         }
 
@@ -232,7 +233,7 @@ export async function paginationHandler<T>(options: IPaginationOptions<T>) {
                 await updatePageContent(locale);
             }
         } catch (error) {
-            console.error("Error handling pagination:", error);
+            logger.error("Error handling pagination:", error);
         }
     });
 
@@ -240,7 +241,7 @@ export async function paginationHandler<T>(options: IPaginationOptions<T>) {
         try {
             await interactionReply.editReply({ components: [] });
         } catch (error) {
-            console.error("Error handling pagination ('end' event):", error);
+            logger.error("Error handling pagination ('end' event):", error);
         }
     });
 }

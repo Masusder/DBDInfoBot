@@ -8,6 +8,7 @@ import {
 import { t } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { ThemeColors } from "@constants/themeColors";
+import logger from "@logger";
 
 export async function sendUnauthorizedMessage(
     interaction: ChatInputCommandInteraction | ButtonInteraction | StringSelectMenuInteraction,
@@ -35,6 +36,6 @@ export async function sendUnauthorizedMessage(
             });
         }
     } catch (error) {
-        console.error("Error sending unauthorized message:", error);
+        logger.error("Error sending unauthorized message:", error);
     }
 }

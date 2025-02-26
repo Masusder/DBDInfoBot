@@ -30,6 +30,7 @@ import {
     sendInboxContent,
     sendNewsContent
 } from "@commands/news/interactionData";
+import logger from "@logger";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -114,7 +115,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             generateSelectMenu
         });
     } catch (error) {
-        console.error("Error executing news command:", error);
+        logger.error("Error executing news command:", error);
     }
 }
 
@@ -135,6 +136,6 @@ export async function batchSendNews(
             await sendInboxContent(inboxItem, channel, Locale.EnglishUS);
         }
     } catch (error) {
-        console.error("Error executing batch news command:", error);
+        logger.error("Error executing batch news command:", error);
     }
 }

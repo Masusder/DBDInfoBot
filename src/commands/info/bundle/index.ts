@@ -16,6 +16,7 @@ import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { sendErrorMessage } from "@handlers/errorResponseHandler";
 import publishMessage from "@utils/discord/publishMessage";
 import generateBundleInteractionData from "@commands/info/bundle/interactionData";
+import logger from "@logger";
 
 // region Interaction Handlers
 export async function handleBundleCommandInteraction(interaction: ChatInputCommandInteraction) {
@@ -50,7 +51,7 @@ export async function handleBundleCommandInteraction(interaction: ChatInputComma
             components: buttons
         });
     } catch (error) {
-        console.error("Error executing bundle subcommand:", error);
+        logger.error("Error executing bundle subcommand:", error);
     }
 }
 
@@ -79,14 +80,14 @@ export async function handleBatchSendBundlesToChannel(
                 });
 
                 publishMessage(message, channel).catch(error => {
-                    console.error(`Failed to publish message for bundle ${bundleId}:`, error);
+                    logger.error(`Failed to publish message for bundle ${bundleId}:`, error);
                 });
             } catch (error) {
-                console.error(`Failed to send bundle ${bundleId}:`, error);
+                logger.error(`Failed to send bundle ${bundleId}:`, error);
             }
         }
     } catch (error) {
-        console.error("Failed batch sending bundles:", error);
+        logger.error("Failed batch sending bundles:", error);
     }
 }
 
@@ -106,7 +107,7 @@ export async function handleBundleCommandAutocompleteInteraction(interaction: Au
 
         await interaction.respond(options);
     } catch (error) {
-        console.error("Error handling autocomplete bundle interaction:", error);
+        logger.error("Error handling autocomplete bundle interaction:", error);
     }
 }
 

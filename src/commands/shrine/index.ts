@@ -21,6 +21,7 @@ import generateShrineEmbed from "@commands/shrine/utils/embed";
 import generatePerkButtons from "@commands/shrine/utils/buttons";
 import { sendErrorMessage } from "@handlers/errorResponseHandler";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
+import logger from "@logger";
 
 export const data = i18next.isInitialized
     ? new SlashCommandBuilder()
@@ -54,7 +55,7 @@ export async function handleShrineCommandInteraction(interaction: ChatInputComma
             components: [row]
         });
     } catch (error) {
-        console.error("Error executing Shrine chat input command:", error);
+        logger.error("Error executing Shrine chat input command:", error);
         await sendErrorMessage(interaction, t('general.fatal_error_generic', locale, ELocaleNamespace.Errors))
     }
 }
@@ -75,10 +76,10 @@ export async function sendShrineToChannel(channel: NewsChannel) {
         });
 
         publishMessage(message, channel).catch(error => {
-            console.error("Failed to publish message:", error);
+            logger.error("Failed to publish message:", error);
         });
     } catch (error) {
-        console.error("Error sending shrine to channel:", error);
+        logger.error("Error sending shrine to channel:", error);
     }
 }
 

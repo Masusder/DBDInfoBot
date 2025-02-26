@@ -10,6 +10,7 @@ import { EGameData } from "@tps/enums/EGameData";
 import { localizeCacheKey } from "@utils/localizationUtils";
 import { stripHtml } from "@utils/stringUtils";
 import { isCosmeticLimited } from "@commands/info/cosmetic/utils";
+import logger from "@logger";
 
 // Holds indexed cosmetics for fast querying by locale
 let indexedCosmetics: Map<string, Map<string, Cosmetic[]>> = new Map();
@@ -41,7 +42,7 @@ export async function initializeCosmeticCache(locale: Locale): Promise<void> {
  * @param locale - The locale to index cosmetics for.
  */
 function indexCosmetics(cosmetics: { [key: string]: Cosmetic }, locale: Locale) {
-    console.log(`Indexing cosmetics for language: ${locale}.`);
+    logger.info(`Indexing cosmetics for language: ${locale}.`);
 
     if (!indexedCosmetics.has(locale)) {
         indexedCosmetics.set(locale, new Map());
@@ -184,7 +185,7 @@ export async function getFilteredCosmeticsList(filters: Partial<Cosmetic> = {}, 
  *
  * @example
  * const inclusionVersions = await getInclusionVersionsForCosmetics(Locale.EN_US);
- * console.log(inclusionVersions); // Sorted array of unique inclusion versions for the specified locale.
+ * logger.info(inclusionVersions); // Sorted array of unique inclusion versions for the specified locale.
  */
 export async function getInclusionVersionsForCosmetics(locale: Locale): Promise<string[]> {
     let inclusionVersions = getCache<string[]>('cosmeticInclusionVersions');

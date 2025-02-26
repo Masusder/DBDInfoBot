@@ -3,6 +3,7 @@ import {
     getCache,
     setCache
 } from "../cache";
+import logger from "@logger";
 
 async function retrieveGlobalStats(): Promise<any | undefined> {
     try {
@@ -10,10 +11,10 @@ async function retrieveGlobalStats(): Promise<any | undefined> {
         if (response.data.success) {
             return response.data.data;
         } else {
-            console.error("Failed to fetch global stats: API responded with success = false");
+            logger.error("Failed to fetch global stats: API responded with success = false");
         }
     } catch (error) {
-        console.error('Error fetching global stats:', error);
+        logger.error('Error fetching global stats:', error);
     }
 }
 
@@ -23,10 +24,10 @@ async function retrievePlayerStats(playerId: string) {
         if (response.data.success) {
             return response.data.data;
         } else {
-            console.error("Failed to fetch player stats: API responded with success = false");
+            logger.error("Failed to fetch player stats: API responded with success = false");
         }
     } catch (error) {
-        console.error('Error fetching player stats:', error);
+        logger.error('Error fetching player stats:', error);
     }
 }
 

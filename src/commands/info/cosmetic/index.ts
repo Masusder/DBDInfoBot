@@ -6,6 +6,7 @@ import {
 } from "discord.js";
 import { getCosmeticChoicesFromIndex, } from "@services/cosmeticService";
 import generateCosmeticInteractionData from "./interactionData";
+import logger from "@logger";
 
 // region Interaction Handlers
 export async function handleCosmeticCommandInteraction(interaction: ChatInputCommandInteraction) {
@@ -29,7 +30,7 @@ export async function handleCosmeticCommandInteraction(interaction: ChatInputCom
             components: [actionRow]
         });
     } catch (error) {
-        console.error("Error executing cosmetic subcommand:", error);
+        logger.error("Error executing cosmetic subcommand:", error);
     }
 }
 
@@ -48,7 +49,7 @@ export async function handleCosmeticButtonInteraction(interaction: ButtonInterac
             flags: MessageFlags.Ephemeral
         });
     } catch (error) {
-        console.error("Error handling cosmetic button interaction:", error);
+        logger.error("Error handling cosmetic button interaction:", error);
     }
 }
 
@@ -68,7 +69,7 @@ export async function handleCosmeticCommandAutocompleteInteraction(interaction: 
 
         await interaction.respond(options);
     } catch (error) {
-        console.error("Error handling autocomplete cosmetic interaction:", error);
+        logger.error("Error handling autocomplete cosmetic interaction:", error);
     }
 }
 

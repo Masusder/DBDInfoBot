@@ -25,6 +25,7 @@ import {
 } from "@commands/inventory";
 import { execute as executeSupport } from "@commands/support";
 import { handleShrineCommandInteraction } from "@commands/shrine";
+import logger from "@logger";
 
 const cooldownManager = new CooldownManager();
 
@@ -143,6 +144,6 @@ export default async(interaction: Interaction) => {
 
         console.warn('Unhandled interaction type or command:', interaction);
     } catch (error: any) {
-        console.error('Unhandled interaction:', error.message);
+        logger.error('Unhandled interaction:', error.message);
     }
 };

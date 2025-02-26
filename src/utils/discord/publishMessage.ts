@@ -2,6 +2,7 @@ import {
     Message,
     NewsChannel
 } from "discord.js";
+import logger from "@logger";
 
 /**
  * Publishes a message if it is sent in a news channel.
@@ -13,10 +14,10 @@ import {
 async function publishMessage(message: Message, channel: NewsChannel): Promise<boolean> {
     try {
         await message.crosspost();
-        console.log(`Published message in ${channel.name}`);
+        logger.info(`Published message in ${channel.name}`);
         return true;
     } catch (error) {
-        console.error('Failed to publish message:', error);
+        logger.error('Failed to publish message:', error);
         return false;
     }
 }

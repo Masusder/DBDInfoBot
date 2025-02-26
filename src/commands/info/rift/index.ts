@@ -23,6 +23,7 @@ import { isValidData } from "@utils/stringUtils";
 import { t } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import splitButtonsIntoRows from "@utils/discord/splitButtons";
+import logger from "@logger";
 
 // region Interaction Handlers
 const TIERS_PER_PAGE = 8;
@@ -104,7 +105,7 @@ export async function handleRiftCommandInteraction(interaction: ChatInputCommand
             generateAdditionalButtons
         });
     } catch (error) {
-        console.error("Error executing rift subcommand:", error);
+        logger.error("Error executing rift subcommand:", error);
     }
 }
 
@@ -124,7 +125,7 @@ export async function handleRiftCommandAutocompleteInteraction(interaction: Auto
 
         await interaction.respond(options);
     } catch (error) {
-        console.error("Error handling autocomplete interaction:", error);
+        logger.error("Error handling autocomplete interaction:", error);
     }
 }
 

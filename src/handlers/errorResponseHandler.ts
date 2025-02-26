@@ -10,6 +10,7 @@ import {
 import { t } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { ThemeColors } from "@constants/themeColors";
+import logger from "@logger";
 
 interface RedirectButtonOptions {
     url: string;
@@ -41,6 +42,6 @@ export async function sendErrorMessage(interaction: ChatInputCommandInteraction 
             await interaction.reply({ embeds: [embed], components: row.components.length > 0 ? [row] : [] });
         }
     } catch (error) {
-        console.error("Error sending error message:", error);
+        logger.error("Error sending error message:", error);
     }
 }

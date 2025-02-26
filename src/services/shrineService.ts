@@ -5,6 +5,7 @@ import {
 } from "../cache";
 import { adjustForTimezone } from "@utils/stringUtils";
 import { IShrine } from "../types";
+import logger from "@logger";
 
 /**
  * Retrieves shrine data from the API.
@@ -17,10 +18,10 @@ async function retrieveShrine(): Promise<IShrine | undefined> {
         if (response.data.success) {
             return response.data.data;
         } else {
-            console.error("Failed to fetch shrine: API responded with success = false");
+            logger.error("Failed to fetch shrine: API responded with success = false");
         }
     } catch (error) {
-        console.error('Error fetching shrine:', error);
+        logger.error('Error fetching shrine:', error);
     }
 }
 

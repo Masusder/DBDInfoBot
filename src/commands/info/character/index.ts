@@ -27,6 +27,7 @@ import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import { getOrCreateMultiplePerkEmojis } from "@utils/emojiManager";
 import { getPerksByCharacterIndex } from "@services/perkService";
 import { sendErrorMessage } from "@handlers/errorResponseHandler";
+import logger from "@logger";
 
 // region Interaction Handlers
 export async function handleCharacterCommandInteraction(interaction: ChatInputCommandInteraction) {
@@ -143,7 +144,7 @@ export async function handleCharacterCommandInteraction(interaction: ChatInputCo
             components: [buttons]
         });
     } catch (error) {
-        console.error("Error executing character subcommand:", error);
+        logger.error("Error executing character subcommand:", error);
     }
 }
 
@@ -163,7 +164,7 @@ export async function handleCharacterCommandAutocompleteInteraction(interaction:
 
         await interaction.respond(options);
     } catch (error) {
-        console.error("Error handling autocomplete interaction:", error);
+        logger.error("Error handling autocomplete interaction:", error);
     }
 }
 

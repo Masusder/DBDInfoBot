@@ -28,6 +28,7 @@ import { ThemeColors } from "@constants/themeColors";
 import { Role } from "@data/Role";
 import { ERole } from "@tps/enums/ERole";
 import { constructFilters } from "./utils";
+import logger from "@logger";
 
 const ADDONS_PER_PAGE = 9;
 
@@ -138,7 +139,7 @@ export async function handleAddonListCommandInteraction(interaction: ChatInputCo
 
         await paginationHandler(paginationOptions);
     } catch (error) {
-        console.error("Error executing cosmetics list subcommand:", error);
+        logger.error("Error executing cosmetics list subcommand:", error);
     }
 }
 

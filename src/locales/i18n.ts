@@ -1,5 +1,6 @@
 import i18next from 'i18next';
 import Backend from 'i18next-fs-backend';
+import logger from "@logger";
 
 async function initI18next() {
     try {
@@ -25,9 +26,9 @@ async function initI18next() {
                 saveMissing: process.env.BRANCH === 'dev' // If true, saves missing translations for debugging
             });
 
-        console.log('i18next initialized successfully');
+        logger.info('i18next initialized successfully');
     } catch (error) {
-        console.error('i18next initialization failed:', error);
+        logger.error('i18next initialization failed:', error);
     }
 }
 

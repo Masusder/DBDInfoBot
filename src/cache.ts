@@ -7,6 +7,7 @@ import {
     mapDiscordLocaleToDbdLang
 } from "@utils/localizationUtils";
 import client from "./client";
+import logger from "@logger";
 
 const globalCache = new NodeCache({ stdTTL: 14_400, checkperiod: 600 });
 const processedKeys = new Set<string>();
@@ -18,7 +19,7 @@ export function setCache<T>(key: string, data: T, ttl: number = 3600): void {
 export function getCache<T>(key: string): T | undefined {
     const cachedData = globalCache.get<T>(key);
     if (!cachedData) {
-        console.warn(`No data found in cache for key: ${key}`);
+        logger.warn(`No data found in cache for key: ${key}`);
         return undefined;
     }
     return cachedData;
@@ -51,13 +52,13 @@ export async function initializeGameDataCache<T>(
             setCache(localizedCacheKey, data, ttl);
 
             if (cacheKey !== EGameData.NewsData) {
-                console.log(`Fetched and cached ${Object.keys(data).length} items for ${localizedCacheKey}.`);
+                logger.info(`Cached ${Object.keys(data).length} items for ${localizedCacheKey}.`);
             }
         } else {
-            console.error(`Failed to fetch ${localizedCacheKey}: API responded with success = false`);
+            logger.error(`Failed to fetch ${localizedCacheKey}: API responded with success = false`);
         }
     } catch (error) {
-        console.error(`Error fetching ${localizedCacheKey}:`, error);
+        logger.error(`Error fetching ${localizedCacheKey}:`, error);
     } finally {
         processedKeys.delete(localizedCacheKey);
     }
@@ -72,7 +73,6 @@ export async function getCachedGameData<T>(
     let cachedData = getCache<{ [key: string]: T }>(localizedCacheKey);
 
     if (!cachedData || Object.keys(cachedData).length === 0) {
-        console.warn(`${localizedCacheKey} cache expired or empty. Fetching new data...`);
         await initializer();
         cachedData = getCache<{ [key: string]: T }>(localizedCacheKey) || {};
     }
@@ -81,27 +81,27 @@ export async function getCachedGameData<T>(
 }
 
 function debugCache(): void {
-    console.log("🔵 DiscordJS cache:");
-    console.log(` 🔹 Guilds: ${client.guilds.cache.size}`);
-    console.log(` 🔹 Channels: ${client.channels.cache.size}`);
-    console.log(` 🔹 Users: ${client.users.cache.size}`);
-    console.log('');
+    logger.info("🔵 DiscordJS cache:");
+    logger.info(` 🔹 Guilds: ${client.guilds.cache.size}`);
+    logger.info(` 🔹 Channels: ${client.channels.cache.size}`);
+    logger.info(` 🔹 Users: ${client.users.cache.size}`);
+    logger.info('');
 
     const allCacheData = globalCache.data;
     const totalSize = Buffer.byteLength(JSON.stringify(allCacheData), 'utf8');
 
-    console.log("🔴 Node-Cache:");
-    console.log(` 🔺 Cache contains ${Object.keys(allCacheData).length} items.`);
-    console.log(` 🔺 Total cache size: ${(totalSize / 1024 / 1024).toFixed(2)} MB`);
-    console.log('');
+    logger.info("🔴 Node-Cache:");
+    logger.info(` 🔺 Cache contains ${Object.keys(allCacheData).length} items.`);
+    logger.info(` 🔺 Total cache size: ${(totalSize / 1024 / 1024).toFixed(2)} MB`);
+    logger.info('');
 
     const memoryUsage = process.memoryUsage();
-    console.log("🔶 Memory Usage:");
-    console.log(` 🔸 RSS: ${(memoryUsage.rss / 1024 / 1024).toFixed(2)} MB`);
-    console.log(` 🔸 Heap total: ${(memoryUsage.heapTotal / 1024 / 1024).toFixed(2)} MB`);
-    console.log(` 🔸 Heap used: ${(memoryUsage.heapUsed / 1024 / 1024).toFixed(2)} MB`);
-    console.log(` 🔸 External: ${(memoryUsage.arrayBuffers / 1024 / 1024).toFixed(2)} MB`);
-    console.log('');
+    logger.info("🔶 Memory Usage:");
+    logger.info(` 🔸 RSS: ${(memoryUsage.rss / 1024 / 1024).toFixed(2)} MB`);
+    logger.info(` 🔸 Heap total: ${(memoryUsage.heapTotal / 1024 / 1024).toFixed(2)} MB`);
+    logger.info(` 🔸 Heap used: ${(memoryUsage.heapUsed / 1024 / 1024).toFixed(2)} MB`);
+    logger.info(` 🔸 External: ${(memoryUsage.arrayBuffers / 1024 / 1024).toFixed(2)} MB`);
+    logger.info('');
 }
 
 export function startCacheAnalytics() {
@@ -109,17 +109,7 @@ export function startCacheAnalytics() {
         try {
             debugCache();
         } catch (error) {
-            console.error("Failed to log cache info:", error);
+            logger.error("Failed to log cache info:", error);
         }
     }, 3600 * 1000);
 }
-
-// export function clearCache(key: string): void {
-//     globalCache.del(key);
-//     console.log(`Cache cleared for key: ${key}`);
-// }
-//
-// export function clearAllCache(): void {
-//     globalCache.flushAll();
-//     console.log('All cache has been cleared.');
-// }

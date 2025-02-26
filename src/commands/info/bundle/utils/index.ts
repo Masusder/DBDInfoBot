@@ -14,6 +14,7 @@ import { Currencies } from "@data/Currencies";
 import { t } from "@utils/localizationUtils";
 import { ELocaleNamespace } from "@tps/enums/ELocaleNamespace";
 import axios from "axios";
+import logger from "@logger";
 
 export function determineDominantRarity(
     cosmeticIds: string[],
@@ -88,7 +89,7 @@ export async function fetchImageBuffer(url: string): Promise<Buffer | null> {
         const response = await axios.get(url, { responseType: 'arraybuffer' });
         return Buffer.from(response.data);
     } catch (error) {
-        console.error(`Failed to fetch image: ${url}`, error);
+        logger.error(`Failed to fetch image: ${url}`, error);
         return null;
     }
 }

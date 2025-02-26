@@ -5,6 +5,7 @@ import {
 } from "discord.js";
 import client from "client";
 import { createPerkIcons } from "@utils/imageUtils";
+import logger from "@logger";
 
 async function fetchAndCacheEmojis(): Promise<Collection<string, ApplicationEmoji>> {
     if (!client.application) return new Collection();
@@ -16,7 +17,7 @@ async function fetchAndCacheEmojis(): Promise<Collection<string, ApplicationEmoj
         });
         return emojis;
     } catch (error) {
-        console.error('Error fetching emojis:', error);
+        logger.error('Error fetching emojis:', error);
         return new Collection();
     }
 }
@@ -72,10 +73,10 @@ export async function getOrCreateApplicationEmoji(
         }
 
         const newEmoji = await client.application.emojis.create({ name: emojiName, attachment: emojiBuffer });
-        console.log(`Application emoji "${emojiName}" created successfully.`);
+        logger.info(`Application emoji "${emojiName}" created successfully.`);
         return newEmoji;
     } catch (error) {
-        console.error('Error handling application emoji:', error);
+        logger.error('Error handling application emoji:', error);
         return null;
     }
 }
@@ -99,7 +100,7 @@ export async function getApplicationEmoji(emojiName: string): Promise<Applicatio
             return null;
         }
     } catch (error) {
-        console.error('Error fetching application emoji:', error);
+        logger.error('Error fetching application emoji:', error);
         return null;
     }
 }
