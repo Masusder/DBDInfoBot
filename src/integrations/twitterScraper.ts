@@ -117,7 +117,7 @@ function convertToVxTwitter(url: string): string {
  * // This will check for new tweets every 60 seconds.
  */
 export async function getLatestTweetLink() {
-    logger.info(`Checking for new Tweets - ${new Date()}`);
+    logger.info('Checking for new Tweets');
 
     if (isFetchingTweets) {
         logger.info('Skipping execution: Tweet fetching is already in progress.');
