@@ -139,43 +139,43 @@
     }
   },
   "news_command": {
-    "name": "news",
-    "description": "Retrieve latest in-game news."
+    "name": "novità",
+    "description": "Visualizza le ultime novità."
   },
   "stats_command": {
-    "name": "stats",
-    "description": "View Steam statistics (global or personal).",
+    "name": "statistiche",
+    "description": "Visualizza Statistiche di Steam (personali o globali).",
     "global_subcommand": {
-      "name": "global",
-      "description": "View global statistics."
+      "name": "globale",
+      "description": "Visualizza statistiche globali."
     },
     "personal_subcommand": {
-      "name": "personal",
-      "description": "View a summarized infographic of player statistics.",
+      "name": "personale",
+      "description": "Visualizza un'infografica riassuntiva delle statistiche dei giocatori.",
       "options": {
         "steam_id": {
-          "name": "steam_id",
-          "description": "The Steam ID, username, or profile URL of the player whose statistics you want to view."
+          "name": "id_steam",
+          "description": "ID Steam, nome utente o URL del profilo del giocatore del quale si vogliono visualizzare le statistiche."
         }
       }
     }
   },
   "inventory_command": {
-    "name": "inventory",
-    "description": "View your in-game inventory for given character in form of an infographic.",
+    "name": "inventario",
+    "description": "Visualizza l'inventario di gioco di un determinato personaggio sotto forma d'infografica.",
     "options": {
       "file": {
         "name": "file",
         "description": "Upload your inventory file. Instructions on how to obtain it can be found on the support server."
       },
       "character": {
-        "name": "character",
-        "description": "Select character you want to generate infographic for."
+        "name": "personaggio",
+        "description": "Selezionare il personaggio per il quale si desidera generare l'infografica."
       }
     }
   },
   "support_command": {
-    "name": "support",
-    "description": "Get a link to the support server."
+    "name": "supporto",
+    "description": "Ottieni un link al server di supporto."
   }
 }
