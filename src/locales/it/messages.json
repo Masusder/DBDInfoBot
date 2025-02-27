@@ -34,9 +34,9 @@
       "backstory": "Backstory di",
       "read_backstory": "Leggi Backstory",
       "character_backstory": "Backstory del personaggio",
-      "hint_for": "Hint for {{character_name}}",
-      "check_hints": "Check Hints",
-      "perks": "Perks"
+      "hint_for": "Suggerimento per {{character_name}}",
+      "check_hints": "Controlla i Suggerimenti",
+      "perks": "Competenze"
     },
     "cosmetic_subcommand": {
       "character": "Personaggio",
@@ -44,19 +44,19 @@
       "rarity": "Rarità",
       "inclusion_version": "Incluso nella Versione",
       "type": "Tipo",
-      "release_date": "Shop Release Date",
+      "release_date": "Data Di Rilascio nel Negozio",
       "sale": "Gli sconti terminano",
       "more_info": "Più info",
       "view_pieces": "Visualizza Pezzi Di Outfit",
       "linked_cosmetic": "Cosmetico Collegato",
-      "limited_until": "Limited Until",
-      "view_3d_model": "View 3D Model",
-      "special_event": "Special Event",
-      "released_with_tome": "Released with Tome",
-      "kill_switch": "Kill Switch",
-      "kill_switch_desc": "This cosmetic has been disabled and is currently unavailable for use.",
+      "limited_until": "Limitato Fino Al",
+      "view_3d_model": "Visualizza Modello 3D",
+      "special_event": "Evento Speciale",
+      "released_with_tome": "Rilasciato con il Volume",
+      "kill_switch": "Kill switch",
+      "kill_switch_desc": "Questo cosmetico è stato disabilitato e non è attualmente disponibile per l'uso.",
       "button_interaction": {
-        "outfit_pieces": "Outfit Pieces for '{{cosmetic_name}}'"
+        "outfit_pieces": "Pezzi di Abbigliamento per '{{cosmetic_name}}'"
       }
     },
     "build_subcommand": {
@@ -69,48 +69,48 @@
       "category": "Categoria",
       "character": "Personaggio",
       "rating": "Valutazione",
-      "rating_desc": "from a total of {{votes_count}} vote(s)",
+      "rating_desc": "da un totale di {{votes_count}} voto(i)",
       "any_perks": "Qualsiasi perk",
       "any_item": "Qualsiasi oggetto",
       "any_power": "Qualsiasi potere",
       "any_offering": "Qualsiasi offerta",
       "desc_not_provided": "La descrizione di questa build non è stata fornita.",
       "build_info": "Informazioni build",
-      "created_by": "Created by {{username}} on {{date}}"
+      "created_by": "Creato da {{username}} il {{date}}"
     },
     "collection_subcommand": {
-      "total_of_cosmetics": "{{collection_title}} (Total of {{cosmetics_count}} cosmetics)",
-      "collection_inclusion_version": "This collection was introduced in version '{{inclusion_version}}'",
+      "total_of_cosmetics": "{{collection_title}} (Totale di {{cosmetics_count}} cosmetici)",
+      "collection_inclusion_version": "Questa collezione è stata introdotta nella versione '{{inclusion_version}}'",
       "collection_info": "Informazioni Collezione",
-      "collection_last_updated": "The collection was last updated on {{update_date}}"
+      "collection_last_updated": "Questa collezione è stata aggiornata il {{update_date}}"
     },
     "rift_subcommand": {
-      "tier": "Tier",
-      "rift_ends_active": "Rift ends in:",
-      "rift_ends_expired": "Rift ended:",
-      "rift_active": "Rift is active from <t:{{start_date}}> to <t:{{end_date}}>",
-      "rift_expired": "Rift was active from <t:{{start_date}}> to <t:{{end_date}}>",
-      "to_progress_active": "To progress by one tier you need to earn:",
-      "to_progress_expired": "To progress by one tier you had to earn:"
+      "tier": "Livello",
+      "rift_ends_active": "La Spaccatura termina tra:",
+      "rift_ends_expired": "Spaccatura terminata:",
+      "rift_active": "La Spaccatura è attiva da <t:{{start_date}}> a <t:{{end_date}}>",
+      "rift_expired": "La Spaccatura è stata attiva da <t:{{start_date}}> a <t:{{end_date}}>",
+      "to_progress_active": "Per progredire di un livello devi ottenere:",
+      "to_progress_expired": "Per progredire di un livello dovevi ottenere:"
     },
     "bundle_subcommand": {
-      "special_pack_title": "{{- special_pack_title}} (Total of {{rewards_count}} items)",
-      "unowned_items": "You need at least {{unowned_items}} unowned item to purchase this bundle.",
-      "no_expiration": "This bundle has no expiration date.",
-      "expiration": "Expiration",
-      "release_date": "Release Date"
+      "special_pack_title": "{{- special_pack_title}} (Totale di {{rewards_count}} oggetti)",
+      "unowned_items": "Hai bisogno di almeno {{unowned_items}} elementi non posseduti per acquistare questo bundle.",
+      "no_expiration": "Questo bundle non ha data di scadenza.",
+      "expiration": "Scadenza",
+      "release_date": "Data di rilascio"
     }
   },
   "list_command": {
     "cosmetics_subcommand": {
-      "found_total": "Found a total of {{cosmetics_count}} cosmetics",
+      "found_total": "Trovati un totale di {{cosmetics_count}} cosmetici",
       "filters_applied": "Filtri applicati",
-      "cosmetics_list": "List of Cosmetics",
-      "more_info": "To learn more about a specific cosmetic, use the command: `/info Cosmetic <cosmetic_name>`"
+      "cosmetics_list": "Elenco dei Cosmetici",
+      "more_info": "Per saperne di più su uno specifico cosmetico, usa il comando: `/info Cosmetic <cosmetic_name>`"
     },
     "builds_subcommand": {
-      "builds_list_page": "Page {{current_page}} of {{total_pages}}",
-      "create_your_own_build": "Create your Build here!",
+      "builds_list_page": "Pagina {{current_page}} di {{total_pages}}",
+      "create_your_own_build": "Crea la tua Build qui!",
       "builds_matching_filters": "Ecco le build corrispondenti ai tuoi filtri:",
       "builds_list": "Lista Delle Builds",
       "created_by": "Creato da:",
@@ -119,65 +119,65 @@
       "select_for_details": "Seleziona una build per visualizzare i dettagli."
     },
     "addons_subcommand": {
-      "addons_list": "List of Add-ons",
-      "found_total": "Found a total of {{addons_count}} add-ons",
-      "filters_applied": "Filters applied",
-      "more_info": "To learn more about a specific add-on, use the command: `/info Add-on <addon_name>`"
+      "addons_list": "Lista di Accessori",
+      "found_total": "Trovato un totale di {{addons_count}} Accessori",
+      "filters_applied": "Filtri applicati",
+      "more_info": "Per saperne di più su uno specifico accessorio, usa il comando: `/info Accessorio <addon_name>`"
     }
   },
   "shrine_command": {
     "author_title": "Reliquiario dei Segreti della settimana",
     "character": "Personaggio",
-    "time_left": "Time left to refresh:",
-    "shrine_active": "**Shrine is active from** <t:{{start_date}}> **to** <t:{{end_date}}>."
+    "time_left": "Tempo rimanente per l'aggiornamento:",
+    "shrine_active": "**Il Reliquario è attivo da** <t:{{start_date}}> **a** <t:{{end_date}}>."
   },
   "generic_pagination": {
     "first": "Primo",
     "previous": "Precedente",
-    "page_number": "Page {{current_page}} of {{total_pages}}",
+    "page_number": "Pagina {{current_page}} di {{total_pages}}",
     "next": "Avanti",
     "last": "Ultimo"
   },
   "news_command": {
-    "select_news_article": "Select a news article.",
-    "news": "News",
-    "published_on": "Published on:",
-    "untitled_news": "Untitled News",
-    "click_here": "Click here",
-    "showcased_items": "Showcased Items",
-    "items_featured_in_article": "These items are featured in the associated news article:",
-    "pinned_article": "This news article is pinned"
+    "select_news_article": "Selezionare un articolo.",
+    "news": "Novità",
+    "published_on": "Pubblicato il:",
+    "untitled_news": "Novità Senza Titolo",
+    "click_here": "Clicca qui",
+    "showcased_items": "Oggetti In Vetrina",
+    "items_featured_in_article": "Questi elementi sono presenti nell'articolo:",
+    "pinned_article": "Questo articolo è fissato"
   },
   "stats_command": {
-    "player_stats_overview": "Player Statistics Overview",
-    "summary_desc": "A quick infographic summary of the player's stats.",
-    "full_stats": "Full Stats",
-    "global_stats_title": "Global Steam Statistics in \"{{category}}\" category",
-    "data_collected_from": "Data collected from over **{{player_count}}** players.",
+    "player_stats_overview": "Panoramica Statistiche Giocatore",
+    "summary_desc": "Un breve riepilogo infografico delle statistiche del giocatore.",
+    "full_stats": "Statistiche complete",
+    "global_stats_title": "Statistiche globali di Steam nella categoria \"{{category}}\"",
+    "data_collected_from": "Dati raccolti da oltre **{{player_count}}** giocatori.",
     "global_stat_tabs": {
-      "other": "Other",
-      "bloodweb": "Bloodweb",
-      "wins": "Wins",
-      "loadout": "Loadout",
-      "trial_survivor": "Survivor Trial Actions",
-      "healing": "Healing",
-      "chase": "Chases",
-      "escapes": "Escapes",
-      "kills": "Kills",
-      "hooks": "Hooks",
-      "trial_killer": "Killer Trial Actions",
-      "downs": "Downs",
-      "killer_downs": "Killer Downs",
-      "killer_specific": "Killer Ability"
+      "other": "Altro",
+      "bloodweb": "Tela Sanguinaria",
+      "wins": "Vittorie",
+      "loadout": "Equipaggiamento",
+      "trial_survivor": "Azioni nelle Prove da Sopravvissuto",
+      "healing": "Cura",
+      "chase": "Inseguimenti",
+      "escapes": "Fughe",
+      "kills": "Uccisioni",
+      "hooks": "Ganci",
+      "trial_killer": "Azioni nelle Prove da Killer",
+      "downs": "Abbattimenti",
+      "killer_downs": "Abbattimenti da Killer",
+      "killer_specific": "Abilità del Killer"
     }
   },
   "inventory_command": {
-    "support": "Support",
-    "inventory_overview": "{{character_name}} - Inventory Overview",
-    "description": "A detailed summary of the inventory for the selected character."
+    "support": "Supporto",
+    "inventory_overview": "{{character_name}} - Panoramica dell'Inventario",
+    "description": "Un riassunto dettagliato dell'inventario per il Personaggio selezionato."
   },
   "support_command": {
-    "support": "Support",
-    "join_server": "Join the support server:"
+    "support": "Supporto",
+    "join_server": "Entra nel server di supporto:"
   }
 }
