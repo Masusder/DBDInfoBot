@@ -15,8 +15,8 @@
           "cosmetic": "Cosmetico",
           "build": "Build",
           "collection": "Collezione",
-          "rift": "Rift",
-          "bundle": "Bundle"
+          "rift": "Spaccatura",
+          "bundle": "Pacchetto"
         }
       },
       "name": {
@@ -61,20 +61,20 @@
           "description": "Specifica la versione in cui è incluso il cosmetico."
         },
         "role": {
-          "name": "role",
-          "description": "Specify role cosmetic belongs to."
+          "name": "ruolo",
+          "description": "Selezionare il ruolo di appartenenza del cosmetico."
         },
         "on_sale": {
-          "name": "on_sale",
-          "description": "Specify whether cosmetic should be currently on sale."
+          "name": "in_sconto",
+          "description": "Selezionare se il cosmetico è attualmente in sconto."
         },
         "limited": {
-          "name": "limited",
-          "description": "Specify whether cosmetic is available for purchase for a limited time."
+          "name": "limitato",
+          "description": "Selezionare se il cosmetico è disponibile per un periodo limitato."
         },
         "search": {
-          "name": "search",
-          "description": "Search for cosmetic by its name/description/collection."
+          "name": "cerca",
+          "description": "Cerca cosmetico per nome/descrizione/collezione."
         }
       }
     },
@@ -124,58 +124,58 @@
       }
     },
     "addons_subcommand": {
-      "name": "add-ons",
-      "description": "Retrieve list of add-ons.",
+      "name": "accessori",
+      "description": "Visualizza elenco degli accessori.",
       "options": {
         "character": {
-          "name": "character",
-          "description": "Name of the character."
+          "name": "personaggio",
+          "description": "Nome del personaggio."
         },
         "rarity": {
-          "name": "rarity",
-          "description": "Specify rarity of the add-ons."
+          "name": "rarità",
+          "description": "Seleziona rarità degli accessori."
         }
       }
     }
   },
   "news_command": {
-    "name": "news",
-    "description": "Retrieve latest in-game news."
+    "name": "novità",
+    "description": "Visualizza le ultime novità."
   },
   "stats_command": {
-    "name": "stats",
-    "description": "View Steam statistics (global or personal).",
+    "name": "statistiche",
+    "description": "Visualizza Statistiche di Steam (personali o globali).",
     "global_subcommand": {
-      "name": "global",
-      "description": "View global statistics."
+      "name": "globale",
+      "description": "Visualizza statistiche globali."
     },
     "personal_subcommand": {
-      "name": "personal",
-      "description": "View a summarized infographic of player statistics.",
+      "name": "personale",
+      "description": "Visualizza un'infografica riassuntiva delle statistiche dei giocatori.",
       "options": {
         "steam_id": {
-          "name": "steam_id",
-          "description": "The Steam ID, username, or profile URL of the player whose statistics you want to view."
+          "name": "id_steam",
+          "description": "ID Steam, nome utente o URL del profilo del giocatore del quale si vogliono visualizzare le statistiche."
         }
       }
     }
   },
   "inventory_command": {
-    "name": "inventory",
-    "description": "View your in-game inventory for given character in form of an infographic.",
+    "name": "inventario",
+    "description": "Visualizza l'inventario di gioco di un determinato personaggio sotto forma d'infografica.",
     "options": {
       "file": {
         "name": "file",
         "description": "Upload your inventory file. Instructions on how to obtain it can be found on the support server."
       },
       "character": {
-        "name": "character",
-        "description": "Select character you want to generate infographic for."
+        "name": "personaggio",
+        "description": "Selezionare il personaggio per il quale si desidera generare l'infografica."
       }
     }
   },
   "support_command": {
-    "name": "support",
-    "description": "Get a link to the support server."
+    "name": "supporto",
+    "description": "Ottieni un link al server di supporto."
   }
 }
